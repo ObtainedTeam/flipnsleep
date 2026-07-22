@@ -11,6 +11,7 @@ export const IMG = {
   falling: "/images/pillow-falling.webp",
   bed: "/images/pillow-bed.webp",
   heroBg: "/images/hero-bg.jpg",
+  sliderBg: "/images/slider-bg.jpg",
   cloudsUp: "/images/clouds-up.png",
   cloudsDown: "/images/clouds-down.png",
   cloudWhite: "/images/icon-cloud-white.png",

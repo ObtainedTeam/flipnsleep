@@ -21,7 +21,7 @@ export default function Home({ onCartOpen }) {
   return (
     <div>
       {/* ============ HERO ============ */}
-      <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center top', padding: isMobile ? '46px 22px 0' : '70px 40px 0', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 640, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '46px 22px 40px' : '70px 40px 60px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         <img src={IMG.icon1p1} alt="1 plus 1 free" style={{ position: 'absolute', top: isMobile ? 18 : 30, right: isMobile ? 18 : '8%', height: isMobile ? 74 : 104, filter: 'drop-shadow(0 8px 20px rgba(32,27,93,.25))' }} />
         <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto', paddingTop: isMobile ? 70 : 60 }}>
           <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 36 : 54, color: c.navy, margin: '0 0 10px', lineHeight: 1.1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 10 : 16, flexWrap: 'wrap' }}>
@@ -32,7 +32,6 @@ export default function Home({ onCartOpen }) {
           </p>
           <a href="#offer" style={{ ...BTN, fontSize: 14, padding: '15px 38px' }}>Shop now</a>
         </div>
-        <div style={{ height: isMobile ? 46 : 70 }} />
       </section>
 
       {/* ============ PRODUCT CARD + OFFER ============ */}

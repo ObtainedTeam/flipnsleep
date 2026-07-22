@@ -38,7 +38,7 @@ export function SummerDealsSlider() {
   return (
     <section style={{ position: 'relative', overflow: 'hidden', paddingBottom: 34, marginTop: -1 }}>
       <style>{`.fns-scroll{scrollbar-width:none;-ms-overflow-style:none}.fns-scroll::-webkit-scrollbar{display:none}`}</style>
-      <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: bgH, backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'top center' }} />
+      <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: bgH, backgroundImage: `url(${IMG.sliderBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div style={{ position: 'relative', maxWidth: 1050, margin: '0 auto', padding: isMobile ? '34px 20px 0' : '48px 40px 0' }}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 34, color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2>
         <div className="fns-scroll" style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', scrollSnapType: 'x mandatory' }}>
@@ -46,7 +46,7 @@ export function SummerDealsSlider() {
             const p = getPrice(b, isCA);
             const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
             return (
-              <a key={b.id} href="/product/signature-cold-pillow" style={{ textDecoration: 'none', scrollSnapAlign: 'center', flex: isMobile ? '0 0 78%' : '0 0 300px', borderRadius: 22, overflow: 'hidden', boxShadow: '0 14px 30px rgba(32,27,93,.18)', background: '#fff' }}>
+              <a key={b.id} href="/product/signature-cold-pillow" style={{ textDecoration: 'none', scrollSnapAlign: 'center', flex: isMobile ? '0 0 78%' : '0 0 300px', borderRadius: 22, overflow: 'hidden', boxShadow: '0 6px 14px rgba(32,27,93,.22)', background: '#fff' }}>
                 <div style={{ position: 'relative' }}>
                   <ProductImageBlock src={b.image} alt={b.label} height={isMobile ? 170 : 190} radius={0} />
                   <span style={{ position: 'absolute', top: 12, left: 12, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' }}>{b.short.toLowerCase()}</span>
