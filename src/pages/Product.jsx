@@ -4,7 +4,7 @@ import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { PRODUCT, BUNDLES, IMG } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNow } from '../shopify';
-import { Stars, ReviewsBlock, FAQBlock, TrustAccordion, CloudDivider } from '../components/Blocks';
+import { Stars, ReviewsBlock, FAQBlock, TrustAccordion, CloudDivider, ProductImageBlock } from '../components/Blocks';
 
 export default function Product({ onCartOpen }) {
   const isMobile = useIsMobile();
@@ -23,9 +23,7 @@ export default function Product({ onCartOpen }) {
       <section style={{ maxWidth: 1060, margin: '0 auto', padding: isMobile ? '20px 16px' : '40px 24px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr', gap: isMobile ? 24 : 44 }}>
         {/* Gallery */}
         <div>
-          <div style={{ background: `linear-gradient(180deg, ${c.sky}, ${c.sky2})`, borderRadius: 22, padding: 18, textAlign: 'center' }}>
-            <img src={PRODUCT.images[img]} alt={PRODUCT.name} style={{ maxHeight: isMobile ? 300 : 430, borderRadius: 14, objectFit: 'contain' }} />
-          </div>
+          <ProductImageBlock src={PRODUCT.images[img]} alt={PRODUCT.name} height={isMobile ? 320 : 460} radius={22} />
           <div style={{ display: 'flex', gap: 8, marginTop: 10, overflowX: 'auto' }}>
             {PRODUCT.images.map((src, i) => (
               <button key={i} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}`}
@@ -95,7 +93,6 @@ export default function Product({ onCartOpen }) {
       </section>
 
       <ReviewsBlock />
-      <CloudDivider fill={c.cream} flip />
       <section style={{ padding: isMobile ? '30px 22px 10px' : '40px 40px 20px' }}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 24, color: c.navy, textAlign: 'center', marginBottom: 12 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
         <FAQBlock limit={5} />

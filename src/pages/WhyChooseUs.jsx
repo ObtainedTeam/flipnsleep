@@ -50,7 +50,6 @@ export default function WhyChooseUs() {
       </section>
 
       <div style={{ marginTop: 40 }}><ReviewsBlock /></div>
-      <CloudDivider fill={c.cream} flip />
       <EmailCapture />
     </div>
   );

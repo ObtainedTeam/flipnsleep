@@ -5,7 +5,7 @@ import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { PRODUCT, BUNDLES, IMG } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNow } from '../shopify';
-import { CloudDivider, Stars, ReviewsBlock, FAQBlock, EmailCapture, TrustAccordion } from '../components/Blocks';
+import { CloudDivider, Stars, ReviewsBlock, FAQBlock, EmailCapture, TrustAccordion, ProductImageBlock, CollectionsBlock, SummerDealsSlider } from '../components/Blocks';
 
 export default function Home({ onCartOpen }) {
   const isMobile = useIsMobile();
@@ -21,26 +21,26 @@ export default function Home({ onCartOpen }) {
   return (
     <div>
       {/* ============ HERO ============ */}
-      <section style={{ background: `linear-gradient(180deg, ${c.skyDeep} 0%, ${c.sky} 55%, ${c.sky2} 100%)`, padding: isMobile ? '46px 22px 0' : '70px 40px 0', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        <img src={IMG.falling} alt="" aria-hidden="true" style={{ position: 'absolute', top: isMobile ? -10 : 0, right: isMobile ? -70 : '6%', width: isMobile ? 220 : 340, opacity: .9, transform: 'rotate(8deg)', mixBlendMode: 'multiply' }} />
-        <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto' }}>
-          <img src={IMG.icon1p1} alt="1 plus 1 free" style={{ height: isMobile ? 84 : 110, transform: 'rotate(-4deg)', filter: 'drop-shadow(0 10px 24px rgba(32,27,93,.25))' }} />
-          <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 36 : 54, color: c.navy, margin: '18px 0 10px', lineHeight: 1.1 }}>
-            Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span>
+      <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center top', padding: isMobile ? '46px 22px 0' : '70px 40px 0', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        <img src={IMG.icon1p1} alt="1 plus 1 free" style={{ position: 'absolute', top: isMobile ? 18 : 30, right: isMobile ? 18 : '8%', height: isMobile ? 74 : 104, filter: 'drop-shadow(0 8px 20px rgba(32,27,93,.25))' }} />
+        <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto', paddingTop: isMobile ? 70 : 60 }}>
+          <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 36 : 54, color: c.navy, margin: '0 0 10px', lineHeight: 1.1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 10 : 16, flexWrap: 'wrap' }}>
+            Summer <img src={IMG.iconCloud} alt="" style={{ height: isMobile ? 30 : 44 }} /> <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span>
           </h1>
           <p style={{ fontSize: isMobile ? 14 : 15.5, lineHeight: 1.65, maxWidth: 380, margin: '0 auto 22px' }}>
             Shop for summer with a buy-one-get-one-free offer on our Signature Cold Pillow.
           </p>
           <a href="#offer" style={{ ...BTN, fontSize: 14, padding: '15px 38px' }}>Shop now</a>
         </div>
+        <div style={{ height: isMobile ? 46 : 70 }} />
         <CloudDivider fill={c.cream} />
       </section>
 
       {/* ============ PRODUCT CARD + OFFER ============ */}
       <section id="offer" style={{ maxWidth: 560, margin: isMobile ? '22px 14px' : '30px auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 14px 34px rgba(32,27,93,.16)' }}>
-        <div style={{ padding: 22, textAlign: 'center', position: 'relative' }}>
-          <span style={{ position: 'absolute', top: 16, left: 16, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 13, borderRadius: 999, padding: '7px 16px' }}>1+1 free</span>
-          <img src={IMG.front} alt="flip'nsleep Signature Cold Pillow" style={{ maxHeight: 250, borderRadius: 16 }} />
+        <div style={{ padding: 16, position: 'relative' }}>
+          <ProductImageBlock src={IMG.front} alt="flip'nsleep Signature Cold Pillow" height={isMobile ? 230 : 270} radius={18} />
+          <span style={{ position: 'absolute', top: 28, left: 28, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 13, borderRadius: 999, padding: '7px 16px' }}>1+1 free</span>
         </div>
         <div style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '24px 20px 26px' }}>
           <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 24, marginBottom: 4 }}>{PRODUCT.name}</h2>
@@ -104,6 +104,9 @@ export default function Home({ onCartOpen }) {
         </div>
       </section>
       <CloudDivider fill={c.cream} flip />
+
+      {/* ============ SUMMER DEALS SLIDER ============ */}
+      <SummerDealsSlider />
 
       {/* ============ JUST FLIP IT ============ */}
       <section style={{ padding: isMobile ? '44px 22px' : '64px 40px', textAlign: 'center' }}>
@@ -174,7 +177,9 @@ export default function Home({ onCartOpen }) {
 
       {/* ============ REVIEWS ============ */}
       <div style={{ marginTop: 46 }}><ReviewsBlock /></div>
-      <CloudDivider fill={c.cream} flip />
+
+      {/* ============ COLLECTIONS ============ */}
+      <CollectionsBlock />
 
       {/* ============ WHY / COMPARISON TEASER ============ */}
       <section style={{ padding: isMobile ? '36px 22px 10px' : '50px 40px 10px', textAlign: 'center' }}>
@@ -182,7 +187,10 @@ export default function Home({ onCartOpen }) {
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 18, maxWidth: 780, margin: '0 auto' }}>
           <div style={{ background: `linear-gradient(180deg, ${c.navy}, ${c.purple})`, color: '#fff', borderRadius: 22, padding: 22 }}>
             <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 19, textAlign: 'center' }}>flip<span style={{ color: c.amber }}>'</span>nsleep</h3>
-            <span style={{ display: 'block', textAlign: 'center', fontSize: 28, margin: '6px 0 8px' }}>✅</span>
+            <div style={{ textAlign: 'center', margin: '10px 0 4px' }}>
+              <img src={IMG.front} alt="flip'nsleep Signature Cold Pillow" style={{ maxHeight: 130, borderRadius: 14 }} />
+            </div>
+            <span style={{ display: 'block', textAlign: 'center', fontSize: 28, margin: '4px 0 8px' }}>✅</span>
             <ul style={{ listStyle: 'none' }}>
               {['Adjustable to any sleeping position', 'Generous amount of filling as standard', 'Dual-sided: cool and warm', 'Washable outer cover', 'OEKO-TEX & CertiPUR-US certified'].map((t, i) => (
                 <li key={i} style={{ borderTop: '1px solid rgba(255,255,255,.22)', padding: '10px 2px', fontSize: 13, textAlign: 'center' }}>{t}</li>
@@ -191,7 +199,10 @@ export default function Home({ onCartOpen }) {
           </div>
           <div style={{ background: '#fff', borderRadius: 22, padding: 22, opacity: .9, boxShadow: '0 10px 26px rgba(32,27,93,.07)' }}>
             <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 19, textAlign: 'center', color: c.navy }}>Standard pillow</h3>
-            <span style={{ display: 'block', textAlign: 'center', fontSize: 28, margin: '6px 0 8px' }}>❌</span>
+            <div style={{ textAlign: 'center', margin: '10px 0 4px' }}>
+              <img src={IMG.randomPillow} alt="Standard pillow" style={{ maxHeight: 130 }} />
+            </div>
+            <span style={{ display: 'block', textAlign: 'center', fontSize: 28, margin: '4px 0 8px' }}>❌</span>
             <ul style={{ listStyle: 'none' }}>
               {['Non-adjustable', 'Standard filling, often insufficient volume', 'No choice — often too warm', 'Not removable or washable', 'Certification unknown'].map((t, i) => (
                 <li key={i} style={{ borderTop: '1px solid rgba(32,27,93,.12)', padding: '10px 2px', fontSize: 13, textAlign: 'center', color: c.grayD }}>{t}</li>
