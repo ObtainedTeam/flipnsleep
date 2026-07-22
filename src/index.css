@@ -1,0 +1,16 @@
+/* flip'nsleep — lokale webfonts (MyFonts webfont-licentie) */
+@font-face {
+  font-family: 'Palo Wide Black';
+  src: url('/fonts/palo-wide-black.woff2') format('woff2'),
+       url('/fonts/palo-wide-black.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Masiva Medium';
+  src: url('/fonts/masiva-medium.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
