@@ -36,11 +36,12 @@ export function SummerDealsSlider() {
   const { symbol, isCA } = useCurrency();
   const bgH = isMobile ? 300 : 360;
   return (
-    <section style={{ position: 'relative', overflow: 'hidden', paddingBottom: 34 }}>
+    <section style={{ position: 'relative', overflow: 'hidden', paddingBottom: 34, marginTop: -1 }}>
+      <style>{`.fns-scroll{scrollbar-width:none;-ms-overflow-style:none}.fns-scroll::-webkit-scrollbar{display:none}`}</style>
       <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: bgH, backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'top center' }} />
       <div style={{ position: 'relative', maxWidth: 1050, margin: '0 auto', padding: isMobile ? '34px 20px 0' : '48px 40px 0' }}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 34, color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2>
-        <div style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', scrollSnapType: 'x mandatory' }}>
+        <div className="fns-scroll" style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', scrollSnapType: 'x mandatory' }}>
           {BUNDLES.map(b => {
             const p = getPrice(b, isCA);
             const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
@@ -114,7 +115,7 @@ export function ReviewsBlock() {
       <section style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: isMobile ? '38px 20px 40px' : '52px 40px 56px' }}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, textAlign: 'center' }}>What our <span style={{ fontFamily: FONT_SUB }}>customers say</span></h2>
         <div style={{ textAlign: 'center', margin: '10px 0 6px' }}><Stars n={5} /> <span style={{ fontSize: 13, marginLeft: 6 }}>4.7 average rating</span></div>
-        <div style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '18px 4px 8px', maxWidth: 1050, margin: '0 auto', scrollSnapType: 'x mandatory' }}>
+        <div className="fns-scroll" style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '18px 4px 8px', maxWidth: 1050, margin: '0 auto', scrollSnapType: 'x mandatory' }}>
           {REVIEWS.map((r, i) => (
             <div key={i} style={{ scrollSnapAlign: 'center', flex: isMobile ? '0 0 86%' : '1 1 0', minWidth: isMobile ? undefined : 260, background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
               <Stars n={r.stars} />

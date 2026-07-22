@@ -52,9 +52,8 @@ export default function Nav({ onCartOpen }) {
           </nav>
         )}
 
-        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-          <img src={IMG.logoMark} alt="" style={{ height: 30, width: 'auto' }} />
-          <span style={{ color: '#fff', fontFamily: FONT_DISPLAY, fontSize: 22, letterSpacing: '-0.02em' }}>flip<span style={{ color: c.amber }}>'</span>nsleep</span>
+        <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+          <img src={IMG.logoFull} alt="flip'nsleep" style={{ height: isMobile ? 30 : 36, width: 'auto' }} />
         </Link>
 
         <button aria-label="Cart" onClick={onCartOpen} style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', fontSize: 22, color: '#fff' }}>

@@ -5,11 +5,12 @@
 
 export const IMG = {
   front: "/images/pillow-front.webp",
+  frontCut: "/images/pillow-front-cut.webp",
   filling: "/images/pillow-filling.webp",
   night: "/images/pillow-night.webp",
   falling: "/images/pillow-falling.webp",
   bed: "/images/pillow-bed.webp",
-  heroBg: "/images/hero-bg.png",
+  heroBg: "/images/hero-bg.jpg",
   cloudsUp: "/images/clouds-up.png",
   cloudsDown: "/images/clouds-down.png",
   cloudWhite: "/images/icon-cloud-white.png",
@@ -55,7 +56,7 @@ export const BUNDLES = [
     prices: { usd: 109.99, cad: 149.99 },
     compareAt: { usd: 219.98, cad: 299.98 },
     blurb: "One for you, one on us. Our signature deal.",
-    image: IMG.front,
+    image: IMG.frontCut,
   },
   {
     id: "2p2",
@@ -65,7 +66,7 @@ export const BUNDLES = [
     prices: { usd: 189.99, cad: 259.99 },
     compareAt: { usd: 439.96, cad: 599.96 },
     blurb: "For both sides of the bed — and the guest room.",
-    image: IMG.falling,
+    image: IMG.frontCut,
   },
 ];
 

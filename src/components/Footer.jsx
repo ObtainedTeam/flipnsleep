@@ -7,9 +7,8 @@ export default function Footer() {
   return (
     <footer style={{ background: c.navy, color: '#fff', borderRadius: '34px 34px 0 0', padding: isMobile ? '38px 24px 30px' : '54px 60px 36px', marginTop: 60 }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 30 }}>
-          <img src={IMG.logoMark} alt="" style={{ height: 40, width: 'auto' }} />
-          <span style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 34 : 44 }}>flip<span style={{ color: c.amber }}>'</span>nsleep</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
+          <img src={IMG.logoFull} alt="flip'nsleep" style={{ height: isMobile ? 44 : 58, width: 'auto' }} />
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: 24, fontSize: 12.5, maxWidth: 820, margin: '0 auto' }}>
           <div>

@@ -33,13 +33,12 @@ export default function Home({ onCartOpen }) {
           <a href="#offer" style={{ ...BTN, fontSize: 14, padding: '15px 38px' }}>Shop now</a>
         </div>
         <div style={{ height: isMobile ? 46 : 70 }} />
-        <CloudDivider fill={c.cream} />
       </section>
 
       {/* ============ PRODUCT CARD + OFFER ============ */}
       <section id="offer" style={{ maxWidth: 560, margin: isMobile ? '22px 14px' : '30px auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 14px 34px rgba(32,27,93,.16)' }}>
         <div style={{ padding: 16, position: 'relative' }}>
-          <ProductImageBlock src={IMG.front} alt="flip'nsleep Signature Cold Pillow" height={isMobile ? 230 : 270} radius={18} />
+          <ProductImageBlock src={IMG.frontCut} alt="flip'nsleep Signature Cold Pillow" height={isMobile ? 230 : 270} radius={18} />
           <span style={{ position: 'absolute', top: 28, left: 28, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 13, borderRadius: 999, padding: '7px 16px' }}>1+1 free</span>
         </div>
         <div style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '24px 20px 26px' }}>
@@ -103,7 +102,6 @@ export default function Home({ onCartOpen }) {
           </div>
         </div>
       </section>
-      <CloudDivider fill={c.cream} flip />
 
       {/* ============ SUMMER DEALS SLIDER ============ */}
       <SummerDealsSlider />
@@ -188,7 +186,7 @@ export default function Home({ onCartOpen }) {
           <div style={{ background: `linear-gradient(180deg, ${c.navy}, ${c.purple})`, color: '#fff', borderRadius: 22, padding: 22 }}>
             <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 19, textAlign: 'center' }}>flip<span style={{ color: c.amber }}>'</span>nsleep</h3>
             <div style={{ textAlign: 'center', margin: '10px 0 4px' }}>
-              <img src={IMG.front} alt="flip'nsleep Signature Cold Pillow" style={{ maxHeight: 130, borderRadius: 14 }} />
+              <img src={IMG.frontCut} alt="flip'nsleep Signature Cold Pillow" style={{ maxHeight: 130 }} />
             </div>
             <span style={{ display: 'block', textAlign: 'center', fontSize: 28, margin: '4px 0 8px' }}>✅</span>
             <ul style={{ listStyle: 'none' }}>
