@@ -22,7 +22,7 @@ export default function Home({ onCartOpen }) {
     <div>
       {/* ============ HERO ============ */}
       <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 640, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '46px 22px 40px' : '70px 40px 60px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        <img src={IMG.icon1p1} alt="1 plus 1 free" style={{ position: 'absolute', top: isMobile ? 18 : 30, right: isMobile ? 18 : '8%', height: isMobile ? 74 : 104, filter: 'drop-shadow(0 8px 20px rgba(32,27,93,.25))' }} />
+        <img src={IMG.icon1p1} alt="1 plus 1 free" style={{ position: 'absolute', top: isMobile ? 18 : 30, right: isMobile ? 18 : '8%', height: isMobile ? 111 : 156, filter: 'drop-shadow(0 8px 20px rgba(32,27,93,.25))' }} />
         <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto', paddingTop: isMobile ? 70 : 60 }}>
           <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 36 : 54, color: c.navy, margin: '0 0 10px', lineHeight: 1.1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 10 : 16, flexWrap: 'wrap' }}>
             Summer <img src={IMG.iconCloud} alt="" style={{ height: isMobile ? 30 : 44 }} /> <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span>
