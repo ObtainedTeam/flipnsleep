@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { REVIEWS, FAQ_ITEMS, IMG, BUNDLES, PRODUCT } from '../data';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
@@ -34,7 +34,7 @@ export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, st
 export function SummerDealsSlider() {
   const isMobile = useIsMobile();
   const { symbol, isCA } = useCurrency();
-  const bgH = isMobile ? 300 : 360;
+  const bgH = isMobile ? 300 : 430;
   return (
     <section style={{ position: 'relative', overflow: 'hidden', paddingBottom: 34, marginTop: -1 }}>
       <style>{`.fns-scroll{scrollbar-width:none;-ms-overflow-style:none}.fns-scroll::-webkit-scrollbar{display:none}`}</style>
@@ -46,9 +46,9 @@ export function SummerDealsSlider() {
             const p = getPrice(b, isCA);
             const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
             return (
-              <a key={b.id} href="/product/signature-cold-pillow" style={{ textDecoration: 'none', scrollSnapAlign: 'center', flex: isMobile ? '0 0 78%' : '0 0 300px', borderRadius: 22, overflow: 'hidden', boxShadow: '0 6px 14px rgba(32,27,93,.22)', background: '#fff' }}>
+              <a key={b.id} href="/product/signature-cold-pillow" style={{ textDecoration: 'none', scrollSnapAlign: 'center', flex: isMobile ? '0 0 78%' : '0 0 350px', borderRadius: 22, overflow: 'hidden', boxShadow: '0 6px 14px rgba(32,27,93,.22)', background: '#fff' }}>
                 <div style={{ position: 'relative' }}>
-                  <ProductImageBlock src={b.image} alt={b.label} height={isMobile ? 170 : 190} radius={0} />
+                  <ProductImageBlock src={b.image} alt={b.label} height={isMobile ? 170 : 220} radius={0} />
                   <span style={{ position: 'absolute', top: 12, left: 12, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' }}>{b.short.toLowerCase()}</span>
                 </div>
                 <div style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '16px 16px 18px', textAlign: 'center' }}>
@@ -66,7 +66,53 @@ export function SummerDealsSlider() {
   );
 }
 
-// Collections-sectie: 2 rijen × 2 kolommen. Demo-foto's tot de categorieën
+// Live besteldeadline: telt af naar 23:00 uur Eastern Time (de "ordered
+// before 11PM, shipped today"-belofte). Waarheidsgetrouwe urgentie.
+export function ShippingCountdown() {
+  const [label, setLabel] = useState('Ordered before 11 PM ET — ships today');
+
+  useEffect(() => {
+    const update = () => {
+      try {
+        const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date());
+        const h = +parts.find(p => p.type === 'hour').value % 24;
+        const m = +parts.find(p => p.type === 'minute').value;
+        const left = 23 * 60 - (h * 60 + m);
+        if (left > 0) {
+          const hh = Math.floor(left / 60), mm = left % 60;
+          setLabel(`Order within ${hh > 0 ? `${hh}h ` : ''}${mm}m and it ships today`);
+        } else {
+          setLabel('Order now — ships tomorrow morning');
+        }
+      } catch { /* val terug op statische tekst */ }
+    };
+    update();
+    const t = setInterval(update, 30000);
+    return () => clearInterval(t);
+  }, []);
+
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#FFF6E3', border: `1px solid ${c.amberD}55`, borderRadius: 999, padding: '7px 14px', fontSize: 12, fontWeight: 600, color: '#8a6519' }}>
+      📦 {label}
+    </div>
+  );
+}
+
+// Statische trustbalk onder de header — cijfers later inwisselen voor
+// echte reviewaantallen zodra die er zijn.
+export function TrustBar() {
+  const isMobile = useIsMobile();
+  const items = ['🌙 100-night sleep trial', '🚚 Free shipping, always', '✓ OEKO-TEX & CertiPUR-US certified', '🛡️ 2-year warranty'];
+  return (
+    <div className="fns-scroll" style={{ background: '#fff', borderBottom: '1px solid rgba(32,27,93,.10)', display: 'flex', gap: isMobile ? 18 : 34, justifyContent: isMobile ? 'flex-start' : 'center', overflowX: 'auto', padding: '9px 16px', whiteSpace: 'nowrap' }}>
+      {items.map((t, i) => (
+        <span key={i} style={{ fontSize: 11.5, fontWeight: 600, color: c.navy, fontFamily: FONT_SUB, flexShrink: 0 }}>{t}</span>
+      ))}
+    </div>
+  );
+}
+
+
 // echt bestaan; alleen Pillows is nu shopbaar.
 export function CollectionsBlock() {
   const isMobile = useIsMobile();
@@ -79,14 +125,14 @@ export function CollectionsBlock() {
   return (
     <section style={{ padding: isMobile ? '40px 20px 8px' : '54px 40px 10px' }}>
       <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, color: c.navy, textAlign: 'center' }}>Discover our <span style={{ fontFamily: FONT_SUB }}>collections</span></h2>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, maxWidth: 480, margin: '22px auto 0' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 18, maxWidth: isMobile ? 480 : 1100, margin: isMobile ? '22px auto 0' : '30px auto 0' }}>
         {items.map(([label, img, to, soon], i) => {
           const inner = (
             <div style={{ position: 'relative', borderRadius: 18, overflow: 'hidden', aspectRatio: '.85', display: 'flex', alignItems: 'flex-end', filter: soon ? 'saturate(.45) brightness(.92)' : 'none' }}>
               <img src={img} alt={label} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 40%, rgba(20,16,64,.65))' }} />
               {soon && <span style={{ position: 'absolute', top: 10, right: 10, background: c.amber, color: c.navy, fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 10.5, borderRadius: 999, padding: '5px 10px' }}>Coming soon</span>}
-              <span style={{ position: 'relative', color: '#fff', fontFamily: FONT_DISPLAY, fontSize: 18, padding: 14, textShadow: '0 2px 8px rgba(0,0,0,.4)' }}>{label}</span>
+              <span style={{ position: 'relative', color: '#fff', fontFamily: FONT_DISPLAY, fontSize: isMobile ? 18 : 21, padding: isMobile ? 14 : 18, textShadow: '0 2px 8px rgba(0,0,0,.4)' }}>{label}</span>
             </div>
           );
           return to
@@ -112,12 +158,12 @@ export function ReviewsBlock() {
     <div>
       {/* Wolkjes komen achter de donkere sectie vandaan: rand met gezichtje boven, kale rand onder */}
       <img src={IMG.cloudsUp} alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginBottom: -1 }} />
-      <section style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: isMobile ? '38px 20px 40px' : '52px 40px 56px' }}>
+      <section style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: isMobile ? '38px 20px 40px' : '64px 40px 70px' }}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, textAlign: 'center' }}>What our <span style={{ fontFamily: FONT_SUB }}>customers say</span></h2>
         <div style={{ textAlign: 'center', margin: '10px 0 6px' }}><Stars n={5} /> <span style={{ fontSize: 13, marginLeft: 6 }}>4.7 average rating</span></div>
         <div className="fns-scroll" style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '18px 4px 8px', maxWidth: 1050, margin: '0 auto', scrollSnapType: 'x mandatory' }}>
           {REVIEWS.map((r, i) => (
-            <div key={i} style={{ scrollSnapAlign: 'center', flex: isMobile ? '0 0 86%' : '1 1 0', minWidth: isMobile ? undefined : 260, background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
+            <div key={i} style={{ scrollSnapAlign: 'center', flex: isMobile ? '0 0 86%' : '1 1 0', minWidth: isMobile ? undefined : 300, background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
               <Stars n={r.stars} />
               <p style={{ fontSize: 13.5, lineHeight: 1.65, margin: '10px 0 14px' }}>"{r.text}"</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
@@ -164,13 +210,13 @@ export function EmailCapture() {
   return (
     <section style={{ background: c.sky, padding: isMobile ? '42px 22px' : '56px 40px', textAlign: 'center' }}>
       <img src={IMG.iconCloud} alt="" style={{ height: 30, marginBottom: 8 }} />
-      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy }}>Sleep better, <span style={{ fontFamily: FONT_SUB }}>pay less</span></h2>
+      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 36, color: c.navy }}>Sleep better, <span style={{ fontFamily: FONT_SUB }}>pay less</span></h2>
       <p style={{ fontSize: 13.5, lineHeight: 1.6, maxWidth: 340, margin: '10px auto 0' }}>Get 10% off your first order and our best sleep tips for warm nights.</p>
       {state === 'done' ? (
         <p style={{ fontSize: 14, fontWeight: 600, marginTop: 20 }}>Check your inbox — your 10% code is on its way. 🌙</p>
       ) : (
         <>
-          <form onSubmit={submit} style={{ display: 'flex', maxWidth: 380, margin: '20px auto 0', background: '#fff', borderRadius: 999, padding: 5, boxShadow: '0 8px 22px rgba(32,27,93,.14)' }}>
+          <form onSubmit={submit} style={{ display: 'flex', maxWidth: isMobile ? 380 : 460, margin: '22px auto 0', background: '#fff', borderRadius: 999, padding: 5, boxShadow: '0 8px 22px rgba(32,27,93,.14)' }}>
             <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Your email address" aria-label="Email address"
               style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: 'Poppins,sans-serif', fontSize: 13, padding: '10px 16px', color: c.navy, minWidth: 0, outline: 'none' }} />
             <button type="submit" disabled={state === 'busy'} style={{ border: 'none', borderRadius: 999, background: c.navy, color: '#fff', fontWeight: 700, fontSize: 13, padding: '11px 20px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>{state === 'busy' ? '…' : 'Get 10% off'}</button>
@@ -188,6 +234,7 @@ export function TrustAccordion({ specs }) {
     ['Ordered before 11:00 PM, shipped today', "Orders placed before 11 PM ET leave our warehouse the same business day. You'll receive tracking as soon as it ships."],
     ['100-night sleep trial, money-back guarantee', 'Try the pillow for 100 nights. Not sleeping better? Send it back for free and get a full refund, no questions asked.'],
     ['Free shipping on every order', 'Shipping is free on all orders across the United States and Canada, and returns are free within the trial period.'],
+    ['2-year warranty', 'Every flip\'nsleep product comes with a 2-year warranty on materials and workmanship. If anything fails, we repair, replace or refund it — no discussion.'],
     ['Product specifications', specs],
   ];
   return (

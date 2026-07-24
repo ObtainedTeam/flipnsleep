@@ -5,12 +5,12 @@ import { IMG } from '../data';
 export default function Footer() {
   const isMobile = useIsMobile();
   return (
-    <footer style={{ background: c.navy, color: '#fff', borderRadius: '34px 34px 0 0', padding: isMobile ? '38px 24px 30px' : '54px 60px 36px', marginTop: 60 }}>
+    <footer style={{ background: c.navy, color: '#fff', borderRadius: '34px 34px 0 0', padding: isMobile ? '38px 24px 30px' : '70px 60px 44px', marginTop: 60 }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 30 }}>
-          <img src={IMG.logoFull} alt="flip'nsleep" style={{ height: isMobile ? 44 : 58, width: 'auto' }} />
+          <img src={IMG.logoFull} alt="flip'nsleep" style={{ height: isMobile ? 44 : 68, width: 'auto' }} />
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: 24, fontSize: 12.5, maxWidth: 820, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 24 : 40, fontSize: isMobile ? 12.5 : 13.5, maxWidth: isMobile ? 820 : 980, margin: '0 auto' }}>
           <div>
             <h4 style={{ fontFamily: FONT_SUB, fontSize: 13, marginBottom: 10, color: c.amber, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Shop</h4>
             <Link to="/product/signature-cold-pillow" style={{ display: 'block', color: '#CFCBF2', textDecoration: 'none', marginBottom: 7 }}>Signature Cold Pillow</Link>

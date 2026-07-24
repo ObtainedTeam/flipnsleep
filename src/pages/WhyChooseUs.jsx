@@ -18,13 +18,13 @@ export default function WhyChooseUs() {
     <div>
       <section style={{ textAlign: 'center', padding: isMobile ? '40px 20px 8px' : '56px 40px 12px' }}>
         <div style={EYEBROW}>The honest comparison</div>
-        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 30 : 42, color: c.navy, margin: '8px 0 10px' }}>Why flip'nsleep?</h1>
+        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 30 : 50, color: c.navy, margin: '8px 0 10px' }}>Why flip'nsleep?</h1>
         <p style={{ fontSize: 14, lineHeight: 1.65, maxWidth: 460, margin: '0 auto' }}>
           Most pillows make you adapt to them. Ours adapts to you — in height, in temperature, and in how much risk you take buying it.
         </p>
       </section>
 
-      <section style={{ maxWidth: 860, margin: '26px auto 0', padding: '0 16px', overflowX: 'auto' }}>
+      <section style={{ maxWidth: isMobile ? 860 : 980, margin: isMobile ? '26px auto 0' : '36px auto 0', padding: '0 16px', overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, background: '#fff', borderRadius: 22, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', minWidth: 560 }}>
           <thead>
             <tr style={{ background: c.navy, color: '#fff' }}>

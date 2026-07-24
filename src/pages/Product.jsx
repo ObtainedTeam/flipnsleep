@@ -20,7 +20,7 @@ export default function Product({ onCartOpen }) {
 
   return (
     <div>
-      <section style={{ maxWidth: 1060, margin: '0 auto', padding: isMobile ? '20px 16px' : '40px 24px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr', gap: isMobile ? 24 : 44 }}>
+      <section style={{ maxWidth: 1160, margin: '0 auto', padding: isMobile ? '20px 16px' : '52px 24px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr', gap: isMobile ? 24 : 60 }}>
         {/* Gallery */}
         <div>
           <ProductImageBlock src={PRODUCT.images[img]} alt={PRODUCT.name} height={isMobile ? 320 : 460} radius={22} />
@@ -37,7 +37,7 @@ export default function Product({ onCartOpen }) {
         {/* Info */}
         <div>
           <div style={EYEBROW}>Signature series</div>
-          <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 36, color: c.navy, margin: '6px 0 6px', lineHeight: 1.15 }}>{PRODUCT.name}</h1>
+          <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 42, color: c.navy, margin: '6px 0 8px', lineHeight: 1.15 }}>{PRODUCT.name}</h1>
           <div style={{ marginBottom: 8 }}><Stars n={5} /><span style={{ fontSize: 12.5, color: c.grayD, marginLeft: 8 }}>4.7 · loved by hot sleepers</span></div>
           <div style={{ fontFamily: FONT_DISPLAY, fontSize: 24, color: c.navy }}>
             {formatPrice(price, symbol)} <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 14, color: '#999' }}>{formatPrice(compare, symbol)}</s>
@@ -82,7 +82,7 @@ export default function Product({ onCartOpen }) {
       </section>
 
       {/* Detail: vulling */}
-      <section style={{ maxWidth: 1060, margin: '0 auto', padding: isMobile ? '10px 16px 30px' : '20px 24px 50px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 18 : 40, alignItems: 'center' }}>
+      <section style={{ maxWidth: 1160, margin: '0 auto', padding: isMobile ? '10px 16px 30px' : '30px 24px 70px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 18 : 40, alignItems: 'center' }}>
         <img src={IMG.filling} alt="Inside the Signature Cold Pillow: adjustable shredded memory foam" style={{ borderRadius: 22 }} />
         <div>
           <div style={EYEBROW}>A look inside the pillow</div>

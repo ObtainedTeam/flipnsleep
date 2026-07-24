@@ -7,7 +7,7 @@ export default function HowItWorks() {
   const isMobile = useIsMobile();
 
   const Step = ({ n, title, text, img, reverse }) => (
-    <section style={{ maxWidth: 1000, margin: '0 auto', padding: isMobile ? '18px 20px' : '28px 24px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 16 : 40, alignItems: 'center' }}>
+    <section style={{ maxWidth: 1080, margin: '0 auto', padding: isMobile ? '18px 20px' : '40px 24px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 16 : 40, alignItems: 'center' }}>
       <img src={img} alt="" style={{ borderRadius: 22, order: isMobile ? 0 : (reverse ? 2 : 0) }} />
       <div>
         <b style={{ width: 40, height: 40, borderRadius: '50%', background: c.sky, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 10 }}>{n}</b>
@@ -21,7 +21,7 @@ export default function HowItWorks() {
     <div>
       <section style={{ background: `linear-gradient(180deg, ${c.skyDeep}, ${c.sky2})`, textAlign: 'center', padding: isMobile ? '44px 22px 0' : '64px 40px 0' }}>
         <div style={{ ...EYEBROW, color: c.navy }}>How it works</div>
-        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 46, color: c.navy, margin: '8px 0 10px' }}>One flip to a cooler night</h1>
+        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 54, color: c.navy, margin: '8px 0 10px' }}>One flip to a cooler night</h1>
         <p style={{ fontSize: 14, lineHeight: 1.65, maxWidth: 460, margin: '0 auto 26px' }}>
           No fans, no plugs, no gimmicks. The Signature Cold Pillow works with two fabrics, one zipper and physics that never needs charging.
         </p>
