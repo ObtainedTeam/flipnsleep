@@ -87,5 +87,6 @@ export const FAQ_ITEMS = [
   ["What if the cool side is too cold in winter?", "Just flip it. The other side is soft bamboo fabric, made for colder nights."],
   ["Do you ship to my country?", "We ship across the United States and Canada. Shipping is free on every order."],
   ["When will my order ship?", "Orders placed before 11 PM ET ship the same business day. You'll receive tracking as soon as it leaves the warehouse."],
+  ["What warranty do I get?", "Every flip'nsleep product comes with a 2-year warranty on materials and workmanship, on top of the 100-night trial. If anything fails within two years, we repair, replace or refund it."],
   ["Is the foam safe?", "The foam is CertiPUR-US certified (no PBDE/TDCPP/TCEP flame retardants, no heavy metals, low VOC) and the fabrics are OEKO-TEX Standard 100 certified."],
 ];

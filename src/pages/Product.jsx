@@ -4,7 +4,7 @@ import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { PRODUCT, BUNDLES, IMG } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNow } from '../shopify';
-import { Stars, ReviewsBlock, FAQBlock, TrustAccordion, CloudDivider, ProductImageBlock } from '../components/Blocks';
+import { Stars, ReviewsBlock, FAQBlock, TrustAccordion, CloudDivider, ProductImageBlock, ShippingCountdown } from '../components/Blocks';
 
 export default function Product({ onCartOpen }) {
   const isMobile = useIsMobile();
@@ -42,7 +42,8 @@ export default function Product({ onCartOpen }) {
           <div style={{ fontFamily: FONT_DISPLAY, fontSize: 24, color: c.navy }}>
             {formatPrice(price, symbol)} <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 14, color: '#999' }}>{formatPrice(compare, symbol)}</s>
           </div>
-          <div style={{ fontSize: 12.5, color: '#2e6b4f', fontWeight: 600, marginBottom: 14 }}>That's {formatPrice(perPillow, symbol)} per pillow · free shipping included</div>
+          <div style={{ fontSize: 12.5, color: '#2e6b4f', fontWeight: 600, marginBottom: 8 }}>That's {formatPrice(perPillow, symbol)} per pillow · free shipping included</div>
+          <div style={{ marginBottom: 14 }}><ShippingCountdown /></div>
 
           {/* FAMILY-DEAL badge-stijl blok */}
           <div style={{ background: '#F0F5F2', border: '1px solid #d4e6da', borderRadius: 12, padding: '12px 16px', marginBottom: 18 }}>
@@ -82,13 +83,23 @@ export default function Product({ onCartOpen }) {
 
       {/* Detail: vulling */}
       <section style={{ maxWidth: 1060, margin: '0 auto', padding: isMobile ? '10px 16px 30px' : '20px 24px 50px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 18 : 40, alignItems: 'center' }}>
-        <img src={IMG.filling} alt="Adjustable shredded memory foam filling" style={{ borderRadius: 22 }} />
+        <img src={IMG.filling} alt="Inside the Signature Cold Pillow: adjustable shredded memory foam" style={{ borderRadius: 22 }} />
         <div>
-          <div style={EYEBROW}>Adjustable by design</div>
-          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, margin: '8px 0 12px' }}>Your pillow, your height</h2>
-          <p style={{ fontSize: 14, lineHeight: 1.75, color: c.grayD }}>
-            Unzip the inner cover and add or remove shredded memory foam until the loft is exactly right for how you sleep. Side sleepers keep more filling for neck support, stomach sleepers take some out. No more "too high" or "too flat" — it's your call, every night.
-          </p>
+          <div style={EYEBROW}>A look inside the pillow</div>
+          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, margin: '8px 0 14px' }}>Four layers, one cool night</h2>
+          <ol style={{ listStyle: 'none' }}>
+            {[
+              ['Cool-touch outer side', 'Woven cooling fabric with a tested Q-max value of 0.26 — the instant cold feeling when your skin touches it.'],
+              ['Adjustable foam core', 'Recycled shredded memory foam (35–40D). Unzip, add or remove filling until the loft fits your sleeping position exactly.'],
+              ['Breathing room', 'Because the foam is shredded, air keeps circulating between the pieces — no heat build-up under your head.'],
+              ['Warm bamboo side', 'Flip it in winter: the reverse side is soft, breathable bamboo fabric. The outer cover zips off and is machine-washable.'],
+            ].map(([t, d], i) => (
+              <li key={i} style={{ display: 'flex', gap: 14, marginBottom: 14, fontSize: 13.5, lineHeight: 1.65 }}>
+                <b style={{ flex: '0 0 30px', height: 30, borderRadius: '50%', background: c.sky, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_DISPLAY, fontSize: 13 }}>{i + 1}</b>
+                <div><strong>{t}.</strong> <span style={{ color: c.grayD }}>{d}</span></div>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
