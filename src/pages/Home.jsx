@@ -22,12 +22,19 @@ export default function Home({ onCartOpen }) {
     <div>
       {/* ============ HERO ============ */}
       <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '46px 22px 40px' : '70px 40px 60px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        {/* Achtergrondvideo: loopt, gedempt, met de foto als poster/fallback */}
+        <video autoPlay muted loop playsInline preload="metadata" poster={IMG.heroBg} aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}>
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+        {/* Verdonkering zodat titel en knop leesbaar blijven, video blijft goed zichtbaar */}
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,0.30)' }} />
         <img src={IMG.icon1p1} alt="1 plus 1 free" style={{ position: 'absolute', top: isMobile ? 18 : 30, right: isMobile ? 18 : '8%', height: isMobile ? 111 : 190, filter: 'drop-shadow(0 8px 20px rgba(32,27,93,.25))' }} />
         <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto', paddingTop: isMobile ? 70 : 60 }}>
-          <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 36 : 66, color: c.navy, margin: '0 0 14px', lineHeight: 1.1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 10 : 16, flexWrap: 'wrap' }}>
+          <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 36 : 66, color: '#fff', margin: '0 0 14px', lineHeight: 1.1, textShadow: '0 2px 18px rgba(20,16,64,.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 10 : 16, flexWrap: 'wrap' }}>
             Summer <img src={IMG.iconCloud} alt="" style={{ height: isMobile ? 30 : 54 }} /> <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span>
           </h1>
-          <p style={{ fontSize: isMobile ? 14 : 17, lineHeight: 1.65, maxWidth: isMobile ? 380 : 460, margin: '0 auto 26px' }}>
+          <p style={{ fontSize: isMobile ? 14 : 17, lineHeight: 1.65, maxWidth: isMobile ? 380 : 460, margin: '0 auto 26px', color: '#EFEDFF', textShadow: '0 1px 10px rgba(20,16,64,.5)' }}>
             Shop for summer with a buy-one-get-one-free offer on our Signature Cold Pillow.
           </p>
           <a href="#offer" style={{ ...BTN, fontSize: isMobile ? 14 : 15, padding: isMobile ? '15px 38px' : '18px 48px' }}>Shop now</a>
