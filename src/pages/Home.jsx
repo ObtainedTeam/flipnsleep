@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { c, BTN, BTNO, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
@@ -18,16 +18,27 @@ export default function Home({ onCartOpen }) {
 
   const addToCart = () => { CartContext.add(selected, 1); onCartOpen && onCartOpen(); };
 
+  // iOS-vangnet: als autoplay geblokkeerd werd (bv. energiebesparende modus),
+  // start de video alsnog bij de eerste aanraking of klik.
+  useEffect(() => {
+    const kick = () => {
+      const v = document.querySelector('video');
+      if (v && v.paused) { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+    };
+    kick();
+    window.addEventListener('touchstart', kick, { once: true, passive: true });
+    window.addEventListener('click', kick, { once: true });
+    return () => { window.removeEventListener('touchstart', kick); window.removeEventListener('click', kick); };
+  }, []);
+
   return (
     <div>
       {/* ============ HERO ============ */}
-      <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: isMobile ? 'flex-start' : 'center', padding: isMobile ? '34px 22px 44px' : '50px 40px 56px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ backgroundImage: `url(${IMG.heroPoster})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: isMobile ? 'flex-start' : 'center', padding: isMobile ? '34px 22px 44px' : '50px 40px 56px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         {/* Achtergrondvideo: loopt, gedempt, met de foto als poster/fallback */}
-        <video autoPlay muted loop playsInline preload="auto" poster={IMG.heroBg} aria-hidden="true"
-          ref={el => { if (el) { el.muted = true; el.defaultMuted = true; const p = el.play(); if (p && p.catch) p.catch(() => {}); } }}
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}>
-          <source src="/videos/hero.mp4" type="video/mp4" />
-        </video>
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
+          `<video autoplay loop muted playsinline webkit-playsinline preload="auto" poster="${IMG.heroPoster}" src="/videos/hero.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>`
+        }} />
         {/* Verdonkering zodat titel en knop leesbaar blijven, video blijft goed zichtbaar */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,0.30)' }} />
         <div style={{ position: 'relative', maxWidth: isMobile ? 720 : 1100, margin: '0 auto', width: '100%', display: isMobile ? 'block' : 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, textAlign: isMobile ? 'center' : 'left' }}>
@@ -42,7 +53,7 @@ export default function Home({ onCartOpen }) {
           </div>
 
           {/* Sleep quiz widget — funnel naar /quiz */}
-          <div style={{ background: 'rgba(30,38,72,0.65)', backdropFilter: 'blur(5px)', WebkitBackdropFilter: 'blur(5px)', borderRadius: 15, padding: isMobile ? '18px 16px 16px' : '28px 26px 24px', width: isMobile ? '100%' : 420, maxWidth: 420, margin: isMobile ? '30px auto 0' : 0, boxShadow: '0 18px 40px rgba(10,8,40,.45)', flexShrink: 0, textAlign: 'center' }}>
+          <div style={{ background: 'rgba(30,38,72,0.72)', borderRadius: 15, padding: isMobile ? '18px 16px 16px' : '28px 26px 24px', width: isMobile ? '100%' : 420, maxWidth: 420, margin: isMobile ? '30px auto 0' : 0, boxShadow: '0 18px 40px rgba(10,8,40,.45)', flexShrink: 0, textAlign: 'center' }}>
             <div style={{ color: '#fff', fontSize: isMobile ? 14 : 16, fontFamily: FONT_SUB }}>Try our <span style={{ fontFamily: FONT_DISPLAY }}>sleep quiz</span></div>
             <div style={{ color: '#fff', fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 40, lineHeight: 1.05, margin: '6px 0 2px' }}>For 15<span style={{ fontFamily: FONT_SUB }}>%</span> off</div>
             <div style={{ color: '#fff', fontSize: isMobile ? 15 : 17, fontFamily: FONT_SUB, marginBottom: 12 }}>your order</div>
