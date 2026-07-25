@@ -21,7 +21,7 @@ export default function Home({ onCartOpen }) {
   return (
     <div>
       {/* ============ HERO ============ */}
-      <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '46px 22px 40px' : '70px 40px 60px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', padding: isMobile ? '34px 22px 44px' : '64px 40px 70px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         {/* Achtergrondvideo: loopt, gedempt, met de foto als poster/fallback */}
         <video autoPlay muted loop playsInline preload="metadata" poster={IMG.heroBg} aria-hidden="true"
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}>
@@ -29,15 +29,35 @@ export default function Home({ onCartOpen }) {
         </video>
         {/* Verdonkering zodat titel en knop leesbaar blijven, video blijft goed zichtbaar */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,0.30)' }} />
-        <img src={IMG.icon1p1} alt="1 plus 1 free" style={{ position: 'absolute', top: isMobile ? 18 : 30, right: isMobile ? 18 : '8%', height: isMobile ? 111 : 190, filter: 'drop-shadow(0 8px 20px rgba(32,27,93,.25))' }} />
-        <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto', paddingTop: isMobile ? 70 : 60 }}>
-          <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 36 : 66, color: '#fff', margin: '0 0 14px', lineHeight: 1.1, textShadow: '0 2px 18px rgba(20,16,64,.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 10 : 16, flexWrap: 'wrap' }}>
-            Summer <img src={IMG.iconCloud} alt="" style={{ height: isMobile ? 30 : 54 }} /> <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span>
-          </h1>
-          <p style={{ fontSize: isMobile ? 14 : 17, lineHeight: 1.65, maxWidth: isMobile ? 380 : 460, margin: '0 auto 26px', color: '#EFEDFF', textShadow: '0 1px 10px rgba(20,16,64,.5)' }}>
-            Shop for summer with a buy-one-get-one-free offer on our Signature Cold Pillow.
-          </p>
-          <a href="#offer" style={{ ...BTN, fontSize: isMobile ? 14 : 15, padding: isMobile ? '15px 38px' : '18px 48px' }}>Shop now</a>
+        <div style={{ position: 'relative', maxWidth: isMobile ? 720 : 1100, margin: '0 auto', width: '100%', display: isMobile ? 'block' : 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, textAlign: isMobile ? 'center' : 'left' }}>
+          <div style={{ maxWidth: isMobile ? undefined : 520 }}>
+            <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 36 : 62, color: '#fff', margin: '0 0 14px', lineHeight: 1.1, textShadow: '0 2px 18px rgba(20,16,64,.45)', display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'center' : 'flex-start', gap: isMobile ? 10 : 16, flexWrap: 'wrap' }}>
+              Summer <img src={IMG.iconCloud} alt="" style={{ height: isMobile ? 30 : 50 }} /> <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span>
+            </h1>
+            <p style={{ fontSize: isMobile ? 14 : 17, lineHeight: 1.65, maxWidth: isMobile ? 380 : 440, margin: isMobile ? '0 auto 22px' : '0 0 24px', color: '#EFEDFF', textShadow: '0 1px 10px rgba(20,16,64,.5)' }}>
+              Shop for summer with a buy-one-get-one-free offer on our Signature Cold Pillow.
+            </p>
+            <a href="#offer" style={{ ...BTN, fontSize: isMobile ? 14 : 15, padding: isMobile ? '15px 38px' : '17px 44px' }}>Shop now</a>
+          </div>
+
+          {/* Sleep quiz widget — funnel naar /quiz */}
+          <div style={{ background: '#1E2648', borderRadius: 15, padding: isMobile ? '18px 16px 16px' : '28px 26px 24px', width: isMobile ? '100%' : 420, maxWidth: 420, margin: isMobile ? '30px auto 0' : 0, boxShadow: '0 18px 40px rgba(10,8,40,.45)', flexShrink: 0, textAlign: 'center' }}>
+            <div style={{ color: '#fff', fontSize: isMobile ? 14 : 16, fontFamily: FONT_SUB }}>Try our <span style={{ fontFamily: FONT_DISPLAY }}>sleep quiz</span></div>
+            <div style={{ color: '#fff', fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 40, lineHeight: 1.05, margin: '6px 0 2px' }}>For 15<span style={{ fontFamily: FONT_SUB }}>%</span> off</div>
+            <div style={{ color: '#fff', fontSize: isMobile ? 15 : 17, fontFamily: FONT_SUB, marginBottom: 12 }}>your order</div>
+            <div style={{ height: 1, background: 'rgba(255,255,255,.55)', margin: '0 6px 12px' }} />
+            <div style={{ color: '#fff', fontSize: isMobile ? 14 : 15.5, fontFamily: FONT_SUB, marginBottom: 12 }}>What kind of <span style={{ fontFamily: FONT_DISPLAY }}>sleeper</span> are you?</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <Link to="/quiz?sleeper=back" style={{ background: c.sky, borderRadius: 15, padding: isMobile ? '11px 8px' : '15px 10px', textDecoration: 'none', color: '#231D5D', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: isMobile ? 20 : 24 }}>😴</span>
+                <span style={{ fontSize: isMobile ? 14 : 15 }}><b style={{ fontFamily: FONT_DISPLAY, fontWeight: 400 }}>Back</b> <span style={{ fontFamily: FONT_SUB }}>Sleeper</span></span>
+              </Link>
+              <Link to="/quiz?sleeper=stomach" style={{ background: c.sky, borderRadius: 15, padding: isMobile ? '11px 8px' : '15px 10px', textDecoration: 'none', color: '#231D5D', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: isMobile ? 20 : 24 }}>🛏️</span>
+                <span style={{ fontSize: isMobile ? 14 : 15 }}><b style={{ fontFamily: FONT_DISPLAY, fontWeight: 400 }}>Stomach</b> <span style={{ fontFamily: FONT_SUB }}>Sleeper</span></span>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

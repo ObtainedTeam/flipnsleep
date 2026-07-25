@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { email, listId } = req.body;
+  const { email, listId, attributes } = req.body;
 
   if (!email || !listId) {
     return res.status(400).json({ error: 'Email and listId required' });
@@ -20,6 +20,7 @@ export default async function handler(req, res) {
         email,
         listIds: [Number(listId)],
         updateEnabled: true,
+        ...(attributes ? { attributes } : {}),
       }),
     });
 

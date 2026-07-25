@@ -3,16 +3,17 @@
 const LIST_IDS = {
   newsletter: 0,
   welcome10: 0,
+  quiz15: 0, // sleep quiz: contact krijgt automation-mail met 15%-code
 };
 
-export async function subscribe(email, list) {
+export async function subscribe(email, list, attributes) {
   const listId = LIST_IDS[list];
   if (!listId) throw new Error('Unknown list: ' + list);
 
   const res = await fetch('/api/subscribe', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, listId }),
+    body: JSON.stringify({ email, listId, ...(attributes ? { attributes } : {}) }),
   });
 
   const data = await res.json();

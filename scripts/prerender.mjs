@@ -46,6 +46,10 @@ const META = {
     title: "FAQ | flip'nsleep",
     desc: '100-night trial, shipping to the US and Canada, washing instructions and how to adjust your pillow — all questions answered.',
   },
+  '/quiz': {
+    title: "Sleep Quiz — 15% Off Your Order | flip'nsleep",
+    desc: 'Answer a few quick questions about how you sleep and get 15% off your Signature Cold Pillow order.',
+  },
   '/privacy': { title: "Privacy Policy | flip'nsleep", desc: "How flip'nsleep handles your data." },
   '/terms': { title: "Terms of Service | flip'nsleep", desc: "The terms that apply to orders on flipnsleep.com." },
   '/returns': { title: "Shipping & Returns | flip'nsleep", desc: 'Free shipping, a 100-night trial and free returns across the US and Canada.' },

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Cart from './components/Cart';
@@ -15,9 +15,12 @@ import About from './pages/About';
 import FAQ from './pages/FAQ';
 import Legal from './pages/Legal';
 import WhyChooseUs from './pages/WhyChooseUs';
+import Quiz from './pages/Quiz';
 
 export function AppShell() {
   const [cartOpen, setCartOpen] = useState(false);
+  const { pathname } = useLocation();
+  const isQuiz = pathname.startsWith('/quiz');
 
   return (
       <CurrencyProvider>
@@ -28,11 +31,12 @@ export function AppShell() {
           a { color: inherit; }
           img { max-width: 100%; }
           summary::-webkit-details-marker { display: none; }
+          .fns-scroll{scrollbar-width:none;-ms-overflow-style:none} .fns-scroll::-webkit-scrollbar{display:none}
         `}</style>
-        <Nav onCartOpen={() => setCartOpen(true)} />
+        {!isQuiz && <Nav onCartOpen={() => setCartOpen(true)} />}
         <Cart isOpen={cartOpen} onClose={() => setCartOpen(false)} />
-        <ExitPopup />
-        <NewsletterPopup />
+        {!isQuiz && <ExitPopup />}
+        {!isQuiz && <NewsletterPopup />}
         <main>
           <Routes>
             <Route path="/" element={<Home onCartOpen={() => setCartOpen(true)} />} />
@@ -42,13 +46,14 @@ export function AppShell() {
             <Route path="/about" element={<About />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/why-flipnsleep" element={<WhyChooseUs />} />
+            <Route path="/quiz" element={<Quiz />} />
             <Route path="/privacy" element={<Legal />} />
             <Route path="/returns" element={<Legal />} />
             <Route path="/terms" element={<Legal />} />
             <Route path="*" element={<Home onCartOpen={() => setCartOpen(true)} />} />
           </Routes>
         </main>
-        <Footer />
+        {!isQuiz && <Footer />}
       </CurrencyProvider>
   );
 }

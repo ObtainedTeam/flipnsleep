@@ -17,6 +17,7 @@ export const IMG = {
   cloudWhite: "/images/icon-cloud-white.png",
   randomPillow: "/images/random-pillow.png",
   logoFull: "/images/logo-contra-full.png",
+  logoDark: "/images/logo-dark-full.png",
   logoMark: "/images/logo-mark.png",
   iconCloud: "/images/icon-cloud.png",
   icon1p1: "/images/icon-1plus1.png",
