@@ -21,9 +21,10 @@ export default function Home({ onCartOpen }) {
   return (
     <div>
       {/* ============ HERO ============ */}
-      <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', padding: isMobile ? '34px 22px 44px' : '64px 40px 70px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ backgroundImage: `url(${IMG.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: isMobile ? 'flex-start' : 'center', padding: isMobile ? '34px 22px 44px' : '50px 40px 56px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
         {/* Achtergrondvideo: loopt, gedempt, met de foto als poster/fallback */}
-        <video autoPlay muted loop playsInline preload="metadata" poster={IMG.heroBg} aria-hidden="true"
+        <video autoPlay muted loop playsInline preload="auto" poster={IMG.heroBg} aria-hidden="true"
+          ref={el => { if (el) { el.muted = true; el.defaultMuted = true; const p = el.play(); if (p && p.catch) p.catch(() => {}); } }}
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}>
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
@@ -35,13 +36,13 @@ export default function Home({ onCartOpen }) {
               Summer <img src={IMG.iconCloud} alt="" style={{ height: isMobile ? 30 : 50 }} /> <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span>
             </h1>
             <p style={{ fontSize: isMobile ? 14 : 17, lineHeight: 1.65, maxWidth: isMobile ? 380 : 440, margin: isMobile ? '0 auto 22px' : '0 0 24px', color: '#EFEDFF', textShadow: '0 1px 10px rgba(20,16,64,.5)' }}>
-              Shop for summer with a buy-one-get-one-free offer on our Signature Cold Pillow.
+              Shop for summer with a <b style={{ fontSize: isMobile ? 15.5 : 19, fontFamily: FONT_SUB }}>buy-one-get-one-free</b> offer on our Signature Cold Pillow.
             </p>
             <a href="#offer" style={{ ...BTN, fontSize: isMobile ? 14 : 15, padding: isMobile ? '15px 38px' : '17px 44px' }}>Shop now</a>
           </div>
 
           {/* Sleep quiz widget — funnel naar /quiz */}
-          <div style={{ background: '#1E2648', borderRadius: 15, padding: isMobile ? '18px 16px 16px' : '28px 26px 24px', width: isMobile ? '100%' : 420, maxWidth: 420, margin: isMobile ? '30px auto 0' : 0, boxShadow: '0 18px 40px rgba(10,8,40,.45)', flexShrink: 0, textAlign: 'center' }}>
+          <div style={{ background: 'rgba(30,38,72,0.65)', backdropFilter: 'blur(5px)', WebkitBackdropFilter: 'blur(5px)', borderRadius: 15, padding: isMobile ? '18px 16px 16px' : '28px 26px 24px', width: isMobile ? '100%' : 420, maxWidth: 420, margin: isMobile ? '30px auto 0' : 0, boxShadow: '0 18px 40px rgba(10,8,40,.45)', flexShrink: 0, textAlign: 'center' }}>
             <div style={{ color: '#fff', fontSize: isMobile ? 14 : 16, fontFamily: FONT_SUB }}>Try our <span style={{ fontFamily: FONT_DISPLAY }}>sleep quiz</span></div>
             <div style={{ color: '#fff', fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 40, lineHeight: 1.05, margin: '6px 0 2px' }}>For 15<span style={{ fontFamily: FONT_SUB }}>%</span> off</div>
             <div style={{ color: '#fff', fontSize: isMobile ? 15 : 17, fontFamily: FONT_SUB, marginBottom: 12 }}>your order</div>
