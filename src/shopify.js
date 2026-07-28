@@ -1,13 +1,16 @@
 // flip'nsleep — Shopify-koppeling.
 // Zelfde mechaniek als bugaway: cart-permalinks naar het eigen checkout-domein.
 // BELANGRIJK: één domeinconstante, overal hergebruikt (les van 20 juli).
-export const DOMAIN = 'checkout.flipnsleep.com';
+// TIJDELIJK het myshopify-domein tot checkout.flipnsleep.com in Shopify is
+// gekoppeld en geverifieerd (Settings > Domains); daarna deze regel omzetten.
+export const DOMAIN = 'flipnsleep.myshopify.com';
+// export const DOMAIN = 'checkout.flipnsleep.com';
 
 // Variant-IDs uit de flip'nsleep Shopify-store.
 // TODO: vervangen zodra de producten in Shopify zijn aangemaakt.
 export const VARIANT_IDS = {
-  '1p1': 'REPLACE_WITH_VARIANT_ID_1P1',
-  '2p2': 'REPLACE_WITH_VARIANT_ID_2P2',
+  '1p1': '44265543073857', // 1+1 Signature bundle (2 kussens, $109.99)
+  '2p2': '44265557098561', // 2+2 Signature Bundle (4 kussens, $189.99)
 };
 
 export function getVariantId(bundleId) {
