@@ -1,9 +1,9 @@
 // Brevo-lijsten voor flip'nsleep.
-// TODO: listId's vervangen zodra de lijsten in Brevo zijn aangemaakt.
+// Lijst-IDs uit het Brevo-account (aangemaakt 28 juli 2026).
 const LIST_IDS = {
-  newsletter: 0,
-  welcome10: 0,
-  quiz15: 0, // sleep quiz: contact krijgt automation-mail met 15%-code
+  newsletter: 4, // flipnsleep newsletter
+  welcome10: 5,  // flipnsleep welcome10 — automation stuurt WELCOME10 (10%)
+  quiz15: 6,     // flipnsleep quiz15 — automation stuurt QUIZ15 (15%)
 };
 
 export async function subscribe(email, list, attributes) {
