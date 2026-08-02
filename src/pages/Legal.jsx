@@ -19,7 +19,7 @@ const SECTIONS = {
       ['Products & pricing', 'All prices are shown in USD or CAD depending on your region and include our bundle discounts. Obvious pricing errors may be corrected before shipment; you will always be informed and may cancel free of charge.'],
       ['Orders & shipping', 'Orders placed before 11 PM ET ship the same business day where possible. Shipping is free within the United States and Canada. Risk transfers to you on delivery.'],
       ['100-night trial & returns', 'You may try the product for up to 100 nights after delivery. Within that period you can return it free of charge for a full refund of the purchase price. Contact support@flipnsleep.com to start a return.'],
-      ['Warranty', 'Statutory warranty rights apply. Defects in materials or workmanship are repaired, replaced or refunded at no cost.'],
+      ['Warranty', 'All products come with a 2-year warranty on materials and workmanship, in addition to your statutory rights. Defects are repaired, replaced or refunded at no cost.'],
       ['Liability', 'Our liability is limited to the purchase price of the order, except where the law does not permit such limitation.'],
     ],
   },

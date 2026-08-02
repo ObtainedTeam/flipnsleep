@@ -1,541 +1,292 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { c, useIsMobile, BTN, H2, LBL } from "../theme";
-import { products } from "../data";
-import { useCurrency, formatPrice, getPrice } from "../currency";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { c, BTN, BTNO, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
+import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
+import { PRODUCT, BUNDLES, IMG } from '../data';
+import { CartContext } from '../components/Cart';
+import { buyNow } from '../shopify';
+import Reveal from '../components/Reveal';
+import { CloudDivider, Stars, ReviewsBlock, FAQBlock, EmailCapture, TrustAccordion, ProductImageBlock, CollectionsBlock, SummerDealsSlider, ShippingCountdown } from '../components/Blocks';
 
-const Star = () => <span style={{ color: "#F59E0B" }}>★</span>;
-
-function ProductCard({ product }) {
-  const { symbol, isUS } = useCurrency();
+export default function Home({ onCartOpen }) {
   const isMobile = useIsMobile();
-  const price = getPrice(product, isUS);
-  return (
-    <Link to={`/product/${product.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-      <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", transition: "transform .2s, box-shadow .2s", cursor: "pointer" }}
-        onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.13)"; }}
-        onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.07)"; }}
-      >
-        <div style={{ position: "relative", aspectRatio: "4 / 5", background: product.imageFit === "contain" ? "#fff" : "#f3f4f2", overflow: "hidden" }}>
-          <img src={product.images[0]} alt={product.name} style={{ width: "100%", height: "100%", objectFit: product.imageFit || "cover", objectPosition: product.imageFit ? "center" : "center top" }} />
-          {product.badge && (
-            <span style={{ position: "absolute", top: 12, left: 12, background: c.sage, color: "#fff", borderRadius: 20, padding: "4px 12px", fontSize: 11, fontWeight: 700 }}>{product.badge}</span>
-          )}
-        </div>
-        <div style={{ padding: "16px 16px 20px" }}>
-          <div style={{ fontSize: 11, color: c.sage, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 }}>{product.category}</div>
-          <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 700, fontSize: 15, marginBottom: 8 }}>{product.name}</div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontWeight: 800, fontSize: 16, color: c.sageD }}>{formatPrice(price, symbol)}</span>
-            <span style={{ ...BTN, fontSize: 12, padding: "6px 14px" }}>View</span>
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-}
+  const { symbol, isCA } = useCurrency();
+  const [selected, setSelected] = useState('1p1');
+  const [flipped, setFlipped] = useState(false);
+  const bundle = BUNDLES.find(b => b.id === selected);
+  const price = getPrice(bundle, isCA);
+  const compare = isCA ? bundle.compareAt.cad : bundle.compareAt.usd;
 
-const TESTIMONIALS = [
-  { name: "Maaike V.", stars: 5, text: "Finally something that actually keeps ticks away. Wore it hiking all weekend — not a single bite.", location: "Vermont" },
-  { name: "James R.", stars: 5, text: "My whole family wears these now. Kids can play in the forest without us constantly checking.", location: "Ontario, Canada" },
-  { name: "Sophie L.", stars: 5, text: "The integrated foot cover is genius. No more tucking trousers into socks.", location: "Minnesota" },
-  { name: "Bart M.", stars: 4, text: "Lightweight, breathable, does exactly what it says. Great for gardening too.", location: "Connecticut" },
-  { name: "Rachel K.", stars: 5, text: "I was terrified of ticks after my neighbor got Lyme. This suit gave me my backyard back.", location: "New Jersey" },
-  { name: "Dave T.", stars: 5, text: "Ditched the spray for good. Wore this fly fishing all summer — not one bite.", location: "Montana" },
-  { name: "Karen P.", stars: 5, text: "Bought the combo set for my husband and me. We garden every weekend now without a worry.", location: "Virginia" },
-  { name: "Mike S.", stars: 5, text: "As a trail runner, I was skeptical. But this thing breathes and keeps every tick off. Game changer.", location: "New Hampshire" },
-  { name: "Linda W.", stars: 5, text: "I have alpha-gal from a tick bite. This suit is the only reason I still go outside.", location: "North Carolina" },
-  { name: "Tom H.", stars: 4, text: "Great concept, well made. My only note is I wish they made one for my dog too.", location: "Wisconsin" },
-];
+  const addToCart = () => { CartContext.add(selected, 1); onCartOpen && onCartOpen(); };
 
-const DISEASES = [
-  { name: "Lyme Disease", severity: "High Risk", color: "#dc2626", desc: "Caused by Borrelia bacteria transmitted through tick bites. Can lead to chronic fatigue, joint pain and neurological issues if untreated." },
-  { name: "TBE (Tick-Borne Encephalitis)", severity: "Serious", color: "#d97706", desc: "Viral infection affecting the nervous system. No cure — prevention is the only protection." },
-  { name: "Anaplasmosis", severity: "Moderate Risk", color: "#ca8a04", desc: "Bacterial infection causing fever, headache and muscle aches. Increasingly common in Europe and North America." },
-  { name: "Babesiosis", severity: "Moderate Risk", color: "#ca8a04", desc: "Parasitic infection of red blood cells. Can be life-threatening in elderly or immunocompromised individuals." },
-];
-
-export default function Home() {
-  const isMobile = useIsMobile();
-  const { symbol, isUS } = useCurrency();
-  const bestsellers = products.filter(p => p.badge === "Best Seller");
+  // iOS-vangnet: als autoplay geblokkeerd werd (bv. energiebesparende modus),
+  // start de video alsnog bij de eerste aanraking of klik.
+  useEffect(() => {
+    const kick = () => {
+      const v = document.querySelector('video');
+      if (v && v.paused) { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+    };
+    kick();
+    window.addEventListener('touchstart', kick, { once: true, passive: true });
+    window.addEventListener('click', kick, { once: true });
+    return () => { window.removeEventListener('touchstart', kick); window.removeEventListener('click', kick); };
+  }, []);
 
   return (
     <div>
-      {/* HERO — looping video with green overlay */}
-      <section style={{
-        position: "relative", minHeight: isMobile ? 420 : 520,
-        display: "flex", alignItems: "center",
-        overflow: "hidden",
-      }}>
-        {/* Background video — autoplay, muted, loops, plays inline on iOS */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/images/Men and female hiking on mountain.png"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: isMobile ? "center" : "center 25%",
-            zIndex: 0,
-          }}
-        >
-          {isMobile && <source src="/videos/hero-mobile.mp4" type="video/mp4" />}
-          <source src="/videos/hero.mp4" type="video/mp4" />
-        </video>
-
-        {/* Green gradient overlay — same look as the photo version */}
-        <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "linear-gradient(to right, rgba(30,50,40,.72) 55%, rgba(30,50,40,.3) 100%)",
-          zIndex: 1,
+      {/* ============ HERO ============ */}
+      <section style={{ backgroundImage: `url(${IMG.heroPoster})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: isMobile ? 'flex-start' : 'center', padding: isMobile ? '34px 22px 44px' : '50px 40px 56px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+        {/* Achtergrondvideo: loopt, gedempt, met de foto als poster/fallback */}
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
+          `<video autoplay loop muted playsinline webkit-playsinline preload="auto" poster="${IMG.heroPoster}" src="/videos/hero.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>`
         }} />
-
-        {/* Hero content */}
-        <div style={{ position: "relative", zIndex: 2, maxWidth: 640, padding: isMobile ? "60px 24px" : "80px 64px", color: "#fff" }}>
-          <span style={{ display: "inline-block", background: "rgba(255,255,255,0.15)", backdropFilter: "blur(4px)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 24, padding: "5px 16px", fontSize: 12, marginBottom: 20 }}>
-            🛡️ Insecticide-free · Tick-proof · Eco-responsible
-          </span>
-          <h1 style={{ fontFamily: "Archivo, sans-serif", fontSize: isMobile ? 36 : 56, fontWeight: 900, lineHeight: 1.1, margin: "0 0 12px" }}>
-            Enjoy the Outdoors.<br /><span style={{ color: c.sageL }}>Safe & Carefree.</span>
-          </h1>
-          <p style={{ fontSize: 16, opacity: 0.88, maxWidth: 420, lineHeight: 1.6, margin: "0 0 12px" }}>
-            Lightweight mesh clothing that physically blocks ticks and insects. No DEET, no chemicals — just a smart layer between you and nature.
-          </p>
-          <p style={{ fontStyle: "italic", color: c.sageL, fontSize: 14, marginBottom: 28 }}>"Like a screen porch for your body 🌿"</p>
-          <Link to="/shop" style={{ ...BTN, fontSize: 15, padding: "14px 32px", display: "inline-block", textDecoration: "none" }}>SHOP NOW</Link>
-        </div>
-      </section>
-
-      {/* TRUST BAR */}
-      <section style={{ background: "#fff", borderBottom: "1px solid #e8ede9", padding: "14px 24px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: isMobile ? 16 : 40 }}>
-          {[
-            { icon: "⭐", text: "500+ happy customers" },
-            { icon: "🔵", text: "100% chemical-free" },
-            { icon: "🚚", text: "Free shipping over $150 US/CA" },
-            { icon: "📦", text: "30-day money-back guarantee" },
-          ].map(({ icon, text }) => (
-            <span key={text} style={{ fontSize: 13, color: "#555", display: "flex", alignItems: "center", gap: 6 }}>
-              <span>{icon}</span>{text}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* SHOP BY CATEGORY — kept as studio/product imagery per spec (not lifestyle) */}
-      <section style={{ background: "#F7F9F8", padding: isMobile ? "48px 0" : "72px 0" }}>
-        <div style={{ maxWidth: 1400, margin: "0 auto", padding: isMobile ? "0 16px" : "0 32px" }}>
-          <div style={{ ...LBL, marginBottom: 8, paddingLeft: isMobile ? 4 : 8 }}>SHOP BY CATEGORY</div>
-          <h2 style={{ ...H2, marginBottom: 28, paddingLeft: isMobile ? 4 : 8 }}>Protection for everyone</h2>
-
-          {!isMobile ? (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gridTemplateRows: "340px", gap: 12 }}>
-              {/* Men */}
-              <Link to="/shop?cat=men" style={{ textDecoration: "none", gridColumn: "1 / 2", gridRow: "1 / 2" }}>
-                <div style={{ position: "relative", borderRadius: 20, overflow: "hidden", height: "100%", cursor: "pointer" }}
-                  onMouseEnter={e => { e.currentTarget.querySelector("img").style.transform = "scale(1.05)"; e.currentTarget.querySelector(".overlay").style.opacity = "0.75"; }}
-                  onMouseLeave={e => { e.currentTarget.querySelector("img").style.transform = "scale(1)"; e.currentTarget.querySelector(".overlay").style.opacity = "0.5"; }}
-                >
-                  <img src="/images/2 guys _ white and black mesh_ hiking.png" alt="Men" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", transition: "transform .5s" }} />
-                  <div className="overlay" style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 60%)", transition: "opacity .3s", opacity: 0.5 }} />
-                  <div style={{ position: "absolute", bottom: 24, left: 24, color: "#fff" }}>
-                    <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 900, fontSize: 26, letterSpacing: "-0.02em" }}>Men</div>
-                    <div style={{ fontSize: 13, opacity: 0.85, marginTop: 4 }}>Shop collection →</div>
-                  </div>
-                </div>
-              </Link>
-
-              {/* Women */}
-              <Link to="/shop?cat=women" style={{ textDecoration: "none", gridColumn: "2 / 3", gridRow: "1 / 2" }}>
-                <div style={{ position: "relative", borderRadius: 20, overflow: "hidden", height: "100%", cursor: "pointer" }}
-                  onMouseEnter={e => { e.currentTarget.querySelector("img").style.transform = "scale(1.05)"; e.currentTarget.querySelector(".overlay").style.opacity = "0.75"; }}
-                  onMouseLeave={e => { e.currentTarget.querySelector("img").style.transform = "scale(1)"; e.currentTarget.querySelector(".overlay").style.opacity = "0.5"; }}
-                >
-                  <img src="/images/Female _ White mesh _ mountain solo.png" alt="Women" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", transition: "transform .5s" }} />
-                  <div className="overlay" style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 60%)", transition: "opacity .3s", opacity: 0.5 }} />
-                  <div style={{ position: "absolute", bottom: 24, left: 24, color: "#fff" }}>
-                    <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 900, fontSize: 26, letterSpacing: "-0.02em" }}>Women</div>
-                    <div style={{ fontSize: 13, opacity: 0.85, marginTop: 4 }}>Shop collection →</div>
-                  </div>
-                </div>
-              </Link>
-
-              {/* Kids */}
-              <Link to="/shop?cat=kids" style={{ textDecoration: "none", gridColumn: "3 / 4", gridRow: "1 / 2" }}>
-                <div style={{ position: "relative", borderRadius: 20, overflow: "hidden", height: "100%", cursor: "pointer" }}
-                  onMouseEnter={e => { e.currentTarget.querySelector("img").style.transform = "scale(1.05)"; e.currentTarget.querySelector(".overlay").style.opacity = "0.75"; }}
-                  onMouseLeave={e => { e.currentTarget.querySelector("img").style.transform = "scale(1)"; e.currentTarget.querySelector(".overlay").style.opacity = "0.5"; }}
-                >
-                  <img src="/images/kids-set-green-flatlay.jpg" alt="Kids" style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform .5s" }} />
-                  <div className="overlay" style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 60%)", transition: "opacity .3s", opacity: 0.5 }} />
-                  <div style={{ position: "absolute", bottom: 24, left: 24, color: "#fff" }}>
-                    <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 900, fontSize: 26, letterSpacing: "-0.02em" }}>Kids</div>
-                    <div style={{ fontSize: 13, opacity: 0.85, marginTop: 4 }}>Shop collection →</div>
-                  </div>
-                </div>
-              </Link>
-
-              {/* Bundles — new bundle lifestyle photo */}
-              <Link to="/shop?cat=bundles" style={{ textDecoration: "none", gridColumn: "4 / 5", gridRow: "1 / 2" }}>
-                <div style={{ position: "relative", borderRadius: 20, overflow: "hidden", height: "100%", cursor: "pointer" }}
-                  onMouseEnter={e => { e.currentTarget.querySelector("img").style.transform = "scale(1.05)"; e.currentTarget.querySelector(".overlay").style.opacity = "0.75"; }}
-                  onMouseLeave={e => { e.currentTarget.querySelector("img").style.transform = "scale(1)"; e.currentTarget.querySelector(".overlay").style.opacity = "0.5"; }}
-                >
-                  <img src="/images/Couple _ camping.png" alt="Bundles" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", transition: "transform .5s" }} />
-                  <div className="overlay" style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 60%)", transition: "opacity .3s", opacity: 0.5 }} />
-                  <div style={{ position: "absolute", bottom: 24, left: 24, color: "#fff" }}>
-                    <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 900, fontSize: 26, letterSpacing: "-0.02em" }}>Bundles</div>
-                    <div style={{ fontSize: 13, opacity: 0.85, marginTop: 4 }}>Best value →</div>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          ) : (
-            /* Mobile: 2 columns, tall cards */
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-              {[
-                { label: "Men", img: "/images/2 guys _ white and black mesh_ hiking.png", link: "/shop?cat=men", sub: "Shop →" },
-                { label: "Women", img: "/images/Female _ White mesh _ mountain solo.png", link: "/shop?cat=women", sub: "Shop →" },
-                { label: "Kids", img: "/images/kids-set-green-flatlay.jpg", link: "/shop?cat=kids", sub: "Shop →" },
-                { label: "Bundles", img: "/images/Couple _ camping.png", link: "/shop?cat=bundles", sub: "Best value →" },
-              ].map(({ label, img, link, sub }) => (
-                <Link key={label} to={link} style={{ textDecoration: "none" }}>
-                  <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", height: 220, cursor: "pointer" }}>
-                    <img src={img} alt={label} style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center" }} />
-                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.05) 55%)" }} />
-                    <div style={{ position: "absolute", bottom: 16, left: 14, color: "#fff" }}>
-                      <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 900, fontSize: 20 }}>{label}</div>
-                      <div style={{ fontSize: 12, opacity: 0.85 }}>{sub}</div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* NATURE PHOTO STRIP — new outdoor photos */}
-      <section style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr", height: isMobile ? "auto" : 300, overflow: "hidden" }}>
-        <div style={{ overflow: "hidden", height: isMobile ? 180 : "100%" }}>
-          <img src="/images/Male _ black mesh _ bino's hunting.png" alt="Outdoor hunting" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 30%" }} />
-        </div>
-        <div style={{ overflow: "hidden", height: isMobile ? 180 : "100%" }}>
-          <img src="/images/Buddies camping together.png" alt="Buddies camping" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 40%" }} />
-        </div>
-        <div style={{ overflow: "hidden", height: isMobile ? 180 : "100%" }}>
-          <img src="/images/Female _ White mesh _ Forest solo.png" alt="Solo forest walk" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%" }} />
-        </div>
-      </section>
-
-      {/* STATS BAR — desktop: solid green bar. Mobile: overlay on photo strip */}
-      {!isMobile && (
-        <section style={{ background: c.sage, padding: "32px 24px" }}>
-          <div style={{ maxWidth: 1100, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 24, textAlign: "center", color: "#fff" }}>
-            {[
-              { num: "1.5M+", label: "Tick bites/year US" },
-              { num: "27,000", label: "New Lyme cases/yr" },
-              { num: "100%", label: "Chemical-free" },
-              { num: "360°", label: "Body coverage" },
-              { num: "< 80g", label: "Per set" },
-            ].map(({ num, label }) => (
-              <div key={label}>
-                <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 900, fontSize: 28 }}>{num}</div>
-                <div style={{ fontSize: 12, opacity: 0.82, marginTop: 4 }}>{label}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-      {isMobile && (
-        <section style={{ position: "relative", overflow: "hidden" }}>
-          <img src="/images/Buddies camping together.png" alt="" style={{ width: "100%", height: 200, objectFit: "cover", objectPosition: "center 40%", display: "block" }} />
-          <div style={{ position: "absolute", inset: 0, background: "rgba(30,50,40,0.75)" }} />
-          <div style={{ position: "absolute", inset: 0, display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", gap: 8, padding: "16px 12px" }}>
-            {[
-              { num: "1.5M+", label: "Tick bites/yr" },
-              { num: "27K", label: "Lyme cases/yr" },
-              { num: "100%", label: "Chemical-free" },
-              { num: "360°", label: "Coverage" },
-              { num: "< 80g", label: "Per set" },
-            ].map(({ num, label }) => (
-              <div key={label} style={{ textAlign: "center", width: "30%", color: "#fff" }}>
-                <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 900, fontSize: 20 }}>{num}</div>
-                <div style={{ fontSize: 10, opacity: 0.8, marginTop: 2 }}>{label}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* FAMILY BUNDLE PROMO — buy 4 sets, get 1 free */}
-      <section style={{ background: "#1a2e24", padding: isMobile ? "40px 20px" : "56px 40px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: isMobile ? "flex-start" : "center", justifyContent: "space-between", gap: isMobile ? 20 : 40 }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 1.5, color: "#9dc4ab", textTransform: "uppercase", marginBottom: 10 }}>Family Bundle Deal</div>
-            <h2 style={{ fontFamily: "Archivo, sans-serif", fontSize: isMobile ? 26 : 34, fontWeight: 900, color: "#fff", margin: "0 0 10px", lineHeight: 1.15 }}>
-              Buy 4 Sets, Get 1 <span style={{ color: "#9dc4ab" }}>FREE</span>
-            </h2>
-            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.6, margin: 0, maxWidth: 520 }}>
-              Protect the whole family. Mix &amp; match men's, women's and kids' sets — the 4th set is on us, applied automatically at checkout.
+        {/* Verdonkering zodat titel en knop leesbaar blijven, video blijft goed zichtbaar */}
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,0.30)' }} />
+        <div style={{ position: 'relative', maxWidth: isMobile ? 720 : 1100, margin: '0 auto', width: '100%', display: isMobile ? 'block' : 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, textAlign: isMobile ? 'center' : 'left' }}>
+          <div style={{ maxWidth: isMobile ? undefined : 520 }}>
+            <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 36 : 62, color: '#fff', margin: '0 0 14px', lineHeight: 1.1, textShadow: '0 2px 18px rgba(20,16,64,.45)', display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'center' : 'flex-start', gap: isMobile ? 10 : 16, flexWrap: 'wrap' }}>
+              Summer <img src={IMG.iconCloud} alt="" style={{ height: isMobile ? 30 : 50 }} /> <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span>
+            </h1>
+            <p style={{ fontSize: isMobile ? 14 : 17, lineHeight: 1.65, maxWidth: isMobile ? 380 : 440, margin: isMobile ? '0 auto 22px' : '0 0 24px', color: '#EFEDFF', textShadow: '0 1px 10px rgba(20,16,64,.5)' }}>
+              Shop for summer with a <b style={{ fontSize: isMobile ? 15.5 : 19, fontFamily: FONT_SUB }}>buy-one-get-one-free</b> offer on our Signature Cold Pillow.
             </p>
+            <a href="#offer" style={{ ...BTN, fontSize: isMobile ? 14 : 15, padding: isMobile ? '15px 38px' : '17px 44px' }}>Shop now</a>
           </div>
-          <Link to="/shop" style={{ background: "#fff", color: c.sageD, padding: "14px 32px", borderRadius: 8, fontSize: 13, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0 }}>
-            Shop the Sets →
-          </Link>
-        </div>
-      </section>
 
-      {/* BESTSELLERS — 3 columns on desktop (was 4), 2 on mobile edge-to-edge */}
-      <section style={{ background: "#fff", padding: isMobile ? "48px 0" : "72px 40px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", paddingLeft: isMobile ? 16 : 0, paddingRight: isMobile ? 16 : 0 }}>
-          <div style={{ ...LBL, marginBottom: 8 }}>OUR PICKS</div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
-            <h2 style={{ ...H2, margin: 0 }}>Best Sellers</h2>
-            <Link to="/shop" style={{ fontSize: 13, color: c.sage, textDecoration: "none", fontWeight: 600 }}>View all →</Link>
-          </div>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(3, 1fr)",
-            gap: isMobile ? 8 : 20
-          }}>
-            {bestsellers.slice(0, isMobile ? 4 : 3).map(p => <ProductCard key={p.id} product={p} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* GEAR UP — uitgelichte accessoires */}
-      <section style={{ background: "#F7F9F8", padding: isMobile ? "48px 0" : "72px 40px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", paddingLeft: isMobile ? 16 : 0, paddingRight: isMobile ? 16 : 0 }}>
-          <div style={{ ...LBL, marginBottom: 8 }}>COMPLETE YOUR KIT</div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
-            <h2 style={{ ...H2, margin: 0 }}>Gear that goes with you</h2>
-            <Link to="/accessories" style={{ fontSize: 13, color: c.sage, textDecoration: "none", fontWeight: 600 }}>View all →</Link>
-          </div>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4, 1fr)",
-            gap: isMobile ? 8 : 20
-          }}>
-            {products.filter((p) => p.category === "ACCESSORIES").slice(0, 4).map(p => <ProductCard key={p.id} product={p} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section style={{ background: "#F7F9F8", padding: isMobile ? "48px 20px" : "72px 40px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ ...LBL, marginBottom: 8 }}>HOW IT WORKS</div>
-          <h2 style={{ ...H2, marginBottom: 40 }}>The science is simple</h2>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(4,1fr)", gap: 28 }}>
-            {[
-              { step: "01", title: "Put it on", desc: "Slip on the lightweight mesh suit as a base layer under your regular clothes." },
-              { step: "02", title: "Physical barrier", desc: "The ultra-fine noseeum mesh creates a physical barrier — ticks and insects simply can't get through." },
-              { step: "03", title: "Sealed at the foot", desc: "The pant leg and foot cover are one continuous piece — no gap, no entry point at the ankle." },
-              { step: "04", title: "Enjoy nature freely", desc: "Hike, garden, camp — no sprays, no worry, just comfort and protection all day." },
-            ].map(({ step, title, desc }) => (
-              <div key={step} style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 2px 10px rgba(0,0,0,0.05)" }}>
-                <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 900, fontSize: 32, color: c.sageL, marginBottom: 12 }}>{step}</div>
-                <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 8 }}>{title}</div>
-                <p style={{ color: "#666", fontSize: 14, lineHeight: 1.6, margin: 0 }}>{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SEE IT IN ACTION VIDEO — unchanged per spec */}
-      <section style={{ background: "#1a2e24", padding: isMobile ? "48px 20px" : "72px 40px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ ...LBL, color: c.sageL, marginBottom: 8 }}>SEE IT IN ACTION</div>
-          <h2 style={{ fontFamily: "Archivo, sans-serif", fontWeight: 900, fontSize: isMobile ? 28 : 36, color: "#fff", marginBottom: 32 }}>Watch it in the wild</h2>
-          <video autoPlay muted loop playsInline style={{ width: "100%", borderRadius: 16, maxHeight: 480, objectFit: "cover" }}>
-            <source src="/videos/see-in-action.mp4" type="video/mp4" />
-          </video>
-        </div>
-      </section>
-
-      {/* WHO IS IT FOR — Hikers + Families updated, Gardeners unchanged */}
-      <section style={{ background: "#fff", padding: isMobile ? "48px 20px" : "72px 40px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ ...LBL, marginBottom: 8 }}>WHO IS IT FOR</div>
-          <h2 style={{ ...H2, marginBottom: 36 }}>Designed for outdoor life</h2>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: isMobile ? 12 : 24 }}>
-            {[
-              { label: "Hikers", icon: "🥾", desc: "Hours in the forest without constantly checking for ticks. Focus on the trail, not the bugs.", img: "/images/2 guys  _ white and black mesh_ hiking.png", link: "/hiking" },
-              { label: "Gardeners", icon: "🌿", desc: "Weeding, planting, pruning — tick territory. Bug Away lets you garden without worry.", img: "/images/jacket-women-lifestyle-gardening.jpg", link: "/gardening" },
-              { label: "Anglers", icon: "🎣", desc: "Standing still in wet ground at dusk. Everything that bites lives where the fish are.", img: "/images/2 males _ Black MEesh _ Fly fishing.png", link: "/fishing" },
-              { label: "Families", icon: "👨‍👩‍👧", desc: "Kids playing in tall grass or exploring nature — protected without any chemical sprays.", img: "/images/Family .png", link: "/families" },
-            ].map(({ label, icon, desc, img, link }) => (
-              <Link key={label} to={link} style={{ textDecoration: "none", color: "inherit" }}>
-                <div style={{ background: "#F7F9F8", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 10px rgba(0,0,0,0.05)", transition: "transform .2s" }}
-                  onMouseEnter={e => e.currentTarget.style.transform = "translateY(-4px)"}
-                  onMouseLeave={e => e.currentTarget.style.transform = ""}
-                >
-                  <div style={{ height: isMobile ? 130 : 180, overflow: "hidden" }}>
-                    <img src={img} alt={label} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  </div>
-                  <div style={{ padding: isMobile ? 14 : 20 }}>
-                    <div style={{ fontSize: 24, marginBottom: 6 }}>{icon}</div>
-                    <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 6 }}>{label} →</div>
-                    <p style={{ color: "#666", fontSize: 14, lineHeight: 1.6, margin: 0 }}>{desc}</p>
-                  </div>
-                </div>
+          {/* Sleep quiz widget — funnel naar /quiz */}
+          <div style={{ background: 'rgba(30,38,72,0.72)', borderRadius: 15, padding: isMobile ? '18px 16px 16px' : '28px 26px 24px', width: isMobile ? '100%' : 420, maxWidth: 420, margin: isMobile ? '30px auto 0' : 0, boxShadow: '0 18px 40px rgba(10,8,40,.45)', flexShrink: 0, textAlign: 'center' }}>
+            <div style={{ color: '#fff', fontSize: isMobile ? 14 : 16, fontFamily: FONT_SUB }}>Try our <span style={{ fontFamily: FONT_DISPLAY }}>sleep quiz</span></div>
+            <div style={{ color: '#fff', fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 40, lineHeight: 1.05, margin: '6px 0 2px' }}>For 15<span style={{ fontFamily: FONT_SUB }}>%</span> off</div>
+            <div style={{ color: '#fff', fontSize: isMobile ? 15 : 17, fontFamily: FONT_SUB, marginBottom: 12 }}>your order</div>
+            <div style={{ height: 1, background: 'rgba(255,255,255,.55)', margin: '0 6px 12px' }} />
+            <div style={{ color: '#fff', fontSize: isMobile ? 14 : 15.5, fontFamily: FONT_SUB, marginBottom: 12 }}>What kind of <span style={{ fontFamily: FONT_DISPLAY }}>sleeper</span> are you?</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <Link to="/quiz?sleeper=back" style={{ background: c.sky, borderRadius: 15, padding: isMobile ? '11px 8px' : '15px 10px', textDecoration: 'none', color: '#231D5D', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: isMobile ? 20 : 24 }}>😴</span>
+                <span style={{ fontSize: isMobile ? 14 : 15 }}><b style={{ fontFamily: FONT_DISPLAY, fontWeight: 400 }}>Back</b> <span style={{ fontFamily: FONT_SUB }}>Sleeper</span></span>
               </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TICK AWARENESS VIDEO */}
-      <section style={{ background: "#F7F9F8", padding: isMobile ? "48px 20px" : "72px 40px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
-          <div style={{ ...LBL, marginBottom: 8 }}>TICK AWARENESS</div>
-          <h2 style={{ ...H2, marginBottom: 32 }}>Know your risk</h2>
-          <video autoPlay muted loop playsInline style={{ width: "100%", borderRadius: 16, maxHeight: 480, objectFit: "cover" }}>
-            <source src="/videos/lyme-awareness.mp4" type="video/mp4" />
-          </video>
-        </div>
-      </section>
-
-      {/* DISEASE INFO */}
-      <section style={{ background: "#fff", padding: isMobile ? "48px 20px" : "72px 40px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ ...LBL, marginBottom: 8 }}>HEALTH & SAFETY</div>
-          <h2 style={{ ...H2, marginBottom: 36 }}>Diseases ticks carry</h2>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(2,1fr)", gap: 20 }}>
-            {DISEASES.map(({ name, severity, color, desc }) => (
-              <div key={name} style={{ background: "#F7F9F8", borderRadius: 16, padding: 24, borderLeft: `4px solid ${color}` }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
-                  <div style={{ fontWeight: 700, fontSize: 16 }}>{name}</div>
-                  <span style={{ background: color + "20", color, borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700, whiteSpace: "nowrap", marginLeft: 8 }}>{severity}</span>
-                </div>
-                <p style={{ color: "#666", fontSize: 14, lineHeight: 1.6, margin: 0 }}>{desc}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 36, background: c.sage, borderRadius: 16, padding: isMobile ? "28px 20px" : "36px 40px", display: "flex", flexDirection: isMobile ? "column" : "row", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
-            <div>
-              <div style={{ fontFamily: "Archivo, sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", marginBottom: 6 }}>Don't leave it to chance</div>
-              <p style={{ color: "rgba(255,255,255,0.85)", fontSize: 15, margin: 0 }}>Bug Away gives you physical tick protection — no chemicals, no sprays, no compromise.</p>
+              <Link to="/quiz?sleeper=stomach" style={{ background: c.sky, borderRadius: 15, padding: isMobile ? '11px 8px' : '15px 10px', textDecoration: 'none', color: '#231D5D', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: isMobile ? 20 : 24 }}>🛏️</span>
+                <span style={{ fontSize: isMobile ? 14 : 15 }}><b style={{ fontFamily: FONT_DISPLAY, fontWeight: 400 }}>Stomach</b> <span style={{ fontFamily: FONT_SUB }}>Sleeper</span></span>
+              </Link>
             </div>
-            <Link to="/shop" style={{ ...BTN, background: "#fff", color: c.sageD, whiteSpace: "nowrap", flexShrink: 0, textDecoration: "none", display: "inline-block" }}>Shop Now</Link>
-          </div>
-          <p style={{ fontSize: 11, color: "#999", marginTop: 16, lineHeight: 1.5 }}>Bug Away is a physical barrier garment designed to prevent insect bites. It is not a medical device and does not prevent or treat tick-borne illness. If you suspect a tick-borne infection, consult a healthcare professional.</p>
-        </div>
-      </section>
-
-      {/* COMPARISON TABLE */}
-      <section style={{ background: "#fff", padding: isMobile ? "48px 20px" : "72px 40px" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <div style={{ ...LBL, marginBottom: 8 }}>WHY BUG AWAY</div>
-          <h2 style={{ ...H2, marginBottom: 36 }}>How we compare</h2>
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
-              <thead>
-                <tr style={{ background: c.sageD, color: "#fff" }}>
-                  <th style={{ padding: "12px 16px", textAlign: "left", borderRadius: "8px 0 0 0" }}>Feature</th>
-                  <th style={{ padding: "12px 16px", textAlign: "center", fontWeight: 900 }}>Bug Away</th>
-                  <th style={{ padding: "12px 16px", textAlign: "center" }}>DEET Spray</th>
-                  <th style={{ padding: "12px 16px", textAlign: "center", borderRadius: "0 8px 0 0" }}>Permethrin Clothing</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ["Chemical-free", "✅ Yes", "❌ No", "❌ No"],
-                  ["Reapplication needed", "✅ Never", "❌ Every 2 hours", "❌ Every 5-6 washes"],
-                  ["Safe for kids", "✅ Yes", "⚠️ Limited", "❌ Not recommended"],
-                  ["Physical barrier", "✅ Yes", "❌ No", "❌ No"],
-                  ["Lasts for years", "✅ Yes", "❌ Single use", "⚠️ Degrades over time"],
-                  ["Breathable", "✅ Ultra-light mesh", "N/A", "⚠️ Treated regular fabric"],
-                  ["Damages gear", "✅ No", "❌ Dissolves synthetics", "⚠️ Can stain"],
-                  ["Cost per season", "✅ One purchase", "❌ $40-80/season", "❌ $30-60/season"],
-                ].map(([feature, ba, deet, perm], i) => (
-                  <tr key={i} style={{ background: i % 2 === 0 ? "#F7F9F8" : "#fff" }}>
-                    <td style={{ padding: "10px 16px", fontWeight: 600 }}>{feature}</td>
-                    <td style={{ padding: "10px 16px", textAlign: "center", fontWeight: 700, color: c.sageD }}>{ba}</td>
-                    <td style={{ padding: "10px 16px", textAlign: "center", color: "#666" }}>{deet}</td>
-                    <td style={{ padding: "10px 16px", textAlign: "center", color: "#666" }}>{perm}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div style={{ textAlign: "center", marginTop: 28 }}>
-            <Link to="/shop" style={{ ...BTN, fontSize: 15, padding: "14px 32px", display: "inline-block", textDecoration: "none" }}>Shop Bug Away</Link>
           </div>
         </div>
       </section>
 
-      {/* REVIEWS SLIDER */}
-      <section style={{ background: "#F7F9F8", padding: isMobile ? "48px 0" : "72px 0", overflow: "hidden" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
-          <div style={{ ...LBL, marginBottom: 8 }}>REVIEWS</div>
-          <h2 style={{ ...H2, marginBottom: 36 }}>What our customers say</h2>
+      {/* ============ PRODUCT CARD + OFFER ============ */}
+      <Reveal><section id="offer" style={{ maxWidth: isMobile ? 560 : 1140, margin: isMobile ? '22px 14px' : '44px auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 14px 34px rgba(32,27,93,.16)', display: isMobile ? 'block' : 'grid', gridTemplateColumns: isMobile ? undefined : '1.05fr 1fr' }}>
+        <div style={{ padding: isMobile ? 16 : 28, position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <ProductImageBlock src={IMG.frontCut} alt="flip'nsleep Signature Cold Pillow" height={isMobile ? 230 : 460} radius={18} style={{ width: '100%' }} />
+          <span style={{ position: 'absolute', top: isMobile ? 28 : 44, left: isMobile ? 28 : 44, background: c.amber, color: c.navy, fontWeight: 700, fontSize: isMobile ? 13 : 15, borderRadius: 999, padding: isMobile ? '7px 16px' : '9px 20px' }}>1+1 free</span>
         </div>
-        <div style={{ display: "flex", gap: 20, overflowX: "auto", paddingBottom: 12, paddingLeft: isMobile ? 20 : 40, paddingRight: isMobile ? 20 : 40, scrollbarWidth: "none", msOverflowStyle: "none", WebkitScrollbar: "none" }}>
-          {TESTIMONIALS.map(({ name, stars, text, location }) => (
-            <div key={name} style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 2px 10px rgba(0,0,0,0.05)", minWidth: isMobile ? 280 : 340, maxWidth: isMobile ? 280 : 340, flexShrink: 0 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-                <div style={{ width: 44, height: 44, borderRadius: "50%", background: c.sage, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 18, fontWeight: 900, color: "#fff" }}>
-                  {name.charAt(0)}
-                </div>
+        <div style={{ background: isMobile ? `linear-gradient(180deg, ${c.purple}, ${c.navy})` : `linear-gradient(135deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: isMobile ? '24px 20px 26px' : '38px 36px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 32, marginBottom: 4 }}>{PRODUCT.name}</h2>
+          <div style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 19 : 24, color: c.amber }}>
+            {formatPrice(price, symbol)} <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 13, color: '#CFCBF2' }}>{formatPrice(compare, symbol)}</s>
+          </div>
+          <div style={{ margin: '6px 0 2px', fontSize: 12.5, color: '#DDD9FF' }}>🌙 100-night sleep trial · 🛡️ 2-year warranty</div>
+          <ul style={{ listStyle: 'none', margin: '14px 0 6px' }}>
+            {PRODUCT.usps.map((u, i) => (
+              <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13.5, lineHeight: 1.5, marginBottom: 9 }}>
+                <img src={IMG.iconCloud} alt="" style={{ height: 14, marginTop: 3 }} />{u}
+              </li>
+            ))}
+          </ul>
+          {BUNDLES.map(b => {
+            const p = getPrice(b, isCA);
+            const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
+            const active = selected === b.id;
+            return (
+              <div key={b.id} role="button" tabIndex={0}
+                onClick={() => setSelected(b.id)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected(b.id); } }}
+                style={{ display: 'flex', alignItems: 'center', gap: 10, background: active ? 'rgba(255,255,255,.24)' : 'rgba(255,255,255,.12)', border: `2px solid ${active ? c.amber : 'transparent'}`, borderRadius: 16, padding: '12px 14px', marginTop: 12, cursor: 'pointer', transition: 'all .15s' }}>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: "#1a1a1a" }}>{name}</div>
-                  <div style={{ fontSize: 12, color: "#999" }}>{location}</div>
+                  <div style={{ fontWeight: 700, fontSize: 14, fontFamily: FONT_SUB }}>{b.label}</div>
+                  <div style={{ fontSize: 13 }}>{formatPrice(p, symbol)} <s style={{ opacity: .6, marginLeft: 6 }}>{formatPrice(cm, symbol)}</s></div>
                 </div>
+                <span style={{ marginLeft: 'auto', background: c.navy, color: '#fff', fontSize: 11.5, fontWeight: 600, borderRadius: 999, padding: '6px 12px', whiteSpace: 'nowrap' }}>Save {formatPrice(cm - p, symbol)}</span>
               </div>
-              <div style={{ marginBottom: 12 }}>{Array(stars).fill(0).map((_, i) => <Star key={i} />)}</div>
-              <p style={{ fontSize: 14, lineHeight: 1.65, color: "#444", margin: 0, fontStyle: "italic" }}>"{text}"</p>
+            );
+          })}
+          <div style={{ textAlign: 'center', marginTop: 14 }}><ShippingCountdown /></div>
+          <div style={{ display: 'flex', gap: 10, marginTop: 14, flexDirection: isMobile ? 'column' : 'row', justifyContent: 'center' }}>
+            <button onClick={() => buyNow(selected)} style={{ ...BTN, fontSize: 14, flex: 1, textAlign: 'center' }}>Order your Cold Pillow now</button>
+            <button onClick={addToCart} style={{ ...BTNO, color: '#fff', borderColor: '#fff', flex: isMobile ? undefined : '0 0 auto' }}>Add to cart</button>
+          </div>
+        </div>
+      </section>
+
+      </Reveal>
+
+      <Reveal delay={100}><div style={{ maxWidth: isMobile ? 560 : 1140, margin: isMobile ? '0 14px 20px' : '0 auto 34px' }}>
+        <TrustAccordion specs={<ul style={{ listStyle: 'none' }}>{PRODUCT.specs.map(([k, v], i) => <li key={i} style={{ marginBottom: 5 }}><b>{k}:</b> {v}</li>)}</ul>} />
+      </div></Reveal>
+
+      {/* ============ EMPATHY / NIGHT ============ */}
+      <section style={{ background: `linear-gradient(180deg, ${c.night} 0%, ${c.navy} 100%)`, color: '#fff', padding: isMobile ? '52px 24px' : '96px 40px', position: 'relative', overflow: 'hidden' }}>
+        <img src={IMG.night} alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: .28 }} />
+        <Reveal><div style={{ position: 'relative', maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 30 : 50, lineHeight: 1.2 }}>
+            3 AM. Awake.<br /><span style={{ color: c.amber }}>Soaked. Again.</span>
+          </h2>
+          <p style={{ fontSize: isMobile ? 14 : 16, lineHeight: 1.75, margin: '18px auto 0', maxWidth: isMobile ? 420 : 540, color: '#E4E1FF' }}>
+            Night sweats aren't "just part of it". When hormones change, so does the way your body regulates temperature at night — and a pillow that traps heat makes it worse. Cooling down your head is one of the fastest ways to fall back asleep.
+          </p>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 28, flexWrap: 'wrap' }}>
+            {[['3 in 4', 'women in menopause experience night sweats'], ['Q-max 0.26', 'tested cool-touch value of the cold side'], ['100', 'nights to try it risk-free']].map(([b, s], i) => (
+              <div key={i} style={{ background: 'rgba(255,255,255,.10)', borderRadius: 18, padding: '16px 18px', textAlign: 'center', minWidth: 110, maxWidth: 150 }}>
+                <b style={{ display: 'block', fontFamily: FONT_DISPLAY, fontSize: 20, color: c.amber }}>{b}</b>
+                <span style={{ fontSize: 11, lineHeight: 1.45, display: 'block', marginTop: 5, color: '#D7D3FF' }}>{s}</span>
+              </div>
+            ))}
+          </div>
+        </div></Reveal>
+      </section>
+
+      {/* ============ SUMMER DEALS SLIDER ============ */}
+      <SummerDealsSlider />
+
+      {/* ============ JUST FLIP IT ============ */}
+      <section style={{ padding: isMobile ? '44px 22px' : '64px 40px', textAlign: 'center' }}>
+        <Reveal><div style={EYEBROW}>How it works</div>
+        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 36, color: c.navy, margin: '8px 0 10px' }}>Just flip it.</h2>
+        <p style={{ fontSize: 13.5, lineHeight: 1.65, maxWidth: 400, margin: '0 auto' }}>One pillow, two sides. Flip to the cooling side on warm nights, back to the soft bamboo side in winter.</p></Reveal>
+        <Reveal delay={120}><div style={{ display: isMobile ? 'block' : 'flex', maxWidth: isMobile ? undefined : 980, margin: isMobile ? undefined : '38px auto 0', gap: 70, alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ maxWidth: 320, margin: isMobile ? '26px auto 0' : 0, flexShrink: 0 }}>
+          <div style={{ width: isMobile ? 240 : 300, height: isMobile ? 156 : 196, margin: '0 auto', perspective: 900 }}>
+            <div style={{ position: 'relative', width: '100%', height: '100%', transition: 'transform .6s', transformStyle: 'preserve-3d', transform: flipped ? 'rotateY(180deg)' : 'none' }}>
+              <div style={{ position: 'absolute', inset: 0, borderRadius: 26, backfaceVisibility: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, fontWeight: 700, fontSize: 15, boxShadow: '0 16px 28px rgba(32,27,93,.18)', background: `linear-gradient(160deg,#EAF6FF,${c.pastelBlue})`, color: c.navy }}>
+                ❄️ Cool side
+                <small style={{ fontWeight: 500, fontSize: 11.5, opacity: .85, maxWidth: 190, lineHeight: 1.45 }}>Cool-touch fabric pulls heat away from your head</small>
+              </div>
+              <div style={{ position: 'absolute', inset: 0, borderRadius: 26, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, fontWeight: 700, fontSize: 15, boxShadow: '0 16px 28px rgba(32,27,93,.18)', background: `linear-gradient(160deg,#FFF2DC,${c.pastelYellow})`, color: c.navy }}>
+                ☀️ Warm side
+                <small style={{ fontWeight: 500, fontSize: 11.5, opacity: .85, maxWidth: 190, lineHeight: 1.45 }}>Soft bamboo fabric for colder nights</small>
+              </div>
+            </div>
+          </div>
+          <div role="group" aria-label="Choose pillow side" style={{ marginTop: 18, display: 'inline-flex', background: '#fff', border: `2px solid ${c.navy}`, borderRadius: 999, overflow: 'hidden' }}>
+            {[['cool', '❄️ Cool'], ['warm', '☀️ Warm']].map(([side, label]) => (
+              <button key={side} onClick={() => setFlipped(side === 'warm')}
+                style={{ border: 'none', background: (side === 'warm') === flipped ? c.navy : 'transparent', color: (side === 'warm') === flipped ? '#fff' : c.navy, fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 13, padding: '10px 22px', cursor: 'pointer' }}>{label}</button>
+            ))}
+          </div>
+        </div>
+        <ol style={{ listStyle: 'none', maxWidth: isMobile ? 380 : 440, margin: isMobile ? '30px auto 0' : 0, textAlign: 'left' }}>
+          {[
+            ['Unzip and adjust.', 'Add or remove filling until the height matches your sleeping position.'],
+            ['Pick your side.', 'Cool-touch fabric on one side, soft bamboo on the other.'],
+            ['Sleep through the night.', 'Less heat build-up means fewer wake-ups.'],
+          ].map(([t, s], i) => (
+            <li key={i} style={{ display: 'flex', gap: 14, marginBottom: 16, fontSize: isMobile ? 13.5 : 15, lineHeight: 1.6 }}>
+              <b style={{ flex: '0 0 34px', height: 34, borderRadius: '50%', background: c.sky, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_DISPLAY, fontSize: 14 }}>{i + 1}</b>
+              <div><strong>{t}</strong> {s}</div>
+            </li>
+          ))}
+        </ol>
+        </div></Reveal>
+        <div style={{ textAlign: 'center' }}><Link to="/how-it-works" style={{ ...BTNO, marginTop: isMobile ? 10 : 30, display: 'inline-block' }}>See how it works</Link></div>
+      </section>
+
+      {/* ============ USP ICONS ============ */}
+      <section style={{ padding: '0 20px 10px' }}>
+        <Reveal><div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? '26px 12px' : '34px 24px', maxWidth: isMobile ? 380 : 1000, margin: isMobile ? '10px auto 0' : '30px auto 0', textAlign: 'center' }}>
+          {[
+            [c.pastelYellow, '🪶', 'Adjustable comfort'],
+            [c.pastelPink, '🌡️', 'Cool and warm side'],
+            [c.pastelBlue, '🌙', '100-night sleep trial'],
+            [c.pastelMint, '😴', 'Suits any sleeping position'],
+          ].map(([bg, icon, label], i) => (
+            <div key={i}>
+              <div style={{ width: isMobile ? 84 : 108, height: isMobile ? 84 : 108, borderRadius: '50%', margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: isMobile ? 32 : 42, background: bg }}>{icon}</div>
+              <p style={{ fontSize: isMobile ? 13.5 : 15, fontWeight: 600, lineHeight: 1.35, fontFamily: FONT_SUB }}>{label}</p>
             </div>
           ))}
-        </div>
+        </div></Reveal>
       </section>
 
-      {/* BLOG PREVIEW */}
-      <section style={{ background: "#fff", padding: isMobile ? "48px 20px" : "72px 40px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
-            <div>
-              <div style={{ ...LBL, marginBottom: 8 }}>KNOWLEDGE BASE</div>
-              <h2 style={{ ...H2, margin: 0 }}>Learn about tick protection</h2>
+      {/* ============ CERTIFICATIONS ============ */}
+      <Reveal><section style={{ background: '#fff', margin: isMobile ? '36px 16px 0' : '52px auto 0', maxWidth: isMobile ? 640 : 760, borderRadius: 22, padding: '24px 20px', textAlign: 'center', boxShadow: '0 10px 26px rgba(32,27,93,.08)' }}>
+        <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 14, color: c.navy }}>Tested & certified</h3>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
+          {[['OEKO-TEX®', 'Standard 100'], ['CertiPUR-US®', 'Certified foam'], ['Q-max 0.26', 'Tested cooling value']].map(([a, b], i) => (
+            <span key={i} style={{ border: `1.5px solid rgba(32,27,93,.25)`, borderRadius: 12, fontSize: 11.5, fontWeight: 600, padding: '10px 14px', color: c.navy, lineHeight: 1.4 }}>{a}<br /><span style={{ fontWeight: 400 }}>{b}</span></span>
+          ))}
+        </div>
+      </section></Reveal>
+
+      {/* ============ REVIEWS ============ */}
+      <div style={{ marginTop: 46 }}><ReviewsBlock /></div>
+
+      {/* ============ COLLECTIONS ============ */}
+      <CollectionsBlock />
+
+      {/* ============ WHY / COMPARISON TEASER ============ */}
+      <Reveal><section style={{ padding: isMobile ? '36px 22px 10px' : '50px 40px 10px', textAlign: 'center' }}>
+        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, color: c.navy, marginBottom: 20 }}>Why <span style={{ color: c.purple }}>flip'nsleep?</span></h2>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 18 : 26, maxWidth: isMobile ? 780 : 940, margin: '0 auto' }}>
+          <div style={{ background: `linear-gradient(180deg, ${c.navy}, ${c.purple})`, color: '#fff', borderRadius: 22, padding: 22 }}>
+            <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 19, textAlign: 'center' }}>flip<span style={{ color: c.amber }}>'</span>nsleep</h3>
+            <div style={{ textAlign: 'center', margin: '10px 0 4px' }}>
+              <img src={IMG.frontCut} alt="flip'nsleep Signature Cold Pillow" style={{ maxHeight: 130 }} />
             </div>
-            <Link to="/blog" style={{ fontSize: 13, color: c.sage, textDecoration: "none", fontWeight: 600 }}>All articles →</Link>
+            <span style={{ display: 'block', textAlign: 'center', fontSize: 28, margin: '4px 0 8px' }}>✅</span>
+            <ul style={{ listStyle: 'none' }}>
+              {['Adjustable to any sleeping position', 'Generous amount of filling as standard', 'Dual-sided: cool and warm', 'Washable outer cover', 'OEKO-TEX & CertiPUR-US certified'].map((t, i) => (
+                <li key={i} style={{ borderTop: '1px solid rgba(255,255,255,.22)', padding: '10px 2px', fontSize: 13, textAlign: 'center' }}>{t}</li>
+              ))}
+            </ul>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 24 }}>
-            {[
-              { cat: "EDUCATION", title: "Tick Season 2025: When Are Ticks Most Active?", excerpt: "Ticks become active as soon as temperatures rise above 7°C. Find out when the risk is highest and how to protect yourself.", img: "/images/proof-ticks.jpg" },
-              { cat: "HEALTH", title: "How to Recognize a Tick Bite and What to Do", excerpt: "Not every tick bite leads to Lyme disease. But knowing what to do immediately after a bite can make all the difference.", img: "/images/proof-mosquito.jpg" },
-              { cat: "PETS", title: "Ticks and Dogs: Risks and How to Protect Your Pet", excerpt: "Dogs face the exact same tick risks as humans. Discover how to protect your dog this outdoor season.", img: "/images/pants-detail-feet-grass.jpg" },
-            ].map(({ cat, title, excerpt, img }) => (
-              <Link key={title} to="/blog" style={{ textDecoration: "none", color: "inherit" }}>
-                <div style={{ background: "#F0F5F2", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 10px rgba(0,0,0,0.05)", transition: "transform .2s" }}
-                  onMouseEnter={e => e.currentTarget.style.transform = "translateY(-4px)"}
-                  onMouseLeave={e => e.currentTarget.style.transform = ""}
-                >
-                  <div style={{ height: 160, overflow: "hidden" }}>
-                    <img src={img} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  </div>
-                  <div style={{ padding: 20 }}>
-                    <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: 1.5, color: c.sage, marginBottom: 8 }}>{cat}</div>
-                    <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 8, lineHeight: 1.4 }}>{title}</div>
-                    <p style={{ color: "#666", fontSize: 13, lineHeight: 1.6, margin: "0 0 12px" }}>{excerpt}</p>
-                    <span style={{ fontSize: 13, color: c.sage, fontWeight: 600 }}>Read more →</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
+          <div style={{ background: '#fff', borderRadius: 22, padding: 22, opacity: .9, boxShadow: '0 10px 26px rgba(32,27,93,.07)' }}>
+            <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 19, textAlign: 'center', color: c.navy }}>Standard pillow</h3>
+            <div style={{ textAlign: 'center', margin: '10px 0 4px' }}>
+              <img src={IMG.randomPillow} alt="Standard pillow" style={{ maxHeight: 130 }} />
+            </div>
+            <span style={{ display: 'block', textAlign: 'center', fontSize: 28, margin: '4px 0 8px' }}>❌</span>
+            <ul style={{ listStyle: 'none' }}>
+              {['Non-adjustable', 'Standard filling, often insufficient volume', 'No choice — often too warm', 'Not removable or washable', 'Certification unknown'].map((t, i) => (
+                <li key={i} style={{ borderTop: '1px solid rgba(32,27,93,.12)', padding: '10px 2px', fontSize: 13, textAlign: 'center', color: c.grayD }}>{t}</li>
+              ))}
+            </ul>
           </div>
         </div>
+        <Link to="/why-flipnsleep" style={{ ...BTNO, marginTop: 24 }}>See the full comparison</Link>
+      </section></Reveal>
+
+      {/* ============ FAQ TEASER ============ */}
+      <Reveal><section style={{ padding: isMobile ? '40px 22px' : '54px 40px' }}>
+        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, textAlign: 'center', marginBottom: 14 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
+        <FAQBlock limit={4} />
+        <div style={{ textAlign: 'center', marginTop: 18 }}><Link to="/faq" style={BTNO}>All questions</Link></div>
+      </section></Reveal>
+
+      {/* ============ FINAL CTA ============ */}
+      <section style={{ background: `linear-gradient(180deg, ${c.night}, #2A2270)`, color: '#fff', textAlign: 'center', padding: isMobile ? '56px 24px' : '96px 40px', position: 'relative', overflow: 'hidden' }}>
+        <img src={IMG.logoMark} alt="" aria-hidden="true" style={{ position: 'absolute', left: isMobile ? -30 : '8%', bottom: -20, height: 160, opacity: .25 }} />
+        <Reveal><div style={{ position: 'relative' }}>
+          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 56, lineHeight: 1.15 }}>Say NO<span style={{ display: 'block', fontSize: isMobile ? 22 : 30, color: c.sky2, fontFamily: FONT_SUB }}>to night sweats</span></h2>
+          <p style={{ fontSize: isMobile ? 13.5 : 15.5, color: '#D7D3FF', margin: '16px auto 26px', maxWidth: isMobile ? 340 : 420, lineHeight: 1.7 }}>
+            Wake up fresh and rested — free from overheating. Try flip'nsleep for 100 nights, risk-free.
+          </p>
+          <a href="#offer" style={{ ...BTN, fontSize: 14 }}>Order your Cold Pillow now</a>
+        </div></Reveal>
       </section>
+
+      <EmailCapture />
+
+      {/* ============ SEO-TEKSTBLOK — night sweats / menopauze zoektermen ============ */}
+      <Reveal y={16}><section style={{ maxWidth: 760, margin: '0 auto', padding: isMobile ? '40px 22px 10px' : '54px 24px 10px', color: c.grayD }}>
+        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginBottom: 10 }}>The cooling pillow for night sweats</h2>
+        <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 14 }}>
+          If you regularly wake up hot and sweaty, you're not alone: night sweats are one of the most common sleep complaints, especially for women in menopause and perimenopause. Hormonal changes disrupt the way your body regulates temperature at night, and an ordinary pillow that traps heat under your head makes those hot flashes at night even harder to sleep through. A cooling pillow tackles the problem where it starts — your head is one of the fastest places your body sheds heat.
+        </p>
+        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginBottom: 10 }}>How the Signature Cold Pillow helps you sleep cooler</h2>
+        <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 14 }}>
+          The flip'nsleep Signature Cold Pillow combines a cool-touch fabric side (tested Q-max cooling value of 0.26) with an adjustable shredded memory foam core that lets air circulate instead of building up heat. Flip it to the soft bamboo side in colder months — one pillow for hot sleepers, all year round. The loft adjusts to every sleeping position: side sleepers keep more filling for neck support, back and stomach sleepers take some out. And because every order is a 1+1 set with free shipping, a 100-night sleep trial and a 2-year warranty, trying a better night is risk-free. We ship across the United States and Canada.
+        </p>
+      </section></Reveal>
     </div>
   );
 }
