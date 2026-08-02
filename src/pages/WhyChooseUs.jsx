@@ -2,6 +2,8 @@ import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { IMG } from '../data';
 import { Link } from 'react-router-dom';
 import { ReviewsBlock, CloudDivider, EmailCapture } from '../components/Blocks';
+import Reveal from '../components/Reveal';
+
 
 const ROWS = [
   ['Adjustable loft', 'Zip open, add or remove filling for your sleeping position', 'Fixed height — take it or leave it'],
@@ -24,7 +26,7 @@ export default function WhyChooseUs() {
         </p>
       </section>
 
-      <section style={{ maxWidth: isMobile ? 860 : 980, margin: isMobile ? '26px auto 0' : '36px auto 0', padding: '0 16px', overflowX: 'auto' }}>
+      <Reveal><section style={{ maxWidth: isMobile ? 860 : 980, margin: isMobile ? '26px auto 0' : '36px auto 0', padding: '0 16px', overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, background: '#fff', borderRadius: 22, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', minWidth: 560 }}>
           <thead>
             <tr style={{ background: c.navy, color: '#fff' }}>
@@ -43,7 +45,7 @@ export default function WhyChooseUs() {
             ))}
           </tbody>
         </table>
-      </section>
+      </section></Reveal>
 
       <section style={{ textAlign: 'center', padding: '34px 20px 10px' }}>
         <Link to="/product/signature-cold-pillow" style={BTN}>Shop the 1+1 deal</Link>

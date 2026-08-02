@@ -3,6 +3,7 @@ import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { REVIEWS, FAQ_ITEMS, IMG, BUNDLES, PRODUCT } from '../data';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { subscribe } from '../brevo';
+import Reveal from './Reveal';
 
 // Gedeelde bouwblokken: wolkenrand, sterren, reviews, FAQ-accordion, e-mailsectie.
 
@@ -40,8 +41,8 @@ export function SummerDealsSlider() {
       <style>{`.fns-scroll{scrollbar-width:none;-ms-overflow-style:none}.fns-scroll::-webkit-scrollbar{display:none}`}</style>
       <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: bgH, backgroundImage: `url(${IMG.sliderBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div style={{ position: 'relative', maxWidth: 1050, margin: '0 auto', padding: isMobile ? '34px 20px 0' : '48px 40px 0' }}>
-        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 34, color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2>
-        <div className="fns-scroll" style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', scrollSnapType: 'x mandatory' }}>
+        <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 34, color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2></Reveal>
+        <Reveal delay={140}><div className="fns-scroll" style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', scrollSnapType: 'x mandatory' }}>
           {BUNDLES.map(b => {
             const p = getPrice(b, isCA);
             const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
@@ -60,7 +61,7 @@ export function SummerDealsSlider() {
               </a>
             );
           })}
-        </div>
+        </div></Reveal>
       </div>
     </section>
   );
@@ -124,8 +125,8 @@ export function CollectionsBlock() {
   ];
   return (
     <section style={{ padding: isMobile ? '40px 20px 8px' : '54px 40px 10px' }}>
-      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, color: c.navy, textAlign: 'center' }}>Discover our <span style={{ fontFamily: FONT_SUB }}>collections</span></h2>
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 18, maxWidth: isMobile ? 480 : 1100, margin: isMobile ? '22px auto 0' : '30px auto 0' }}>
+      <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, color: c.navy, textAlign: 'center' }}>Discover our <span style={{ fontFamily: FONT_SUB }}>collections</span></h2></Reveal>
+      <Reveal delay={120}><div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 18, maxWidth: isMobile ? 480 : 1100, margin: isMobile ? '22px auto 0' : '30px auto 0' }}>
         {items.map(([label, img, to, soon], i) => {
           const inner = (
             <div style={{ position: 'relative', borderRadius: 18, overflow: 'hidden', aspectRatio: '.85', display: 'flex', alignItems: 'flex-end', filter: soon ? 'saturate(.45) brightness(.92)' : 'none' }}>
@@ -139,7 +140,7 @@ export function CollectionsBlock() {
             ? <a key={i} href={to} style={{ textDecoration: 'none' }}>{inner}</a>
             : <div key={i}>{inner}</div>;
         })}
-      </div>
+      </div></Reveal>
     </section>
   );
 }
@@ -159,9 +160,27 @@ export function ReviewsBlock() {
       {/* Wolkjes komen achter de donkere sectie vandaan: rand met gezichtje boven, kale rand onder */}
       <img src={IMG.cloudsUp} alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginBottom: -1 }} />
       <section style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: isMobile ? '38px 20px 40px' : '64px 40px 70px' }}>
+        <Reveal>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, textAlign: 'center' }}>What our <span style={{ fontFamily: FONT_SUB }}>customers say</span></h2>
-        <div style={{ textAlign: 'center', margin: '10px 0 6px' }}><Stars n={5} /> <span style={{ fontSize: 13, marginLeft: 6 }}>4.7 average rating</span></div>
+        {REVIEWS.length === 0 && (
+          <p style={{ textAlign: 'center', fontSize: 13.5, lineHeight: 1.7, maxWidth: 440, margin: '12px auto 0', color: '#DDD9FF' }}>
+            We just launched — our first customers are sleeping on their pillows right now. Verified reviews will appear here as they come in.
+          </p>
+        )}
+        </Reveal>
+        <Reveal delay={120}>
         <div className="fns-scroll" style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '18px 4px 8px', maxWidth: 1050, margin: '0 auto', scrollSnapType: 'x mandatory' }}>
+          {REVIEWS.length === 0 && [
+            ['🌙', '100-night sleep trial', "Every future review here comes from a verified buyer who actually slept on it. Try it for 100 nights yourself — full refund if it's not for you."],
+            ['🛡️', '2-year warranty', 'We stand behind the materials and workmanship for two full years. If anything fails, we repair, replace or refund it.'],
+            ['📦', 'Free shipping & returns', 'Free shipping across the US and Canada, and free returns within the trial period. Nothing to lose but the night sweats.'],
+          ].map(([icon, title, text], i) => (
+            <div key={i} style={{ scrollSnapAlign: 'center', flex: isMobile ? '0 0 86%' : '1 1 0', minWidth: isMobile ? undefined : 300, background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
+              <span style={{ fontSize: 22 }}>{icon}</span>
+              <div style={{ fontFamily: FONT_SUB, fontSize: 15, fontWeight: 600, margin: '8px 0 6px' }}>{title}</div>
+              <p style={{ fontSize: 13, lineHeight: 1.65 }}>{text}</p>
+            </div>
+          ))}
           {REVIEWS.map((r, i) => (
             <div key={i} style={{ scrollSnapAlign: 'center', flex: isMobile ? '0 0 86%' : '1 1 0', minWidth: isMobile ? undefined : 300, background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
               <Stars n={r.stars} />
@@ -173,6 +192,7 @@ export function ReviewsBlock() {
             </div>
           ))}
         </div>
+        </Reveal>
       </section>
       <img src={IMG.cloudsDown} alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginTop: -1 }} />
     </div>
@@ -209,6 +229,7 @@ export function EmailCapture() {
 
   return (
     <section style={{ background: c.sky, padding: isMobile ? '42px 22px' : '56px 40px', textAlign: 'center' }}>
+      <Reveal>
       <img src={IMG.iconCloud} alt="" style={{ height: 30, marginBottom: 8 }} />
       <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 36, color: c.navy }}>Sleep better, <span style={{ fontFamily: FONT_SUB }}>pay less</span></h2>
       <p style={{ fontSize: 13.5, lineHeight: 1.6, maxWidth: 340, margin: '10px auto 0' }}>Get 10% off your first order and our best sleep tips for warm nights.</p>
@@ -225,6 +246,7 @@ export function EmailCapture() {
           <p style={{ fontSize: 11, marginTop: 10, opacity: .65 }}>No spam. Unsubscribe anytime.</p>
         </>
       )}
+      </Reveal>
     </section>
   );
 }

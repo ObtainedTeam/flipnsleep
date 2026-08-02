@@ -5,6 +5,7 @@ import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { PRODUCT, BUNDLES, IMG } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNow } from '../shopify';
+import Reveal from '../components/Reveal';
 import { CloudDivider, Stars, ReviewsBlock, FAQBlock, EmailCapture, TrustAccordion, ProductImageBlock, CollectionsBlock, SummerDealsSlider, ShippingCountdown } from '../components/Blocks';
 
 export default function Home({ onCartOpen }) {
@@ -74,7 +75,7 @@ export default function Home({ onCartOpen }) {
       </section>
 
       {/* ============ PRODUCT CARD + OFFER ============ */}
-      <section id="offer" style={{ maxWidth: isMobile ? 560 : 1140, margin: isMobile ? '22px 14px' : '44px auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 14px 34px rgba(32,27,93,.16)', display: isMobile ? 'block' : 'grid', gridTemplateColumns: isMobile ? undefined : '1.05fr 1fr' }}>
+      <Reveal><section id="offer" style={{ maxWidth: isMobile ? 560 : 1140, margin: isMobile ? '22px 14px' : '44px auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 14px 34px rgba(32,27,93,.16)', display: isMobile ? 'block' : 'grid', gridTemplateColumns: isMobile ? undefined : '1.05fr 1fr' }}>
         <div style={{ padding: isMobile ? 16 : 28, position: 'relative', display: 'flex', alignItems: 'center' }}>
           <ProductImageBlock src={IMG.frontCut} alt="flip'nsleep Signature Cold Pillow" height={isMobile ? 230 : 460} radius={18} style={{ width: '100%' }} />
           <span style={{ position: 'absolute', top: isMobile ? 28 : 44, left: isMobile ? 28 : 44, background: c.amber, color: c.navy, fontWeight: 700, fontSize: isMobile ? 13 : 15, borderRadius: 999, padding: isMobile ? '7px 16px' : '9px 20px' }}>1+1 free</span>
@@ -84,7 +85,7 @@ export default function Home({ onCartOpen }) {
           <div style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 19 : 24, color: c.amber }}>
             {formatPrice(price, symbol)} <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 13, color: '#CFCBF2' }}>{formatPrice(compare, symbol)}</s>
           </div>
-          <div style={{ margin: '6px 0 2px' }}><Stars n={5} /><span style={{ fontSize: 12.5, color: '#DDD9FF', marginLeft: 8 }}>Loved by hot sleepers</span></div>
+          <div style={{ margin: '6px 0 2px', fontSize: 12.5, color: '#DDD9FF' }}>🌙 100-night sleep trial · 🛡️ 2-year warranty</div>
           <ul style={{ listStyle: 'none', margin: '14px 0 6px' }}>
             {PRODUCT.usps.map((u, i) => (
               <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13.5, lineHeight: 1.5, marginBottom: 9 }}>
@@ -117,14 +118,16 @@ export default function Home({ onCartOpen }) {
         </div>
       </section>
 
-      <div style={{ maxWidth: isMobile ? 560 : 1140, margin: isMobile ? '0 14px 20px' : '0 auto 34px' }}>
+      </Reveal>
+
+      <Reveal delay={100}><div style={{ maxWidth: isMobile ? 560 : 1140, margin: isMobile ? '0 14px 20px' : '0 auto 34px' }}>
         <TrustAccordion specs={<ul style={{ listStyle: 'none' }}>{PRODUCT.specs.map(([k, v], i) => <li key={i} style={{ marginBottom: 5 }}><b>{k}:</b> {v}</li>)}</ul>} />
-      </div>
+      </div></Reveal>
 
       {/* ============ EMPATHY / NIGHT ============ */}
       <section style={{ background: `linear-gradient(180deg, ${c.night} 0%, ${c.navy} 100%)`, color: '#fff', padding: isMobile ? '52px 24px' : '96px 40px', position: 'relative', overflow: 'hidden' }}>
         <img src={IMG.night} alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: .28 }} />
-        <div style={{ position: 'relative', maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
+        <Reveal><div style={{ position: 'relative', maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 30 : 50, lineHeight: 1.2 }}>
             3 AM. Awake.<br /><span style={{ color: c.amber }}>Soaked. Again.</span>
           </h2>
@@ -139,7 +142,7 @@ export default function Home({ onCartOpen }) {
               </div>
             ))}
           </div>
-        </div>
+        </div></Reveal>
       </section>
 
       {/* ============ SUMMER DEALS SLIDER ============ */}
@@ -147,10 +150,10 @@ export default function Home({ onCartOpen }) {
 
       {/* ============ JUST FLIP IT ============ */}
       <section style={{ padding: isMobile ? '44px 22px' : '64px 40px', textAlign: 'center' }}>
-        <div style={EYEBROW}>How it works</div>
+        <Reveal><div style={EYEBROW}>How it works</div>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 36, color: c.navy, margin: '8px 0 10px' }}>Just flip it.</h2>
-        <p style={{ fontSize: 13.5, lineHeight: 1.65, maxWidth: 400, margin: '0 auto' }}>One pillow, two sides. Flip to the cooling side on warm nights, back to the soft bamboo side in winter.</p>
-        <div style={{ display: isMobile ? 'block' : 'flex', maxWidth: isMobile ? undefined : 980, margin: isMobile ? undefined : '38px auto 0', gap: 70, alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{ fontSize: 13.5, lineHeight: 1.65, maxWidth: 400, margin: '0 auto' }}>One pillow, two sides. Flip to the cooling side on warm nights, back to the soft bamboo side in winter.</p></Reveal>
+        <Reveal delay={120}><div style={{ display: isMobile ? 'block' : 'flex', maxWidth: isMobile ? undefined : 980, margin: isMobile ? undefined : '38px auto 0', gap: 70, alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ maxWidth: 320, margin: isMobile ? '26px auto 0' : 0, flexShrink: 0 }}>
           <div style={{ width: isMobile ? 240 : 300, height: isMobile ? 156 : 196, margin: '0 auto', perspective: 900 }}>
             <div style={{ position: 'relative', width: '100%', height: '100%', transition: 'transform .6s', transformStyle: 'preserve-3d', transform: flipped ? 'rotateY(180deg)' : 'none' }}>
@@ -183,13 +186,13 @@ export default function Home({ onCartOpen }) {
             </li>
           ))}
         </ol>
-        </div>
+        </div></Reveal>
         <div style={{ textAlign: 'center' }}><Link to="/how-it-works" style={{ ...BTNO, marginTop: isMobile ? 10 : 30, display: 'inline-block' }}>See how it works</Link></div>
       </section>
 
       {/* ============ USP ICONS ============ */}
       <section style={{ padding: '0 20px 10px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? '26px 12px' : '34px 24px', maxWidth: isMobile ? 380 : 1000, margin: isMobile ? '10px auto 0' : '30px auto 0', textAlign: 'center' }}>
+        <Reveal><div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? '26px 12px' : '34px 24px', maxWidth: isMobile ? 380 : 1000, margin: isMobile ? '10px auto 0' : '30px auto 0', textAlign: 'center' }}>
           {[
             [c.pastelYellow, '🪶', 'Adjustable comfort'],
             [c.pastelPink, '🌡️', 'Cool and warm side'],
@@ -201,18 +204,18 @@ export default function Home({ onCartOpen }) {
               <p style={{ fontSize: isMobile ? 13.5 : 15, fontWeight: 600, lineHeight: 1.35, fontFamily: FONT_SUB }}>{label}</p>
             </div>
           ))}
-        </div>
+        </div></Reveal>
       </section>
 
       {/* ============ CERTIFICATIONS ============ */}
-      <section style={{ background: '#fff', margin: isMobile ? '36px 16px 0' : '52px auto 0', maxWidth: isMobile ? 640 : 760, borderRadius: 22, padding: '24px 20px', textAlign: 'center', boxShadow: '0 10px 26px rgba(32,27,93,.08)' }}>
+      <Reveal><section style={{ background: '#fff', margin: isMobile ? '36px 16px 0' : '52px auto 0', maxWidth: isMobile ? 640 : 760, borderRadius: 22, padding: '24px 20px', textAlign: 'center', boxShadow: '0 10px 26px rgba(32,27,93,.08)' }}>
         <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 14, color: c.navy }}>Tested & certified</h3>
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
           {[['OEKO-TEX®', 'Standard 100'], ['CertiPUR-US®', 'Certified foam'], ['Q-max 0.26', 'Tested cooling value']].map(([a, b], i) => (
             <span key={i} style={{ border: `1.5px solid rgba(32,27,93,.25)`, borderRadius: 12, fontSize: 11.5, fontWeight: 600, padding: '10px 14px', color: c.navy, lineHeight: 1.4 }}>{a}<br /><span style={{ fontWeight: 400 }}>{b}</span></span>
           ))}
         </div>
-      </section>
+      </section></Reveal>
 
       {/* ============ REVIEWS ============ */}
       <div style={{ marginTop: 46 }}><ReviewsBlock /></div>
@@ -221,7 +224,7 @@ export default function Home({ onCartOpen }) {
       <CollectionsBlock />
 
       {/* ============ WHY / COMPARISON TEASER ============ */}
-      <section style={{ padding: isMobile ? '36px 22px 10px' : '50px 40px 10px', textAlign: 'center' }}>
+      <Reveal><section style={{ padding: isMobile ? '36px 22px 10px' : '50px 40px 10px', textAlign: 'center' }}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, color: c.navy, marginBottom: 20 }}>Why <span style={{ color: c.purple }}>flip'nsleep?</span></h2>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 18 : 26, maxWidth: isMobile ? 780 : 940, margin: '0 auto' }}>
           <div style={{ background: `linear-gradient(180deg, ${c.navy}, ${c.purple})`, color: '#fff', borderRadius: 22, padding: 22 }}>
@@ -250,31 +253,31 @@ export default function Home({ onCartOpen }) {
           </div>
         </div>
         <Link to="/why-flipnsleep" style={{ ...BTNO, marginTop: 24 }}>See the full comparison</Link>
-      </section>
+      </section></Reveal>
 
       {/* ============ FAQ TEASER ============ */}
-      <section style={{ padding: isMobile ? '40px 22px' : '54px 40px' }}>
+      <Reveal><section style={{ padding: isMobile ? '40px 22px' : '54px 40px' }}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, textAlign: 'center', marginBottom: 14 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
         <FAQBlock limit={4} />
         <div style={{ textAlign: 'center', marginTop: 18 }}><Link to="/faq" style={BTNO}>All questions</Link></div>
-      </section>
+      </section></Reveal>
 
       {/* ============ FINAL CTA ============ */}
       <section style={{ background: `linear-gradient(180deg, ${c.night}, #2A2270)`, color: '#fff', textAlign: 'center', padding: isMobile ? '56px 24px' : '96px 40px', position: 'relative', overflow: 'hidden' }}>
         <img src={IMG.logoMark} alt="" aria-hidden="true" style={{ position: 'absolute', left: isMobile ? -30 : '8%', bottom: -20, height: 160, opacity: .25 }} />
-        <div style={{ position: 'relative' }}>
+        <Reveal><div style={{ position: 'relative' }}>
           <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 56, lineHeight: 1.15 }}>Say NO<span style={{ display: 'block', fontSize: isMobile ? 22 : 30, color: c.sky2, fontFamily: FONT_SUB }}>to night sweats</span></h2>
           <p style={{ fontSize: isMobile ? 13.5 : 15.5, color: '#D7D3FF', margin: '16px auto 26px', maxWidth: isMobile ? 340 : 420, lineHeight: 1.7 }}>
             Wake up fresh and rested — free from overheating. Try flip'nsleep for 100 nights, risk-free.
           </p>
           <a href="#offer" style={{ ...BTN, fontSize: 14 }}>Order your Cold Pillow now</a>
-        </div>
+        </div></Reveal>
       </section>
 
       <EmailCapture />
 
       {/* ============ SEO-TEKSTBLOK — night sweats / menopauze zoektermen ============ */}
-      <section style={{ maxWidth: 760, margin: '0 auto', padding: isMobile ? '40px 22px 10px' : '54px 24px 10px', color: c.grayD }}>
+      <Reveal y={16}><section style={{ maxWidth: 760, margin: '0 auto', padding: isMobile ? '40px 22px 10px' : '54px 24px 10px', color: c.grayD }}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginBottom: 10 }}>The cooling pillow for night sweats</h2>
         <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 14 }}>
           If you regularly wake up hot and sweaty, you're not alone: night sweats are one of the most common sleep complaints, especially for women in menopause and perimenopause. Hormonal changes disrupt the way your body regulates temperature at night, and an ordinary pillow that traps heat under your head makes those hot flashes at night even harder to sleep through. A cooling pillow tackles the problem where it starts — your head is one of the fastest places your body sheds heat.
@@ -283,7 +286,7 @@ export default function Home({ onCartOpen }) {
         <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 14 }}>
           The flip'nsleep Signature Cold Pillow combines a cool-touch fabric side (tested Q-max cooling value of 0.26) with an adjustable shredded memory foam core that lets air circulate instead of building up heat. Flip it to the soft bamboo side in colder months — one pillow for hot sleepers, all year round. The loft adjusts to every sleeping position: side sleepers keep more filling for neck support, back and stomach sleepers take some out. And because every order is a 1+1 set with free shipping, a 100-night sleep trial and a 2-year warranty, trying a better night is risk-free. We ship across the United States and Canada.
         </p>
-      </section>
+      </section></Reveal>
     </div>
   );
 }

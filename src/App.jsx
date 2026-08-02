@@ -16,6 +16,7 @@ import FAQ from './pages/FAQ';
 import Legal from './pages/Legal';
 import WhyChooseUs from './pages/WhyChooseUs';
 import Quiz from './pages/Quiz';
+import Reviews from './pages/Reviews';
 
 export function AppShell() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -47,6 +48,7 @@ export function AppShell() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/why-flipnsleep" element={<WhyChooseUs />} />
             <Route path="/quiz" element={<Quiz />} />
+            <Route path="/reviews" element={<Reviews />} />
             <Route path="/privacy" element={<Legal />} />
             <Route path="/returns" element={<Legal />} />
             <Route path="/terms" element={<Legal />} />

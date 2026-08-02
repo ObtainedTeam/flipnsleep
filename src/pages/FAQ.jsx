@@ -1,6 +1,8 @@
 import { c, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW, BTN } from '../theme';
 import { FAQ_ITEMS } from '../data';
 import { FAQBlock, EmailCapture } from '../components/Blocks';
+import Reveal from '../components/Reveal';
+
 import { Link } from 'react-router-dom';
 
 export default function FAQ() {
@@ -14,12 +16,12 @@ export default function FAQ() {
           Everything about the trial, shipping, washing and adjusting. Still stuck? Email <a href="mailto:support@flipnsleep.com" style={{ fontWeight: 600 }}>support@flipnsleep.com</a>.
         </p>
       </section>
-      <section style={{ padding: isMobile ? '20px 22px 40px' : '26px 40px 56px' }}>
+      <Reveal><section style={{ padding: isMobile ? '20px 22px 40px' : '26px 40px 56px' }}>
         <FAQBlock items={FAQ_ITEMS} />
         <div style={{ textAlign: 'center', marginTop: 28 }}>
           <Link to="/product/signature-cold-pillow" style={BTN}>Shop the 1+1 deal</Link>
         </div>
-      </section>
+      </section></Reveal>
       <EmailCapture />
     </div>
   );

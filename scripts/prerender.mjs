@@ -46,6 +46,10 @@ const META = {
     title: "FAQ | flip'nsleep",
     desc: '100-night trial, shipping to the US and Canada, washing instructions and how to adjust your pillow — all questions answered.',
   },
+  '/reviews': {
+    title: "Reviews | flip'nsleep",
+    desc: "Verified customer reviews of the Signature Cold Pillow, collected independently through Trustpilot. Real sleepers, real reviews — unfiltered.",
+  },
   '/quiz': {
     title: "Sleep Quiz — 15% Off Your Order | flip'nsleep",
     desc: 'Answer a few quick questions about how you sleep and get 15% off your Signature Cold Pillow order.',

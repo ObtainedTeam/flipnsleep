@@ -2,6 +2,8 @@ import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { IMG } from '../data';
 import { Link } from 'react-router-dom';
 import { CloudDivider, EmailCapture } from '../components/Blocks';
+import Reveal from '../components/Reveal';
+
 
 export default function About() {
   const isMobile = useIsMobile();
@@ -19,7 +21,7 @@ export default function About() {
         <CloudDivider fill={c.cream} />
       </section>
 
-      <section style={{ maxWidth: 720, margin: '0 auto', padding: isMobile ? '30px 22px' : '44px 24px' }}>
+      <Reveal><section style={{ maxWidth: 720, margin: '0 auto', padding: isMobile ? '30px 22px' : '44px 24px' }}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, marginBottom: 12 }}>What we believe</h2>
         <p style={{ fontSize: 14, lineHeight: 1.8, color: c.grayD, marginBottom: 18 }}>
           Sleep is not a luxury, and cooling down shouldn't require gadgets. We believe in simple, honest product design: two fabrics that do their job, a filling you can adjust yourself, and certifications you can verify — OEKO-TEX Standard 100 for the fabrics, CertiPUR-US for the foam.
@@ -33,7 +35,7 @@ export default function About() {
         <div style={{ textAlign: 'center', marginTop: 26 }}>
           <Link to="/product/signature-cold-pillow" style={BTN}>Shop the 1+1 deal</Link>
         </div>
-      </section>
+      </section></Reveal>
 
       <EmailCapture />
     </div>

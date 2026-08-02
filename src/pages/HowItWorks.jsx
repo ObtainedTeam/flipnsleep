@@ -1,6 +1,8 @@
 import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { IMG } from '../data';
 import { CloudDivider, EmailCapture } from '../components/Blocks';
+import Reveal from '../components/Reveal';
+
 import { Link } from 'react-router-dom';
 
 export default function HowItWorks() {
@@ -8,12 +10,12 @@ export default function HowItWorks() {
 
   const Step = ({ n, title, text, img, reverse }) => (
     <section style={{ maxWidth: 1080, margin: '0 auto', padding: isMobile ? '18px 20px' : '40px 24px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 16 : 40, alignItems: 'center' }}>
-      <img src={img} alt="" style={{ borderRadius: 22, order: isMobile ? 0 : (reverse ? 2 : 0) }} />
-      <div>
+      <Reveal style={{ order: isMobile ? 0 : (reverse ? 2 : 0) }}><img src={img} alt="" style={{ borderRadius: 22 }} /></Reveal>
+      <Reveal delay={120}><div>
         <b style={{ width: 40, height: 40, borderRadius: '50%', background: c.sky, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 10 }}>{n}</b>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, marginBottom: 10 }}>{title}</h2>
         <p style={{ fontSize: 14, lineHeight: 1.75, color: c.grayD }}>{text}</p>
-      </div>
+      </div></Reveal>
     </section>
   );
 

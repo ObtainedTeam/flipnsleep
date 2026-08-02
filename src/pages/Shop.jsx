@@ -3,6 +3,8 @@ import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { BUNDLES, PRODUCT } from '../data';
 import { EmailCapture, ProductImageBlock } from '../components/Blocks';
+import Reveal from '../components/Reveal';
+
 
 export default function Shop() {
   const isMobile = useIsMobile();
@@ -23,7 +25,7 @@ export default function Shop() {
           const p = getPrice(b, isCA);
           const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
           return (
-            <Link key={b.id} to="/product/signature-cold-pillow" style={{ textDecoration: 'none', background: '#fff', borderRadius: 24, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', display: 'block' }}>
+            <Reveal key={b.id} delay={BUNDLES.indexOf(b) * 130}><Link to="/product/signature-cold-pillow" style={{ textDecoration: 'none', background: '#fff', borderRadius: 24, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', display: 'block' }}>
               <div style={{ position: 'relative' }}>
                 <ProductImageBlock src={b.image} alt={b.label} height={isMobile ? 210 : 280} radius={0} />
                 <span style={{ position: 'absolute', top: 14, left: 14, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' }}>{b.short}</span>
@@ -35,7 +37,7 @@ export default function Shop() {
                 <div style={{ fontSize: 12, color: '#2e6b4f', fontWeight: 600, marginTop: 2 }}>{formatPrice(p / b.pillows, symbol)} per pillow · free shipping</div>
                 <span style={{ ...BTN, marginTop: 14, padding: '11px 26px', fontSize: 12 }}>View deal</span>
               </div>
-            </Link>
+            </Link></Reveal>
           );
         })}
       </section>

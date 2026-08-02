@@ -4,6 +4,7 @@ import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { PRODUCT, BUNDLES, IMG } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNow } from '../shopify';
+import Reveal from '../components/Reveal';
 import { Stars, ReviewsBlock, FAQBlock, TrustAccordion, CloudDivider, ProductImageBlock, ShippingCountdown } from '../components/Blocks';
 
 export default function Product({ onCartOpen }) {
@@ -22,7 +23,7 @@ export default function Product({ onCartOpen }) {
     <div>
       <section style={{ maxWidth: 1160, margin: '0 auto', padding: isMobile ? '20px 16px' : '52px 24px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr', gap: isMobile ? 24 : 60 }}>
         {/* Gallery */}
-        <div>
+        <Reveal><div>
           <ProductImageBlock src={PRODUCT.images[img]} alt={PRODUCT.name} height={isMobile ? 320 : 460} radius={22} />
           <div style={{ display: 'flex', gap: 8, marginTop: 10, overflowX: 'auto' }}>
             {PRODUCT.images.map((src, i) => (
@@ -32,13 +33,13 @@ export default function Product({ onCartOpen }) {
               </button>
             ))}
           </div>
-        </div>
+        </div></Reveal>
 
         {/* Info */}
-        <div>
+        <Reveal delay={120}><div>
           <div style={EYEBROW}>Signature series</div>
           <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 42, color: c.navy, margin: '6px 0 8px', lineHeight: 1.15 }}>{PRODUCT.name}</h1>
-          <div style={{ marginBottom: 8 }}><Stars n={5} /><span style={{ fontSize: 12.5, color: c.grayD, marginLeft: 8 }}>4.7 · loved by hot sleepers</span></div>
+          <div style={{ marginBottom: 8, fontSize: 12.5, color: c.grayD }}>🌙 100-night sleep trial · 🛡️ 2-year warranty · 📦 Free shipping</div>
           <div style={{ fontFamily: FONT_DISPLAY, fontSize: 24, color: c.navy }}>
             {formatPrice(price, symbol)} <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 14, color: '#999' }}>{formatPrice(compare, symbol)}</s>
           </div>
@@ -78,13 +79,13 @@ export default function Product({ onCartOpen }) {
           </div>
 
           <TrustAccordion specs={<ul style={{ listStyle: 'none' }}>{PRODUCT.specs.map(([k, v], i) => <li key={i} style={{ marginBottom: 5 }}><b>{k}:</b> {v}</li>)}</ul>} />
-        </div>
+        </div></Reveal>
       </section>
 
       {/* Detail: vulling */}
       <section style={{ maxWidth: 1160, margin: '0 auto', padding: isMobile ? '10px 16px 30px' : '30px 24px 70px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 18 : 40, alignItems: 'center' }}>
-        <img src={IMG.filling} alt="Inside the Signature Cold Pillow: adjustable shredded memory foam" style={{ borderRadius: 22 }} />
-        <div>
+        <Reveal><img src={IMG.filling} alt="Inside the Signature Cold Pillow: adjustable shredded memory foam" style={{ borderRadius: 22 }} /></Reveal>
+        <Reveal delay={120}><div>
           <div style={EYEBROW}>A look inside the pillow</div>
           <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, margin: '8px 0 14px' }}>Four layers, one cool night</h2>
           <ol style={{ listStyle: 'none' }}>
@@ -100,7 +101,7 @@ export default function Product({ onCartOpen }) {
               </li>
             ))}
           </ol>
-        </div>
+        </div></Reveal>
       </section>
 
       <ReviewsBlock />

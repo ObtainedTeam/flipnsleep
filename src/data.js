@@ -75,12 +75,9 @@ export const BUNDLES = [
 
 export const bundleById = (id) => BUNDLES.find(b => b.id === id);
 
-// LET OP: demo-reviews. Vervangen door echte klantreviews vóór de launch.
-export const REVIEWS = [
-  { stars: 5, text: "First summer in years I'm not waking up drenched at 3 AM. I flip it once before bed and sleep straight through.", who: "Karen M.", when: "Verified buyer" },
-  { stars: 5, text: "Bought the 1+1 — one for me, one for my husband. He runs hot too, and we finally stopped fighting over the thermostat.", who: "Linda R.", when: "Verified buyer" },
-  { stars: 4, text: "Took a few nights to get the filling right for side sleeping, but once adjusted it's the best pillow I've owned.", who: "Susan T.", when: "Verified buyer" },
-];
+// Echte klantreviews. Leeg tot de eerste geverifieerde reviews binnen zijn;
+// de reviewsectie toont dan automatisch de eerlijke launch-variant.
+export const REVIEWS = [];
 
 export const FAQ_ITEMS = [
   ["How does the 100-night trial work?", "Sleep on it for up to 100 nights. Not convinced? Contact us, ship it back for free and receive a full refund."],

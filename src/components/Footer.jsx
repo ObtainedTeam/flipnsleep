@@ -19,6 +19,7 @@ export default function Footer() {
           <div>
             <h4 style={{ fontFamily: FONT_SUB, fontSize: 13, marginBottom: 10, color: c.amber, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Support</h4>
             <Link to="/faq" style={{ display: 'block', color: '#CFCBF2', textDecoration: 'none', marginBottom: 7 }}>FAQ</Link>
+            <Link to="/reviews" style={{ display: 'block', color: '#CFCBF2', textDecoration: 'none', marginBottom: 7 }}>Reviews</Link>
             <Link to="/returns" style={{ display: 'block', color: '#CFCBF2', textDecoration: 'none', marginBottom: 7 }}>Shipping & returns</Link>
             <a href="mailto:support@flipnsleep.com" style={{ display: 'block', color: '#CFCBF2', textDecoration: 'none', marginBottom: 7 }}>Contact</a>
           </div>
