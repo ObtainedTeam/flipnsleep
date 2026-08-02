@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
-import { REVIEWS, FAQ_ITEMS, IMG, BUNDLES, PRODUCT } from '../data';
+import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT } from '../data';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { subscribe } from '../brevo';
 import Reveal from './Reveal';
@@ -155,6 +156,18 @@ export function Stars({ n = 5, size = 14 }) {
 
 export function ReviewsBlock() {
   const isMobile = useIsMobile();
+  const [data, setData] = useState(null); // { reviews, count, avg } uit /api/reviews (Judge.me)
+
+  useEffect(() => {
+    fetch('/api/reviews').then((r) => r.json()).then(setData).catch(() => setData(null));
+  }, []);
+
+  // Geen echte reviews = geen sectie. Zodra de eerste Judge.me-review
+  // gepubliceerd is, verschijnt dit blok vanzelf met echte content.
+  const reviews = (data && data.reviews) || [];
+  if (reviews.length === 0) return null;
+  const shown = reviews.slice(0, 6);
+
   return (
     <div>
       {/* Wolkjes komen achter de donkere sectie vandaan: rand met gezichtje boven, kale rand onder */}
@@ -162,37 +175,25 @@ export function ReviewsBlock() {
       <section style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: isMobile ? '38px 20px 40px' : '64px 40px 70px' }}>
         <Reveal>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, textAlign: 'center' }}>What our <span style={{ fontFamily: FONT_SUB }}>customers say</span></h2>
-        {REVIEWS.length === 0 && (
-          <p style={{ textAlign: 'center', fontSize: 13.5, lineHeight: 1.7, maxWidth: 440, margin: '12px auto 0', color: '#DDD9FF' }}>
-            We just launched — our first customers are sleeping on their pillows right now. Verified reviews will appear here as they come in.
-          </p>
-        )}
+        <div style={{ textAlign: 'center', margin: '10px 0 6px' }}><Stars n={Math.round(data.avg)} /> <span style={{ fontSize: 13, marginLeft: 6 }}>{data.avg} · {data.count} verified review{data.count === 1 ? '' : 's'}</span></div>
         </Reveal>
         <Reveal delay={120}>
         <div className="fns-scroll" style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '18px 4px 8px', maxWidth: 1050, margin: '0 auto', scrollSnapType: 'x mandatory' }}>
-          {REVIEWS.length === 0 && [
-            ['🌙', '100-night sleep trial', "Every future review here comes from a verified buyer who actually slept on it. Try it for 100 nights yourself — full refund if it's not for you."],
-            ['🛡️', '2-year warranty', 'We stand behind the materials and workmanship for two full years. If anything fails, we repair, replace or refund it.'],
-            ['📦', 'Free shipping & returns', 'Free shipping across the US and Canada, and free returns within the trial period. Nothing to lose but the night sweats.'],
-          ].map(([icon, title, text], i) => (
+          {shown.map((r, i) => (
             <div key={i} style={{ scrollSnapAlign: 'center', flex: isMobile ? '0 0 86%' : '1 1 0', minWidth: isMobile ? undefined : 300, background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
-              <span style={{ fontSize: 22 }}>{icon}</span>
-              <div style={{ fontFamily: FONT_SUB, fontSize: 15, fontWeight: 600, margin: '8px 0 6px' }}>{title}</div>
-              <p style={{ fontSize: 13, lineHeight: 1.65 }}>{text}</p>
-            </div>
-          ))}
-          {REVIEWS.map((r, i) => (
-            <div key={i} style={{ scrollSnapAlign: 'center', flex: isMobile ? '0 0 86%' : '1 1 0', minWidth: isMobile ? undefined : 300, background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
-              <Stars n={r.stars} />
-              <p style={{ fontSize: 13.5, lineHeight: 1.65, margin: '10px 0 14px' }}>"{r.text}"</p>
+              <Stars n={r.rating} />
+              <p style={{ fontSize: 13.5, lineHeight: 1.65, margin: '10px 0 14px' }}>"{r.body}"</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
-                <b style={{ fontFamily: FONT_SUB, fontSize: 14 }}>{r.who}</b>
-                <span style={{ color: c.grayD }}>{r.when}</span>
+                <b style={{ fontFamily: FONT_SUB, fontSize: 14 }}>{r.name}</b>
+                <span style={{ color: c.grayD }}>{r.verified ? 'Verified buyer' : r.date}</span>
               </div>
             </div>
           ))}
         </div>
         </Reveal>
+        <div style={{ textAlign: 'center', marginTop: 18 }}>
+          <Link to="/reviews" style={{ color: '#DDD9FF', fontSize: 13, textDecoration: 'underline' }}>Read all reviews</Link>
+        </div>
       </section>
       <img src={IMG.cloudsDown} alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginTop: -1 }} />
     </div>
