@@ -5,7 +5,7 @@
 // Zonder token of bij fouten geeft de functie een lege lijst terug en toont de
 // reviewpagina automatisch de tussenversie. Respons wordt een uur gecachet.
 
-const SHOP_DOMAIN = '0j1ggm-z7.myshopify.com';
+const SHOP_DOMAIN = 'fgxp7p-qp.myshopify.com';
 
 export default async function handler(req, res) {
   const token = process.env.JUDGEME_PRIVATE_TOKEN;

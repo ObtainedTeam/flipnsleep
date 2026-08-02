@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Cart from './components/Cart';
@@ -12,50 +12,61 @@ import Shop from './pages/Shop';
 import Product from './pages/Product';
 import HowItWorks from './pages/HowItWorks';
 import About from './pages/About';
+import Blog from './pages/Blog';
 import FAQ from './pages/FAQ';
-import Legal from './pages/Legal';
-import WhyChooseUs from './pages/WhyChooseUs';
-import Quiz from './pages/Quiz';
+import Pets from './pages/Pets';
+import Accessories from './pages/Accessories';
 import Reviews from './pages/Reviews';
+import Legal from './pages/Legal';
+import Activity from './pages/Activity';
+import WhyChooseUs from './pages/WhyChooseUs';
+import { activities } from './data/activities';
 
 export function AppShell() {
   const [cartOpen, setCartOpen] = useState(false);
-  const { pathname } = useLocation();
-  const isQuiz = pathname.startsWith('/quiz');
 
   return (
       <CurrencyProvider>
         <ScrollToTop />
+        <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
         <style>{`
           * { box-sizing: border-box; margin: 0; padding: 0; }
-          body { font-family: 'Poppins', sans-serif; background: #F9F8F3; color: #201B5D; overflow-x: hidden; }
+          body { font-family: 'Archivo', sans-serif; background: #F7F9F8; overflow-x: hidden; }
           a { color: inherit; }
           img { max-width: 100%; }
-          summary::-webkit-details-marker { display: none; }
-          .fns-scroll{scrollbar-width:none;-ms-overflow-style:none} .fns-scroll::-webkit-scrollbar{display:none}
         `}</style>
-        {!isQuiz && <Nav onCartOpen={() => setCartOpen(true)} />}
+        <Nav onCartOpen={() => setCartOpen(true)} />
         <Cart isOpen={cartOpen} onClose={() => setCartOpen(false)} />
-        {!isQuiz && <ExitPopup />}
-        {!isQuiz && <NewsletterPopup />}
+        <ExitPopup />
+        <NewsletterPopup />
         <main>
           <Routes>
-            <Route path="/" element={<Home onCartOpen={() => setCartOpen(true)} />} />
+            <Route path="/" element={<Home />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/shop/:category" element={<Shop />} />
             <Route path="/product/:id" element={<Product onCartOpen={() => setCartOpen(true)} />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/about" element={<About />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<Blog />} />
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/why-flipnsleep" element={<WhyChooseUs />} />
-            <Route path="/quiz" element={<Quiz />} />
+            {/* Activiteitenpagina's — inhoud staat in src/data/activities.js.
+                Eén component, vier routes. Nieuwe activiteit = blok in dat bestand. */}
+            {activities.map(a => (
+              <Route key={a.slug} path={`/${a.slug}`}
+                element={<Activity onCartOpen={() => setCartOpen(true)} />} />
+            ))}
+            <Route path="/why-choose-us" element={<WhyChooseUs />} />
+            <Route path="/pets" element={<Pets />} />
+            <Route path="/accessories" element={<Accessories />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/privacy" element={<Legal />} />
             <Route path="/returns" element={<Legal />} />
             <Route path="/terms" element={<Legal />} />
-            <Route path="*" element={<Home onCartOpen={() => setCartOpen(true)} />} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </main>
-        {!isQuiz && <Footer />}
+        <Footer />
       </CurrencyProvider>
   );
 }
