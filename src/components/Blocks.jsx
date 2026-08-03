@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
-import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT } from '../data';
+import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT, productById } from '../data';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { subscribe } from '../brevo';
 import Reveal from './Reveal';
@@ -119,15 +119,17 @@ export function TrustBar() {
 export function CollectionsBlock() {
   const isMobile = useIsMobile();
   const items = [
-    ['Pillows', IMG.front, '/shop', false],
-    ['Sheets', IMG.bed, null, true],
-    ['Pregnancy', IMG.night, null, true],
-    ['Toppers', IMG.filling, null, true],
+    ['Pillows', IMG.front, '/product/signature-cold-pillow', false],
+    ['Sheets', productById('bamboo-sheet-set').images[0], '/product/bamboo-sheet-set', false],
+    ['Blankets', productById('cooling-weighted-blanket').images[0], '/product/cooling-weighted-blanket', false],
+    ['Comforters', productById('cooling-comforter').images[0], '/product/cooling-comforter', false],
+    ['Silk Series', IMG.night, null, true],
+    ['Toppers', IMG.bed, null, true],
   ];
   return (
     <section style={{ padding: isMobile ? '40px 20px 8px' : '54px 40px 10px' }}>
       <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, color: c.navy, textAlign: 'center' }}>Discover our <span style={{ fontFamily: FONT_SUB }}>collections</span></h2></Reveal>
-      <Reveal delay={120}><div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 18, maxWidth: isMobile ? 480 : 1100, margin: isMobile ? '22px auto 0' : '30px auto 0' }}>
+      <Reveal delay={120}><div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', gap: isMobile ? 12 : 18, maxWidth: isMobile ? 480 : 1040, margin: isMobile ? '22px auto 0' : '30px auto 0' }}>
         {items.map(([label, img, to, soon], i) => {
           const inner = (
             <div style={{ position: 'relative', borderRadius: 18, overflow: 'hidden', aspectRatio: '.85', display: 'flex', alignItems: 'flex-end', filter: soon ? 'saturate(.45) brightness(.92)' : 'none' }}>

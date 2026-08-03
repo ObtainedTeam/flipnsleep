@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { c, BTN, BTNO, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { PRODUCT, BUNDLES, IMG } from '../data';
+import { PRODUCT, BUNDLES, IMG, products } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNow } from '../shopify';
 import Reveal from '../components/Reveal';
@@ -124,20 +124,20 @@ export default function Home({ onCartOpen }) {
         <TrustAccordion specs={<ul style={{ listStyle: 'none' }}>{PRODUCT.specs.map(([k, v], i) => <li key={i} style={{ marginBottom: 5 }}><b>{k}:</b> {v}</li>)}</ul>} />
       </div></Reveal>
 
-      {/* ============ EMPATHY / NIGHT ============ */}
+      {/* ============ EMPATHY / NIGHT (breed publiek) ============ */}
       <section style={{ background: `linear-gradient(180deg, ${c.night} 0%, ${c.navy} 100%)`, color: '#fff', padding: isMobile ? '52px 24px' : '96px 40px', position: 'relative', overflow: 'hidden' }}>
         <img src={IMG.night} alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: .28 }} />
         <Reveal><div style={{ position: 'relative', maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 30 : 50, lineHeight: 1.2 }}>
-            3 AM. Awake.<br /><span style={{ color: c.amber }}>Soaked. Again.</span>
+            3 AM. Awake.<br /><span style={{ color: c.amber }}>Too warm to settle.</span>
           </h2>
-          <p style={{ fontSize: isMobile ? 14 : 16, lineHeight: 1.75, margin: '18px auto 0', maxWidth: isMobile ? 420 : 540, color: '#E4E1FF' }}>
-            Night sweats aren't "just part of it". When hormones change, so does the way your body regulates temperature at night — and a pillow that traps heat makes it worse. Cooling down your head is one of the fastest ways to fall back asleep.
+          <p style={{ fontSize: isMobile ? 14 : 16, lineHeight: 1.75, margin: '18px auto 0', maxWidth: isMobile ? 420 : 560, color: '#E4E1FF' }}>
+            A warm bedroom, a restless mind, or the way sleep shifts as we get older: waking up hot is one of the most common reasons people stir in the middle of the night. A pillow that traps heat keeps you there. Cooling your head is one of the quickest ways to drift back to sleep.
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 28, flexWrap: 'wrap' }}>
-            {[['3 in 4', 'women in menopause experience night sweats'], ['Q-max 0.26', 'tested cool-touch value of the cold side'], ['100', 'nights to try it risk-free']].map(([b, s], i) => (
-              <div key={i} style={{ background: 'rgba(255,255,255,.10)', borderRadius: 18, padding: '16px 18px', textAlign: 'center', minWidth: 110, maxWidth: 150 }}>
-                <b style={{ display: 'block', fontFamily: FONT_DISPLAY, fontSize: 20, color: c.amber }}>{b}</b>
+            {[['Both sides', 'cool-touch for warm nights, soft bamboo for cold ones'], ['Q-max 0.26', 'tested cool-touch value of the cold side'], ['100 nights', 'to try it risk-free']].map(([b, s], i) => (
+              <div key={i} style={{ background: 'rgba(255,255,255,.10)', borderRadius: 18, padding: '16px 18px', textAlign: 'center', minWidth: 110, maxWidth: 160 }}>
+                <b style={{ display: 'block', fontFamily: FONT_DISPLAY, fontSize: 19, color: c.amber }}>{b}</b>
                 <span style={{ fontSize: 11, lineHeight: 1.45, display: 'block', marginTop: 5, color: '#D7D3FF' }}>{s}</span>
               </div>
             ))}
@@ -145,8 +145,64 @@ export default function Home({ onCartOpen }) {
         </div></Reveal>
       </section>
 
+      {/* ============ WAAROM SLAAP OP LEEFTIJD (geen medische claims) ============ */}
+      <Reveal><section style={{ padding: isMobile ? '48px 22px 8px' : '74px 40px 10px', maxWidth: 1040, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto' }}>
+          <div style={EYEBROW}>Rest, at every age</div>
+          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 27 : 38, color: c.navy, margin: '8px 0 12px', lineHeight: 1.2 }}>Good sleep gets more precious with age</h2>
+          <p style={{ fontSize: isMobile ? 14 : 15.5, lineHeight: 1.75, color: c.grayD }}>
+            Sleep tends to get lighter and easier to interrupt as the years add up, and a warm room or a pillow that holds heat is often all it takes to cut a night short. Experts generally suggest most adults aim for seven to nine hours, yet comfortable, unbroken sleep gets harder to come by. We can't change your body clock, but we can make the bed a cooler, calmer place to be, so drifting off and staying asleep is a little easier.
+          </p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 14 : 20, margin: isMobile ? '26px auto 0' : '34px auto 0' }}>
+          {[
+            ['😴', 'Lighter with age', 'Sleep naturally becomes shorter and easier to disturb over the years.'],
+            ['🌡️', 'Temperature matters', 'A cooler sleep surface helps many people settle down and stay settled.'],
+            ['🛏️', 'Comfort you control', 'Your pillow and bedding are the part of a good night you can actually change tonight.'],
+          ].map(([icon, t, s], i) => (
+            <div key={i} style={{ background: '#fff', borderRadius: 20, padding: '22px 22px', boxShadow: '0 10px 26px rgba(32,27,93,.08)' }}>
+              <div style={{ fontSize: 30, marginBottom: 8 }}>{icon}</div>
+              <h3 style={{ fontFamily: FONT_SUB, fontSize: 15.5, fontWeight: 600, color: c.navy, marginBottom: 6 }}>{t}</h3>
+              <p style={{ fontSize: 13, lineHeight: 1.6, color: c.grayD }}>{s}</p>
+            </div>
+          ))}
+        </div>
+        <p style={{ fontSize: 11.5, lineHeight: 1.6, color: c.gray, textAlign: 'center', maxWidth: 620, margin: '18px auto 0' }}>
+          flip'nsleep makes comfort products, not medical devices. Nothing on this page is medical advice or a claim to diagnose, treat or prevent any condition. If sleep problems persist, please speak to a doctor.
+        </p>
+      </section></Reveal>
+
       {/* ============ SUMMER DEALS SLIDER ============ */}
       <SummerDealsSlider />
+
+      {/* ============ UITGELICHT: DE VOLLEDIGE RANGE ============ */}
+      <Reveal><section style={{ padding: isMobile ? '44px 20px 8px' : '64px 40px 10px' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={EYEBROW}>More for cooler nights</div>
+          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 27 : 36, color: c.navy, margin: '8px 0 8px' }}>Cooling comfort, from head to toe</h2>
+          <p style={{ fontSize: 13.5, lineHeight: 1.6, color: c.grayD, maxWidth: 460, margin: '0 auto' }}>The same idea as the pillow, across the whole bed: stay comfortable without trapping heat.</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 18 : 24, maxWidth: 1080, margin: isMobile ? '26px auto 0' : '34px auto 0' }}>
+          {products.map((prod, i) => {
+            const pp = getPrice(prod, isCA);
+            const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
+            return (
+              <Reveal key={prod.id} delay={i * 110}><Link to={`/product/${prod.id}`} style={{ textDecoration: 'none', background: '#fff', borderRadius: 22, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', display: 'block', height: '100%' }}>
+                <div style={{ position: 'relative' }}>
+                  <ProductImageBlock src={prod.images[0]} alt={prod.name} height={isMobile ? 210 : 230} radius={0} />
+                  {prod.badge && <span style={{ position: 'absolute', top: 12, left: 12, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '5px 13px' }}>{prod.badge}</span>}
+                </div>
+                <div style={{ padding: '16px 18px 20px' }}>
+                  <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 17, color: c.navy, marginBottom: 4 }}>{prod.name}</h3>
+                  <div style={{ fontSize: 12.5, color: c.grayD, marginBottom: 8, lineHeight: 1.5 }}>{prod.tagline}</div>
+                  <div style={{ fontSize: 15.5, fontWeight: 700, color: c.navy }}>From {formatPrice(pp, symbol)} {cm && <s style={{ fontWeight: 400, color: '#999', fontSize: 12.5 }}>{formatPrice(cm, symbol)}</s>}</div>
+                  <span style={{ ...BTN, marginTop: 12, padding: '10px 22px', fontSize: 11.5 }}>View product</span>
+                </div>
+              </Link></Reveal>
+            );
+          })}
+        </div>
+      </section></Reveal>
 
       {/* ============ JUST FLIP IT ============ */}
       <section style={{ padding: isMobile ? '44px 22px' : '64px 40px', textAlign: 'center' }}>
@@ -262,13 +318,13 @@ export default function Home({ onCartOpen }) {
         <div style={{ textAlign: 'center', marginTop: 18 }}><Link to="/faq" style={BTNO}>All questions</Link></div>
       </section></Reveal>
 
-      {/* ============ FINAL CTA ============ */}
+      {/* ============ FINAL CTA (breder) ============ */}
       <section style={{ background: `linear-gradient(180deg, ${c.night}, #2A2270)`, color: '#fff', textAlign: 'center', padding: isMobile ? '56px 24px' : '96px 40px', position: 'relative', overflow: 'hidden' }}>
         <img src={IMG.logoMark} alt="" aria-hidden="true" style={{ position: 'absolute', left: isMobile ? -30 : '8%', bottom: -20, height: 160, opacity: .25 }} />
         <Reveal><div style={{ position: 'relative' }}>
-          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 56, lineHeight: 1.15 }}>Say NO<span style={{ display: 'block', fontSize: isMobile ? 22 : 30, color: c.sky2, fontFamily: FONT_SUB }}>to night sweats</span></h2>
-          <p style={{ fontSize: isMobile ? 13.5 : 15.5, color: '#D7D3FF', margin: '16px auto 26px', maxWidth: isMobile ? 340 : 420, lineHeight: 1.7 }}>
-            Wake up fresh and rested — free from overheating. Try flip'nsleep for 100 nights, risk-free.
+          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 32 : 56, lineHeight: 1.15 }}>Sleep cooler.<span style={{ display: 'block', fontSize: isMobile ? 22 : 30, color: c.sky2, fontFamily: FONT_SUB }}>Wake rested.</span></h2>
+          <p style={{ fontSize: isMobile ? 13.5 : 15.5, color: '#D7D3FF', margin: '16px auto 26px', maxWidth: isMobile ? 340 : 440, lineHeight: 1.7 }}>
+            Whatever keeps you up when the nights get warm, flip'nsleep makes the bed a cooler place to be. Try it for 100 nights, risk-free, with free shipping across the US and Canada.
           </p>
           <a href="#offer" style={{ ...BTN, fontSize: 14 }}>Order your Cold Pillow now</a>
         </div></Reveal>
@@ -276,15 +332,15 @@ export default function Home({ onCartOpen }) {
 
       <EmailCapture />
 
-      {/* ============ SEO-TEKSTBLOK — night sweats / menopauze zoektermen ============ */}
+      {/* ============ SEO-TEKSTBLOK — koeler slapen, breder publiek ============ */}
       <Reveal y={16}><section style={{ maxWidth: 760, margin: '0 auto', padding: isMobile ? '40px 22px 10px' : '54px 24px 10px', color: c.grayD }}>
-        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginBottom: 10 }}>The cooling pillow for night sweats</h2>
+        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginBottom: 10 }}>The cooling pillow for hot sleepers</h2>
         <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 14 }}>
-          If you regularly wake up hot and sweaty, you're not alone: night sweats are one of the most common sleep complaints, especially for women in menopause and perimenopause. Hormonal changes disrupt the way your body regulates temperature at night, and an ordinary pillow that traps heat under your head makes those hot flashes at night even harder to sleep through. A cooling pillow tackles the problem where it starts — your head is one of the fastest places your body sheds heat.
+          If you regularly wake up hot, you're in good company: overheating at night is one of the most common sleep complaints, whether it comes from a warm bedroom, the way the body holds heat as we get older, or hormonal changes during menopause and perimenopause. An ordinary pillow that traps heat under your head only makes it harder to drift back off. A cooling pillow tackles the problem where it starts, since your head is one of the fastest places your body sheds heat.
         </p>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginBottom: 10 }}>How the Signature Cold Pillow helps you sleep cooler</h2>
         <p style={{ fontSize: 13, lineHeight: 1.8, marginBottom: 14 }}>
-          The flip'nsleep Signature Cold Pillow combines a cool-touch fabric side (tested Q-max cooling value of 0.26) with an adjustable shredded memory foam core that lets air circulate instead of building up heat. Flip it to the soft bamboo side in colder months — one pillow for hot sleepers, all year round. The loft adjusts to every sleeping position: side sleepers keep more filling for neck support, back and stomach sleepers take some out. And because every order is a 1+1 set with free shipping, a 100-night sleep trial and a 2-year warranty, trying a better night is risk-free. We ship across the United States and Canada.
+          The flip'nsleep Signature Cold Pillow combines a cool-touch fabric side (tested Q-max cooling value of 0.26) with an adjustable shredded memory foam core that lets air circulate instead of building up heat. Flip it to the soft bamboo side in colder months, so it's one pillow for hot sleepers all year round. The loft adjusts to every sleeping position: side sleepers keep more filling for neck support, back and stomach sleepers take some out. Pair it with the Breeze Bamboo Sheet Set, the Cloudweight Weighted Blanket or the Arctic Air Cooling Comforter for a bed that stays cool from top to bottom. Every order comes with free shipping, a 100-night sleep trial and a 2-year warranty, so trying a better night is risk-free. We ship across the United States and Canada.
         </p>
       </section></Reveal>
     </div>
