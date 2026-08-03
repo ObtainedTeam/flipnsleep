@@ -30,6 +30,18 @@ const META = {
     title: "Signature Cold Pillow — 1+1 Free | flip'nsleep",
     desc: 'The adjustable pillow that keeps the night sweats away. Cool-touch side, warm bamboo side, adjustable shredded memory foam. Buy 1 get 1 free.',
   },
+  '/product/cooling-weighted-blanket': {
+    title: "Cloudweight Weighted Blanket | flip'nsleep",
+    desc: 'A cooling weighted blanket with a bamboo-viscose cover and evenly distributed glass micro-beads. Grounding weight in a breathable fabric that stays cool. Free shipping and a 100-night trial.',
+  },
+  '/product/bamboo-sheet-set': {
+    title: "Breeze Bamboo Sheet Set | flip'nsleep",
+    desc: 'A four-piece 100% bamboo viscose sheet set at 400 thread count. Silky, breathable and moisture-wicking, with a deep-pocket fitted sheet that grips the mattress. Free shipping and a 100-night trial.',
+  },
+  '/product/cooling-comforter': {
+    title: "Arctic Air Cooling Comforter | flip'nsleep",
+    desc: 'A lightweight all-season comforter with a 100% organic-cotton shell and a double-sided cool-touch finish. Breathable, made for hot sleepers. Free shipping and a 100-night trial.',
+  },
   '/how-it-works': {
     title: "How It Works | flip'nsleep",
     desc: 'A cool-touch fabric (Q-max 0.26), adjustable shredded memory foam and a warm bamboo side. One flip to a cooler night — no gadgets, no plugs.',

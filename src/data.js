@@ -1,7 +1,10 @@
 // flip'nsleep — productdata.
-// Eén product, twee bundels. Prijsladder definitief goedgekeurd 21 juli 2026.
-// Foto's staan op vaste bestandsnamen in /public/images zodat demo-beelden
-// later 1-op-1 vervangen kunnen worden zonder codewijziging.
+// Kussen: één product met twee bundels (prijsladder goedgekeurd 21 juli 2026).
+// Daarnaast drie variantproducten (weighted blanket, bamboe lakenset, cooling
+// comforter), elk met maten en kleuren — zelfde vorm als de bugaway-producten
+// zodat de PDP/dispatcher hetzelfde patroon kan volgen.
+// Alle foto's op vaste bestandsnamen in /public/images zodat beelden zonder
+// codewijziging vervangbaar zijn.
 
 export const IMG = {
   front: "/images/pillow-front.webp",
@@ -10,6 +13,11 @@ export const IMG = {
   night: "/images/pillow-night.webp",
   falling: "/images/pillow-falling.webp",
   bed: "/images/pillow-bed.webp",
+  // Nieuwe kussenfoto's — cover-herontwerp, transparante achtergrond.
+  coverFront: "/images/pillow-cover-front.webp",
+  coverBack: "/images/pillow-cover-back.webp",
+  coverDuo: "/images/pillow-cover-duo.webp",
+  coverInside: "/images/pillow-cover-inside.webp",
   heroBg: "/images/hero-bg.jpg",
   heroPoster: "/images/hero-poster.jpg",
   sliderBg: "/images/slider-bg.jpg",
@@ -74,6 +82,150 @@ export const BUNDLES = [
 ];
 
 export const bundleById = (id) => BUNDLES.find(b => b.id === id);
+
+/* ============================================================
+   VARIANTPRODUCTEN — maat + kleur (zelfde vorm als bugaway).
+   Prijzen region-aware {usd, cad}. compareAt = doorstreepprijs.
+   Kleurnamen afgeleid van de Alibaba-kleurcodes.
+   Specs zijn ingevuld uit de leverancierdata; regels met "confirm"
+   nog te bevestigen tegen het carelabel voordat het product live gaat.
+   ============================================================ */
+
+export const products = [
+  {
+    id: "cooling-weighted-blanket",
+    name: "Cloudweight Weighted Blanket",
+    category: "BLANKETS",
+    tagline: "Deep, even weight that settles you, without the heat.",
+    prices: { usd: 89.99, cad: 122.99 },
+    compareAt: { usd: 119.99, cad: 162.99 },
+    badge: "New",
+    colors: ["Graphite"],
+    colorHex: ["#4A4855"],
+    sizes: ["Twin", "Queen", "King", "Super King"],
+    desc: "A cooling weighted blanket with a bamboo-viscose cover and evenly distributed glass micro-beads. The gentle, grounding weight of a hug, in a breathable fabric that doesn't trap heat.",
+    longDesc: `A cooling weighted blanket with a bamboo-viscose cover and evenly distributed glass micro-beads. It gives you the gentle, grounding weight of a hug in a breathable fabric that doesn't trap heat, so you stay settled without overheating. The beads are quilted into small, even squares that keep the weight spread edge to edge, with no shifting and no lumps. Use it over your duvet or on its own. Free shipping across the US and Canada, a 100-night trial and a 2-year warranty.`,
+    features: [
+      "Bamboo-viscose cover, soft, breathable and cool to the touch",
+      "Evenly distributed glass micro-beads (0.8 to 2.5 mm)",
+      "Small-square quilting keeps the weight even and silent",
+      "Grounding weight without trapping heat",
+      "Machine washable on a gentle cold cycle",
+    ],
+    specs: [
+      ["Cover", "Viscose derived from bamboo"],
+      ["Fill", "Hypoallergenic glass micro-beads (0.8 to 2.5 mm)"],
+      ["Construction", "Small-square quilting for even weight distribution"],
+      ["Sizes", "Twin, Queen, King, Super King"],
+      ["Weight", "Matched to size (see selector)"], // confirm: exacte lb per maat
+      ["Care", "Machine wash gentle, cold; air dry"], // confirm tegen carelabel
+      ["Country of origin", "China"],
+    ],
+    highlights: [
+      { icon: "🌬️", label: "Breathable", sub: "Bamboo-viscose cover" },
+      { icon: "🫧", label: "Even weight", sub: "No shifting beads" },
+      { icon: "🌙", label: "100-night trial", sub: "Risk-free" },
+    ],
+    useCases: ["Warm bedrooms", "Over your duvet", "Evening wind-down", "Guest room", "Movie nights"],
+    images: [
+      "/images/weighted-3.webp",
+      "/images/weighted-1.webp",
+      "/images/weighted-2.webp",
+      "/images/weighted-4.webp",
+      "/images/weighted-5.webp",
+    ],
+  },
+  {
+    id: "bamboo-sheet-set",
+    name: "Breeze Bamboo Sheet Set",
+    category: "BEDDING",
+    tagline: "Silky 400-thread-count bamboo that sleeps cool all night.",
+    prices: { usd: 119.99, cad: 162.99 },
+    compareAt: { usd: 159.99, cad: 216.99 },
+    badge: "New",
+    colors: ["Sage", "Cloud White", "Dove Grey", "Blush", "Midnight Black"],
+    colorHex: ["#9AD6A0", "#F4F4EF", "#D3D3D3", "#F3C0CB", "#1b1b1b"],
+    sizes: ["Twin", "Queen", "King", "Super King"],
+    desc: "A four-piece sheet set woven from 100% bamboo viscose at 400 thread count. Silky, breathable and temperature-regulating, with a deep-pocket fitted sheet that actually stays put.",
+    longDesc: `A four-piece set woven from 100% bamboo viscose at 400 thread count: silky, breathable and temperature-regulating. The weave stays cool against the skin and wicks away moisture, so you spend less of the night flipping to the cold side. You get a flat sheet, a deep-pocket fitted sheet and two pillowcases, with 16-inch pockets and a 360-degree wrap that grips the mattress and stays put. Free shipping across the US and Canada, a 100-night trial and a 2-year warranty.`,
+    features: [
+      "100% bamboo viscose at 400 thread count",
+      "Breathable and moisture-wicking for hot sleepers",
+      "Four pieces: flat sheet, fitted sheet and two pillowcases",
+      "16-inch deep-pocket fitted sheet with a 360-degree elastic wrap",
+      "OEKO-TEX Standard 100 certified",
+    ],
+    specs: [
+      ["Material", "100% bamboo viscose"],
+      ["Thread count", "400 TC"],
+      ["Set includes", "1 flat sheet, 1 fitted sheet, 2 pillowcases"],
+      ["Fitted sheet", "16-inch deep pockets, 360° elastic wrap"],
+      ["Sizes", "Twin, Queen, King, Super King"],
+      ["Certifications", "OEKO-TEX Standard 100"],
+      ["Care", "Machine wash cold, gentle; tumble dry low"],
+      ["Country of origin", "China"],
+    ],
+    highlights: [
+      { icon: "🎋", label: "Bamboo viscose", sub: "400 thread count" },
+      { icon: "❄️", label: "Sleeps cool", sub: "Breathable weave" },
+      { icon: "✅", label: "OEKO-TEX 100", sub: "Tested safe" },
+    ],
+    useCases: ["Hot sleepers", "All-season bedding", "Sensitive skin", "Guest room", "Gift"],
+    images: [
+      "/images/bamboo-sheets-1.webp",
+      "/images/bamboo-sheets-5.webp",
+      "/images/bamboo-sheets-3.webp",
+      "/images/bamboo-sheets-6.webp",
+      "/images/bamboo-sheets-2.webp",
+      "/images/bamboo-sheets-4.webp",
+    ],
+  },
+  {
+    id: "cooling-comforter",
+    name: "Arctic Air Cooling Comforter",
+    category: "BEDDING",
+    tagline: "A lightweight, double-sided cooling comforter for hot sleepers.",
+    prices: { usd: 89.99, cad: 122.99 },
+    compareAt: { usd: 119.99, cad: 162.99 },
+    badge: "New",
+    colors: ["Stone Grey", "Ash", "Driftwood", "Glacier Blue"],
+    colorHex: ["#858182", "#898791", "#B3ADA8", "#91B3C2"],
+    sizes: ["Twin", "Queen", "King"],
+    desc: "A lightweight all-season comforter with a 100% organic-cotton shell and a double-sided cool-tech finish. Breathable, moisture-wicking and made for people who sleep hot.",
+    longDesc: `A lightweight, all-season comforter with a 100% organic-cotton shell and a double-sided cool-touch finish, so whichever way it lands it feels fresh. It's built for hot sleepers: the weave wicks moisture and lets heat escape instead of trapping it, and the light fill drapes softly without weighing you down. The surface resists pilling, snagging and fading, so it stays like new wash after wash. Pair it with the Breeze Bamboo Sheet Set for a bed that stays cool top to bottom. Free shipping across the US and Canada, a 100-night trial and a 2-year warranty.`,
+    features: [
+      "100% organic-cotton shell with a double-sided cool-tech finish",
+      "Lightweight, all-season drape",
+      "Moisture-wicking and breathable, built for hot sleepers",
+      "Anti-pilling, anti-snagging and fade-resistant",
+      "Machine washable",
+    ],
+    specs: [
+      ["Shell", "100% organic cotton"],
+      ["Finish", "Double-sided cool-touch, moisture-wicking, breathable"],
+      ["Weight", "Lightweight fill (all-season)"],
+      ["Sizes", "Twin (68 × 90 in), Queen (90 × 90 in), King (105 × 90 in)"],
+      ["Durability", "Anti-pilling, anti-snagging, fade-resistant"],
+      ["Care", "Machine wash cold, gentle; tumble dry low"],
+      ["Country of origin", "China"],
+    ],
+    highlights: [
+      { icon: "❄️", label: "Cool both sides", sub: "Fresh either way" },
+      { icon: "🪶", label: "Lightweight", sub: "All-season drape" },
+      { icon: "🌿", label: "Organic cotton", sub: "Breathable shell" },
+    ],
+    useCases: ["Hot sleepers", "Summer nights", "All-season use", "Guest room", "Pair with sheets"],
+    images: [
+      "/images/comforter-2.webp",
+      "/images/comforter-1.webp",
+      "/images/comforter-3.webp",
+      "/images/comforter-4.webp",
+      "/images/comforter-5.webp",
+    ],
+  },
+];
+
+export const productById = (id) => products.find(p => p.id === id);
 
 // Echte klantreviews. Leeg tot de eerste geverifieerde reviews binnen zijn;
 // de reviewsectie toont dan automatisch de eerlijke launch-variant.
