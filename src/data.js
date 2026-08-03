@@ -40,7 +40,7 @@ export const PRODUCT = {
   desc: "An adjustable shredded memory foam pillow with a dual-sided cover: a cool-touch side for warm nights and a soft bamboo side for cold ones. Unzip to add or remove filling until it fits your sleeping position exactly.",
   // Ankerprijs per kussen — doorgestreept naast elk aanbod.
   anchorPerPillow: { usd: 109.99, cad: 149.99 },
-  images: [IMG.front, IMG.filling, IMG.bed, IMG.falling, IMG.night],
+  images: [IMG.coverFront, IMG.coverDuo, IMG.coverInside, IMG.coverBack],
   usps: [
     "50 × 76 cm (20 × 30 in), shredded memory foam filling",
     "Adjust the filling to your sleeping position",
@@ -67,7 +67,7 @@ export const BUNDLES = [
     prices: { usd: 109.99, cad: 149.99 },
     compareAt: { usd: 219.98, cad: 299.98 },
     blurb: "One for you, one on us. Our signature deal.",
-    image: IMG.frontCut,
+    image: IMG.coverFront,
   },
   {
     id: "2p2",
@@ -77,7 +77,7 @@ export const BUNDLES = [
     prices: { usd: 189.99, cad: 259.99 },
     compareAt: { usd: 439.96, cad: 599.96 },
     blurb: "For both sides of the bed — and the guest room.",
-    image: IMG.frontCut,
+    image: IMG.coverFront,
   },
 ];
 

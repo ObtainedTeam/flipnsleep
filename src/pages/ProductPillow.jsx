@@ -84,7 +84,7 @@ export default function ProductPillow({ onCartOpen }) {
 
       {/* Detail: vulling */}
       <section style={{ maxWidth: 1160, margin: '0 auto', padding: isMobile ? '10px 16px 30px' : '30px 24px 70px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 18 : 40, alignItems: 'center' }}>
-        <Reveal><img src={IMG.filling} alt="Inside the Signature Cold Pillow: adjustable shredded memory foam" style={{ borderRadius: 22 }} /></Reveal>
+        <Reveal><img src={IMG.coverInside} alt="Inside the Signature Cold Pillow: adjustable shredded memory foam" style={{ borderRadius: 22 }} /></Reveal>
         <Reveal delay={120}><div>
           <div style={EYEBROW}>A look inside the pillow</div>
           <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, margin: '8px 0 14px' }}>Four layers, one cool night</h2>
