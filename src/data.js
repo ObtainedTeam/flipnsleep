@@ -136,7 +136,6 @@ export const products = [
     useCases: ["Warm bedrooms", "Over your duvet", "Evening wind-down", "Guest room", "Movie nights"],
     images: [
       "/images/weighted-hero.webp",
-      "/images/weighted-3.webp",
       "/images/weighted-1.webp",
       "/images/weighted-2.webp",
       "/images/weighted-4.webp",

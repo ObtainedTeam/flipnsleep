@@ -49,7 +49,7 @@ export function PillowDeck({ count = 2, height = 220, radius = 0, bg = '#D5EBFA'
     P({ width: '46%', left: '50%', top: '52%', transform: 'rotate(6deg)', zIndex: 4 }, 'd'),
   ];
   return (
-    <div style={{ position: 'relative', background: bg, borderRadius: radius, overflow: 'hidden', height }}>
+    <div style={{ position: 'relative', width: '100%', background: bg, borderRadius: radius, overflow: 'hidden', height }}>
       <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', left: '-5%', top: '9%', width: '40%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
       <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '6%', width: '46%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
       {count >= 4 ? four : two}
@@ -117,7 +117,7 @@ export function SummerDealsSlider() {
                   <span style={badge}>{b.short.toLowerCase()}</span>
                 </div>
                 <div style={panel}>
-                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 4 }}>{PRODUCT.name}</div>
+                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 4 }}>{b.pillows} × {PRODUCT.name}</div>
                   <div style={{ fontSize: 12, color: '#DDD9FF', lineHeight: 1.5, marginBottom: 8 }}>{PRODUCT.tagline}</div>
                   <div style={{ fontFamily: FONT_DISPLAY, fontSize: 15, color: '#fff', marginBottom: 10 }}>{formatPrice(p, symbol)} <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 11.5, color: '#BDB7EE' }}>{formatPrice(cm, symbol)}</s></div>
                   <span style={chip}>Now {b.label.match(/\(([^)]+)\)/)?.[1] || b.short} for only {formatPrice(p, symbol)}</span>
@@ -186,11 +186,13 @@ export function ShippingCountdown() {
 // echte reviewaantallen zodra die er zijn.
 export function TrustBar() {
   const isMobile = useIsMobile();
-  const items = ['🌙 100-night sleep trial', '🚚 Free shipping, always', '✓ OEKO-TEX & CertiPUR-US certified', '🛡️ 2-year warranty'];
+  const items = [['🌙', '100-night sleep trial'], ['🚚', 'Free shipping, always'], ['✅', 'OEKO-TEX & CertiPUR-US certified'], ['🛡️', '2-year warranty']];
   return (
-    <div className="fns-scroll" style={{ background: '#fff', borderBottom: '1px solid rgba(32,27,93,.10)', display: 'flex', gap: isMobile ? 18 : 34, justifyContent: isMobile ? 'flex-start' : 'center', overflowX: 'auto', padding: '9px 16px', whiteSpace: 'nowrap' }}>
-      {items.map((t, i) => (
-        <span key={i} style={{ fontSize: 11.5, fontWeight: 600, color: c.navy, fontFamily: FONT_SUB, flexShrink: 0 }}>{t}</span>
+    <div className="fns-scroll" style={{ background: '#fff', borderBottom: '1px solid rgba(32,27,93,.10)', display: 'flex', alignItems: 'center', gap: isMobile ? 18 : 34, justifyContent: isMobile ? 'flex-start' : 'center', overflowX: 'auto', padding: '9px 16px', whiteSpace: 'nowrap' }}>
+      {items.map(([icon, label], i) => (
+        <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: c.navy, fontFamily: FONT_SUB, flexShrink: 0, lineHeight: 1 }}>
+          <span style={{ fontSize: 13, lineHeight: 1 }}>{icon}</span>{label}
+        </span>
       ))}
     </div>
   );

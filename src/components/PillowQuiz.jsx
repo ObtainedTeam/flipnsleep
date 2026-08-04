@@ -11,7 +11,7 @@ import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 const QUESTIONS = [
   { key: 'pos', q: 'How do you sleep most of the night?', opts: [['🛌', 'On my side', 'side'], ['🙂', 'On my back', 'back'], ['😴', 'On my stomach', 'stomach']] },
   { key: 'firm', q: 'How do you like a pillow to feel?', opts: [['☁️', 'Soft and low', 'soft'], ['⚖️', 'Right in between', 'medium'], ['🧱', 'Firm and high', 'firm']] },
-  { key: 'shoulder', q: 'How broad are your shoulders?', opts: [['🙆', 'On the narrow side', 'narrow'], ['🧍', 'About average', 'average'], ['💪', 'Broad', 'broad']] },
+  { key: 'weight', q: 'Roughly how much do you weigh? This just helps us size the filling.', opts: [['🪶', 'Under 130 lb · 60 kg', 'under130'], ['🚶', '130–170 lb · 60–77 kg', 'w130'], ['🧍', '170–210 lb · 77–95 kg', 'w170'], ['💪', '210–250 lb · 95–113 kg', 'w210'], ['🏋️', 'Over 250 lb · 113 kg+', 'over250']] },
   { key: 'current', q: 'Your current pillow usually feels…', opts: [['⬆️', 'Too high or too full', 'high'], ['👌', 'About right', 'right'], ['⬇️', 'Too flat', 'flat']] },
 ];
 
@@ -24,10 +24,10 @@ function recommend(a) {
     stomach: { soft: [10, 12], medium: [9, 11], firm: [8, 10] },
   };
   let [lo, hi] = table[a.pos][a.firm];
-  const shoulder = { narrow: 1, average: 0, broad: -1 }[a.shoulder] || 0;
+  const weight = { under130: 2, w130: 1, w170: 0, w210: -1, over250: -2 }[a.weight] || 0;
   const cur = { high: 1, right: 0, flat: -1 }[a.current] || 0;
-  lo = Math.max(0, lo + shoulder + cur);
-  hi = Math.max(lo, hi + shoulder + cur);
+  lo = Math.max(0, lo + weight + cur);
+  hi = Math.max(lo, hi + weight + cur);
   const posText = a.pos === 'side'
     ? 'As a side sleeper you need the most height to keep your neck level with your spine, so keep plenty of filling in.'
     : a.pos === 'stomach'
@@ -50,7 +50,7 @@ export default function PillowQuiz() {
 
   return (
     <section style={{ background: '#fff', padding: isMobile ? '44px 20px' : '64px 40px' }}>
-      <div style={{ maxWidth: 620, margin: '0 auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 24, padding: isMobile ? '26px 20px 30px' : '38px 40px 42px', textAlign: 'center', minHeight: isMobile ? 420 : 400 }}>
+      <div style={{ maxWidth: 620, margin: '0 auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 24, padding: isMobile ? '26px 20px 30px' : '38px 40px 42px', textAlign: 'center', minHeight: isMobile ? 520 : 470 }}>
         <div style={EYEBROW}>Free filling finder</div>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 32, color: c.navy, margin: '8px 0 8px' }}>Get your filling just right 🪶</h2>
         <p style={{ fontSize: 13.5, lineHeight: 1.6, color: c.grayD, maxWidth: 450, margin: '0 auto 20px' }}>
