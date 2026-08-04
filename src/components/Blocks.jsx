@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
-import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT, productById } from '../data';
+import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT, productById, products } from '../data';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { subscribe } from '../brevo';
 import Reveal from './Reveal';
@@ -20,12 +20,39 @@ export function CloudDivider({ fill = c.cream, flip = false }) {
 // Standaard productfoto-blok: achtergrond #D5EBFA met twee witte wolkjes
 // schuin onder elkaar, productfoto eroverheen. Overal hergebruiken waar een
 // productfoto staat.
-export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, style = {}, imgStyle = {} }) {
+export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, bg = '#D5EBFA', style = {}, imgStyle = {} }) {
   return (
-    <div style={{ position: 'relative', background: '#D5EBFA', borderRadius: radius, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', height, ...style }}>
-      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', left: '8%', top: '16%', width: '34%', opacity: .95 }} />
-      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', right: '6%', bottom: '12%', width: '42%', opacity: .95 }} />
-      <img src={src} alt={alt} style={{ position: 'relative', maxHeight: '86%', maxWidth: '88%', objectFit: 'contain', ...imgStyle }} />
+    <div style={{ position: 'relative', background: bg, borderRadius: radius, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', height, ...style }}>
+      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', left: '-4%', top: '11%', width: '44%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '7%', width: '50%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+      <img src={src} alt={alt} style={{ position: 'relative', maxHeight: '80%', maxWidth: '80%', objectFit: 'contain', ...imgStyle }} />
+    </div>
+  );
+}
+
+// Kussenstapel voor de bundelkaarten: 2 kussens (1+1) of 4 kussens (2+2),
+// half over elkaar met schaduw, op de wolkenachtergrond zodat de wolkjes er
+// goed achter uit komen.
+export function PillowDeck({ count = 2, height = 220, radius = 0 }) {
+  const P = (extra, key) => (
+    <img key={key} src={IMG.coverFront} alt="" aria-hidden="true"
+      style={{ position: 'absolute', objectFit: 'contain', filter: 'drop-shadow(0 8px 12px rgba(32,27,93,.24))', ...extra }} />
+  );
+  const two = [
+    P({ width: '54%', left: '13%', top: '30%', transform: 'rotate(-6deg)', zIndex: 1 }, 'a'),
+    P({ width: '54%', left: '33%', top: '40%', transform: 'rotate(6deg)', zIndex: 2 }, 'b'),
+  ];
+  const four = [
+    P({ width: '46%', left: '8%', top: '12%', transform: 'rotate(-7deg)', zIndex: 1 }, 'a'),
+    P({ width: '46%', left: '25%', top: '21%', transform: 'rotate(4deg)', zIndex: 2 }, 'b'),
+    P({ width: '46%', left: '33%', top: '43%', transform: 'rotate(-5deg)', zIndex: 3 }, 'c'),
+    P({ width: '46%', left: '50%', top: '52%', transform: 'rotate(6deg)', zIndex: 4 }, 'd'),
+  ];
+  return (
+    <div style={{ position: 'relative', background: '#D5EBFA', borderRadius: radius, overflow: 'hidden', height }}>
+      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', left: '-5%', top: '9%', width: '40%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '6%', width: '46%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+      {count >= 4 ? four : two}
     </div>
   );
 }
@@ -36,33 +63,79 @@ export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, st
 export function SummerDealsSlider() {
   const isMobile = useIsMobile();
   const { symbol, isCA } = useCurrency();
-  const bgH = isMobile ? 300 : 430;
+  const scroller = useRef(null);
+  const nudged = useRef(false);
+
+  // Zodra de slider in beeld komt: even automatisch heen en weer scrollen, als
+  // hint dat je kunt swipen. Gebeurt eenmalig.
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting && !nudged.current) {
+          nudged.current = true;
+          const d = isMobile ? 130 : 210;
+          setTimeout(() => { el.scrollTo({ left: d, behavior: 'smooth' }); }, 300);
+          setTimeout(() => { el.scrollTo({ left: 0, behavior: 'smooth' }); }, 1150);
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [isMobile]);
+
+  const cardBase = { textDecoration: 'none', scrollSnapAlign: 'center', flex: isMobile ? '0 0 78%' : '0 0 320px', borderRadius: 22, overflow: 'hidden', background: '#fff' };
+  const panel = { background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '16px 16px 18px', textAlign: 'center' };
+  const chip = { display: 'inline-block', background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '9px 16px' };
+  const badge = { position: 'absolute', top: 12, left: 12, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' };
+
   return (
     <section style={{ position: 'relative', overflow: 'hidden', paddingBottom: 34, marginTop: -1 }}>
       <style>{`.fns-scroll{scrollbar-width:none;-ms-overflow-style:none}.fns-scroll::-webkit-scrollbar{display:none}`}</style>
-      <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: bgH, backgroundImage: `url(${IMG.sliderBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div style={{ position: 'relative', maxWidth: 1050, margin: '0 auto', padding: isMobile ? '34px 20px 0' : '48px 40px 0' }}>
+      <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: isMobile ? 300 : 430, backgroundImage: `url(${IMG.sliderBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      <div style={{ position: 'relative', maxWidth: 1180, margin: '0 auto', padding: isMobile ? '34px 20px 0' : '48px 40px 0' }}>
         <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 34, color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2></Reveal>
-        <Reveal delay={140}><div className="fns-scroll" style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', scrollSnapType: 'x mandatory' }}>
+        <div ref={scroller} className="fns-scroll" style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', scrollSnapType: 'x mandatory' }}>
+          {/* Kussenbundels — kussenstapel (2 of 4 kussens) op de wolkenachtergrond */}
           {BUNDLES.map(b => {
             const p = getPrice(b, isCA);
             const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
             return (
-              <a key={b.id} href="/product/signature-cold-pillow" style={{ textDecoration: 'none', scrollSnapAlign: 'center', flex: isMobile ? '0 0 78%' : '0 0 350px', borderRadius: 22, overflow: 'hidden', boxShadow: '0 6px 14px rgba(32,27,93,.22)', background: '#fff' }}>
+              <a key={b.id} href="/product/signature-cold-pillow" style={cardBase}>
                 <div style={{ position: 'relative' }}>
-                  <ProductImageBlock src={b.image} alt={b.label} height={isMobile ? 170 : 220} radius={0} />
-                  <span style={{ position: 'absolute', top: 12, left: 12, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' }}>{b.short.toLowerCase()}</span>
+                  <PillowDeck count={b.pillows} height={isMobile ? 170 : 210} radius={0} />
+                  <span style={badge}>{b.short.toLowerCase()}</span>
                 </div>
-                <div style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '16px 16px 18px', textAlign: 'center' }}>
+                <div style={panel}>
                   <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 4 }}>{PRODUCT.name}</div>
                   <div style={{ fontSize: 12, color: '#DDD9FF', lineHeight: 1.5, marginBottom: 8 }}>{PRODUCT.tagline}</div>
                   <div style={{ fontFamily: FONT_DISPLAY, fontSize: 15, color: '#fff', marginBottom: 10 }}>{formatPrice(p, symbol)} <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 11.5, color: '#BDB7EE' }}>{formatPrice(cm, symbol)}</s></div>
-                  <span style={{ display: 'inline-block', background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '9px 16px' }}>Now {b.label.match(/\(([^)]+)\)/)?.[1] || b.short} for only {formatPrice(p, symbol)}</span>
+                  <span style={chip}>Now {b.label.match(/\(([^)]+)\)/)?.[1] || b.short} for only {formatPrice(p, symbol)}</span>
                 </div>
               </a>
             );
           })}
-        </div></Reveal>
+          {/* Overige afgeprijsde producten — volledige productfoto */}
+          {products.map(prod => {
+            const p = getPrice(prod, isCA);
+            const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
+            return (
+              <a key={prod.id} href={`/product/${prod.id}`} style={cardBase}>
+                <div style={{ position: 'relative' }}>
+                  <img src={prod.images[0]} alt={prod.name} style={{ display: 'block', width: '100%', height: isMobile ? 170 : 210, objectFit: 'cover' }} />
+                  {prod.badge && <span style={badge}>{prod.badge.toLowerCase()}</span>}
+                </div>
+                <div style={panel}>
+                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 4 }}>{prod.name}</div>
+                  <div style={{ fontSize: 12, color: '#DDD9FF', lineHeight: 1.5, marginBottom: 8 }}>{prod.tagline}</div>
+                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 15, color: '#fff', marginBottom: 10 }}>From {formatPrice(p, symbol)} {cm && <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 11.5, color: '#BDB7EE' }}>{formatPrice(cm, symbol)}</s>}</div>
+                  <span style={chip}>Shop the deal</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -121,10 +194,10 @@ export function CollectionsBlock() {
   const items = [
     ['Pillows', IMG.front, '/product/signature-cold-pillow', false],
     ['Sheets', productById('bamboo-sheet-set').images[0], '/product/bamboo-sheet-set', false],
-    ['Blankets', productById('cooling-weighted-blanket').images[0], '/product/cooling-weighted-blanket', false],
-    ['Comforters', productById('cooling-comforter').images[0], '/product/cooling-comforter', false],
-    ['Silk Series', IMG.night, null, true],
-    ['Toppers', IMG.bed, null, true],
+    ['Blankets', IMG.tileBlankets, '/product/cooling-weighted-blanket', false],
+    ['Comforters', IMG.tileComforters, '/product/cooling-comforter', false],
+    ['Silk Series', IMG.tileSilk, null, true],
+    ['Mattress Toppers', IMG.tileToppers, null, true],
   ];
   return (
     <section style={{ padding: isMobile ? '40px 20px 8px' : '54px 40px 10px' }}>

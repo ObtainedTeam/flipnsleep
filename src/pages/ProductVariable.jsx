@@ -52,12 +52,14 @@ export default function ProductVariable({ onCartOpen }) {
       <section style={{ maxWidth: 1160, margin: '0 auto', padding: isMobile ? '20px 16px' : '52px 24px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr', gap: isMobile ? 24 : 60 }}>
         {/* Gallery */}
         <Reveal><div>
-          <ProductImageBlock src={product.images[img]} alt={product.name} height={isMobile ? 320 : 460} radius={22} />
+          <div style={{ background: c.cream, borderRadius: 22, overflow: 'hidden', height: isMobile ? 320 : 460 }}>
+            <img src={product.images[img]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
           <div className="fns-scroll" style={{ display: 'flex', gap: 8, marginTop: 10, overflowX: 'auto' }}>
             {product.images.map((src, i) => (
               <button key={i} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}`}
-                style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: 12, padding: 0, cursor: 'pointer', background: '#D5EBFA', flexShrink: 0 }}>
-                <img src={src} alt="" style={{ width: 64, height: 64, objectFit: 'contain', borderRadius: 10, display: 'block' }} />
+                style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: 12, padding: 0, cursor: 'pointer', background: c.cream, flexShrink: 0, overflow: 'hidden' }}>
+                <img src={src} alt="" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 10, display: 'block' }} />
               </button>
             ))}
           </div>
@@ -178,7 +180,7 @@ export default function ProductVariable({ onCartOpen }) {
               const op = getPrice(o, isCA);
               return (
                 <Link key={o.id} to={`/product/${o.id}`} style={{ textDecoration: 'none', background: '#fff', borderRadius: 20, overflow: 'hidden', boxShadow: '0 10px 26px rgba(32,27,93,.10)', display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{ width: isMobile ? 110 : 140, flexShrink: 0 }}><ProductImageBlock src={o.images[0]} alt={o.name} height={isMobile ? 110 : 130} radius={0} /></div>
+                  <div style={{ width: isMobile ? 110 : 140, height: isMobile ? 110 : 130, flexShrink: 0, background: c.cream, overflow: 'hidden' }}><img src={o.images[0]} alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>
                   <div style={{ padding: '12px 14px 12px 0' }}>
                     <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, color: c.navy, marginBottom: 3 }}>{o.name}</div>
                     <div style={{ fontSize: 12, color: c.grayD, marginBottom: 6, lineHeight: 1.45 }}>{o.tagline}</div>

@@ -56,8 +56,8 @@ export default function Shop() {
             const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
             return (
               <Reveal key={prod.id} delay={idx * 120}><Link to={`/product/${prod.id}`} style={{ textDecoration: 'none', background: '#fff', borderRadius: 22, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', display: 'block', height: '100%' }}>
-                <div style={{ position: 'relative' }}>
-                  <ProductImageBlock src={prod.images[0]} alt={prod.name} height={isMobile ? 220 : 240} radius={0} />
+                <div style={{ position: 'relative', height: isMobile ? 220 : 240, background: c.cream, overflow: 'hidden' }}>
+                  <img src={prod.images[0]} alt={prod.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   {prod.badge && <span style={{ position: 'absolute', top: 14, left: 14, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '5px 13px' }}>{prod.badge}</span>}
                 </div>
                 <div style={{ padding: '16px 18px 20px' }}>

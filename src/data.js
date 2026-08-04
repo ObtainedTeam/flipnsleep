@@ -31,6 +31,13 @@ export const IMG = {
   iconCloud: "/images/icon-cloud.png",
   icon1p1: "/images/icon-1plus1.png",
   iconStar: "/images/icon-star.png",
+  weightedHero: "/images/weighted-hero.webp",
+  comforterHero: "/images/comforter-hero.webp",
+  tileBlankets: "/images/tile-blankets.webp",
+  tileComforters: "/images/tile-comforters.webp",
+  tileSilk: "/images/tile-silk.webp",
+  tileToppers: "/images/tile-toppers.webp",
+  standardPillowSweaty: "/images/standard-pillow-sweaty.webp",
 };
 
 export const PRODUCT = {
@@ -128,6 +135,7 @@ export const products = [
     ],
     useCases: ["Warm bedrooms", "Over your duvet", "Evening wind-down", "Guest room", "Movie nights"],
     images: [
+      "/images/weighted-hero.webp",
       "/images/weighted-3.webp",
       "/images/weighted-1.webp",
       "/images/weighted-2.webp",
@@ -216,6 +224,7 @@ export const products = [
     ],
     useCases: ["Hot sleepers", "Summer nights", "All-season use", "Guest room", "Pair with sheets"],
     images: [
+      "/images/comforter-hero.webp",
       "/images/comforter-2.webp",
       "/images/comforter-1.webp",
       "/images/comforter-3.webp",
