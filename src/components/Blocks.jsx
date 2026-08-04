@@ -33,7 +33,7 @@ export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, bg
 // Kussenstapel voor de bundelkaarten: 2 kussens (1+1) of 4 kussens (2+2),
 // half over elkaar met schaduw, op de wolkenachtergrond zodat de wolkjes er
 // goed achter uit komen.
-export function PillowDeck({ count = 2, height = 220, radius = 0 }) {
+export function PillowDeck({ count = 2, height = 220, radius = 0, bg = '#D5EBFA' }) {
   const P = (extra, key) => (
     <img key={key} src={IMG.coverFront} alt="" aria-hidden="true"
       style={{ position: 'absolute', objectFit: 'contain', filter: 'drop-shadow(0 8px 12px rgba(32,27,93,.24))', ...extra }} />
@@ -49,7 +49,7 @@ export function PillowDeck({ count = 2, height = 220, radius = 0 }) {
     P({ width: '46%', left: '50%', top: '52%', transform: 'rotate(6deg)', zIndex: 4 }, 'd'),
   ];
   return (
-    <div style={{ position: 'relative', background: '#D5EBFA', borderRadius: radius, overflow: 'hidden', height }}>
+    <div style={{ position: 'relative', background: bg, borderRadius: radius, overflow: 'hidden', height }}>
       <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', left: '-5%', top: '9%', width: '40%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
       <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '6%', width: '46%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
       {count >= 4 ? four : two}
@@ -85,18 +85,27 @@ export function SummerDealsSlider() {
     return () => io.disconnect();
   }, [isMobile]);
 
-  const cardBase = { textDecoration: 'none', scrollSnapAlign: 'center', flex: isMobile ? '0 0 78%' : '0 0 320px', borderRadius: 22, overflow: 'hidden', background: '#fff' };
+  // Slepen met de muis om horizontaal te scrollen — native drag werkt op desktop niet.
+  const drag = useRef({ down: false, startX: 0, left: 0, moved: false });
+  const onDown = (e) => { const el = scroller.current; if (!el) return; drag.current = { down: true, startX: e.pageX, left: el.scrollLeft, moved: false }; };
+  const onMove = (e) => { const el = scroller.current; if (!drag.current.down || !el) return; const dx = e.pageX - drag.current.startX; if (Math.abs(dx) > 4) drag.current.moved = true; el.scrollLeft = drag.current.left - dx; };
+  const stop = () => { drag.current.down = false; };
+  const onClickCapture = (e) => { if (drag.current.moved) { e.preventDefault(); e.stopPropagation(); drag.current.moved = false; } };
+
+  const cardBase = { textDecoration: 'none', flex: isMobile ? '0 0 78%' : '0 0 320px', borderRadius: 22, overflow: 'hidden', background: '#fff' };
   const panel = { background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '16px 16px 18px', textAlign: 'center' };
   const chip = { display: 'inline-block', background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '9px 16px' };
   const badge = { position: 'absolute', top: 12, left: 12, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' };
 
   return (
     <section style={{ position: 'relative', overflow: 'hidden', paddingBottom: 34, marginTop: -1 }}>
-      <style>{`.fns-scroll{scrollbar-width:none;-ms-overflow-style:none}.fns-scroll::-webkit-scrollbar{display:none}`}</style>
+      <style>{`.fns-scroll{scrollbar-width:none;-ms-overflow-style:none}.fns-scroll::-webkit-scrollbar{display:none}.fns-scroll img{-webkit-user-drag:none;user-drag:none}`}</style>
       <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: isMobile ? 300 : 430, backgroundImage: `url(${IMG.sliderBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div style={{ position: 'relative', maxWidth: 1180, margin: '0 auto', padding: isMobile ? '34px 20px 0' : '48px 40px 0' }}>
         <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 34, color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2></Reveal>
-        <div ref={scroller} className="fns-scroll" style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', scrollSnapType: 'x mandatory' }}>
+        <div ref={scroller} className="fns-scroll"
+          onMouseDown={onDown} onMouseMove={onMove} onMouseUp={stop} onMouseLeave={stop} onClickCapture={onClickCapture}
+          style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', cursor: 'grab', userSelect: 'none', WebkitOverflowScrolling: 'touch' }}>
           {/* Kussenbundels — kussenstapel (2 of 4 kussens) op de wolkenachtergrond */}
           {BUNDLES.map(b => {
             const p = getPrice(b, isCA);
@@ -217,6 +226,40 @@ export function CollectionsBlock() {
             : <div key={i}>{inner}</div>;
         })}
       </div></Reveal>
+    </section>
+  );
+}
+
+// Herbruikbaar rijtje productkaarten: het kussen plus de drie producten.
+// Gebruikt onder aan pagina's als verwijzing naar het assortiment.
+export function RangeCards({ title = 'Complete your bed', intro }) {
+  const isMobile = useIsMobile();
+  const { symbol, isCA } = useCurrency();
+  const cards = [
+    { to: '/product/signature-cold-pillow', name: PRODUCT.name, tagline: PRODUCT.tagline, img: IMG.coverFront, pillow: true, price: getPrice(BUNDLES[0], isCA), compareAt: isCA ? BUNDLES[0].compareAt.cad : BUNDLES[0].compareAt.usd, badge: 'Bestseller', from: false },
+    ...products.map(p => ({ to: `/product/${p.id}`, name: p.name, tagline: p.tagline, img: p.images[0], pillow: false, price: getPrice(p, isCA), compareAt: p.compareAt ? (isCA ? p.compareAt.cad : p.compareAt.usd) : null, badge: p.badge, from: true })),
+  ];
+  return (
+    <section style={{ padding: isMobile ? '20px 20px 44px' : '30px 40px 64px' }}>
+      <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, textAlign: 'center', marginBottom: intro ? 6 : 20 }}>{title}</h2></Reveal>
+      {intro && <Reveal><p style={{ textAlign: 'center', fontSize: 13.5, color: c.grayD, maxWidth: 460, margin: '0 auto 24px', lineHeight: 1.6 }}>{intro}</p></Reveal>}
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 18, maxWidth: 1080, margin: '0 auto' }}>
+        {cards.map((cd, i) => (
+          <Reveal key={i} delay={i * 70}><Link to={cd.to} style={{ textDecoration: 'none', background: '#fff', borderRadius: 18, overflow: 'hidden', boxShadow: '0 10px 26px rgba(32,27,93,.09)', display: 'block', height: '100%' }}>
+            <div style={{ position: 'relative', height: isMobile ? 130 : 170, background: c.cream, overflow: 'hidden' }}>
+              {cd.pillow
+                ? <PillowDeck count={2} height={isMobile ? 130 : 170} radius={0} />
+                : <img src={cd.img} alt={cd.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
+              {cd.badge && <span style={{ position: 'absolute', top: 10, left: 10, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 10.5, borderRadius: 999, padding: '4px 11px' }}>{cd.badge}</span>}
+            </div>
+            <div style={{ padding: isMobile ? '12px 12px 16px' : '14px 16px 18px' }}>
+              <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 14 : 16, color: c.navy, marginBottom: 4, lineHeight: 1.2 }}>{cd.name}</h3>
+              <div style={{ fontSize: 11.5, color: c.grayD, marginBottom: 8, lineHeight: 1.45, display: isMobile ? 'none' : 'block' }}>{cd.tagline}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: c.navy }}>{cd.from ? 'From ' : ''}{formatPrice(cd.price, symbol)} {cd.compareAt && <s style={{ fontWeight: 400, color: '#999', fontSize: 11.5 }}>{formatPrice(cd.compareAt, symbol)}</s>}</div>
+            </div>
+          </Link></Reveal>
+        ))}
+      </div>
     </section>
   );
 }

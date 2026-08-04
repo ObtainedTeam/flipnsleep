@@ -6,7 +6,7 @@ import { useRef, useState, useEffect } from 'react';
 // - Respecteert prefers-reduced-motion (dan geen animatie).
 // - Server-side gerenderde HTML blijft volledig zichtbaar (SEO/no-JS);
 //   de animatie activeert pas in de browser.
-export default function Reveal({ children, delay = 0, y = 26, once = false, style = {} }) {
+export default function Reveal({ children, delay = 0, y = 16, once = false, style = {} }) {
   const ref = useRef(null);
   const [state, setState] = useState('ssr'); // ssr | hidden | shown
 
@@ -23,7 +23,7 @@ export default function Reveal({ children, delay = 0, y = 26, once = false, styl
       } else if (!once) {
         setState('hidden');
       }
-    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    }, { threshold: 0.01, rootMargin: '0px 0px 14% 0px' });
     io.observe(el);
     return () => io.disconnect();
   }, [once]);
@@ -34,7 +34,7 @@ export default function Reveal({ children, delay = 0, y = 26, once = false, styl
       ...style,
       opacity: hidden ? 0 : 1,
       transform: hidden ? `translateY(${y}px)` : 'translateY(0)',
-      transition: `opacity .7s ease ${delay}ms, transform .7s ease ${delay}ms`,
+      transition: `opacity .45s ease ${delay}ms, transform .45s ease ${delay}ms`,
       willChange: 'opacity, transform',
     }}>
       {children}
