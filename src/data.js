@@ -38,6 +38,8 @@ export const IMG = {
   tileSilk: "/images/tile-silk.webp",
   tileToppers: "/images/tile-toppers.webp",
   standardPillowSweaty: "/images/standard-pillow-sweaty.webp",
+  flipCool: "/images/flip-cool.webp",
+  flipWarm: "/images/flip-warm.webp",
 };
 
 export const PRODUCT = {

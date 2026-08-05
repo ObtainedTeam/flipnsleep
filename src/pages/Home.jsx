@@ -78,7 +78,7 @@ export default function Home({ onCartOpen }) {
       </section>
 
       {/* ============ PRODUCT CARD + OFFER ============ */}
-      <Reveal><section id="offer" style={{ maxWidth: isMobile ? 560 : 1140, margin: isMobile ? '22px 14px 44px' : '44px auto 66px', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 14px 34px rgba(32,27,93,.16)', display: isMobile ? 'block' : 'grid', gridTemplateColumns: isMobile ? undefined : '1.05fr 1fr' }}>
+      <Reveal style={{ position: 'relative', zIndex: 2, marginTop: isMobile ? -50 : -84 }}><section id="offer" style={{ maxWidth: isMobile ? 560 : 1140, margin: isMobile ? '0 14px 44px' : '0 auto 66px', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 14px 34px rgba(32,27,93,.16)', display: isMobile ? 'block' : 'grid', gridTemplateColumns: isMobile ? undefined : '1.05fr 1fr' }}>
         <div style={{ padding: isMobile ? 16 : 28, position: 'relative', display: 'flex', alignItems: 'center' }}>
           <PillowDeck count={bundle.pillows} height={isMobile ? 230 : 460} radius={18} bg="transparent" />
           <span style={{ position: 'absolute', top: isMobile ? 28 : 44, left: isMobile ? 28 : 44, background: c.amber, color: c.navy, fontWeight: 700, fontSize: isMobile ? 13 : 15, borderRadius: 999, padding: isMobile ? '7px 16px' : '9px 20px' }}>{bundle.short.toLowerCase()}</span>
@@ -117,6 +117,9 @@ export default function Home({ onCartOpen }) {
           <div style={{ display: 'flex', gap: 10, marginTop: 14, flexDirection: isMobile ? 'column' : 'row', justifyContent: 'center' }}>
             <button onClick={() => buyNow(selected)} style={{ ...BTN, fontSize: 14, flex: 1, textAlign: 'center' }}>Order your Cold Pillow now</button>
             <button onClick={addToCart} style={{ ...BTNO, color: '#fff', borderColor: '#fff', flex: isMobile ? undefined : '0 0 auto' }}>Add to cart</button>
+          </div>
+          <div style={{ textAlign: 'center', marginTop: 12 }}>
+            <Link to="/product/signature-cold-pillow" style={{ color: '#fff', fontSize: 12.5, fontWeight: 600, fontFamily: FONT_SUB, textDecoration: 'underline', textUnderlineOffset: 3, opacity: .9 }}>See full product details →</Link>
           </div>
         </div>
       </section>
@@ -216,13 +219,17 @@ export default function Home({ onCartOpen }) {
         <div style={{ maxWidth: 320, margin: isMobile ? '26px auto 0' : 0, flexShrink: 0 }}>
           <div style={{ width: isMobile ? 240 : 300, height: isMobile ? 156 : 196, margin: '0 auto', perspective: 900 }}>
             <div style={{ position: 'relative', width: '100%', height: '100%', transition: 'transform .6s', transformStyle: 'preserve-3d', transform: flipped ? 'rotateY(180deg)' : 'none' }}>
-              <div style={{ position: 'absolute', inset: 0, borderRadius: 26, backfaceVisibility: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, fontWeight: 700, fontSize: 15, boxShadow: '0 16px 28px rgba(32,27,93,.18)', background: `linear-gradient(160deg,#EAF6FF,${c.pastelBlue})`, color: c.navy }}>
-                ❄️ Cool side
-                <small style={{ fontWeight: 500, fontSize: 11.5, opacity: .85, maxWidth: 190, lineHeight: 1.45 }}>Cool-touch fabric pulls heat away from your head</small>
+              <div style={{ position: 'absolute', inset: 0, borderRadius: 26, overflow: 'hidden', backfaceVisibility: 'hidden', boxShadow: '0 16px 28px rgba(32,27,93,.18)', backgroundImage: `url(${IMG.flipCool})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ background: 'rgba(255,255,255,.82)', borderRadius: 14, padding: '10px 16px', textAlign: 'center', maxWidth: '84%', boxShadow: '0 4px 12px rgba(32,27,93,.14)' }}>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: c.navy }}>❄️ Cool side</div>
+                  <div style={{ fontWeight: 500, fontSize: 11.5, color: c.grayD, lineHeight: 1.45, marginTop: 2 }}>Cool-touch fabric pulls heat away from your head</div>
+                </div>
               </div>
-              <div style={{ position: 'absolute', inset: 0, borderRadius: 26, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, fontWeight: 700, fontSize: 15, boxShadow: '0 16px 28px rgba(32,27,93,.18)', background: `linear-gradient(160deg,#FFF2DC,${c.pastelYellow})`, color: c.navy }}>
-                ☀️ Warm side
-                <small style={{ fontWeight: 500, fontSize: 11.5, opacity: .85, maxWidth: 190, lineHeight: 1.45 }}>Soft bamboo fabric for colder nights</small>
+              <div style={{ position: 'absolute', inset: 0, borderRadius: 26, overflow: 'hidden', backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', boxShadow: '0 16px 28px rgba(32,27,93,.18)', backgroundImage: `url(${IMG.flipWarm})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ background: 'rgba(255,255,255,.82)', borderRadius: 14, padding: '10px 16px', textAlign: 'center', maxWidth: '84%', boxShadow: '0 4px 12px rgba(32,27,93,.14)' }}>
+                  <div style={{ fontWeight: 700, fontSize: 15, color: c.navy }}>☀️ Warm side</div>
+                  <div style={{ fontWeight: 500, fontSize: 11.5, color: c.grayD, lineHeight: 1.45, marginTop: 2 }}>Soft bamboo fabric for colder nights</div>
+                </div>
               </div>
             </div>
           </div>
