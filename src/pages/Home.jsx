@@ -219,14 +219,16 @@ export default function Home({ onCartOpen }) {
         <div style={{ maxWidth: 320, margin: isMobile ? '26px auto 0' : 0, flexShrink: 0 }}>
           <div style={{ width: isMobile ? 240 : 300, height: isMobile ? 176 : 220, margin: '0 auto', perspective: 900 }}>
             <div style={{ position: 'relative', width: '100%', height: '100%', transition: 'transform .6s', transformStyle: 'preserve-3d', transform: flipped ? 'rotateY(180deg)' : 'none' }}>
-              <div style={{ position: 'absolute', inset: 0, borderRadius: 26, overflow: 'hidden', backfaceVisibility: 'hidden', boxShadow: '0 16px 28px rgba(32,27,93,.18)', backgroundImage: `url(${IMG.flipCool})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundColor: '#fff', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ background: 'rgba(255,255,255,.82)', borderRadius: 14, padding: '10px 16px', textAlign: 'center', maxWidth: '84%', boxShadow: '0 4px 12px rgba(32,27,93,.14)' }}>
+              <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={IMG.flipCool} alt="Cool side of the Signature Cold Pillow" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 14px 20px rgba(32,27,93,.22))' }} />
+                <div style={{ position: 'absolute', background: 'rgba(255,255,255,.82)', borderRadius: 14, padding: '10px 16px', textAlign: 'center', maxWidth: '78%', boxShadow: '0 4px 12px rgba(32,27,93,.14)' }}>
                   <div style={{ fontWeight: 700, fontSize: 15, color: c.navy }}>❄️ Cool side</div>
                   <div style={{ fontWeight: 500, fontSize: 11.5, color: c.grayD, lineHeight: 1.45, marginTop: 2 }}>Cool-touch fabric pulls heat away from your head</div>
                 </div>
               </div>
-              <div style={{ position: 'absolute', inset: 0, borderRadius: 26, overflow: 'hidden', backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', boxShadow: '0 16px 28px rgba(32,27,93,.18)', backgroundImage: `url(${IMG.flipWarm})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundColor: '#fff', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ background: 'rgba(255,255,255,.82)', borderRadius: 14, padding: '10px 16px', textAlign: 'center', maxWidth: '84%', boxShadow: '0 4px 12px rgba(32,27,93,.14)' }}>
+              <div style={{ position: 'absolute', inset: 0, backfaceVisibility: 'hidden', transform: 'rotateY(180deg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={IMG.flipWarm} alt="Warm side of the Signature Cold Pillow" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', filter: 'drop-shadow(0 14px 20px rgba(32,27,93,.22))' }} />
+                <div style={{ position: 'absolute', background: 'rgba(255,255,255,.82)', borderRadius: 14, padding: '10px 16px', textAlign: 'center', maxWidth: '78%', boxShadow: '0 4px 12px rgba(32,27,93,.14)' }}>
                   <div style={{ fontWeight: 700, fontSize: 15, color: c.navy }}>☀️ Warm side</div>
                   <div style={{ fontWeight: 500, fontSize: 11.5, color: c.grayD, lineHeight: 1.45, marginTop: 2 }}>Soft bamboo fabric for colder nights</div>
                 </div>
