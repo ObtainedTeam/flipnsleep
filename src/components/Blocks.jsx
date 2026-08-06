@@ -92,8 +92,8 @@ export function SummerDealsSlider() {
   const stop = () => { drag.current.down = false; };
   const onClickCapture = (e) => { if (drag.current.moved) { e.preventDefault(); e.stopPropagation(); drag.current.moved = false; } };
 
-  const cardBase = { textDecoration: 'none', flex: isMobile ? '0 0 78%' : '0 0 320px', borderRadius: 22, overflow: 'hidden', background: '#fff' };
-  const panel = { background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '16px 16px 18px', textAlign: 'center' };
+  const cardBase = { textDecoration: 'none', flex: isMobile ? '0 0 78%' : '0 0 320px', borderRadius: 22, overflow: 'hidden', background: '#fff', display: 'flex', flexDirection: 'column' };
+  const panel = { background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '16px 16px 18px', textAlign: 'center', flex: 1 };
   const chip = { display: 'inline-block', background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '9px 16px' };
   const badge = { position: 'absolute', top: 12, left: 12, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' };
 
@@ -112,7 +112,7 @@ export function SummerDealsSlider() {
             const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
             return (
               <a key={b.id} href="/product/signature-cold-pillow" style={cardBase}>
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative', flexShrink: 0 }}>
                   <PillowDeck count={b.pillows} height={isMobile ? 170 : 210} radius={0} />
                   <span style={badge}>{b.short.toLowerCase()}</span>
                 </div>
@@ -131,7 +131,7 @@ export function SummerDealsSlider() {
             const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
             return (
               <a key={prod.id} href={`/product/${prod.id}`} style={cardBase}>
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative', flexShrink: 0 }}>
                   <img src={prod.images[0]} alt={prod.name} style={{ display: 'block', width: '100%', height: isMobile ? 170 : 210, objectFit: 'cover' }} />
                   {prod.badge && <span style={badge}>{prod.badge.toLowerCase()}</span>}
                 </div>
