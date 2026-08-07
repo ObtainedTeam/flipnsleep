@@ -39,10 +39,10 @@ export default function Home({ onCartOpen }) {
     <div>
       {/* ============ HERO ============ */}
       <section style={{ backgroundImage: `url(${IMG.heroPoster})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: isMobile ? 'flex-start' : 'center', padding: isMobile ? '34px 22px 44px' : '50px 40px 56px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        {/* Achtergrondvideo alleen op mobiel, waar hij soepel loopt. Op desktop hapert de automatisch spelende video (apparaat/browser-afhankelijk), dus daar toont de sectie de posterfoto als stilstaande achtergrond. */}
-        {isMobile && <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
+        {/* Achtergrondvideo: loopt gedempt op alle schermen, met de posterfoto als fallback */}
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
           `<video autoplay loop muted playsinline webkit-playsinline preload="auto" poster="${IMG.heroPoster}" src="/videos/hero.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translateZ(0);backface-visibility:hidden"></video>`
-        }} />}
+        }} />
         {/* Verdonkering zodat titel en knop leesbaar blijven, video blijft goed zichtbaar */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,0.30)' }} />
         <div style={{ position: 'relative', maxWidth: isMobile ? 720 : 1100, margin: '0 auto', width: '100%', display: isMobile ? 'block' : 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, textAlign: isMobile ? 'center' : 'left' }}>
