@@ -27,13 +27,13 @@ export default function About() {
           Sleep is not a luxury, and cooling down shouldn't require gadgets. We believe in simple, honest product design: two fabrics that do their job, a filling you can adjust yourself, and certifications you can verify — OEKO-TEX Standard 100 for the fabrics, CertiPUR-US for the foam.
         </p>
         <p style={{ fontSize: 14, lineHeight: 1.8, color: c.grayD, marginBottom: 18 }}>
-          We also believe you shouldn't have to gamble on sleep. That's why every order is a 1+1 set, ships free, and comes with a 100-night trial. If it doesn't make your nights better, it goes back on us.
+          We also believe you shouldn't have to gamble on sleep. That's why every order is a buy-one-get-one-free set, ships free, and comes with a 100-night trial. If it doesn't make your nights better, it goes back on us.
         </p>
         <p style={{ fontSize: 14, lineHeight: 1.8, color: c.grayD }}>
           flip'nsleep is part of Obtained VOF and ships across the United States and Canada.
         </p>
         <div style={{ textAlign: 'center', marginTop: 26 }}>
-          <Link to="/product/signature-cold-pillow" style={BTN}>Shop the 1+1 deal</Link>
+          <Link to="/product/signature-cold-pillow" style={BTN}>Shop the deal</Link>
         </div>
       </section></Reveal>
 

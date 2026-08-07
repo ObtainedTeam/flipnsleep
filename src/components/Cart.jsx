@@ -129,7 +129,7 @@ export default function Cart({ isOpen, onClose }) {
           {lines.length === 0 ? (
             <div style={{ textAlign: 'center', marginTop: 60 }}>
               <p style={{ fontSize: 14, color: c.grayD, marginBottom: 16 }}>Your cart is empty.</p>
-              <a href="/product/signature-cold-pillow" style={BTN}>Shop the 1+1 deal</a>
+              <a href="/product/signature-cold-pillow" style={BTN}>Shop the deal</a>
             </div>
           ) : lines.map(l => (
             <div key={l.key} style={{ display: 'flex', gap: 12, background: '#fff', borderRadius: 16, padding: 12, marginBottom: 12, boxShadow: '0 4px 14px rgba(32,27,93,.06)' }}>
@@ -152,8 +152,8 @@ export default function Cart({ isOpen, onClose }) {
           {onlyOnePlusOne && (
             <div style={{ background: '#F0F5F2', border: '1px solid #d4e6da', borderRadius: 14, padding: 14, marginTop: 4 }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, marginBottom: 4 }}>Make it 4 pillows for less per pillow</div>
-              <div style={{ fontSize: 11.5, color: c.grayD, marginBottom: 10 }}>The 2+2 bundle brings the price down to {isCA ? 'CA$65.00' : '$47.50'} per pillow.</div>
-              <button onClick={() => { CartContext.remove('1p1'); CartContext.add('2p2', 1); }} style={{ ...BTN, padding: '9px 18px', fontSize: 11.5 }}>Upgrade to 2+2</button>
+              <div style={{ fontSize: 11.5, color: c.grayD, marginBottom: 10 }}>Buy 2, Get 2 Free brings the price down to {isCA ? 'CA$65.00' : '$47.50'} per pillow.</div>
+              <button onClick={() => { CartContext.remove('1p1'); CartContext.add('2p2', 1); }} style={{ ...BTN, padding: '9px 18px', fontSize: 11.5 }}>Upgrade to 4 pillows</button>
             </div>
           )}
 

@@ -51,7 +51,7 @@ export default function HowItWorks() {
         <p style={{ fontSize: 13.5, lineHeight: 1.7, maxWidth: 400, margin: '0 auto 20px', color: c.grayD }}>
           Sleep on it. Adjust it. Flip it. If it doesn't earn its place on your bed within 100 nights, send it back for free and get every dollar refunded.
         </p>
-        <Link to="/product/signature-cold-pillow" style={BTN}>Shop the 1+1 deal</Link>
+        <Link to="/product/signature-cold-pillow" style={BTN}>Shop the deal</Link>
       </section>
 
       <RangeCards title="Shop the flip'nsleep range" intro="One pillow, and the cooling bedding built on the same simple idea." />

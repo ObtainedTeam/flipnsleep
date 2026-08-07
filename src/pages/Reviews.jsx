@@ -87,11 +87,11 @@ export default function Reviews() {
               </p>
               <a href={JUDGEME_REVIEW_FORM_URL} target="_blank" rel="noopener noreferrer" style={BTN}>Write a review</a>
               <div style={{ marginTop: 14 }}>
-                <Link to="/product/signature-cold-pillow" style={BTNO}>Shop the 1+1 deal</Link>
+                <Link to="/product/signature-cold-pillow" style={BTNO}>Shop the deal</Link>
               </div>
             </>
           ) : (
-            <Link to="/product/signature-cold-pillow" style={BTN}>Shop the 1+1 deal</Link>
+            <Link to="/product/signature-cold-pillow" style={BTN}>Shop the deal</Link>
           )}
         </Reveal>
       </section>

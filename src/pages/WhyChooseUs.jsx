@@ -48,7 +48,7 @@ export default function WhyChooseUs() {
       </section></Reveal>
 
       <section style={{ textAlign: 'center', padding: '34px 20px 10px' }}>
-        <Link to="/product/signature-cold-pillow" style={BTN}>Shop the 1+1 deal</Link>
+        <Link to="/product/signature-cold-pillow" style={BTN}>Shop the deal</Link>
       </section>
 
       <div style={{ marginTop: 40 }}><ReviewsBlock /></div>

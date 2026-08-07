@@ -27,10 +27,10 @@ export default function ExitPopup() {
       <div onClick={() => setShow(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,.6)' }} />
       <div style={{ position: 'relative', background: c.navy, color: '#fff', borderRadius: 24, padding: '36px 30px', maxWidth: 400, width: '100%', textAlign: 'center', boxShadow: '0 24px 60px rgba(20,16,64,.5)' }}>
         <button onClick={() => setShow(false)} aria-label="Close" style={{ position: 'absolute', top: 12, right: 14, background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#fff' }}>×</button>
-        <img src={IMG.icon1p1} alt="1+1 free" style={{ height: 64, marginBottom: 12 }} />
+        <img src={IMG.icon1p1} alt="Buy 1, Get 1 Free" style={{ height: 64, marginBottom: 12 }} />
         <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 24, marginBottom: 10 }}>Leaving already?</h3>
-        <p style={{ fontSize: 13.5, lineHeight: 1.65, color: '#DDD9FF', marginBottom: 18 }}>The 1+1 deal means two pillows for the price of one — and you can try them for 100 nights, risk-free. Nothing to lose but the night sweats.</p>
-        <a href="/product/signature-cold-pillow" onClick={() => setShow(false)} style={BTN}>Claim my 1+1 deal</a>
+        <p style={{ fontSize: 13.5, lineHeight: 1.65, color: '#DDD9FF', marginBottom: 18 }}>Buy one pillow and get the second free — and you can try them for 100 nights, risk-free. Nothing to lose but the night sweats.</p>
+        <a href="/product/signature-cold-pillow" onClick={() => setShow(false)} style={BTN}>Claim my deal</a>
       </div>
     </div>
   );

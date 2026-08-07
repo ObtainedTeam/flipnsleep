@@ -19,7 +19,7 @@ export default function FAQ() {
       <Reveal><section style={{ padding: isMobile ? '20px 22px 40px' : '26px 40px 56px' }}>
         <FAQBlock items={FAQ_ITEMS} />
         <div style={{ textAlign: 'center', marginTop: 28 }}>
-          <Link to="/product/signature-cold-pillow" style={BTN}>Shop the 1+1 deal</Link>
+          <Link to="/product/signature-cold-pillow" style={BTN}>Shop the deal</Link>
         </div>
       </section></Reveal>
       <EmailCapture />

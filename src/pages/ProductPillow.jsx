@@ -48,7 +48,7 @@ export default function ProductPillow({ onCartOpen }) {
 
           {/* FAMILY-DEAL badge-stijl blok */}
           <div style={{ background: '#F0F5F2', border: '1px solid #d4e6da', borderRadius: 12, padding: '12px 16px', marginBottom: 18 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: '#2e6b4f', letterSpacing: .5, marginBottom: 4 }}>🌙 1+1 FREE — OUR SIGNATURE DEAL</div>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#2e6b4f', letterSpacing: .5, marginBottom: 4 }}>🌙 BUY 1, GET 1 FREE — OUR SIGNATURE DEAL</div>
             <div style={{ fontSize: 12, color: '#555', lineHeight: 1.5 }}>Every order comes as a set: one for you, one on us. Applied automatically at checkout.</div>
           </div>
 

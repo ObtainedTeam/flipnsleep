@@ -16,7 +16,7 @@ export default function Shop() {
         <div style={EYEBROW}>Shop</div>
         <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 30 : 48, color: c.navy, margin: '8px 0 12px' }}>Pick your bundle</h1>
         <p style={{ fontSize: 14, lineHeight: 1.65, maxWidth: 420, margin: '0 auto' }}>
-          Every order is a set — that's our 1+1 promise. Choose two pillows or four, always with free shipping and a 100-night trial.
+          Every order is a set — that's our buy-one-get-one-free promise. Choose two pillows or four, always with free shipping and a 100-night trial.
         </p>
       </section>
 
@@ -31,7 +31,7 @@ export default function Shop() {
                 <span style={{ position: 'absolute', top: 14, left: 14, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' }}>{b.short}</span>
               </div>
               <div style={{ padding: '18px 20px 22px' }}>
-                <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginBottom: 4 }}>{PRODUCT.name} ({b.short.split(' ')[0]})</h2>
+                <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginBottom: 4 }}>{PRODUCT.name} — {b.short}</h2>
                 <div style={{ fontFamily: FONT_SUB, fontSize: 13.5, color: c.grayD, marginBottom: 8 }}>{b.label} — {b.blurb}</div>
                 <div style={{ fontSize: 17, fontWeight: 700, color: c.navy }}>{formatPrice(p, symbol)} <s style={{ fontWeight: 400, color: '#999', fontSize: 13 }}>{formatPrice(cm, symbol)}</s></div>
                 <div style={{ fontSize: 12, color: '#2e6b4f', fontWeight: 600, marginTop: 2 }}>{formatPrice(p / b.pillows, symbol)} per pillow · free shipping</div>

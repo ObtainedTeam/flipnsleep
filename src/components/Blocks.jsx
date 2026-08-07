@@ -114,13 +114,13 @@ export function SummerDealsSlider() {
               <a key={b.id} href="/product/signature-cold-pillow" style={cardBase}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                   <PillowDeck count={b.pillows} height={isMobile ? 170 : 210} radius={0} />
-                  <span style={badge}>{b.short.toLowerCase()}</span>
+                  <span style={badge}>{b.short}</span>
                 </div>
                 <div style={panel}>
                   <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 4 }}>{b.pillows} × {PRODUCT.name}</div>
                   <div style={{ fontSize: 12, color: '#DDD9FF', lineHeight: 1.5, marginBottom: 8 }}>{PRODUCT.tagline}</div>
                   <div style={{ fontFamily: FONT_DISPLAY, fontSize: 15, color: '#fff', marginBottom: 10 }}>{formatPrice(p, symbol)} <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 11.5, color: '#BDB7EE' }}>{formatPrice(cm, symbol)}</s></div>
-                  <span style={chip}>Now {b.label.match(/\(([^)]+)\)/)?.[1] || b.short} for only {formatPrice(p, symbol)}</span>
+                  <span style={chip}>{b.short} — only {formatPrice(p, symbol)}</span>
                 </div>
               </a>
             );

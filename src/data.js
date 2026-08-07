@@ -70,8 +70,8 @@ export const PRODUCT = {
 export const BUNDLES = [
   {
     id: "1p1",
-    label: "2 pillows (1+1 free)",
-    short: "1+1 FREE",
+    label: "2 pillows (buy 1, get 1 free)",
+    short: "Buy 1, Get 1 Free",
     pillows: 2,
     prices: { usd: 109.99, cad: 149.99 },
     compareAt: { usd: 219.98, cad: 299.98 },
@@ -80,8 +80,8 @@ export const BUNDLES = [
   },
   {
     id: "2p2",
-    label: "4 pillows (2+2)",
-    short: "2+2 DEAL",
+    label: "4 pillows (buy 2, get 2 free)",
+    short: "Buy 2, Get 2 Free",
     pillows: 4,
     prices: { usd: 189.99, cad: 259.99 },
     compareAt: { usd: 439.96, cad: 599.96 },
