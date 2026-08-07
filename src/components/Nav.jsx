@@ -15,6 +15,17 @@ const LINKS = [
   ['/about', 'Our story'],
 ];
 
+// Productcategorieën voor het hamburgermenu. Live categorieën linken naar hun
+// product; Silk Series en Mattress Toppers zijn coming-soon (geen link).
+const CATEGORIES = [
+  ['/product/signature-cold-pillow', 'Pillows', false],
+  ['/product/bamboo-sheet-set', 'Sheets', false],
+  ['/product/cooling-weighted-blanket', 'Blankets', false],
+  ['/product/cooling-comforter', 'Comforters', false],
+  [null, 'Silk Series', true],
+  [null, 'Mattress Toppers', true],
+];
+
 export default function Nav({ onCartOpen }) {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
@@ -78,6 +89,17 @@ export default function Nav({ onCartOpen }) {
         <nav style={{ position: 'sticky', top: 55, zIndex: 89, background: c.navy, borderTop: '1px solid rgba(255,255,255,.12)', padding: '10px 0 16px' }}>
           {LINKS.map(([to, label]) => (
             <Link key={to} to={to} style={{ display: 'block', padding: '11px 24px', color: loc.pathname === to ? c.amber : '#fff', textDecoration: 'none', fontFamily: FONT_SUB, fontSize: 15 }}>{label}</Link>
+          ))}
+          <div style={{ borderTop: '1px solid rgba(255,255,255,.12)', margin: '8px 0 2px' }} />
+          <div style={{ padding: '8px 24px 4px', color: c.gray, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: FONT_SUB }}>Shop by category</div>
+          {CATEGORIES.map(([to, label, soon]) => (
+            soon ? (
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '11px 24px', color: 'rgba(255,255,255,.45)', fontFamily: FONT_SUB, fontSize: 15 }}>
+                {label} <span style={{ fontSize: 10, background: 'rgba(255,255,255,.14)', color: '#fff', borderRadius: 999, padding: '2px 8px', fontWeight: 600, letterSpacing: '0.04em' }}>Soon</span>
+              </div>
+            ) : (
+              <Link key={label} to={to} style={{ display: 'block', padding: '11px 24px', color: loc.pathname === to ? c.amber : '#fff', textDecoration: 'none', fontFamily: FONT_SUB, fontSize: 15 }}>{label}</Link>
+            )
           ))}
         </nav>
       )}
