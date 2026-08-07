@@ -95,7 +95,7 @@ export function SummerDealsSlider() {
   const cardBase = { textDecoration: 'none', flex: isMobile ? '0 0 78%' : '0 0 320px', borderRadius: 22, overflow: 'hidden', background: '#fff', display: 'flex', flexDirection: 'column' };
   const panel = { background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '16px 16px 18px', textAlign: 'center', flex: 1 };
   const chip = { display: 'inline-block', background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '9px 16px' };
-  const badge = { position: 'absolute', top: 12, left: 12, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' };
+  const badge = { position: 'absolute', top: 12, left: 12, zIndex: 20, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' };
 
   return (
     <section style={{ position: 'relative', overflow: 'hidden', paddingBottom: 34, marginTop: -1 }}>
@@ -252,7 +252,7 @@ export function RangeCards({ title = 'Complete your bed', intro }) {
               {cd.pillow
                 ? <PillowDeck count={2} height={isMobile ? 130 : 170} radius={0} />
                 : <img src={cd.img} alt={cd.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
-              {cd.badge && <span style={{ position: 'absolute', top: 10, left: 10, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 10.5, borderRadius: 999, padding: '4px 11px' }}>{cd.badge}</span>}
+              {cd.badge && <span style={{ position: 'absolute', top: 10, left: 10, zIndex: 20, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 10.5, borderRadius: 999, padding: '4px 11px' }}>{cd.badge}</span>}
             </div>
             <div style={{ padding: isMobile ? '12px 12px 16px' : '14px 16px 18px' }}>
               <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 14 : 16, color: c.navy, marginBottom: 4, lineHeight: 1.2 }}>{cd.name}</h3>

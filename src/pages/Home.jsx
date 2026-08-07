@@ -39,10 +39,10 @@ export default function Home({ onCartOpen }) {
     <div>
       {/* ============ HERO ============ */}
       <section style={{ backgroundImage: `url(${IMG.heroPoster})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: isMobile ? 560 : 720, display: 'flex', flexDirection: 'column', justifyContent: isMobile ? 'flex-start' : 'center', padding: isMobile ? '34px 22px 44px' : '50px 40px 56px', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-        {/* Achtergrondvideo: loopt, gedempt, met de foto als poster/fallback */}
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
-          `<video autoplay loop muted playsinline webkit-playsinline preload="auto" poster="${IMG.heroPoster}" src="/videos/hero.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translateZ(0);will-change:transform;backface-visibility:hidden"></video>`
-        }} />
+        {/* Achtergrondvideo alleen op mobiel, waar hij soepel loopt. Op desktop hapert de automatisch spelende video (apparaat/browser-afhankelijk), dus daar toont de sectie de posterfoto als stilstaande achtergrond. */}
+        {isMobile && <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
+          `<video autoplay loop muted playsinline webkit-playsinline preload="auto" poster="${IMG.heroPoster}" src="/videos/hero.mp4" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translateZ(0);backface-visibility:hidden"></video>`
+        }} />}
         {/* Verdonkering zodat titel en knop leesbaar blijven, video blijft goed zichtbaar */}
         <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,0.30)' }} />
         <div style={{ position: 'relative', maxWidth: isMobile ? 720 : 1100, margin: '0 auto', width: '100%', display: isMobile ? 'block' : 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 60, textAlign: isMobile ? 'center' : 'left' }}>
@@ -81,7 +81,7 @@ export default function Home({ onCartOpen }) {
       <Reveal style={{ position: 'relative', zIndex: 2, marginTop: isMobile ? -50 : -84 }}><section id="offer" style={{ maxWidth: isMobile ? 560 : 1140, margin: isMobile ? '0 14px 44px' : '0 auto 66px', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 26, overflow: 'hidden', boxShadow: '0 14px 34px rgba(32,27,93,.16)', display: isMobile ? 'block' : 'grid', gridTemplateColumns: isMobile ? undefined : '1.05fr 1fr' }}>
         <div style={{ padding: isMobile ? 16 : 28, position: 'relative', display: 'flex', alignItems: 'center' }}>
           <PillowDeck count={bundle.pillows} height={isMobile ? 230 : 460} radius={18} bg="transparent" />
-          <span style={{ position: 'absolute', top: isMobile ? 28 : 44, left: isMobile ? 28 : 44, background: c.amber, color: c.navy, fontWeight: 700, fontSize: isMobile ? 13 : 15, borderRadius: 999, padding: isMobile ? '7px 16px' : '9px 20px' }}>{bundle.short}</span>
+          <span style={{ position: 'absolute', top: isMobile ? 28 : 44, left: isMobile ? 28 : 44, zIndex: 20, background: c.amber, color: c.navy, fontWeight: 700, fontSize: isMobile ? 13 : 15, borderRadius: 999, padding: isMobile ? '7px 16px' : '9px 20px' }}>{bundle.short}</span>
         </div>
         <div style={{ background: isMobile ? `linear-gradient(180deg, ${c.purple}, ${c.navy})` : `linear-gradient(135deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: isMobile ? '24px 20px 26px' : '38px 36px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 32, marginBottom: 4 }}>{PRODUCT.name}</h2>
