@@ -96,6 +96,7 @@ export default function ProductVariable({ onCartOpen }) {
                 );
               })}
             </div>
+            {product.sizeInfo && <div style={{ fontSize: 12.5, color: c.grayD, marginTop: 10, fontFamily: FONT_SUB }}>{product.sizeInfo[size]}</div>}
           </div>
 
           {/* Colour selector */}
@@ -131,7 +132,7 @@ export default function ProductVariable({ onCartOpen }) {
           </div>
 
           <TrustAccordion specs={
-            <ul style={{ listStyle: 'none' }}>{product.specs.map(([k, v], i) => <li key={i} style={{ marginBottom: 5 }}><b>{k}:</b> {v}</li>)}</ul>
+            <ul style={{ listStyle: 'none' }}>{product.sizeInfo && <li style={{ marginBottom: 5 }}><b>Dimensions &amp; weight:</b> {product.sizeInfo[size]}</li>}{product.specs.map(([k, v], i) => <li key={i} style={{ marginBottom: 5 }}><b>{k}:</b> {v}</li>)}</ul>
           } />
         </div></Reveal>
       </section>

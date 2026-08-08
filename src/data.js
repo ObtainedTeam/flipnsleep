@@ -112,6 +112,12 @@ export const products = [
     colors: ["Graphite"],
     colorHex: ["#4A4855"],
     sizes: ["Twin", "Queen", "King", "Super King"],
+    sizeInfo: {
+      "Twin": "135 \u00d7 200 cm \u00b7 7 kg (\u224815 lb)",
+      "Queen": "150 \u00d7 200 cm \u00b7 9 kg (\u224820 lb)",
+      "King": "200 \u00d7 200 cm \u00b7 11 kg (\u224824 lb)",
+      "Super King": "200 \u00d7 200 cm \u00b7 13 kg (\u224829 lb)",
+    },
     desc: "A cooling weighted blanket with a bamboo-viscose cover and evenly distributed glass micro-beads. The gentle, grounding weight of a hug, in a breathable fabric that doesn't trap heat.",
     longDesc: `A cooling weighted blanket with a bamboo-viscose cover and evenly distributed glass micro-beads. It gives you the gentle, grounding weight of a hug in a breathable fabric that doesn't trap heat, so you stay settled without overheating. The beads are quilted into small, even squares that keep the weight spread edge to edge, with no shifting and no lumps. Use it over your duvet or on its own. Free shipping across the US and Canada, a 100-night trial and a 2-year warranty.`,
     features: [
@@ -126,7 +132,6 @@ export const products = [
       ["Fill", "Hypoallergenic glass micro-beads (0.8 to 2.5 mm)"],
       ["Construction", "Small-square quilting for even weight distribution"],
       ["Sizes", "Twin, Queen, King, Super King"],
-      ["Weight", "Matched to size (see selector)"], // confirm: exacte lb per maat
       ["Care", "Machine wash gentle, cold; air dry"], // confirm tegen carelabel
       ["Country of origin", "China"],
     ],
