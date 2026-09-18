@@ -119,7 +119,7 @@ export function SummerDealsSlider() {
                 <div style={panel}>
                   <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 4 }}>{b.pillows} × {PRODUCT.name}</div>
                   <div style={{ fontSize: 12, color: '#DDD9FF', lineHeight: 1.5, marginBottom: 8 }}>{PRODUCT.tagline}</div>
-                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 15, color: '#fff', marginBottom: 10 }}>{formatPrice(p, symbol)} <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 11.5, color: '#BDB7EE' }}>{formatPrice(cm, symbol)}</s></div>
+                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 15, color: '#fff', marginBottom: 10 }}>{formatPrice(p, symbol)} <span style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 11.5, color: '#BDB7EE' }}>· {formatPrice(p / b.pillows, symbol)} each</span></div>
                   <span style={chip}>{b.short} — only {formatPrice(p, symbol)}</span>
                 </div>
               </a>
@@ -238,7 +238,7 @@ export function RangeCards({ title = 'Complete your bed', intro }) {
   const isMobile = useIsMobile();
   const { symbol, isCA } = useCurrency();
   const cards = [
-    { to: '/product/signature-cold-pillow', name: PRODUCT.name, tagline: PRODUCT.tagline, img: IMG.coverFront, pillow: true, price: getPrice(BUNDLES[0], isCA), compareAt: isCA ? BUNDLES[0].compareAt.cad : BUNDLES[0].compareAt.usd, badge: 'Bestseller', from: false },
+    { to: '/product/signature-cold-pillow', name: PRODUCT.name, tagline: PRODUCT.tagline, img: IMG.coverFront, pillow: true, price: getPrice(BUNDLES[0], isCA), compareAt: null, badge: 'Bestseller', from: false },
     ...products.map(p => ({ to: `/product/${p.id}`, name: p.name, tagline: p.tagline, img: p.images[0], pillow: false, price: getPrice(p, isCA), compareAt: p.compareAt ? (isCA ? p.compareAt.cad : p.compareAt.usd) : null, badge: p.badge, from: true })),
   ];
   return (

@@ -45,7 +45,7 @@ export default function Nav({ onCartOpen }) {
       {/* Announcement bar */}
       <div style={{ background: c.navy, overflow: 'hidden', whiteSpace: 'nowrap' }} aria-hidden="true">
         <div style={{ display: 'inline-block', padding: '7px 0', color: c.amber, fontSize: 11.5, fontWeight: 600, letterSpacing: '0.04em', animation: 'fnsslide 22s linear infinite' }}>
-          {Array(2).fill('☁️ FREE SHIPPING ON EVERY ORDER · ☁️ 100-NIGHT SLEEP TRIAL · ☁️ ORDERED BEFORE 11PM, SHIPPED TODAY · ').join('')}
+          {Array(2).fill('☁️ FREE SHIPPING ACROSS THE US · ☁️ 100-NIGHT SLEEP TRIAL · ☁️ FREE RETURNS · ☁️ ORDER BY 11PM, SHIPS TODAY · ').join('')}
         </div>
         <style>{`@keyframes fnsslide { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
       </div>

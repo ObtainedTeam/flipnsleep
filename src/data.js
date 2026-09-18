@@ -45,8 +45,8 @@ export const IMG = {
 export const PRODUCT = {
   id: "signature-cold-pillow",
   name: "Signature Cold Pillow",
-  tagline: "The adjustable pillow that keeps the night sweats away.",
-  desc: "An adjustable shredded memory foam pillow with a dual-sided cover: a cool-touch side for warm nights and a soft bamboo side for cold ones. Unzip to add or remove filling until it fits your sleeping position exactly.",
+  tagline: "The adjustable pillow that finally fits your head.",
+  desc: "Dual-sided and fully adjustable. A cool-touch side for warm nights, a soft bamboo side for winter, and shredded memory foam that breathes instead of baking under your head. Take out a few handfuls until the height fits your sleeping position exactly.",
   // Ankerprijs per kussen — doorgestreept naast elk aanbod.
   anchorPerPillow: { usd: 109.99, cad: 151 },
   images: [IMG.coverFront, IMG.coverDuo, IMG.coverInside, IMG.coverBack],
@@ -247,12 +247,16 @@ export const productById = (id) => products.find(p => p.id === id);
 export const REVIEWS = [];
 
 export const FAQ_ITEMS = [
-  ["How does the 100-night trial work?", "Sleep on it for up to 100 nights. Not convinced? Contact us, ship it back for free and receive a full refund."],
+  ["Does it stay cool all night?", "Honestly: the cool-touch side feels cool the moment you touch it, and because the foam is shredded it sheds heat instead of trapping it, so it doesn't warm up and hold like a solid pillow. It won't stay ice-cold for eight hours \u2014 no cool-touch pillow does. Flip it for a fresh cool side, and a breathable pillowcase helps."],
+  ["How is this different from a cheap cooling pillow?", "It's adjustable, dual-sided, breathable and certified, and you get two for the price of one. Most cheap cooling pillows are a fixed loft with a cool side only."],
+  ["Will it go flat?", "Shredded memory foam holds its loft, and you can fluff it or top it up with a spare bag of filling if you ever want it fuller again."],
+  ["What size is it, and will it fit my pillowcase?", "20 \u00d7 30 in (50 \u00d7 76 cm). It fits a standard or queen pillowcase."],
+  ["Firm or soft \u2014 which is it?", "Your choice. Take filling out for a softer, flatter pillow, leave it in for firmer and taller. Most side sleepers keep more in, stomach sleepers take more out."],
+  ["How does the 100-night trial work?", "Sleep on it for up to 100 nights. Not sleeping cooler? Contact us, ship it back for free and receive a full refund."],
   ["How do I adjust the pillow?", "Unzip the inner cover and add or remove filling until the height matches your sleeping position. Side sleepers usually keep more filling, stomach sleepers less."],
-  ["Is the cover washable?", "Yes — the outer cover zips off and is machine-washable at 40°C / 104°F. The foam core itself should not be washed."],
+  ["Is the cover washable?", "Yes \u2014 the outer cover zips off and is machine-washable at 40\u00b0C / 104\u00b0F. The foam core itself should not be washed."],
   ["What if the cool side is too cold in winter?", "Just flip it. The other side is soft bamboo fabric, made for colder nights."],
-  ["Do you ship to my country?", "We ship across the United States and Canada. Shipping is free on every order."],
-  ["When will my order ship?", "Orders placed before 11 PM ET ship the same business day. You'll receive tracking as soon as it leaves the warehouse."],
+  ["Shipping and returns?", "Free both ways across the United States and Canada, within the 100-night trial. Orders placed before 11 PM ET ship the same business day and you'll receive tracking as soon as it leaves the warehouse."],
   ["What warranty do I get?", "Every flip'nsleep product comes with a 2-year warranty on materials and workmanship, on top of the 100-night trial. If anything fails within two years, we repair, replace or refund it."],
   ["Is the foam safe?", "The foam is CertiPUR-US certified (no PBDE/TDCPP/TCEP flame retardants, no heavy metals, low VOC) and the fabrics are OEKO-TEX Standard 100 certified."],
 ];
