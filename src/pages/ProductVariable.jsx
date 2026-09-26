@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { c, BTN, BTNO, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { productById, products } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNowProduct, isProductPurchasable } from '../shopify';
+import { trackAddToCart, trackViewContent } from '../track';
 import Reveal from '../components/Reveal';
 import { ProductImageBlock, TrustAccordion, ReviewsBlock, FAQBlock, ShippingCountdown } from '../components/Blocks';
 
@@ -19,6 +20,10 @@ export default function ProductVariable({ onCartOpen }) {
   const [size, setSize] = useState(product ? product.sizes[0] : null);
   const [color, setColor] = useState(product ? product.colors[0] : null);
   const [img, setImg] = useState(0);
+
+  useEffect(() => {
+    if (product) trackViewContent({ content_type: 'product', content_name: product.id });
+  }, [product && product.id]);
 
   if (!product) {
     return (
@@ -37,6 +42,7 @@ export default function ProductVariable({ onCartOpen }) {
 
   const addToCart = () => {
     if (!purchasable) return;
+    trackAddToCart({ content_type: 'product', content_name: product.id, contents: [{ size, color, quantity: 1 }] });
     CartContext.addProduct(product.id, size, color, 1);
     onCartOpen && onCartOpen();
   };

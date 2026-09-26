@@ -4,6 +4,7 @@ import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { PRODUCT, BUNDLES, IMG } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNow } from '../shopify';
+import { trackAddToCart, trackViewContent } from '../track';
 import Reveal from '../components/Reveal';
 import PillowQuiz from '../components/PillowQuiz';
 import { Stars, ReviewsBlock, FAQBlock, TrustAccordion, ProductImageBlock, ShippingCountdown } from '../components/Blocks';
@@ -22,6 +23,7 @@ export default function ProductPillow({ onCartOpen }) {
   const { symbol, isCA } = useCurrency();
   const [selected, setSelected] = useState('1p1');
   const [img, setImg] = useState(0);
+  useEffect(() => { trackViewContent({ content_type: 'product', content_name: 'flipnsleep-pillow' }); }, []);
   const rv = useReviews();
   const hasReviews = !!(rv && rv.count > 0);
   const bundle = BUNDLES.find(b => b.id === selected);
@@ -29,7 +31,11 @@ export default function ProductPillow({ onCartOpen }) {
   const perPillow = price / bundle.pillows;
   const dealPrice = getPrice(BUNDLES[0], isCA);
 
-  const addToCart = () => { CartContext.add(selected, 1); onCartOpen && onCartOpen(); };
+  const addToCart = () => {
+    trackAddToCart({ content_type: 'product', content_name: 'flipnsleep-pillow', contents: [{ id: selected, quantity: 1 }] });
+    CartContext.add(selected, 1);
+    onCartOpen && onCartOpen();
+  };
 
   const trust = [['🌙', '100-night trial'], ['🚚', 'Free shipping & returns'], ['✅', 'OEKO-TEX & CertiPUR-US'], ['🛡️', '2-year warranty']];
 
