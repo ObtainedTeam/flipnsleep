@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { cartCheckoutUrl, CART_CROSSSELL_ANCHOR, CART_CROSSSELL_CONTEXTUAL } from '../shopify';
-import { trackInitiateCheckout } from '../track';
 import { bundleById, productById } from '../data';
 
 // Module-level cart store met pub/sub. Items zijn óf een kussenbundel
@@ -108,10 +107,6 @@ export default function Cart({ isOpen, onClose }) {
 
   const handleCheckout = () => {
     if (items.length === 0) return;
-    trackInitiateCheckout({
-      content_type: 'product',
-      num_items: items.reduce((n, i) => n + (i.qty || 1), 0),
-    });
     window.location.href = cartCheckoutUrl(items);
   };
 

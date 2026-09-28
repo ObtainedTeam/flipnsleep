@@ -1,7 +1,7 @@
 // flip'nsleep — Shopify-koppeling.
 // Cart-permalinks naar het eigen checkout-domein (zelfde mechaniek als bugaway).
 // BELANGRIJK: één domeinconstante, overal hergebruikt.
-import { trackInitiateCheckout } from './track';
+// InitiateCheckout komt nu uit de Shopify-Meta-koppeling (CAPI), niet meer uit deze code.
 
 export const DOMAIN = 'checkout.flipnsleep.com';
 
@@ -19,7 +19,6 @@ export function getVariantId(bundleId) {
 export function buyNow(bundleId, qty = 1) {
   const id = getVariantId(bundleId);
   if (!id) return;
-  trackInitiateCheckout({ content_type: 'product', contents: [{ id, quantity: qty }] });
   window.location.href = `https://${DOMAIN}/cart/${id}:${qty}`;
 }
 
@@ -88,7 +87,6 @@ export function buyNowProduct(productId, size, color, qty = 1) {
   const variantId = getProductVariantId(productId, size, color);
   const handle = SHOPIFY_HANDLES[productId];
   if (variantId) {
-    trackInitiateCheckout({ content_type: 'product', contents: [{ id: variantId, quantity: qty }] });
     window.location.href = `https://${DOMAIN}/cart/${variantId}:${qty}`;
     return;
   }
