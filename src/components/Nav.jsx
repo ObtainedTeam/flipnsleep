@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { c, useIsMobile, FONT_DISPLAY, FONT_SUB } from '../theme';
+import { c, rv, FONT_SUB } from '../theme';
 import { CartContext } from './Cart';
 import { TrustBar } from './Blocks';
-import { IMG } from '../data';
+import { IMG, dim } from '../data';
 
 const LINKS = [
   ['/', 'Home'],
@@ -27,7 +27,6 @@ const CATEGORIES = [
 ];
 
 export default function Nav({ onCartOpen }) {
-  const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const [count, setCount] = useState(CartContext.count());
   const loc = useLocation();
@@ -50,22 +49,22 @@ export default function Nav({ onCartOpen }) {
         <style>{`@keyframes fnsslide { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
       </div>
 
-      <header style={{ background: c.navy, position: 'sticky', top: 0, zIndex: 90, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: isMobile ? '12px 16px' : '14px 40px' }}>
-        {isMobile ? (
-          <>
+      <header className="r-pad" style={{ background: c.navy, position: 'sticky', top: 0, zIndex: 90, display: 'flex', alignItems: 'center', justifyContent: 'space-between', ...rv('pad', '14px 40px', '12px 16px') }}>
+        {/* Mobiel: hamburger + logo (display:contents zodat de drie kinderen van de
+            header los van elkaar uitgelijnd blijven). Desktop: logo + links. */}
+        <div className="m-only" style={{ display: 'contents' }}>
             <button aria-label="Menu" onClick={() => setOpen(!open)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 5, padding: 4 }}>
               <i style={{ width: 22, height: 3, background: '#fff', borderRadius: 2, display: 'block' }} />
               <i style={{ width: 22, height: 3, background: '#fff', borderRadius: 2, display: 'block' }} />
               <i style={{ width: 22, height: 3, background: '#fff', borderRadius: 2, display: 'block' }} />
             </button>
             <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-              <img src={IMG.logoFull} alt="flip'nsleep" style={{ height: 30, width: 'auto' }} />
+              <img src={IMG.logoFull} {...dim(IMG.logoFull)} decoding="async" alt="flip'nsleep" style={{ height: 30, width: 'auto' }} />
             </Link>
-          </>
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 44 }}>
+        </div>
+          <div className="d-only" style={{ display: 'flex', alignItems: 'center', gap: 44 }}>
             <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-              <img src={IMG.logoFull} alt="flip'nsleep" style={{ height: 40, width: 'auto' }} />
+              <img src={IMG.logoFull} {...dim(IMG.logoFull)} decoding="async" alt="flip'nsleep" style={{ height: 40, width: 'auto' }} />
             </Link>
             <nav style={{ display: 'flex', gap: 28 }}>
               {LINKS.map(([to, label]) => (
@@ -73,7 +72,6 @@ export default function Nav({ onCartOpen }) {
               ))}
             </nav>
           </div>
-        )}
 
         <button aria-label="Cart" onClick={onCartOpen} style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', fontSize: 22, color: '#fff' }}>
           🛒
@@ -85,8 +83,8 @@ export default function Nav({ onCartOpen }) {
 
       <TrustBar />
 
-      {isMobile && open && (
-        <nav style={{ position: 'sticky', top: 55, zIndex: 89, background: c.navy, borderTop: '1px solid rgba(255,255,255,.12)', padding: '10px 0 16px' }}>
+      {open && (
+        <nav className="m-only" style={{ position: 'sticky', top: 55, zIndex: 89, background: c.navy, borderTop: '1px solid rgba(255,255,255,.12)', padding: '10px 0 16px' }}>
           {LINKS.map(([to, label]) => (
             <Link key={to} to={to} style={{ display: 'block', padding: '11px 24px', color: loc.pathname === to ? c.amber : '#fff', textDecoration: 'none', fontFamily: FONT_SUB, fontSize: 15 }}>{label}</Link>
           ))}

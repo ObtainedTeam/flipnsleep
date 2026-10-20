@@ -1,7 +1,6 @@
-import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
-import { IMG } from '../data';
+import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { Link } from 'react-router-dom';
-import { ReviewsBlock, CloudDivider, EmailCapture } from '../components/Blocks';
+import { ReviewsBlock, EmailCapture } from '../components/Blocks';
 import Reveal from '../components/Reveal';
 
 
@@ -15,18 +14,17 @@ const ROWS = [
 ];
 
 export default function WhyChooseUs() {
-  const isMobile = useIsMobile();
   return (
     <div>
-      <section style={{ textAlign: 'center', padding: isMobile ? '40px 20px 8px' : '56px 40px 12px' }}>
+      <section className="r-pad" style={{ textAlign: 'center', ...rv('pad', '56px 40px 12px', '40px 20px 8px') }}>
         <div style={EYEBROW}>The honest comparison</div>
-        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 30 : 50, color: c.navy, margin: '8px 0 10px' }}>Why flip'nsleep?</h1>
+        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: 'var(--h1)', color: c.navy, margin: '8px 0 10px' }}>Why flip'nsleep?</h1>
         <p style={{ fontSize: 14, lineHeight: 1.65, maxWidth: 460, margin: '0 auto' }}>
           Most pillows make you adapt to them. Ours adapts to you — in height, in temperature, and in how much risk you take buying it.
         </p>
       </section>
 
-      <Reveal><section style={{ maxWidth: isMobile ? 860 : 980, margin: isMobile ? '26px auto 0' : '36px auto 0', padding: '0 16px', overflowX: 'auto' }}>
+      <Reveal><section className="r-mw r-mar" style={{ ...rv('mw', 980, 860), ...rv('mar', '36px auto 0', '26px auto 0'), padding: '0 16px', overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, background: '#fff', borderRadius: 22, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', minWidth: 560 }}>
           <thead>
             <tr style={{ background: c.navy, color: '#fff' }}>

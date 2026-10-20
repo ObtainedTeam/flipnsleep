@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { c, BTN, BTNO, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
+import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { Link } from 'react-router-dom';
 import { EmailCapture } from '../components/Blocks';
 import Reveal from '../components/Reveal';
 import { JUDGEME_REVIEW_FORM_URL } from '../judgeme';
 
 export default function Reviews() {
-  const isMobile = useIsMobile();
   const [data, setData] = useState(null); // { reviews, count, avg }
 
   useEffect(() => {
@@ -17,15 +16,15 @@ export default function Reviews() {
 
   return (
     <div>
-      <section style={{ textAlign: 'center', padding: isMobile ? '40px 20px 8px' : '56px 40px 10px' }}>
+      <section className="r-pad" style={{ textAlign: 'center', ...rv('pad', '56px 40px 10px', '40px 20px 8px') }}>
         <div style={EYEBROW}>Reviews</div>
-        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 30 : 50, color: c.navy, margin: '8px 0 10px' }}>Real sleepers, <span style={{ fontFamily: FONT_SUB }}>real reviews</span></h1>
+        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: 'var(--h1)', color: c.navy, margin: '8px 0 10px' }}>Real sleepers, <span style={{ fontFamily: FONT_SUB }}>real reviews</span></h1>
         <p style={{ fontSize: 14, lineHeight: 1.7, maxWidth: 460, margin: '0 auto' }}>
           Reviews here are collected independently through Judge.me from verified flip'nsleep buyers. We can't edit them or make them up — and that's exactly the point.
         </p>
       </section>
 
-      <section style={{ maxWidth: 860, margin: '0 auto', padding: isMobile ? '26px 20px 10px' : '34px 24px 10px' }}>
+      <section className="r-pad" style={{ maxWidth: 860, margin: '0 auto', ...rv('pad', '34px 24px 10px', '26px 20px 10px') }}>
         <Reveal>
           {hasReviews ? (
             <>
@@ -34,7 +33,7 @@ export default function Reviews() {
                 <span style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginLeft: 10 }}>{data.avg}</span>
                 <span style={{ fontSize: 13, color: c.grayD, marginLeft: 8 }}>based on {data.count} verified review{data.count === 1 ? '' : 's'}</span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 14 }}>
+              <div className="grid-2m1" style={{ gap: 14 }}>
                 {data.reviews.map((r, i) => (
                   <div key={i} style={{ background: '#fff', borderRadius: 18, padding: '20px 20px 16px', boxShadow: '0 8px 22px rgba(32,27,93,.07)' }}>
                     <div style={{ color: '#F2B33D', fontSize: 14, letterSpacing: 2, marginBottom: 8 }}>{'★'.repeat(r.rating)}<span style={{ color: '#E4E1F0' }}>{'★'.repeat(5 - r.rating)}</span></div>
@@ -49,8 +48,8 @@ export default function Reviews() {
               </div>
             </>
           ) : (
-            <div style={{ background: '#fff', borderRadius: 22, padding: isMobile ? '26px 20px' : '36px 34px', boxShadow: '0 10px 26px rgba(32,27,93,.08)', textAlign: 'center' }}>
-              <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 20 : 24, color: c.navy, marginBottom: 10 }}>The first reviews are on their way</h2>
+            <div className="r-pad" style={{ background: '#fff', borderRadius: 22, ...rv('pad', '36px 34px', '26px 20px'), boxShadow: '0 10px 26px rgba(32,27,93,.08)', textAlign: 'center' }}>
+              <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 24, 20), color: c.navy, marginBottom: 10 }}>The first reviews are on their way</h2>
               <p style={{ fontSize: 13.5, lineHeight: 1.75, color: c.grayD, maxWidth: 520, margin: '0 auto' }}>
                 flip'nsleep is a young brand, and our first customers are sleeping on their pillows right now. Every verified buyer automatically gets a review invitation, and as their reviews come in they'll appear on this page — unfiltered. Until then, we'd rather show you no reviews than fake ones.
               </p>
@@ -60,9 +59,9 @@ export default function Reviews() {
       </section>
 
       {/* Waarom je ons nu al kunt vertrouwen */}
-      <section style={{ maxWidth: 860, margin: '0 auto', padding: isMobile ? '18px 20px 10px' : '24px 24px 10px' }}>
+      <section className="r-pad" style={{ maxWidth: 860, margin: '0 auto', ...rv('pad', '24px 24px 10px', '18px 20px 10px') }}>
         <Reveal delay={100}>
-          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 14 }}>
+          <div className="grid-3m1" style={{ gap: 14 }}>
             {[
               ['🌙', '100-night sleep trial', "Try it for 100 nights. Not convinced? Free return, full refund."],
               ['🛡️', '2-year warranty', 'Materials and workmanship covered — repaired, replaced or refunded.'],
@@ -78,7 +77,7 @@ export default function Reviews() {
         </Reveal>
       </section>
 
-      <section style={{ textAlign: 'center', padding: isMobile ? '24px 20px 40px' : '30px 24px 50px' }}>
+      <section className="r-pad" style={{ textAlign: 'center', ...rv('pad', '30px 24px 50px', '24px 20px 40px') }}>
         <Reveal delay={140}>
           {JUDGEME_REVIEW_FORM_URL ? (
             <>

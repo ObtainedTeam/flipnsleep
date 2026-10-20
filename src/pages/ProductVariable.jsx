@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { c, BTN, BTNO, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
+import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { productById, products } from '../data';
+import { productById, products, dim } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNowProduct, isProductPurchasable } from '../shopify';
 import { trackAddToCart, trackViewContent } from '../track';
@@ -12,7 +12,6 @@ import { ProductImageBlock, TrustAccordion, ReviewsBlock, FAQBlock, ShippingCoun
 // Productpagina voor de variantproducten (maat + kleur). Zelfde bouwstenen en
 // wolk-achtergronden als de kussenpagina, gevoed uit products[] in data.js.
 export default function ProductVariable({ onCartOpen }) {
-  const isMobile = useIsMobile();
   const { symbol, isCA } = useCurrency();
   const { id } = useParams();
   const product = productById(id);
@@ -55,17 +54,17 @@ export default function ProductVariable({ onCartOpen }) {
 
   return (
     <div>
-      <section style={{ maxWidth: 1160, margin: '0 auto', padding: isMobile ? '20px 16px' : '52px 24px', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr', gap: isMobile ? 24 : 60 }}>
+      <section className="r-pad r-cols r-gap" style={{ maxWidth: 1160, margin: '0 auto', ...rv('pad', '52px 24px', '20px 16px'), display: 'grid', ...rv('cols', '1.05fr 1fr', '1fr'), ...rv('gap', 60, 24) }}>
         {/* Gallery */}
         <Reveal><div>
-          <div style={{ background: c.cream, borderRadius: 22, overflow: 'hidden', height: isMobile ? 320 : 460 }}>
-            <img src={product.images[img]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          <div className="r-h" style={{ background: c.cream, borderRadius: 22, overflow: 'hidden', ...rv('h', 460, 320) }}>
+            <img src={product.images[img]} {...dim(product.images[img])} fetchPriority="high" decoding="async" alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </div>
           <div className="fns-scroll" style={{ display: 'flex', gap: 8, marginTop: 10, overflowX: 'auto' }}>
             {product.images.map((src, i) => (
               <button key={i} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}`}
                 style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: 12, padding: 0, cursor: 'pointer', background: c.cream, flexShrink: 0, overflow: 'hidden' }}>
-                <img src={src} alt="" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 10, display: 'block' }} />
+                <img src={src} {...dim(src)} loading="lazy" decoding="async" alt="" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 10, display: 'block' }} />
               </button>
             ))}
           </div>
@@ -74,7 +73,7 @@ export default function ProductVariable({ onCartOpen }) {
         {/* Info */}
         <Reveal delay={120}><div>
           <div style={EYEBROW}>{product.badge || 'flip\u2019nsleep'}</div>
-          <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 42, color: c.navy, margin: '6px 0 6px', lineHeight: 1.15 }}>{product.name}</h1>
+          <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 42, 28), color: c.navy, margin: '6px 0 6px', lineHeight: 1.15 }}>{product.name}</h1>
           {product.tagline && <p style={{ fontFamily: FONT_SUB, fontSize: 14.5, color: c.grayD, marginBottom: 10 }}>{product.tagline}</p>}
           <div style={{ marginBottom: 10, fontSize: 12.5, color: c.grayD }}>🌙 100-night sleep trial · 🛡️ 2-year warranty · 📦 Free shipping</div>
 
@@ -126,7 +125,7 @@ export default function ProductVariable({ onCartOpen }) {
           )}
 
           {/* CTA's */}
-          <div style={{ display: 'flex', gap: 10, margin: '4px 0 18px', flexDirection: isMobile ? 'column' : 'row' }}>
+          <div className="row-m-col" style={{ display: 'flex', gap: 10, margin: '4px 0 18px' }}>
             <button onClick={() => buyNowProduct(product.id, size, color)} disabled={!purchasable}
               style={{ ...BTN, flex: 1, textAlign: 'center', fontSize: 14, opacity: purchasable ? 1 : .5, cursor: purchasable ? 'pointer' : 'not-allowed' }}>
               {purchasable ? 'Buy now' : 'Coming soon'}
@@ -144,7 +143,7 @@ export default function ProductVariable({ onCartOpen }) {
       </section>
 
       {/* Why you'll love it: longDesc + highlights + features */}
-      <section style={{ maxWidth: 1000, margin: '0 auto', padding: isMobile ? '14px 16px 30px' : '20px 24px 50px' }}>
+      <section className="r-pad" style={{ maxWidth: 1000, margin: '0 auto', ...rv('pad', '20px 24px 50px', '14px 16px 30px') }}>
         <Reveal><div>
           <div style={EYEBROW}>Why you'll love it</div>
           {product.longDesc.split('\n\n').map((para, i) => (
@@ -153,7 +152,7 @@ export default function ProductVariable({ onCartOpen }) {
         </div></Reveal>
 
         {product.highlights && (
-          <Reveal delay={100}><div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 14, margin: '26px 0 6px' }}>
+          <Reveal delay={100}><div className="grid-3m1" style={{ gap: 14, margin: '26px 0 6px' }}>
             {product.highlights.map((h, i) => (
               <div key={i} style={{ background: c.sky, borderRadius: 16, padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
                 <span style={{ fontSize: 24 }}>{h.icon}</span>
@@ -167,8 +166,8 @@ export default function ProductVariable({ onCartOpen }) {
         )}
 
         <Reveal delay={140}><div style={{ marginTop: 24 }}>
-          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 22 : 26, color: c.navy, marginBottom: 12 }}>What's inside</h2>
-          <ul style={{ listStyle: 'none', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '8px 24px' }}>
+          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 26, 22), color: c.navy, marginBottom: 12 }}>What's inside</h2>
+          <ul className="grid-2m1" style={{ listStyle: 'none', gap: '8px 24px' }}>
             {product.features.map((f, i) => (
               <li key={i} style={{ display: 'flex', gap: 10, fontSize: 13.5, lineHeight: 1.6, color: c.grayD }}>
                 <span style={{ color: c.amberD, flexShrink: 0 }}>✓</span>{f}
@@ -180,14 +179,14 @@ export default function ProductVariable({ onCartOpen }) {
 
       {/* Pairing / cross-sell */}
       {others.length > 0 && (
-        <section style={{ maxWidth: 1000, margin: '0 auto', padding: isMobile ? '0 16px 34px' : '0 24px 50px' }}>
-          <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 22 : 26, color: c.navy, textAlign: 'center', marginBottom: 18 }}>Complete your <span style={{ fontFamily: FONT_SUB }}>bed</span></h2></Reveal>
-          <Reveal delay={100}><div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 16 : 24 }}>
+        <section className="r-pad" style={{ maxWidth: 1000, margin: '0 auto', ...rv('pad', '0 24px 50px', '0 16px 34px') }}>
+          <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 26, 22), color: c.navy, textAlign: 'center', marginBottom: 18 }}>Complete your <span style={{ fontFamily: FONT_SUB }}>bed</span></h2></Reveal>
+          <Reveal delay={100}><div className="grid-2m1 r-gap" style={rv('gap', 24, 16)}>
             {others.map(o => {
               const op = getPrice(o, isCA);
               return (
                 <Link key={o.id} to={`/product/${o.id}`} style={{ textDecoration: 'none', background: '#fff', borderRadius: 20, overflow: 'hidden', boxShadow: '0 10px 26px rgba(32,27,93,.10)', display: 'flex', alignItems: 'center', gap: 14 }}>
-                  <div style={{ width: isMobile ? 110 : 140, height: isMobile ? 110 : 130, flexShrink: 0, background: c.cream, overflow: 'hidden' }}><img src={o.images[0]} alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>
+                  <div className="r-w r-h" style={{ ...rv('w', 140, 110), ...rv('h', 130, 110), flexShrink: 0, background: c.cream, overflow: 'hidden' }}><img src={o.images[0]} {...dim(o.images[0])} loading="lazy" decoding="async" alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>
                   <div style={{ padding: '12px 14px 12px 0' }}>
                     <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, color: c.navy, marginBottom: 3 }}>{o.name}</div>
                     <div style={{ fontSize: 12, color: c.grayD, marginBottom: 6, lineHeight: 1.45 }}>{o.tagline}</div>
@@ -201,7 +200,7 @@ export default function ProductVariable({ onCartOpen }) {
       )}
 
       <ReviewsBlock />
-      <section style={{ padding: isMobile ? '30px 22px 40px' : '40px 40px 60px' }}>
+      <section className="r-pad" style={rv('pad', '40px 40px 60px', '30px 22px 40px')}>
         <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 24, color: c.navy, textAlign: 'center', marginBottom: 12 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
         <FAQBlock limit={5} />
       </section>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { c, BTN, FONT_DISPLAY } from '../theme';
 import { subscribe } from '../brevo';
-import { IMG } from '../data';
+import { IMG, dim } from '../data';
 
 // Welkomstpopup: 10% op de eerste bestelling, gekoppeld aan Brevo.
 export default function NewsletterPopup() {
@@ -39,7 +39,7 @@ export default function NewsletterPopup() {
       <div onClick={close} style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,.6)' }} />
       <div style={{ position: 'relative', background: c.sky, borderRadius: 24, padding: '34px 28px', maxWidth: 380, width: '100%', textAlign: 'center', boxShadow: '0 24px 60px rgba(20,16,64,.4)' }}>
         <button onClick={close} aria-label="Close" style={{ position: 'absolute', top: 12, right: 14, background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: c.navy }}>×</button>
-        <img src={IMG.iconCloud} alt="" style={{ height: 34, marginBottom: 10 }} />
+        <img src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" style={{ height: 34, marginBottom: 10 }} />
         <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 24, marginBottom: 8, color: c.navy }}>Sleep better, pay less</h3>
         {state === 'done' ? (
           <p style={{ fontSize: 13.5, lineHeight: 1.6 }}>Check your inbox — your 10% code is on its way. Sweet dreams!</p>

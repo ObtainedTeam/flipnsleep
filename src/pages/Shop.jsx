@@ -1,33 +1,32 @@
 import { Link } from 'react-router-dom';
-import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
+import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { BUNDLES, PRODUCT, products } from '../data';
+import { BUNDLES, PRODUCT, products, dim } from '../data';
 import { EmailCapture, ProductImageBlock } from '../components/Blocks';
 import Reveal from '../components/Reveal';
 
 
 export default function Shop() {
-  const isMobile = useIsMobile();
   const { symbol, isCA } = useCurrency();
 
   return (
     <div>
-      <section style={{ textAlign: 'center', padding: isMobile ? '36px 20px 10px' : '54px 40px 16px' }}>
+      <section className="r-pad" style={{ textAlign: 'center', ...rv('pad', '54px 40px 16px', '36px 20px 10px') }}>
         <div style={EYEBROW}>Shop</div>
-        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 30 : 48, color: c.navy, margin: '8px 0 12px' }}>Pick your bundle</h1>
+        <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 48, 30), color: c.navy, margin: '8px 0 12px' }}>Pick your bundle</h1>
         <p style={{ fontSize: 14, lineHeight: 1.65, maxWidth: 420, margin: '0 auto' }}>
           Every order is a set — that's our buy-one-get-one-free promise. Choose two pillows or four, always with free shipping and a 100-night trial.
         </p>
       </section>
 
-      <section style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 22 : 30, maxWidth: isMobile ? 860 : 1040, margin: isMobile ? '26px auto 0' : '36px auto 0', padding: '0 20px' }}>
+      <section className="grid-2m1 r-gap r-mw r-mar" style={{ ...rv('gap', 30, 22), ...rv('mw', 1040, 860), ...rv('mar', '36px auto 0', '26px auto 0'), padding: '0 20px' }}>
         {BUNDLES.map(b => {
           const p = getPrice(b, isCA);
           const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
           return (
             <Reveal key={b.id} delay={BUNDLES.indexOf(b) * 130}><Link to="/product/signature-cold-pillow" style={{ textDecoration: 'none', background: '#fff', borderRadius: 24, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', display: 'block' }}>
               <div style={{ position: 'relative' }}>
-                <ProductImageBlock src={b.image} alt={b.label} height={isMobile ? 210 : 280} radius={0} />
+                <ProductImageBlock src={b.image} alt={b.label} height={[280, 210]} radius={0} priority={b.id === BUNDLES[0].id} />
                 <span style={{ position: 'absolute', top: 14, left: 14, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' }}>{b.short}</span>
               </div>
               <div style={{ padding: '18px 20px 22px' }}>
@@ -43,21 +42,21 @@ export default function Shop() {
       </section>
 
       {/* De volledige flip'nsleep-range: deken, lakens, comforter */}
-      <section style={{ padding: isMobile ? '46px 20px 8px' : '64px 40px 10px' }}>
+      <section className="r-pad" style={rv('pad', '64px 40px 10px', '46px 20px 8px')}>
         <Reveal><div style={{ textAlign: 'center' }}>
           <div style={EYEBROW}>More for your bed</div>
-          <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 34, color: c.navy, margin: '8px 0 6px' }}>The full <span style={{ fontFamily: FONT_SUB }}>flip'nsleep</span> range</h2>
+          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 34, 26), color: c.navy, margin: '8px 0 6px' }}>The full <span style={{ fontFamily: FONT_SUB }}>flip'nsleep</span> range</h2>
           <p style={{ fontSize: 13.5, color: c.grayD, maxWidth: 440, margin: '0 auto' }}>Cooling bedding built on the same idea as the pillow: stay comfortable without trapping heat.</p>
         </div></Reveal>
 
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 18 : 24, maxWidth: 1080, margin: isMobile ? '26px auto 0' : '34px auto 0' }}>
+        <div className="grid-3m1 r-gap r-mar" style={{ ...rv('gap', 24, 18), maxWidth: 1080, ...rv('mar', '34px auto 0', '26px auto 0') }}>
           {products.map((prod, idx) => {
             const p = getPrice(prod, isCA);
             const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
             return (
               <Reveal key={prod.id} delay={idx * 120}><Link to={`/product/${prod.id}`} style={{ textDecoration: 'none', background: '#fff', borderRadius: 22, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', display: 'block', height: '100%' }}>
-                <div style={{ position: 'relative', height: isMobile ? 220 : 240, background: c.cream, overflow: 'hidden' }}>
-                  <img src={prod.images[0]} alt={prod.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <div className="r-h" style={{ position: 'relative', ...rv('h', 240, 220), background: c.cream, overflow: 'hidden' }}>
+                  <img src={prod.images[0]} {...dim(prod.images[0])} loading="lazy" decoding="async" alt={prod.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   {prod.badge && <span style={{ position: 'absolute', top: 14, left: 14, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '5px 13px' }}>{prod.badge}</span>}
                 </div>
                 <div style={{ padding: '16px 18px 20px' }}>

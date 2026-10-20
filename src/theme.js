@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 // flip'nsleep brand tokens — afgeleid uit het Figma-ontwerp.
 export const c = {
   navy:"#201B5D", purple:"#3A217F", night:"#141040",
@@ -11,22 +9,13 @@ export const c = {
 
 export const FONT_DISPLAY = "'Palo Wide Black','Archivo Black',sans-serif";
 export const FONT_SUB = "'Masiva Medium','Poppins',sans-serif";
-export const FONT_BODY = "'Poppins',sans-serif";
+export const FONT_BODY = "'Poppins','Poppins Fallback',sans-serif";
 
-export const useIsMobile = () => {
-  // Tijdens prerenderen bestaat window niet. Start op false (desktop) en
-  // corrigeer in de effect, die draait alleen in de browser.
-  const [isMobile, setIsMobile] = useState(
-    typeof window === 'undefined' ? false : window.innerWidth < 768
-  );
-  useEffect(() => {
-    const h = () => setIsMobile(window.innerWidth < 768);
-    h();
-    window.addEventListener('resize', h);
-    return () => window.removeEventListener('resize', h);
-  }, []);
-  return isMobile;
-};
+// Responsive helper (zie index.css): rv('fs', 62, 36) geeft
+// { '--d-fs': '62px', '--m-fs': '36px' }; combineer met className="r-fs".
+// Getallen krijgen px, strings gaan ongewijzigd door.
+const px = (v) => (typeof v === 'number' ? `${v}px` : v);
+export const rv = (prop, d, m) => ({ [`--d-${prop}`]: px(d), [`--m-${prop}`]: px(m) });
 
 export const BTN = {
   background:`linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color:c.navy, border:"none",

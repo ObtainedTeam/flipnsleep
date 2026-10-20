@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB } from '../theme';
+import { c, BTN, rv, FONT_DISPLAY, FONT_SUB } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { cartCheckoutUrl, CART_CROSSSELL_ANCHOR, CART_CROSSSELL_CONTEXTUAL } from '../shopify';
-import { bundleById, productById } from '../data';
+import { bundleById, productById, dim } from '../data';
 
 // Module-level cart store met pub/sub. Items zijn óf een kussenbundel
 // { bundleId, qty } óf een variantproduct { productId, size, color, qty }.
@@ -54,7 +54,6 @@ export const CartContext = {
 };
 
 export default function Cart({ isOpen, onClose }) {
-  const isMobile = useIsMobile();
   const { symbol, isCA } = useCurrency();
   const [items, setItems] = useState([...CartContext.items]);
 
@@ -115,7 +114,7 @@ export default function Cart({ isOpen, onClose }) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 200 }}>
       <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,.55)' }} />
-      <aside style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: isMobile ? '100%' : 420, background: c.cream, display: 'flex', flexDirection: 'column', boxShadow: '-10px 0 40px rgba(32,27,93,.25)' }}>
+      <aside className="r-w" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, ...rv('w', 420, '100%'), background: c.cream, display: 'flex', flexDirection: 'column', boxShadow: '-10px 0 40px rgba(32,27,93,.25)' }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 20px', background: c.navy, color: '#fff' }}>
           <span style={{ fontFamily: FONT_DISPLAY, fontSize: 18 }}>Your cart</span>
           <button onClick={onClose} aria-label="Close cart" style={{ background: 'none', border: 'none', color: '#fff', fontSize: 22, cursor: 'pointer' }}>×</button>
@@ -133,7 +132,7 @@ export default function Cart({ isOpen, onClose }) {
             </div>
           ) : lines.map(l => (
             <div key={l.key} style={{ display: 'flex', gap: 12, background: '#fff', borderRadius: 16, padding: 12, marginBottom: 12, boxShadow: '0 4px 14px rgba(32,27,93,.06)' }}>
-              <img src={l.image} alt="" style={{ width: 74, height: 74, objectFit: l.imgFit, borderRadius: 12, background: c.sky }} />
+              <img src={l.image} {...dim(l.image)} loading="lazy" decoding="async" alt="" style={{ width: 74, height: 74, objectFit: l.imgFit, borderRadius: 12, background: c.sky }} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontFamily: FONT_SUB, fontSize: 14, marginBottom: 2 }}>{l.name}</div>
                 <div style={{ fontSize: 12, color: c.grayD, marginBottom: 6 }}>{l.sub}</div>
@@ -165,7 +164,7 @@ export default function Cart({ isOpen, onClose }) {
                 const rp = getPrice(r, isCA);
                 return (
                   <Link key={r.id} to={`/product/${r.id}`} onClick={onClose} style={{ display: 'flex', gap: 10, alignItems: 'center', background: '#fff', borderRadius: 14, padding: 10, marginBottom: 8, textDecoration: 'none', boxShadow: '0 3px 12px rgba(32,27,93,.05)' }}>
-                    <img src={r.images[0]} alt="" style={{ width: 48, height: 48, objectFit: 'contain', borderRadius: 10, background: c.sky, flexShrink: 0 }} />
+                    <img src={r.images[0]} {...dim(r.images[0])} loading="lazy" decoding="async" alt="" style={{ width: 48, height: 48, objectFit: 'contain', borderRadius: 10, background: c.sky, flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontFamily: FONT_SUB, fontSize: 12.5, color: c.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
                       <div style={{ fontSize: 11.5, color: c.grayD }}>From {formatPrice(rp, symbol)}</div>

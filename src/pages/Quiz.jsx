@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB } from '../theme';
-import { IMG } from '../data';
+import { c, BTN, rv, FONT_DISPLAY, FONT_SUB } from '../theme';
+import { IMG, dim } from '../data';
 import { subscribe } from '../brevo';
 
 // Sleep quiz funnel: één vraag per pagina, effen beige achtergrond, logo
@@ -65,7 +65,6 @@ const QUESTIONS = [
 ];
 
 export default function Quiz() {
-  const isMobile = useIsMobile();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [answers, setAnswers] = useState({});
@@ -107,11 +106,11 @@ export default function Quiz() {
     <div style={{ minHeight: '100vh', background: c.cream, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '26px 20px 60px' }}>
       {/* Logo */}
       <Link to="/" aria-label="flip'nsleep home" style={{ marginBottom: 22 }}>
-        <img src={IMG.logoDark} alt="flip'nsleep" style={{ height: isMobile ? 34 : 42, width: 'auto' }} />
+        <img src={IMG.logoDark} {...dim(IMG.logoDark)} decoding="async" alt="flip'nsleep" className="r-h" style={{ ...rv('h', 42, 34), width: 'auto' }} />
       </Link>
 
       {/* Voortgangsbalk */}
-      <div style={{ width: '100%', maxWidth: 460, marginBottom: isMobile ? 34 : 44 }}>
+      <div className="r-mb" style={{ width: '100%', maxWidth: 460, ...rv('mb', 44, 34) }}>
         <div style={{ height: 8, background: '#E7E4DA', borderRadius: 99, overflow: 'hidden' }}>
           <div style={{ height: '100%', width: `${progress}%`, background: `linear-gradient(90deg, ${c.purple}, ${c.navy})`, borderRadius: 99, transition: 'width .4s ease' }} />
         </div>
@@ -122,13 +121,13 @@ export default function Quiz() {
 
       {!emailStep ? (
         <div style={{ width: '100%', maxWidth: 460, textAlign: 'center' }}>
-          <h1 style={{ fontSize: isMobile ? 22 : 28, color: c.navy, fontFamily: FONT_SUB, fontWeight: 400, marginBottom: isMobile ? 24 : 32, lineHeight: 1.3 }}>
+          <h1 className="r-fs r-mb" style={{ ...rv('fs', 28, 22), color: c.navy, fontFamily: FONT_SUB, fontWeight: 400, ...rv('mb', 32, 24), lineHeight: 1.3 }}>
             {current.q[0]}<span style={{ fontFamily: FONT_DISPLAY }}>{current.q[1]}</span>{current.q[2]}
           </h1>
           <div style={{ display: 'grid', gap: 12 }}>
             {current.options.map(([emoji, label]) => (
               <button key={label} onClick={() => pick(current.id, label)}
-                style={{ display: 'flex', alignItems: 'center', gap: 14, background: c.sky, border: '2px solid transparent', borderRadius: 15, padding: isMobile ? '16px 18px' : '19px 22px', cursor: 'pointer', fontFamily: FONT_SUB, fontSize: isMobile ? 15 : 16, color: c.navy, textAlign: 'left', transition: 'transform .1s, border .1s' }}
+                className="r-pad r-fs" style={{ display: 'flex', alignItems: 'center', gap: 14, background: c.sky, border: '2px solid transparent', borderRadius: 15, ...rv('pad', '19px 22px', '16px 18px'), cursor: 'pointer', fontFamily: FONT_SUB, ...rv('fs', 16, 15), color: c.navy, textAlign: 'left', transition: 'transform .1s, border .1s' }}
                 onMouseDown={e => e.currentTarget.style.transform = 'scale(.98)'}
                 onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}>
                 <span style={{ fontSize: 22 }}>{emoji}</span>
@@ -145,12 +144,12 @@ export default function Quiz() {
           {state === 'done' ? (
             <>
               <div style={{ fontSize: 44, marginBottom: 12 }}>🌙</div>
-              <h1 style={{ fontSize: isMobile ? 24 : 30, color: c.navy, fontFamily: FONT_DISPLAY, fontWeight: 400, marginBottom: 12 }}>Check your inbox!</h1>
+              <h1 className="r-fs" style={{ ...rv('fs', 30, 24), color: c.navy, fontFamily: FONT_DISPLAY, fontWeight: 400, marginBottom: 12 }}>Check your inbox!</h1>
               <p style={{ fontSize: 14, lineHeight: 1.7, color: c.grayD }}>Your 15% discount code is on its way. We're taking you to your perfect pillow…</p>
             </>
           ) : (
             <>
-              <h1 style={{ fontSize: isMobile ? 24 : 30, color: c.navy, fontFamily: FONT_SUB, fontWeight: 400, marginBottom: 10, lineHeight: 1.3 }}>
+              <h1 className="r-fs" style={{ ...rv('fs', 30, 24), color: c.navy, fontFamily: FONT_SUB, fontWeight: 400, marginBottom: 10, lineHeight: 1.3 }}>
                 Your perfect pillow is <span style={{ fontFamily: FONT_DISPLAY }}>ready</span>
               </h1>
               <p style={{ fontSize: 13.5, lineHeight: 1.7, color: c.grayD, marginBottom: 24 }}>

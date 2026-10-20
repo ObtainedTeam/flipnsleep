@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
+import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
 
 // Gratis kussenvulling-quiz. Volledig op dezelfde pagina (geen redirect, geen
 // e-mail). Geeft een concreet aantal handjes schuim dat je uit het volle kussen
@@ -37,7 +37,6 @@ function recommend(a) {
 }
 
 export default function PillowQuiz() {
-  const isMobile = useIsMobile();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const done = step >= QUESTIONS.length;
@@ -49,10 +48,10 @@ export default function PillowQuiz() {
   const range = r ? (r.lo === r.hi ? `${r.lo}` : `${r.lo}–${r.hi}`) : '';
 
   return (
-    <section style={{ background: '#fff', padding: isMobile ? '44px 20px' : '64px 40px' }}>
-      <div style={{ maxWidth: 620, margin: '0 auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 24, padding: isMobile ? '26px 20px 30px' : '38px 40px 42px', textAlign: 'center', minHeight: isMobile ? 520 : 470 }}>
+    <section className="r-pad" style={{ background: '#fff', ...rv('pad', '64px 40px', '44px 20px') }}>
+      <div className="r-pad r-mh" style={{ maxWidth: 620, margin: '0 auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 24, ...rv('pad', '38px 40px 42px', '26px 20px 30px'), textAlign: 'center', ...rv('mh', 470, 520) }}>
         <div style={EYEBROW}>Free filling finder</div>
-        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 32, color: c.navy, margin: '8px 0 8px' }}>Get your filling just right 🪶</h2>
+        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 32, 24), color: c.navy, margin: '8px 0 8px' }}>Get your filling just right 🪶</h2>
         <p style={{ fontSize: 13.5, lineHeight: 1.6, color: c.grayD, maxWidth: 450, margin: '0 auto 20px' }}>
           Your Signature Cold Pillow arrives generously filled with shredded memory foam. Answer four quick questions and we'll tell you roughly how many handfuls to take out for your perfect height. No email needed, and you can re-tune anytime.
         </p>
@@ -60,7 +59,7 @@ export default function PillowQuiz() {
         {!done ? (
           <div>
             <div style={{ fontSize: 12, fontWeight: 700, color: c.purple, marginBottom: 12, fontFamily: FONT_SUB }}>Question {step + 1} of {QUESTIONS.length}</div>
-            <h3 style={{ fontFamily: FONT_SUB, fontSize: isMobile ? 16 : 18, fontWeight: 600, color: c.navy, marginBottom: 16 }}>{QUESTIONS[step].q}</h3>
+            <h3 className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', 18, 16), fontWeight: 600, color: c.navy, marginBottom: 16 }}>{QUESTIONS[step].q}</h3>
             <div style={{ display: 'grid', gap: 10, maxWidth: 380, margin: '0 auto' }}>
               {QUESTIONS[step].opts.map(([emoji, label, val], i) => (
                 <button key={i} onClick={() => answer(QUESTIONS[step].key, val)}
@@ -73,9 +72,9 @@ export default function PillowQuiz() {
             </div>
           </div>
         ) : (
-          <div style={{ background: '#fff', borderRadius: 18, padding: isMobile ? '22px 18px' : '26px 24px', boxShadow: '0 8px 22px rgba(32,27,93,.10)', maxWidth: 440, margin: '0 auto' }}>
+          <div className="r-pad" style={{ background: '#fff', borderRadius: 18, ...rv('pad', '26px 24px', '22px 18px'), boxShadow: '0 8px 22px rgba(32,27,93,.10)', maxWidth: 440, margin: '0 auto' }}>
             <div style={{ fontSize: 34, marginBottom: 4 }}>🪶</div>
-            <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 20 : 23, color: c.navy, marginBottom: 4 }}>Take out about {range} {r.hi === 1 ? 'handful' : 'handfuls'}</h3>
+            <h3 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 23, 20), color: c.navy, marginBottom: 4 }}>Take out about {range} {r.hi === 1 ? 'handful' : 'handfuls'}</h3>
             <p style={{ fontSize: 12.5, color: c.purple, fontWeight: 700, marginBottom: 12, fontFamily: FONT_SUB }}>of shredded memory foam, from the full pillow</p>
             <p style={{ fontSize: 13.5, lineHeight: 1.7, color: c.grayD, marginBottom: 12 }}>
               {r.posText} Take out around {range} loose fistfuls, lie down, and check that your head and neck stay level. Add or remove one more handful either way until it feels right.

@@ -1,4 +1,48 @@
-/* flip'nsleep — lokale webfonts (MyFonts webfont-licentie) */
+/* flip'nsleep — lokale webfonts (MyFonts webfont-licentie; Poppins via fontsource, OFL) */
+@font-face {
+  font-family: 'Poppins Fallback';
+  src: local('Arial');
+  size-adjust: 112%;
+  ascent-override: 95%;
+  descent-override: 32%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/poppins-300.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/poppins-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/poppins-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/poppins-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/poppins-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Palo Wide Black';
   src: url('/fonts/palo-wide-black.woff2') format('woff2'),
@@ -13,4 +57,88 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+}
+
+/* ============================================================
+   Responsive systeem — SSR-veilig. Geen JS-breakpoint (useIsMobile) meer:
+   server en client renderen exact dezelfde HTML, CSS kiest per viewport.
+   Breakpoint: 767px (zelfde grens als het oude useIsMobile).
+
+   1. Tokens: --h1/--h2 veranderen onder de media query.
+   2. Slot-klassen: `.r-<prop>` leest `--d-<prop>` (desktop) en `--m-<prop>`
+      (mobiel) uit de inline style. Gebruik: className="r-fs r-pad"
+      style={{ ...rv('fs', 62, 36), ...rv('pad', '50px 40px', '34px 22px') }}.
+   3. Layout-utilities: .d-only/.m-only, .grid-2m1 enz., .row-m-col.
+   ============================================================ */
+:root {
+  --h1: 50px;      /* paginatitel */
+  --h2: 30px;      /* sectiekop */
+  --h2-lg: 32px;   /* grotere sectiekop */
+}
+img { max-width: 100%; width: auto; height: auto; }
+
+.r-fs     { font-size: var(--d-fs); }
+.r-pad    { padding: var(--d-pad); }
+.r-mar    { margin: var(--d-mar); }
+.r-mt     { margin-top: var(--d-mt); }
+.r-mb     { margin-bottom: var(--d-mb); }
+.r-gap    { gap: var(--d-gap); }
+.r-h      { height: var(--d-h); }
+.r-mh     { min-height: var(--d-mh); }
+.r-maxh   { max-height: var(--d-maxh); }
+.r-w      { width: var(--d-w); }
+.r-mw     { max-width: var(--d-mw); }
+.r-minw   { min-width: var(--d-minw); }
+.r-cols   { grid-template-columns: var(--d-cols); }
+.r-flex   { flex: var(--d-flex); }
+.r-order  { order: var(--d-order); }
+.r-top    { top: var(--d-top); }
+.r-left   { left: var(--d-left); }
+.r-right  { right: var(--d-right); }
+.r-bottom { bottom: var(--d-bottom); }
+.r-jc     { justify-content: var(--d-jc); }
+.r-ta     { text-align: var(--d-ta); }
+.r-disp   { display: var(--d-disp); }
+.r-bg     { background: var(--d-bg); }
+
+.grid-2m1, .grid-3m1, .grid-4m2, .grid-3m2 { display: grid; }
+.grid-2m1 { grid-template-columns: 1fr 1fr; }
+.grid-3m1, .grid-3m2 { grid-template-columns: repeat(3, 1fr); }
+.grid-4m2 { grid-template-columns: repeat(4, 1fr); }
+.row-m-col { flex-direction: row; }
+
+@media (min-width: 768px) {
+  .m-only { display: none !important; }
+}
+@media (max-width: 767px) {
+  :root { --h1: 30px; --h2: 24px; --h2-lg: 26px; }
+  .d-only { display: none !important; }
+
+  .r-fs     { font-size: var(--m-fs); }
+  .r-pad    { padding: var(--m-pad); }
+  .r-mar    { margin: var(--m-mar); }
+  .r-mt     { margin-top: var(--m-mt); }
+  .r-mb     { margin-bottom: var(--m-mb); }
+  .r-gap    { gap: var(--m-gap); }
+  .r-h      { height: var(--m-h); }
+  .r-mh     { min-height: var(--m-mh); }
+  .r-maxh   { max-height: var(--m-maxh); }
+  .r-w      { width: var(--m-w); }
+  .r-mw     { max-width: var(--m-mw); }
+  .r-minw   { min-width: var(--m-minw); }
+  .r-cols   { grid-template-columns: var(--m-cols); }
+  .r-flex   { flex: var(--m-flex); }
+  .r-order  { order: var(--m-order); }
+  .r-top    { top: var(--m-top); }
+  .r-left   { left: var(--m-left); }
+  .r-right  { right: var(--m-right); }
+  .r-bottom { bottom: var(--m-bottom); }
+  .r-jc     { justify-content: var(--m-jc); }
+  .r-ta     { text-align: var(--m-ta); }
+  .r-disp   { display: var(--m-disp); }
+  .r-bg     { background: var(--m-bg); }
+
+  .grid-2m1, .grid-3m1 { grid-template-columns: 1fr; }
+  .grid-4m2, .grid-3m2 { grid-template-columns: 1fr 1fr; }
+  .row-m-col { flex-direction: column; }
 }

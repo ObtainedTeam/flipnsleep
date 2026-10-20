@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { c, BTN, useIsMobile, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
-import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT, productById, products } from '../data';
+import { c, rv, FONT_DISPLAY, FONT_SUB } from '../theme';
+import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT, productById, products, dim } from '../data';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { subscribe } from '../brevo';
 import Reveal from './Reveal';
@@ -20,12 +20,16 @@ export function CloudDivider({ fill = c.cream, flip = false }) {
 // Standaard productfoto-blok: achtergrond #D5EBFA met twee witte wolkjes
 // schuin onder elkaar, productfoto eroverheen. Overal hergebruiken waar een
 // productfoto staat.
-export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, bg = '#D5EBFA', style = {}, imgStyle = {} }) {
+// `height` mag een getal zijn of [desktop, mobiel]; `priority` zet fetchpriority
+// op de hoofdfoto (LCP) in plaats van lazy loading.
+export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, bg = '#D5EBFA', style = {}, imgStyle = {}, priority = false }) {
+  const [hd, hm] = Array.isArray(height) ? height : [height, height];
+  const load = priority ? { fetchPriority: 'high' } : { loading: 'lazy' };
   return (
-    <div style={{ position: 'relative', background: bg, borderRadius: radius, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', height, ...style }}>
-      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', left: '-4%', top: '11%', width: '44%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
-      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '7%', width: '50%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
-      <img src={src} alt={alt} style={{ position: 'relative', maxHeight: '80%', maxWidth: '80%', objectFit: 'contain', ...imgStyle }} />
+    <div className="r-h" style={{ position: 'relative', background: bg, borderRadius: radius, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', ...rv('h', hd, hm), ...style }}>
+      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', left: '-4%', top: '11%', width: '44%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '7%', width: '50%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+      <img src={src} {...dim(src)} {...load} decoding="async" alt={alt} style={{ position: 'relative', maxHeight: '80%', maxWidth: '80%', objectFit: 'contain', ...imgStyle }} />
     </div>
   );
 }
@@ -33,9 +37,12 @@ export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, bg
 // Kussenstapel voor de bundelkaarten: 2 kussens (1+1) of 4 kussens (2+2),
 // half over elkaar met schaduw, op de wolkenachtergrond zodat de wolkjes er
 // goed achter uit komen.
-export function PillowDeck({ count = 2, height = 220, radius = 0, bg = '#D5EBFA' }) {
+// `height` mag een getal zijn of [desktop, mobiel]; `priority` voor de LCP-stapel.
+export function PillowDeck({ count = 2, height = 220, radius = 0, bg = '#D5EBFA', priority = false }) {
+  const [hd, hm] = Array.isArray(height) ? height : [height, height];
+  const load = priority ? { fetchPriority: 'high' } : { loading: 'lazy' };
   const P = (extra, key) => (
-    <img key={key} src={IMG.coverFront} alt="" aria-hidden="true"
+    <img key={key} src={IMG.coverFront} {...dim(IMG.coverFront)} {...load} decoding="async" alt="" aria-hidden="true"
       style={{ position: 'absolute', objectFit: 'contain', filter: 'drop-shadow(0 8px 12px rgba(32,27,93,.24))', ...extra }} />
   );
   const two = [
@@ -49,9 +56,9 @@ export function PillowDeck({ count = 2, height = 220, radius = 0, bg = '#D5EBFA'
     P({ width: '46%', left: '50%', top: '52%', transform: 'rotate(6deg)', zIndex: 4 }, 'd'),
   ];
   return (
-    <div style={{ position: 'relative', width: '100%', background: bg, borderRadius: radius, overflow: 'hidden', height }}>
-      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', left: '-5%', top: '9%', width: '40%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
-      <img src={IMG.cloudWhite} alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '6%', width: '46%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+    <div className="r-h" style={{ position: 'relative', width: '100%', background: bg, borderRadius: radius, overflow: 'hidden', ...rv('h', hd, hm) }}>
+      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', left: '-5%', top: '9%', width: '40%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '6%', width: '46%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
       {count >= 4 ? four : two}
     </div>
   );
@@ -61,7 +68,6 @@ export function PillowDeck({ count = 2, height = 220, radius = 0, bg = '#D5EBFA'
 // hangen half over de lucht heen (padding boven, beschrijving op het witte
 // vlak eronder) — zoals in het Figma-ontwerp.
 export function SummerDealsSlider() {
-  const isMobile = useIsMobile();
   const { symbol, isCA } = useCurrency();
   const scroller = useRef(null);
   const nudged = useRef(false);
@@ -75,7 +81,7 @@ export function SummerDealsSlider() {
       entries.forEach((e) => {
         if (e.isIntersecting && !nudged.current) {
           nudged.current = true;
-          const d = isMobile ? 130 : 210;
+          const d = window.innerWidth < 768 ? 130 : 210;
           setTimeout(() => { el.scrollTo({ left: d, behavior: 'smooth' }); }, 300);
           setTimeout(() => { el.scrollTo({ left: 0, behavior: 'smooth' }); }, 1150);
         }
@@ -83,7 +89,7 @@ export function SummerDealsSlider() {
     }, { threshold: 0.3 });
     io.observe(el);
     return () => io.disconnect();
-  }, [isMobile]);
+  }, []);
 
   // Slepen met de muis om horizontaal te scrollen — native drag werkt op desktop niet.
   const drag = useRef({ down: false, startX: 0, left: 0, moved: false });
@@ -92,7 +98,7 @@ export function SummerDealsSlider() {
   const stop = () => { drag.current.down = false; };
   const onClickCapture = (e) => { if (drag.current.moved) { e.preventDefault(); e.stopPropagation(); drag.current.moved = false; } };
 
-  const cardBase = { textDecoration: 'none', flex: isMobile ? '0 0 78%' : '0 0 320px', borderRadius: 22, overflow: 'hidden', background: '#fff', display: 'flex', flexDirection: 'column' };
+  const cardBase = { textDecoration: 'none', ...rv('flex', '0 0 320px', '0 0 78%'), borderRadius: 22, overflow: 'hidden', background: '#fff', display: 'flex', flexDirection: 'column' };
   const panel = { background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '16px 16px 18px', textAlign: 'center', flex: 1 };
   const chip = { display: 'inline-block', background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '9px 16px' };
   const badge = { position: 'absolute', top: 12, left: 12, zIndex: 20, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' };
@@ -100,9 +106,9 @@ export function SummerDealsSlider() {
   return (
     <section style={{ position: 'relative', overflow: 'hidden', paddingBottom: 34, marginTop: -1 }}>
       <style>{`.fns-scroll{scrollbar-width:none;-ms-overflow-style:none}.fns-scroll::-webkit-scrollbar{display:none}.fns-scroll img{-webkit-user-drag:none;user-drag:none}`}</style>
-      <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: isMobile ? 300 : 430, backgroundImage: `url(${IMG.sliderBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div style={{ position: 'relative', maxWidth: 1180, margin: '0 auto', padding: isMobile ? '34px 20px 0' : '48px 40px 0' }}>
-        <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 34, color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2></Reveal>
+      <div aria-hidden="true" className="r-h" style={{ position: 'absolute', top: 0, left: 0, right: 0, ...rv('h', 430, 300), backgroundImage: `url(${IMG.sliderBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      <div className="r-pad" style={{ position: 'relative', maxWidth: 1180, margin: '0 auto', ...rv('pad', '48px 40px 0', '34px 20px 0') }}>
+        <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 34, 28), color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2></Reveal>
         <div ref={scroller} className="fns-scroll"
           onMouseDown={onDown} onMouseMove={onMove} onMouseUp={stop} onMouseLeave={stop} onClickCapture={onClickCapture}
           style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', cursor: 'grab', userSelect: 'none', WebkitOverflowScrolling: 'touch' }}>
@@ -111,9 +117,9 @@ export function SummerDealsSlider() {
             const p = getPrice(b, isCA);
             const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
             return (
-              <a key={b.id} href="/product/signature-cold-pillow" style={cardBase}>
+              <a key={b.id} href="/product/signature-cold-pillow" className="r-flex" style={cardBase}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
-                  <PillowDeck count={b.pillows} height={isMobile ? 170 : 210} radius={0} />
+                  <PillowDeck count={b.pillows} height={[210, 170]} radius={0} />
                   <span style={badge}>{b.short}</span>
                 </div>
                 <div style={panel}>
@@ -130,9 +136,9 @@ export function SummerDealsSlider() {
             const p = getPrice(prod, isCA);
             const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
             return (
-              <a key={prod.id} href={`/product/${prod.id}`} style={cardBase}>
+              <a key={prod.id} href={`/product/${prod.id}`} className="r-flex" style={cardBase}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
-                  <img src={prod.images[0]} alt={prod.name} style={{ display: 'block', width: '100%', height: isMobile ? 170 : 210, objectFit: 'cover' }} />
+                  <img src={prod.images[0]} {...dim(prod.images[0])} loading="lazy" decoding="async" alt={prod.name} className="r-h" style={{ display: 'block', width: '100%', ...rv('h', 210, 170), objectFit: 'cover' }} />
                   {prod.badge && <span style={badge}>{prod.badge.toLowerCase()}</span>}
                 </div>
                 <div style={panel}>
@@ -185,10 +191,9 @@ export function ShippingCountdown() {
 // Statische trustbalk onder de header — cijfers later inwisselen voor
 // echte reviewaantallen zodra die er zijn.
 export function TrustBar() {
-  const isMobile = useIsMobile();
   const items = [['🌙', '100-night sleep trial'], ['🚚', 'Free shipping, always'], ['✅', 'OEKO-TEX & CertiPUR-US certified'], ['🛡️', '2-year warranty']];
   return (
-    <div className="fns-scroll" style={{ background: '#fff', borderBottom: '1px solid rgba(32,27,93,.10)', display: 'flex', alignItems: 'center', gap: isMobile ? 18 : 34, justifyContent: isMobile ? 'flex-start' : 'center', overflowX: 'auto', padding: '9px 16px', whiteSpace: 'nowrap' }}>
+    <div className="fns-scroll r-gap r-jc" style={{ background: '#fff', borderBottom: '1px solid rgba(32,27,93,.10)', display: 'flex', alignItems: 'center', ...rv('gap', 34, 18), ...rv('jc', 'center', 'flex-start'), overflowX: 'auto', padding: '9px 16px', whiteSpace: 'nowrap' }}>
       {items.map(([icon, label], i) => (
         <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: c.navy, fontFamily: FONT_SUB, flexShrink: 0, lineHeight: 1 }}>
           <span style={{ fontSize: 13, lineHeight: 1 }}>{icon}</span>{label}
@@ -201,7 +206,6 @@ export function TrustBar() {
 
 // echt bestaan; alleen Pillows is nu shopbaar.
 export function CollectionsBlock() {
-  const isMobile = useIsMobile();
   const items = [
     ['Pillows', IMG.front, '/product/signature-cold-pillow', false],
     ['Sheets', productById('bamboo-sheet-set').images[0], '/product/bamboo-sheet-set', false],
@@ -211,16 +215,16 @@ export function CollectionsBlock() {
     ['Mattress Toppers', IMG.tileToppers, null, true],
   ];
   return (
-    <section style={{ padding: isMobile ? '40px 20px 8px' : '54px 40px 10px' }}>
-      <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, color: c.navy, textAlign: 'center' }}>Discover our <span style={{ fontFamily: FONT_SUB }}>collections</span></h2></Reveal>
-      <Reveal delay={120}><div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', gap: isMobile ? 12 : 18, maxWidth: isMobile ? 480 : 1040, margin: isMobile ? '22px auto 0' : '30px auto 0' }}>
+    <section className="r-pad" style={rv('pad', '54px 40px 10px', '40px 20px 8px')}>
+      <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'var(--h2-lg)', color: c.navy, textAlign: 'center' }}>Discover our <span style={{ fontFamily: FONT_SUB }}>collections</span></h2></Reveal>
+      <Reveal delay={120}><div className="grid-3m2 r-gap r-mw r-mar" style={{ ...rv('gap', 18, 12), ...rv('mw', 1040, 480), ...rv('mar', '30px auto 0', '22px auto 0') }}>
         {items.map(([label, img, to, soon], i) => {
           const inner = (
             <div style={{ position: 'relative', borderRadius: 18, overflow: 'hidden', aspectRatio: '.85', display: 'flex', alignItems: 'flex-end', filter: soon ? 'saturate(.45) brightness(.92)' : 'none' }}>
-              <img src={img} alt={label} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={img} {...dim(img)} loading="lazy" decoding="async" alt={label} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 40%, rgba(20,16,64,.65))' }} />
               {soon && <span style={{ position: 'absolute', top: 10, right: 10, background: c.amber, color: c.navy, fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 10.5, borderRadius: 999, padding: '5px 10px' }}>Coming soon</span>}
-              <span style={{ position: 'relative', color: '#fff', fontFamily: FONT_DISPLAY, fontSize: isMobile ? 18 : 21, padding: isMobile ? 14 : 18, textShadow: '0 2px 8px rgba(0,0,0,.4)' }}>{label}</span>
+              <span className="r-fs r-pad" style={{ position: 'relative', color: '#fff', fontFamily: FONT_DISPLAY, ...rv('fs', 21, 18), ...rv('pad', 18, 14), textShadow: '0 2px 8px rgba(0,0,0,.4)' }}>{label}</span>
             </div>
           );
           return to
@@ -235,28 +239,27 @@ export function CollectionsBlock() {
 // Herbruikbaar rijtje productkaarten: het kussen plus de drie producten.
 // Gebruikt onder aan pagina's als verwijzing naar het assortiment.
 export function RangeCards({ title = 'Complete your bed', intro }) {
-  const isMobile = useIsMobile();
   const { symbol, isCA } = useCurrency();
   const cards = [
     { to: '/product/signature-cold-pillow', name: PRODUCT.name, tagline: PRODUCT.tagline, img: IMG.coverFront, pillow: true, price: getPrice(BUNDLES[0], isCA), compareAt: null, badge: 'Bestseller', from: false },
     ...products.map(p => ({ to: `/product/${p.id}`, name: p.name, tagline: p.tagline, img: p.images[0], pillow: false, price: getPrice(p, isCA), compareAt: p.compareAt ? (isCA ? p.compareAt.cad : p.compareAt.usd) : null, badge: p.badge, from: true })),
   ];
   return (
-    <section style={{ padding: isMobile ? '20px 20px 44px' : '30px 40px 64px' }}>
-      <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 30, color: c.navy, textAlign: 'center', marginBottom: intro ? 6 : 20 }}>{title}</h2></Reveal>
+    <section className="r-pad" style={rv('pad', '30px 40px 64px', '20px 20px 44px')}>
+      <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'var(--h2)', color: c.navy, textAlign: 'center', marginBottom: intro ? 6 : 20 }}>{title}</h2></Reveal>
       {intro && <Reveal><p style={{ textAlign: 'center', fontSize: 13.5, color: c.grayD, maxWidth: 460, margin: '0 auto 24px', lineHeight: 1.6 }}>{intro}</p></Reveal>}
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 12 : 18, maxWidth: 1080, margin: '0 auto' }}>
+      <div className="grid-4m2 r-gap" style={{ ...rv('gap', 18, 12), maxWidth: 1080, margin: '0 auto' }}>
         {cards.map((cd, i) => (
           <Reveal key={i} delay={i * 70}><Link to={cd.to} style={{ textDecoration: 'none', background: '#fff', borderRadius: 18, overflow: 'hidden', boxShadow: '0 10px 26px rgba(32,27,93,.09)', display: 'block', height: '100%' }}>
-            <div style={{ position: 'relative', height: isMobile ? 130 : 170, background: c.cream, overflow: 'hidden' }}>
+            <div className="r-h" style={{ position: 'relative', ...rv('h', 170, 130), background: c.cream, overflow: 'hidden' }}>
               {cd.pillow
-                ? <PillowDeck count={2} height={isMobile ? 130 : 170} radius={0} />
-                : <img src={cd.img} alt={cd.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
+                ? <PillowDeck count={2} height={[170, 130]} radius={0} />
+                : <img src={cd.img} {...dim(cd.img)} loading="lazy" decoding="async" alt={cd.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
               {cd.badge && <span style={{ position: 'absolute', top: 10, left: 10, zIndex: 20, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 10.5, borderRadius: 999, padding: '4px 11px' }}>{cd.badge}</span>}
             </div>
-            <div style={{ padding: isMobile ? '12px 12px 16px' : '14px 16px 18px' }}>
-              <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 14 : 16, color: c.navy, marginBottom: 4, lineHeight: 1.2 }}>{cd.name}</h3>
-              <div style={{ fontSize: 11.5, color: c.grayD, marginBottom: 8, lineHeight: 1.45, display: isMobile ? 'none' : 'block' }}>{cd.tagline}</div>
+            <div className="r-pad" style={rv('pad', '14px 16px 18px', '12px 12px 16px')}>
+              <h3 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 16, 14), color: c.navy, marginBottom: 4, lineHeight: 1.2 }}>{cd.name}</h3>
+              <div className="d-only" style={{ fontSize: 11.5, color: c.grayD, marginBottom: 8, lineHeight: 1.45 }}>{cd.tagline}</div>
               <div style={{ fontSize: 14, fontWeight: 700, color: c.navy }}>{cd.from ? 'From ' : ''}{formatPrice(cd.price, symbol)} {cd.compareAt && <s style={{ fontWeight: 400, color: '#999', fontSize: 11.5 }}>{formatPrice(cd.compareAt, symbol)}</s>}</div>
             </div>
           </Link></Reveal>
@@ -275,7 +278,6 @@ export function Stars({ n = 5, size = 14 }) {
 }
 
 export function ReviewsBlock() {
-  const isMobile = useIsMobile();
   const [data, setData] = useState(null); // { reviews, count, avg } uit /api/reviews (Judge.me)
 
   useEffect(() => {
@@ -291,16 +293,16 @@ export function ReviewsBlock() {
   return (
     <div>
       {/* Wolkjes komen achter de donkere sectie vandaan: rand met gezichtje boven, kale rand onder */}
-      <img src={IMG.cloudsUp} alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginBottom: -1 }} />
-      <section style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: isMobile ? '38px 20px 40px' : '64px 40px 70px' }}>
+      <img src={IMG.cloudsUp} {...dim(IMG.cloudsUp)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginBottom: -1 }} />
+      <section className="r-pad" style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', ...rv('pad', '64px 40px 70px', '38px 20px 40px') }}>
         <Reveal>
-        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 26 : 32, textAlign: 'center' }}>What our <span style={{ fontFamily: FONT_SUB }}>customers say</span></h2>
+        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'var(--h2-lg)', textAlign: 'center' }}>What our <span style={{ fontFamily: FONT_SUB }}>customers say</span></h2>
         <div style={{ textAlign: 'center', margin: '10px 0 6px' }}><Stars n={Math.round(data.avg)} /> <span style={{ fontSize: 13, marginLeft: 6 }}>{data.avg} · {data.count} verified review{data.count === 1 ? '' : 's'}</span></div>
         </Reveal>
         <Reveal delay={120}>
         <div className="fns-scroll" style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '18px 4px 8px', maxWidth: 1050, margin: '0 auto', scrollSnapType: 'x mandatory' }}>
           {shown.map((r, i) => (
-            <div key={i} style={{ scrollSnapAlign: 'center', flex: isMobile ? '0 0 86%' : '1 1 0', minWidth: isMobile ? undefined : 300, background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
+            <div key={i} className="r-flex r-minw" style={{ scrollSnapAlign: 'center', ...rv('flex', '1 1 0', '0 0 86%'), ...rv('minw', 300, 0), background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
               <Stars n={r.rating} />
               <p style={{ fontSize: 13.5, lineHeight: 1.65, margin: '10px 0 14px' }}>"{r.body}"</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
@@ -315,7 +317,7 @@ export function ReviewsBlock() {
           <Link to="/reviews" style={{ color: '#DDD9FF', fontSize: 13, textDecoration: 'underline' }}>Read all reviews</Link>
         </div>
       </section>
-      <img src={IMG.cloudsDown} alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginTop: -1 }} />
+      <img src={IMG.cloudsDown} {...dim(IMG.cloudsDown)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginTop: -1 }} />
     </div>
   );
 }
@@ -337,7 +339,6 @@ export function FAQBlock({ items = FAQ_ITEMS, dark = false, limit }) {
 }
 
 export function EmailCapture() {
-  const isMobile = useIsMobile();
   const [email, setEmail] = useState('');
   const [state, setState] = useState('idle');
 
@@ -349,16 +350,16 @@ export function EmailCapture() {
   };
 
   return (
-    <section style={{ background: c.sky, padding: isMobile ? '42px 22px' : '56px 40px', textAlign: 'center' }}>
+    <section className="r-pad" style={{ background: c.sky, ...rv('pad', '56px 40px', '42px 22px'), textAlign: 'center' }}>
       <Reveal>
-      <img src={IMG.iconCloud} alt="" style={{ height: 30, marginBottom: 8 }} />
-      <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 24 : 36, color: c.navy }}>Sleep better, <span style={{ fontFamily: FONT_SUB }}>pay less</span></h2>
+      <img src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" style={{ height: 30, marginBottom: 8 }} />
+      <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 36, 24), color: c.navy }}>Sleep better, <span style={{ fontFamily: FONT_SUB }}>pay less</span></h2>
       <p style={{ fontSize: 13.5, lineHeight: 1.6, maxWidth: 340, margin: '10px auto 0' }}>Get 10% off your first order and our best sleep tips for warm nights.</p>
       {state === 'done' ? (
         <p style={{ fontSize: 14, fontWeight: 600, marginTop: 20 }}>Check your inbox — your 10% code is on its way. 🌙</p>
       ) : (
         <>
-          <form onSubmit={submit} style={{ display: 'flex', maxWidth: isMobile ? 380 : 460, margin: '22px auto 0', background: '#fff', borderRadius: 999, padding: 5, boxShadow: '0 8px 22px rgba(32,27,93,.14)' }}>
+          <form onSubmit={submit} className="r-mw" style={{ display: 'flex', ...rv('mw', 460, 380), margin: '22px auto 0', background: '#fff', borderRadius: 999, padding: 5, boxShadow: '0 8px 22px rgba(32,27,93,.14)' }}>
             <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Your email address" aria-label="Email address"
               style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: 'Poppins,sans-serif', fontSize: 13, padding: '10px 16px', color: c.navy, minWidth: 0, outline: 'none' }} />
             <button type="submit" disabled={state === 'busy'} style={{ border: 'none', borderRadius: 999, background: c.navy, color: '#fff', fontWeight: 700, fontSize: 13, padding: '11px 20px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>{state === 'busy' ? '…' : 'Get 10% off'}</button>

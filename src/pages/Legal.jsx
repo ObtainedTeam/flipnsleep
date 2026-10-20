@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { c, useIsMobile, FONT_DISPLAY } from '../theme';
+import { c, rv, FONT_DISPLAY } from '../theme';
 
 const SECTIONS = {
   '/privacy': {
@@ -36,12 +36,11 @@ const SECTIONS = {
 
 export default function Legal() {
   const { pathname } = useLocation();
-  const isMobile = useIsMobile();
   const page = SECTIONS[pathname] || SECTIONS['/terms'];
 
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto', padding: isMobile ? '36px 22px 50px' : '54px 24px 70px' }}>
-      <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: isMobile ? 28 : 36, color: c.navy, marginBottom: 6 }}>{page.title}</h1>
+    <div className="r-pad" style={{ maxWidth: 720, margin: '0 auto', ...rv('pad', '54px 24px 70px', '36px 22px 50px') }}>
+      <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 36, 28), color: c.navy, marginBottom: 6 }}>{page.title}</h1>
       <p style={{ fontSize: 12, color: c.gray, marginBottom: 26 }}>Last updated: July 2026 · flip'nsleep is part of Obtained VOF</p>
       {page.blocks.map(([h, t], i) => (
         <div key={i} style={{ marginBottom: 22 }}>

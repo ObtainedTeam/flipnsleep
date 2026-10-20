@@ -42,6 +42,63 @@ export const IMG = {
   flipWarm: "/images/flip-warm.webp",
 };
 
+// Intrinsieke afmetingen van elke afbeelding (voor width/height-attributen,
+// zodat de browser de verhouding kent voordat het bestand geladen is).
+export const IMG_DIM = {
+  "/images/bamboo-sheets-1.webp": [800, 800],
+  "/images/bamboo-sheets-2.webp": [800, 800],
+  "/images/bamboo-sheets-3.webp": [800, 800],
+  "/images/bamboo-sheets-4.webp": [800, 800],
+  "/images/bamboo-sheets-5.webp": [800, 800],
+  "/images/bamboo-sheets-6.webp": [800, 800],
+  "/images/clouds-down.png": [2200, 247],
+  "/images/clouds-up.png": [2133, 270],
+  "/images/comforter-1.webp": [800, 800],
+  "/images/comforter-2.webp": [800, 800],
+  "/images/comforter-3.webp": [800, 800],
+  "/images/comforter-4.webp": [800, 800],
+  "/images/comforter-5.webp": [800, 800],
+  "/images/comforter-hero.webp": [500, 460],
+  "/images/flip-cool.webp": [1500, 1103],
+  "/images/flip-warm.webp": [1500, 1181],
+  "/images/hero-bg.jpg": [391, 453],
+  "/images/hero-poster.jpg": [1080, 1080],
+  "/images/icon-1plus1.png": [170, 126],
+  "/images/icon-cloud-white.png": [199, 98],
+  "/images/icon-cloud.png": [228, 136],
+  "/images/icon-star.png": [13, 12],
+  "/images/logo-contra-full.png": [888, 220],
+  "/images/logo-dark-full.png": [888, 220],
+  "/images/logo-mark.png": [459, 590],
+  "/images/pillow-bed.webp": [1600, 1233],
+  "/images/pillow-cover-back.webp": [1500, 1181],
+  "/images/pillow-cover-duo.webp": [1700, 1364],
+  "/images/pillow-cover-front.webp": [1500, 1103],
+  "/images/pillow-cover-inside.webp": [1500, 1389],
+  "/images/pillow-falling.webp": [1600, 1233],
+  "/images/pillow-filling.webp": [1600, 1610],
+  "/images/pillow-front-cut.webp": [1200, 835],
+  "/images/pillow-front.webp": [1600, 1233],
+  "/images/pillow-night.webp": [1600, 1233],
+  "/images/random-pillow.png": [160, 149],
+  "/images/slider-bg.jpg": [391, 453],
+  "/images/standard-pillow-sweaty.webp": [500, 500],
+  "/images/tile-blankets.webp": [500, 500],
+  "/images/tile-comforters.webp": [500, 500],
+  "/images/tile-silk.webp": [500, 500],
+  "/images/tile-toppers.webp": [500, 500],
+  "/images/weighted-1.webp": [750, 750],
+  "/images/weighted-2.webp": [750, 750],
+  "/images/weighted-4.webp": [750, 750],
+  "/images/weighted-5.webp": [1300, 1201],
+  "/images/weighted-hero.webp": [500, 415],
+};
+// Gebruik: <img src={src} {...dim(src)} />
+export const dim = (src) => {
+  const d = IMG_DIM[src];
+  return d ? { width: d[0], height: d[1] } : {};
+};
+
 export const PRODUCT = {
   id: "signature-cold-pillow",
   name: "Signature Cold Pillow",
