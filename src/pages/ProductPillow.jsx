@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD, CHIP } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { PRODUCT, BUNDLES, IMG, dim } from '../data';
@@ -7,7 +7,8 @@ import { buyNow } from '../shopify';
 import { trackAddToCart, trackViewContent } from '../track';
 import Reveal from '../components/Reveal';
 import PillowQuiz from '../components/PillowQuiz';
-import { Stars, ReviewsBlock, FAQBlock, TrustAccordion, ProductImageBlock, ShippingCountdown } from '../components/Blocks';
+import { Stars, ReviewsBlock, FAQBlock, TrustAccordion, ProductImageBlock, ShippingCountdown, CompareCards } from '../components/Blocks';
+import StickyBuyBar from '../components/StickyBuyBar';
 
 // Echte Judge.me-review-samenvatting. Toont sterren + aantal zodra er
 // geverifieerde reviews zijn; tot die tijd het eerlijke verkoopcijfer.
@@ -22,6 +23,7 @@ export default function ProductPillow({ onCartOpen }) {
   const { symbol, isCA } = useCurrency();
   const [selected, setSelected] = useState('1p1');
   const [img, setImg] = useState(0);
+  const buyRef = useRef(null);
   useEffect(() => { trackViewContent({ content_type: 'product', content_name: 'flipnsleep-pillow' }); }, []);
   const rvw = useReviews();
   const hasReviews = !!(rvw && rvw.count > 0);
@@ -36,16 +38,25 @@ export default function ProductPillow({ onCartOpen }) {
     onCartOpen && onCartOpen();
   };
 
+  const compareRows = [
+    ['Price', `Two for ${formatPrice(price, symbol)}, so ${formatPrice(perPillow, symbol)} each`, 'Often one pillow for $120 to $150'],
+    ['All year', 'Cool side and warm side', 'Cool side only'],
+    ['Fit', 'Adjustable fill for your position', 'Fixed loft'],
+    ['Heat', 'Breathable shredded foam', 'Often solid foam that heats up'],
+    ['Trying it', '100-night trial, free returns', 'Varies, sometimes restocking fees'],
+    ['Certified', 'OEKO-TEX and CertiPUR-US', 'Certification varies'],
+  ];
+
   const trust = [['🌙', '100-night trial'], ['🚚', 'Free shipping & returns'], ['✅', 'OEKO-TEX & CertiPUR-US'], ['🛡️', '2-year warranty']];
 
   return (
     <div>
       {/* 1 — Above the fold + buy box */}
-      <section className="r-pad r-cols r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', '1.05fr 1fr', '1fr'), ...rv('gap', 56, 24) }}>
+      <section className="r-pad r-cols r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', 'minmax(0, 1.05fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24) }}>
         {/* Gallery */}
         <Reveal><div>
           <ProductImageBlock src={PRODUCT.images[img]} alt={PRODUCT.name} height={[460, 320]} radius={R.lg} priority />
-          <div style={{ display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto' }}>
+          <div className="thumbs">
             {PRODUCT.images.map((src, i) => (
               <button key={i} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}`}
                 style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: R.sm, padding: 0, cursor: 'pointer', background: c.sky, flexShrink: 0, overflow: 'hidden' }}>
@@ -102,7 +113,7 @@ export default function ProductPillow({ onCartOpen }) {
           })}
 
           {/* CTA — Add to cart primair, Buy now secundair */}
-          <div className="row-m-col" style={{ display: 'flex', gap: 12, margin: '16px 0 12px' }}>
+          <div ref={buyRef} className="row-m-col" style={{ display: 'flex', gap: 12, margin: '16px 0 12px' }}>
             <button onClick={addToCart} style={{ ...BTN, flex: '1.4 0 auto' }}>Add to cart</button>
             <button onClick={() => buyNow(selected)} style={{ ...BTNO, flex: '1 0 auto' }}>Buy now</button>
           </div>
@@ -182,8 +193,9 @@ export default function ProductPillow({ onCartOpen }) {
       <section className="r-pad" style={rv('pad', ...SP.sectionTop)}>
         <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 8 }}>How it compares</h2></Reveal>
         <Reveal><p className="r-fs" style={{ textAlign: 'center', ...rv('fs', ...T.md), lineHeight: LH.body, color: c.grayD, maxWidth: W.narrow, margin: '0 auto 24px' }}>Against a typical single-sided cooling pillow, your real edge is value and all-season use.</p></Reveal>
-        <Reveal delay={100}><div style={{ maxWidth: W.text, margin: '0 auto', overflowX: 'auto', ...CARD }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: T.sm[0], minWidth: 480 }}>
+        <Reveal delay={100}><div className="m-only"><CompareCards rows={compareRows} ours="Signature Cold Pillow" theirs="Generic cooling pillow" /></div>
+        <div className="d-only" style={{ maxWidth: W.text, margin: '0 auto', ...CARD, overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: T.sm[0] }}>
             <thead>
               <tr>
                 <th style={{ padding: '14px 16px', textAlign: 'left' }}></th>
@@ -192,14 +204,7 @@ export default function ProductPillow({ onCartOpen }) {
               </tr>
             </thead>
             <tbody>
-              {[
-                ['Price', `Two for ${formatPrice(price, symbol)}, so ${formatPrice(perPillow, symbol)} each`, 'Often one pillow for $120 to $150'],
-                ['All year', 'Cool side and warm side', 'Cool side only'],
-                ['Fit', 'Adjustable fill for your position', 'Fixed loft'],
-                ['Heat', 'Breathable shredded foam', 'Often solid foam that heats up'],
-                ['Trying it', '100-night trial, free returns', 'Varies, sometimes restocking fees'],
-                ['Certified', 'OEKO-TEX and CertiPUR-US', 'Certification varies'],
-              ].map(([label, ours, theirs], i) => (
+              {compareRows.map(([label, ours, theirs], i) => (
                 <tr key={i} style={{ borderTop: '1px solid rgba(32,27,93,.1)' }}>
                   <td style={{ padding: '12px 16px', fontWeight: 700, color: c.navy, fontFamily: FONT_SUB }}>{label}</td>
                   <td style={{ padding: '12px 16px', color: c.navy, background: 'rgba(213,235,249,.4)' }}>{ours}</td>
@@ -252,6 +257,8 @@ export default function ProductPillow({ onCartOpen }) {
           </div>
         </div></Reveal>
       </section>
+
+      <StickyBuyBar targetRef={buyRef} name="Signature Cold Pillow" price={`${formatPrice(price, symbol)} · ${bundle.pillows} pillows`} onAdd={addToCart} />
     </div>
   );
 }

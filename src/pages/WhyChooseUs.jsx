@@ -1,6 +1,6 @@
 import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, T, LH, SP, W, CARD } from '../theme';
 import { Link } from 'react-router-dom';
-import { ReviewsBlock, EmailCapture } from '../components/Blocks';
+import { ReviewsBlock, EmailCapture, CompareCards } from '../components/Blocks';
 import Reveal from '../components/Reveal';
 
 
@@ -24,8 +24,9 @@ export default function WhyChooseUs() {
         </p>
       </section>
 
-      <Reveal><section className="r-mw r-mar r-pad" style={{ ...rv('mw', W.page - 80, W.page), ...rv('mar', '40px auto 0', '32px auto 0'), ...rv('pad', `8px ${SP.gutter[0]}px 40px`, `8px ${SP.gutter[1]}px 40px`), overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, ...CARD, overflow: 'hidden', minWidth: 560 }}>
+      <Reveal><section className="r-mw r-mar r-pad" style={{ ...rv('mw', W.page - 80, W.page), ...rv('mar', '40px auto 0', '32px auto 0'), ...rv('pad', `8px ${SP.gutter[0]}px 40px`, `8px ${SP.gutter[1]}px 40px`) }}>
+        <div className="m-only"><CompareCards rows={ROWS} ours="flip'nsleep" theirs="Standard pillow" /></div>
+        <table className="d-only" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, ...CARD, overflow: 'hidden' }}>
           <thead>
             <tr style={{ background: c.navy, color: c.white }}>
               <th style={{ padding: '16px 20px', textAlign: 'left', fontFamily: FONT_SUB, fontSize: T.sm[0] }}></th>

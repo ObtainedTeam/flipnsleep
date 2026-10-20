@@ -9,6 +9,13 @@ export default function NewsletterPopup() {
   const [email, setEmail] = useState('');
   const [state, setState] = useState('idle'); // idle | busy | done | error
 
+  // De nav ("Join the list") kan de popup altijd openen, ook na eerder sluiten.
+  useEffect(() => {
+    const open = () => { setState('idle'); setShow(true); };
+    window.addEventListener('fns:newsletter', open);
+    return () => window.removeEventListener('fns:newsletter', open);
+  }, []);
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (localStorage.getItem('fns_news_seen')) return;

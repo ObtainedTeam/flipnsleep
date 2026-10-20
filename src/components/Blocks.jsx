@@ -350,7 +350,7 @@ export function EmailCapture() {
   };
 
   return (
-    <section className="r-pad" style={{ background: c.sky, ...rv('pad', ...SP.section), textAlign: 'center' }}>
+    <section id="newsletter" className="r-pad" style={{ background: c.sky, ...rv('pad', ...SP.section), textAlign: 'center' }}>
       <Reveal>
       <img src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" style={{ height: 30, marginBottom: 8 }} />
       <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy }}>Sleep better, <span style={{ fontFamily: FONT_SUB }}>pay less</span></h2>
@@ -390,6 +390,31 @@ export function TrustAccordion({ specs }) {
           </summary>
           <div style={{ fontSize: T.sm[0], lineHeight: LH.body, padding: '0 2px 16px', opacity: .88 }}>{a}</div>
         </details>
+      ))}
+    </div>
+  );
+}
+
+// Mobiele vergelijking: één kaart per regel, wij links en de ander rechts.
+// rows: [[label, ours, theirs], ...]. Gebruik in een .m-only wrapper; de
+// tabelversie staat ernaast in .d-only.
+export function CompareCards({ rows, ours, theirs }) {
+  return (
+    <div style={{ display: 'grid', gap: 12 }}>
+      {rows.map(([label, us, them], i) => (
+        <div key={i} style={{ ...CARD, padding: 16 }}>
+          <div style={{ fontFamily: FONT_SUB, fontWeight: 600, fontSize: T.sm[0], color: c.navy, marginBottom: 10 }}>{label}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 8 }}>
+            <div style={{ background: c.sky, borderRadius: R.sm, padding: 12 }}>
+              <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.purple, marginBottom: 4, fontFamily: FONT_SUB }}>{ours}</div>
+              <div style={{ fontSize: T.sm[1], lineHeight: LH.body, color: c.navy }}>{us}</div>
+            </div>
+            <div style={{ background: c.cream, borderRadius: R.sm, padding: 12 }}>
+              <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.grayD, marginBottom: 4, fontFamily: FONT_SUB }}>{theirs}</div>
+              <div style={{ fontSize: T.sm[1], lineHeight: LH.body, color: c.grayD }}>{them}</div>
+            </div>
+          </div>
+        </div>
       ))}
     </div>
   );

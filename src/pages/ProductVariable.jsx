@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
@@ -7,6 +7,7 @@ import { CartContext } from '../components/Cart';
 import { buyNowProduct, isProductPurchasable } from '../shopify';
 import { trackAddToCart, trackViewContent } from '../track';
 import Reveal from '../components/Reveal';
+import StickyBuyBar from '../components/StickyBuyBar';
 import { ProductImageBlock, TrustAccordion, ReviewsBlock, FAQBlock, ShippingCountdown } from '../components/Blocks';
 
 // Productpagina voor de variantproducten (maat + kleur). Zelfde bouwstenen en
@@ -19,6 +20,7 @@ export default function ProductVariable({ onCartOpen }) {
   const [size, setSize] = useState(product ? product.sizes[0] : null);
   const [color, setColor] = useState(product ? product.colors[0] : null);
   const [img, setImg] = useState(0);
+  const buyRef = useRef(null);
 
   useEffect(() => {
     if (product) trackViewContent({ content_type: 'product', content_name: product.id });
@@ -54,13 +56,13 @@ export default function ProductVariable({ onCartOpen }) {
 
   return (
     <div>
-      <section className="r-pad r-cols r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', '1.05fr 1fr', '1fr'), ...rv('gap', 56, 24) }}>
+      <section className="r-pad r-cols r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', 'minmax(0, 1.05fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24) }}>
         {/* Gallery */}
         <Reveal><div>
           <div className="r-h" style={{ background: c.cream, borderRadius: R.lg, boxShadow: SH.card, overflow: 'hidden', ...rv('h', 460, 320) }}>
             <img src={product.images[img]} {...dim(product.images[img])} fetchPriority="high" decoding="async" alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </div>
-          <div className="fns-scroll" style={{ display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto' }}>
+          <div className="thumbs">
             {product.images.map((src, i) => (
               <button key={i} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}`}
                 style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: R.sm, padding: 0, cursor: 'pointer', background: c.cream, flexShrink: 0, overflow: 'hidden' }}>
@@ -125,7 +127,7 @@ export default function ProductVariable({ onCartOpen }) {
           )}
 
           {/* CTA's */}
-          <div className="row-m-col" style={{ display: 'flex', gap: 12, margin: '4px 0 20px' }}>
+          <div ref={buyRef} className="row-m-col" style={{ display: 'flex', gap: 12, margin: '4px 0 20px' }}>
             <button onClick={() => buyNowProduct(product.id, size, color)} disabled={!purchasable}
               style={{ ...BTN, flex: '1 0 auto', opacity: purchasable ? 1 : .5, cursor: purchasable ? 'pointer' : 'not-allowed' }}>
               {purchasable ? 'Buy now' : 'Coming soon'}
@@ -204,6 +206,8 @@ export default function ProductVariable({ onCartOpen }) {
         <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
         <FAQBlock limit={5} />
       </section>
+
+      <StickyBuyBar targetRef={buyRef} name={product.name} price={`${formatPrice(price, symbol)}${hasColors ? ` · ${size}, ${color}` : ` · ${size}`}`} onAdd={addToCart} disabled={!purchasable} label={purchasable ? 'Add to cart' : 'Coming soon'} />
     </div>
   );
 }

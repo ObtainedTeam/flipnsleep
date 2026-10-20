@@ -69,6 +69,8 @@ const META = {
   '/privacy': { title: "Privacy Policy | flip'nsleep", desc: "How flip'nsleep handles your data." },
   '/terms': { title: "Terms of Service | flip'nsleep", desc: "The terms that apply to orders on flipnsleep.com." },
   '/returns': { title: "Shipping & Returns | flip'nsleep", desc: 'Free shipping, a 100-night trial and free returns across the US and Canada.' },
+  // 404: wordt naar dist/404.html geschreven (niet in de sitemap, noindex).
+  '/404': { title: "Page not found | flip'nsleep", desc: "This page took a nap. Head back to flip'nsleep.", file: '404.html', noindex: true },
 };
 
 const ROUTES = Object.keys(META);
@@ -79,11 +81,16 @@ function applyMeta(html, route) {
   return html
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${m.title}</title>`)
     .replace(/(<meta name="description" content=")[^"]*(")/, `$1${m.desc}$2`)
-    .replace('</head>', `  <link rel="canonical" href="${canonical}" />\n  </head>`);
+    .replace('</head>', m.noindex
+      ? `  <meta name="robots" content="noindex" />\n  </head>`
+      : `  <link rel="canonical" href="${canonical}" />\n  </head>`);
 }
 
 async function main() {
-  const template = await readFile(path.join(OUT_DIR, 'index.html'), 'utf8');
+  // Idempotent: bij een tweede run is index.html al geprerenderd; neem dan de
+  // lege shell uit app.html (van dezelfde vite-build) als sjabloon.
+  let template = await readFile(path.join(OUT_DIR, 'index.html'), 'utf8');
+  if (!template.includes('<div id="root"></div>')) template = await readFile(path.join(OUT_DIR, 'app.html'), 'utf8');
   // De SPA-shell blijft beschikbaar als app.html voor de Vercel-rewrite.
   await writeFile(path.join(OUT_DIR, 'app.html'), template);
 
@@ -101,13 +108,14 @@ async function main() {
       log(`FOUT bij ${route}: ${e.message} — schrijf head-only fallback`);
       html = applyMeta(template, route);
     }
+    if (META[route].file) { await writeFile(path.join(OUT_DIR, META[route].file), html); continue; }
     const dir = route === '/' ? OUT_DIR : path.join(OUT_DIR, route);
     await mkdir(dir, { recursive: true });
     await writeFile(path.join(dir, 'index.html'), html);
   }
 
   // sitemap.xml + robots.txt
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${ROUTES.map(r => `  <url><loc>${SITE}${r === '/' ? '' : r}</loc></url>`).join('\n')}\n</urlset>\n`;
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${ROUTES.filter(r => !META[r].noindex).map(r => `  <url><loc>${SITE}${r === '/' ? '' : r}</loc></url>`).join('\n')}\n</urlset>\n`;
   await writeFile(path.join(OUT_DIR, 'sitemap.xml'), sitemap);
   await writeFile(path.join(OUT_DIR, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 

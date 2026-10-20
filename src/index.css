@@ -154,3 +154,58 @@ button:active, a:active { transform: translateY(1px); }
 /* Blok 2: link-hover voor navigatie en footer */
 .nav-link, .foot-link { text-decoration: none; text-underline-offset: 4px; text-decoration-thickness: 2px; }
 .nav-link:hover, .foot-link:hover { text-decoration: underline; filter: none; }
+
+/* ============================================================
+   Blok 3: navigatie. Eigen breekpunt (1200px) omdat zes categorieën plus
+   links niet op een tablet passen; daaronder hamburger + drawer.
+   ============================================================ */
+.nav-bar { padding: 12px 40px; min-height: 68px; }
+.nav-logo { height: 36px; }
+.nav-lg { display: flex; align-items: center; }
+.nav-sm { display: none !important; }
+.nav-cat:hover { filter: none; background: rgba(255,255,255,.08); }
+.nav-panel {
+  left: 50%; opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translate(-50%, 6px);
+  transition: opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+}
+.nav-panel.is-open {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translate(-50%, 0);
+  transition: opacity .18s ease, transform .18s ease, visibility 0s;
+}
+.nav-scrim {
+  position: fixed; inset: 0; z-index: 190; background: rgba(20,16,64,.5);
+  opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s;
+}
+.nav-scrim.is-open { opacity: 1; visibility: visible; transition: opacity .25s ease, visibility 0s; }
+.nav-drawer {
+  position: fixed; top: 0; bottom: 0; left: 0; z-index: 195;
+  width: min(360px, 88vw); display: flex; flex-direction: column;
+  transform: translateX(-102%); visibility: hidden;
+  transition: transform .28s ease, visibility 0s linear .28s;
+}
+.nav-drawer.is-open { transform: none; visibility: visible; transition: transform .28s ease, visibility 0s; }
+@media (max-width: 1199px) {
+  .nav-lg { display: none !important; }
+  .nav-sm { display: flex !important; }
+  .nav-bar { padding: 10px 16px; min-height: 56px; }
+  .nav-logo { height: 30px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-panel, .nav-panel.is-open, .nav-drawer, .nav-drawer.is-open { transition: none; }
+}
+
+/* Blok 3: productgalerij-thumbnails. Scrollen binnen de container met snap,
+   rechts een zachte fade-rand; padding zodat de laatste thumb vrij komt. */
+.thumbs { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; padding: 2px 28px 2px 2px; max-width: 100%;
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+          mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
+.thumbs::-webkit-scrollbar { display: none; }
+.thumbs > * { scroll-snap-align: start; flex-shrink: 0; }
+
+/* Blok 3: ruimte voor de mobiele sticky koopbalk onder de footer */
+@media (max-width: 767px) {
+  body.has-sticky-buy { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+}

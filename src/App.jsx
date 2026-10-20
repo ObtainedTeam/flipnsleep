@@ -18,6 +18,7 @@ import Legal from './pages/Legal';
 import WhyChooseUs from './pages/WhyChooseUs';
 import Quiz from './pages/Quiz';
 import Reviews from './pages/Reviews';
+import NotFound from './pages/NotFound';
 
 export function AppShell() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -53,7 +54,7 @@ export function AppShell() {
             <Route path="/privacy" element={<Legal />} />
             <Route path="/returns" element={<Legal />} />
             <Route path="/terms" element={<Legal />} />
-            <Route path="*" element={<Home onCartOpen={() => setCartOpen(true)} />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         {!isQuiz && <Footer />}
