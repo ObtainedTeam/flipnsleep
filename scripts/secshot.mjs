@@ -1,4 +1,4 @@
-// Sectie-screenshot: node scripts/secshot.mjs <route> <css-selector|y> <out.png> [width]
+// Sectie-screenshot (playwright uit een lokale install; pas het importpad aan): node scripts/secshot.mjs <route> <css-selector|y> <out.png> [width]
 import { chromium } from '/home/claude/beginbhv/node_modules/playwright/index.mjs';
 import { createServer } from 'http';
 import { readFile, stat } from 'fs/promises';
