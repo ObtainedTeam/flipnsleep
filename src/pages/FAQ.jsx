@@ -1,6 +1,6 @@
 import { c, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, BTN, T, LH, SP, W } from '../theme';
 import { FAQ_ITEMS } from '../data';
-import { FAQBlock, EmailCapture } from '../components/Blocks';
+import { FAQBlock } from '../components/Blocks';
 import Reveal from '../components/Reveal';
 
 import { Link } from 'react-router-dom';
@@ -21,7 +21,6 @@ export default function FAQ() {
           <Link to="/product/signature-cold-pillow" style={BTN}>Shop the deal</Link>
         </div>
       </section></Reveal>
-      <EmailCapture />
     </div>
   );
 }

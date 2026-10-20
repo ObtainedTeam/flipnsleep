@@ -1,6 +1,6 @@
 import { c, BTN, rv, FONT_DISPLAY, EYEBROW, R, SH, T, LH, SP, W } from '../theme';
 import { IMG, dim } from '../data';
-import { CloudDivider, EmailCapture, RangeCards } from '../components/Blocks';
+import { CloudDivider, RangeCards } from '../components/Blocks';
 import Reveal from '../components/Reveal';
 
 import { Link } from 'react-router-dom';
@@ -34,15 +34,15 @@ export default function HowItWorks() {
 
       <Step n="1" img={IMG.coverFront}
         title="The cool-touch side"
-        text="The cooling side is woven from cool-touch fabric with a tested Q-max value of 0.26 — that's the instant 'cold pillow feeling' when your skin touches it. Heat is conducted away from your head instead of building up underneath it, which is exactly what you need when a warm flash hits at 3 AM." />
+        text="The cooling side is woven from cool-touch fabric with a tested Q-max value of 0.26, that's the instant 'cold pillow feeling' when your skin touches it. Heat is conducted away from your head instead of building up underneath it, which is exactly what you need when a warm flash hits at 3 AM." />
 
       <Step n="2" img={IMG.coverInside} reverse
         title="Adjustable shredded foam"
-        text="Inside sits recycled shredded memory foam (35–40D). Because it's shredded, air keeps moving between the pieces — far less heat retention than a solid foam block. And because there's a zipper, you decide the loft: add filling for side sleeping, remove some for stomach sleeping. One pillow, every sleeping position." />
+        text="Inside sits recycled shredded memory foam (35–40D). Because it's shredded, air keeps moving between the pieces, far less heat retention than a solid foam block. And because there's a zipper, you decide the loft: add filling for side sleeping, remove some for stomach sleeping. One pillow, every sleeping position." />
 
       <Step n="3" img={IMG.coverBack}
         title="The warm bamboo side"
-        text="Cold snap in January? Flip it. The other side is soft bamboo fiber fabric — gentle, breathable and noticeably warmer to the touch. That's why this is a pillow for every season, not just a summer purchase." />
+        text="Cold snap in January? Flip it. The other side is soft bamboo fiber fabric, gentle, breathable and noticeably warmer to the touch. That's why this is a pillow for every season, not just a summer purchase." />
 
       <section className="r-pad" style={{ textAlign: 'center', ...rv('pad', ...SP.section) }}>
         <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, marginBottom: 12 }}>Try it for 100 nights</h2>
@@ -53,8 +53,6 @@ export default function HowItWorks() {
       </section>
 
       <RangeCards title="Shop the flip'nsleep range" intro="One pillow, and the cooling bedding built on the same simple idea." />
-
-      <EmailCapture />
     </div>
   );
 }

@@ -40,6 +40,10 @@ export const IMG = {
   standardPillowSweaty: "/images/standard-pillow-sweaty.webp",
   flipCool: "/images/flip-cool.webp",
   flipWarm: "/images/flip-warm.webp",
+  ugc1: "/images/ugc-1.webp",
+  ugc2: "/images/ugc-2.webp",
+  ugc3: "/images/ugc-3.webp",
+  ugc4: "/images/ugc-4.webp",
 };
 
 // Intrinsieke afmetingen van elke afbeelding (voor width/height-attributen,
@@ -87,6 +91,10 @@ export const IMG_DIM = {
   "/images/tile-comforters.webp": [500, 500],
   "/images/tile-silk.webp": [500, 500],
   "/images/tile-toppers.webp": [500, 500],
+  "/images/ugc-1.webp": [540, 960],
+  "/images/ugc-2.webp": [540, 960],
+  "/images/ugc-3.webp": [540, 960],
+  "/images/ugc-4.webp": [540, 960],
   "/images/weighted-1.webp": [750, 750],
   "/images/weighted-2.webp": [750, 750],
   "/images/weighted-4.webp": [750, 750],
@@ -142,7 +150,7 @@ export const BUNDLES = [
     pillows: 4,
     prices: { usd: 189.99, cad: 260 },
     compareAt: { usd: 439.96, cad: 599.96 },
-    blurb: "For both sides of the bed — and the guest room.",
+    blurb: "For both sides of the bed, and the guest room.",
     image: IMG.coverFront,
   },
 ];
@@ -150,7 +158,7 @@ export const BUNDLES = [
 export const bundleById = (id) => BUNDLES.find(b => b.id === id);
 
 /* ============================================================
-   VARIANTPRODUCTEN — maat + kleur (zelfde vorm als bugaway).
+   VARIANTPRODUCTEN, maat + kleur (zelfde vorm als bugaway).
    Prijzen region-aware {usd, cad}. compareAt = doorstreepprijs.
    Kleurnamen afgeleid van de Alibaba-kleurcodes.
    Specs zijn ingevuld uit de leverancierdata; regels met "confirm"
@@ -197,6 +205,14 @@ export const products = [
       { icon: "🫧", label: "Even weight", sub: "No shifting beads" },
       { icon: "🌙", label: "100-night trial", sub: "Risk-free" },
     ],
+    faq: [
+      ["How heavy is it, and which size should I pick?", "Twin is 7 kg (about 15 lb), Queen 9 kg (about 20 lb), King 11 kg (about 24 lb) and Super King 13 kg (about 29 lb). A common rule of thumb is a blanket of roughly 10% of your body weight, but comfort is personal: if you're between two, the lighter one is the easier start."],
+      ["Will a weighted blanket make me hot?", "It's designed not to. The cover is bamboo viscose, which breathes and feels cool to the touch, and the glass micro-beads don't hold heat the way a thick fill does. It's still a blanket, so in a very warm room many people use it on its own instead of on top of a duvet."],
+      ["Do the beads shift or make noise?", "The beads are quilted into small squares, so the weight stays spread edge to edge and doesn't pool at one end. Glass micro-beads are fine and quiet compared with plastic pellets."],
+      ["How do I wash it?", "Machine wash on a gentle, cold cycle and air dry. Because of the weight, the larger sizes are easier to wash in a large-capacity or laundromat machine. Always check the care label on your blanket."],
+      ["What are the dimensions?", "Twin is 135 \u00d7 200 cm, Queen 150 \u00d7 200 cm, King and Super King are both 200 \u00d7 200 cm; the Super King is the heavier option of that size."],
+      ["What if it isn't right for me?", "You have 100 nights to try it. If it's not for you, contact us and return it for free for a full refund. It's also covered by our 2-year warranty."],
+    ],
     useCases: ["Warm bedrooms", "Over your duvet", "Evening wind-down", "Guest room", "Movie nights"],
     images: [
       "/images/weighted-hero.webp",
@@ -240,6 +256,14 @@ export const products = [
       { icon: "🎋", label: "Bamboo viscose", sub: "400 thread count" },
       { icon: "❄️", label: "Sleeps cool", sub: "Breathable weave" },
       { icon: "✅", label: "OEKO-TEX 100", sub: "Tested safe" },
+    ],
+    faq: [
+      ["Will these sheets fit my mattress?", "The fitted sheet has 16-inch deep pockets and a 360-degree elastic wrap, so it fits most standard and deeper mattresses. Sizes are Twin, Queen, King and Super King."],
+      ["Do bamboo sheets really sleep cooler?", "Bamboo viscose is breathable and moisture-wicking, so it feels cool and dry against the skin and doesn't cling when you're warm. It won't cool a hot room, but most hot sleepers notice the difference compared with heavier cotton or polyester."],
+      ["What's in the set?", "One flat sheet, one deep-pocket fitted sheet and two pillowcases. The pillowcases fit the Signature Cold Pillow."],
+      ["How do I wash them?", "Machine wash cold on a gentle cycle and tumble dry low. Skip bleach and fabric softener to keep the fabric silky. They get softer with every wash."],
+      ["Will they shrink or pill?", "Washed cold and dried low, shrinkage is minimal. Very hot washes and high heat are what make bamboo fabric shrink or lose its sheen."],
+      ["What if I don't like them?", "You have 100 nights to try them. Contact us for a free return and full refund, and they're covered by our 2-year warranty."],
     ],
     useCases: ["Hot sleepers", "All-season bedding", "Sensitive skin", "Guest room", "Gift"],
     images: [
@@ -285,6 +309,14 @@ export const products = [
       { icon: "🪶", label: "Lightweight", sub: "All-season drape" },
       { icon: "🌿", label: "Organic cotton", sub: "Breathable shell" },
     ],
+    faq: [
+      ["Is it warm enough for winter?", "It's a lightweight, all-season comforter. In a heated bedroom that's enough for most hot sleepers year round; if your bedroom gets genuinely cold, layer it with a throw or blanket on the coldest nights."],
+      ["How does the cooling finish work?", "Both sides have a cool-touch finish on a breathable organic-cotton shell. It feels fresh when you get in and lets heat and moisture escape instead of trapping them, so you're less likely to wake up hot."],
+      ["What size should I choose?", "Twin is 68 \u00d7 90 in, Queen 90 \u00d7 90 in and King 105 \u00d7 90 in. If you like extra drape over the sides, size up."],
+      ["How do I wash it?", "Machine wash cold on a gentle cycle and tumble dry low. A larger machine gives it room to rinse properly. The shell resists pilling, snagging and fading."],
+      ["Do I need a duvet cover?", "No, it's designed to be used as is. A breathable cover is fine if you prefer one, but it adds a layer between you and the cool-touch finish."],
+      ["What if it's not for me?", "You have 100 nights to try it. Contact us for a free return and full refund. It's covered by our 2-year warranty."],
+    ],
     useCases: ["Hot sleepers", "Summer nights", "All-season use", "Guest room", "Pair with sheets"],
     images: [
       "/images/comforter-hero.webp",
@@ -303,15 +335,25 @@ export const productById = (id) => products.find(p => p.id === id);
 // de reviewsectie toont dan automatisch de eerlijke launch-variant.
 export const REVIEWS = [];
 
+// Video-rij op Home ("Sleep better with flip'nsleep"). Posters zijn stills uit
+// de hero-video als placeholder. Zodra Thomas de echte video's levert: zet
+// `src` op het mp4-pad en de kaart opent een modal met de video.
+export const UGC_VIDEOS = [
+  { poster: IMG.ugc1, caption: "The cool side, explained", src: null },
+  { poster: IMG.ugc2, caption: "Adjusting the fill", src: null },
+  { poster: IMG.ugc3, caption: "Flip it at 3 AM", src: null },
+  { poster: IMG.ugc4, caption: "Unboxing", src: null },
+];
+
 export const FAQ_ITEMS = [
-  ["Does it stay cool all night?", "Honestly: the cool-touch side feels cool the moment you touch it, and because the foam is shredded it sheds heat instead of trapping it, so it doesn't warm up and hold like a solid pillow. It won't stay ice-cold for eight hours \u2014 no cool-touch pillow does. Flip it for a fresh cool side, and a breathable pillowcase helps."],
+  ["Does it stay cool all night?", "Honestly: the cool-touch side feels cool the moment you touch it, and because the foam is shredded it sheds heat instead of trapping it, so it doesn't warm up and hold like a solid pillow. It won't stay ice-cold for eight hours, no cool-touch pillow does. Flip it for a fresh cool side, and a breathable pillowcase helps."],
   ["How is this different from a cheap cooling pillow?", "It's adjustable, dual-sided, breathable and certified, and you get two for the price of one. Most cheap cooling pillows are a fixed loft with a cool side only."],
   ["Will it go flat?", "Shredded memory foam holds its loft, and you can fluff it or top it up with a spare bag of filling if you ever want it fuller again."],
   ["What size is it, and will it fit my pillowcase?", "20 \u00d7 30 in (50 \u00d7 76 cm). It fits a standard or queen pillowcase."],
-  ["Firm or soft \u2014 which is it?", "Your choice. Take filling out for a softer, flatter pillow, leave it in for firmer and taller. Most side sleepers keep more in, stomach sleepers take more out."],
+  ["Firm or soft: which is it?", "Your choice. Take filling out for a softer, flatter pillow, leave it in for firmer and taller. Most side sleepers keep more in, stomach sleepers take more out."],
   ["How does the 100-night trial work?", "Sleep on it for up to 100 nights. Not sleeping cooler? Contact us, ship it back for free and receive a full refund."],
   ["How do I adjust the pillow?", "Unzip the inner cover and add or remove filling until the height matches your sleeping position. Side sleepers usually keep more filling, stomach sleepers less."],
-  ["Is the cover washable?", "Yes \u2014 the outer cover zips off and is machine-washable at 40\u00b0C / 104\u00b0F. The foam core itself should not be washed."],
+  ["Is the cover washable?", "Yes, the outer cover zips off and is machine-washable at 40\u00b0C / 104\u00b0F. The foam core itself should not be washed."],
   ["What if the cool side is too cold in winter?", "Just flip it. The other side is soft bamboo fabric, made for colder nights."],
   ["Shipping and returns?", "Free both ways across the United States and Canada, within the 100-night trial. Orders placed before 11 PM ET ship the same business day and you'll receive tracking as soon as it leaves the warehouse."],
   ["What warranty do I get?", "Every flip'nsleep product comes with a 2-year warranty on materials and workmanship, on top of the 100-night trial. If anything fails within two years, we repair, replace or refund it."],

@@ -19,7 +19,7 @@ const SITE = (process.env.SITE_URL || 'https://www.flipnsleep.com').replace(/\/$
 
 const META = {
   '/': {
-    title: "flip'nsleep — The Adjustable Cooling Pillow for Night Sweats",
+    title: "flip'nsleep — The Adjustable Cooling Pillow for Hot Sleepers",
     desc: 'Adjustable shredded memory foam pillow with a cool-touch side and a warm bamboo side. Buy 1 get 1 free, 100-night sleep trial, free shipping. Ships to the US and Canada.',
   },
   '/shop': {
@@ -28,7 +28,7 @@ const META = {
   },
   '/product/signature-cold-pillow': {
     title: "Signature Cold Pillow — 1+1 Free | flip'nsleep",
-    desc: 'The adjustable pillow that keeps the night sweats away. Cool-touch side, warm bamboo side, adjustable shredded memory foam. Buy 1 get 1 free.',
+    desc: 'The adjustable cooling pillow for hot sleepers. Cool-touch side, warm bamboo side, adjustable shredded memory foam. Buy 1 get 1 free.',
   },
   '/product/cooling-weighted-blanket': {
     title: "Cloudweight Weighted Blanket | flip'nsleep",
@@ -75,6 +75,38 @@ const META = {
 
 const ROUTES = Object.keys(META);
 
+// JSON-LD: Organization op home, Product + Offer per productpagina (USD-prijzen
+// uit data.js). Geen aggregateRating zolang er geen echte reviews zijn.
+let DATA = null;
+function jsonLd(route) {
+  if (!DATA) return '';
+  const { PRODUCT, BUNDLES, products } = DATA;
+  const brand = { '@type': 'Brand', name: "flip'nsleep" };
+  let obj = null;
+  if (route === '/') {
+    obj = { '@context': 'https://schema.org', '@type': 'Organization', name: "flip'nsleep", url: SITE,
+      logo: `${SITE}/images/logo-dark-full.png`, email: 'info@flipnsleep.com',
+      parentOrganization: { '@type': 'Organization', name: 'Obtained VOF' } };
+  } else if (route === `/product/${PRODUCT.id}`) {
+    const url = `${SITE}${route}`;
+    obj = { '@context': 'https://schema.org', '@type': 'Product', name: PRODUCT.name, description: PRODUCT.desc,
+      image: PRODUCT.images.map(i => `${SITE}${i}`), brand, url,
+      offers: BUNDLES.map(b => ({ '@type': 'Offer', name: b.label, price: b.prices.usd.toFixed(2), priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock', url })) };
+  } else {
+    const p = products.find(x => route === `/product/${x.id}`);
+    if (p) {
+      const url = `${SITE}${route}`;
+      obj = { '@context': 'https://schema.org', '@type': 'Product', name: p.name, description: p.desc,
+        image: p.images.map(i => `${SITE}${i}`), brand, url,
+        offers: { '@type': 'Offer', price: p.prices.usd.toFixed(2), priceCurrency: 'USD',
+          availability: 'https://schema.org/InStock', url } };
+    }
+  }
+  if (!obj) return '';
+  return `  <script type="application/ld+json">${JSON.stringify(obj).replace(/</g, '\\u003c')}</script>\n`;
+}
+
 function applyMeta(html, route) {
   const m = META[route];
   const canonical = `${SITE}${route === '/' ? '' : route}`;
@@ -83,7 +115,7 @@ function applyMeta(html, route) {
     .replace(/(<meta name="description" content=")[^"]*(")/, `$1${m.desc}$2`)
     .replace('</head>', m.noindex
       ? `  <meta name="robots" content="noindex" />\n  </head>`
-      : `  <link rel="canonical" href="${canonical}" />\n  </head>`);
+      : `  <link rel="canonical" href="${canonical}" />\n${jsonLd(route)}  </head>`);
 }
 
 async function main() {
@@ -94,7 +126,9 @@ async function main() {
   // De SPA-shell blijft beschikbaar als app.html voor de Vercel-rewrite.
   await writeFile(path.join(OUT_DIR, 'app.html'), template);
 
-  const { render } = await import(SSR_ENTRY);
+  const mod = await import(SSR_ENTRY);
+  const { render } = mod;
+  DATA = { PRODUCT: mod.PRODUCT, BUNDLES: mod.BUNDLES, products: mod.products };
 
   let ok = 0, words = 0;
   for (const route of ROUTES) {

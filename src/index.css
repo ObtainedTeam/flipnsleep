@@ -209,3 +209,35 @@ button:active, a:active { transform: translateY(1px); }
 @media (max-width: 767px) {
   body.has-sticky-buy { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
 }
+
+/* ============================================================
+   Blok 4: Mellow/Cloudpillo-secties
+   ============================================================ */
+/* Horizontale rij met scroll-snap (reviews) */
+.snap-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.snap-row::-webkit-scrollbar { display: none; }
+.snap-row > * { scroll-snap-align: start; flex-shrink: 0; }
+.rev-card { flex: 0 0 calc((100% - 48px) / 3); }
+.clamp-5 { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Video-rij: vier kolommen op desktop, swipe-rij op mobiel */
+.vid-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* Merkstatement: foto met zwevende kaart */
+.float-card { position: absolute; left: -32px; bottom: -32px; max-width: 260px; }
+
+/* Footer */
+.foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
+.foot-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 767px) {
+  .rev-card { flex-basis: 86%; }
+  .vid-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin: 0 -20px; padding: 0 20px 8px; scroll-padding: 0 20px; }
+  .vid-row::-webkit-scrollbar { display: none; }
+  .vid-row > * { flex: 0 0 62%; scroll-snap-align: start; }
+  .float-card { left: 12px; right: 12px; bottom: -28px; max-width: none; }
+  .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px 20px; }
+  .foot-brand { grid-column: 1 / -1; }
+  .foot-bottom { flex-direction: column; align-items: flex-start; }
+}

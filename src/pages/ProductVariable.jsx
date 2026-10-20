@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
+import { c, BTN, BTNO, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { productById, products, dim } from '../data';
 import { CartContext } from '../components/Cart';
@@ -77,13 +77,12 @@ export default function ProductVariable({ onCartOpen }) {
           <div style={EYEBROW}>{product.badge || 'flip\u2019nsleep'}</div>
           <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), color: c.navy, margin: '8px 0 8px', lineHeight: LH.tight }}>{product.name}</h1>
           {product.tagline && <p className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', ...T.lg), lineHeight: LH.head, color: c.grayD, marginBottom: 12 }}>{product.tagline}</p>}
-          <div style={{ marginBottom: 12, fontSize: T.sm[0], color: c.grayD }}>🌙 100-night sleep trial · 🛡️ 2-year warranty · 📦 Free shipping</div>
 
           <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h3), color: c.navy }}>
             {formatPrice(price, symbol)}
             {compare && <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: T.sm[0], color: c.gray, marginLeft: 8 }}>{formatPrice(compare, symbol)}</s>}
           </div>
-          {compare && <div style={{ fontSize: T.sm[0], color: c.purple, fontWeight: 600, marginBottom: 8 }}>Save {formatPrice(compare - price, symbol)} · free shipping included</div>}
+          {compare && <div style={{ fontSize: T.sm[0], color: c.purple, fontWeight: 600, marginBottom: 8 }}>Save {formatPrice(compare - price, symbol)}</div>}
           <div style={{ margin: '12px 0 16px' }}><ShippingCountdown /></div>
 
           <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.body, marginBottom: 20 }}>{product.desc}</p>
@@ -126,15 +125,15 @@ export default function ProductVariable({ onCartOpen }) {
             </div>
           )}
 
-          {/* CTA's */}
+          {/* CTA's: Add to cart primair, Buy now secundair */}
           <div ref={buyRef} className="row-m-col" style={{ display: 'flex', gap: 12, margin: '4px 0 20px' }}>
-            <button onClick={() => buyNowProduct(product.id, size, color)} disabled={!purchasable}
-              style={{ ...BTN, flex: '1 0 auto', opacity: purchasable ? 1 : .5, cursor: purchasable ? 'pointer' : 'not-allowed' }}>
-              {purchasable ? 'Buy now' : 'Coming soon'}
-            </button>
             <button onClick={addToCart} disabled={!purchasable}
+              style={{ ...BTN, flex: '1.4 0 auto', opacity: purchasable ? 1 : .5, cursor: purchasable ? 'pointer' : 'not-allowed' }}>
+              {purchasable ? 'Add to cart' : 'Coming soon'}
+            </button>
+            <button onClick={() => buyNowProduct(product.id, size, color)} disabled={!purchasable}
               style={{ ...BTNO, flex: '1 0 auto', opacity: purchasable ? 1 : .5, cursor: purchasable ? 'pointer' : 'not-allowed' }}>
-              Add to cart
+              Buy now
             </button>
           </div>
 
@@ -192,7 +191,8 @@ export default function ProductVariable({ onCartOpen }) {
                   <div style={{ padding: '16px 20px 16px 0' }}>
                     <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.lg), lineHeight: LH.head, color: c.navy, marginBottom: 4 }}>{o.name}</div>
                     <div style={{ fontSize: T.xs[0], color: c.grayD, marginBottom: 8, lineHeight: LH.body }}>{o.tagline}</div>
-                    <div style={{ fontSize: T.sm[0], fontWeight: 700, color: c.navy }}>From {formatPrice(op, symbol)}</div>
+                    <div style={{ fontSize: T.sm[0], fontWeight: 700, color: c.navy, marginBottom: 12 }}>From {formatPrice(op, symbol)}</div>
+                    <span style={BTN_SM}>View</span>
                   </div>
                 </Link>
               );
@@ -204,7 +204,7 @@ export default function ProductVariable({ onCartOpen }) {
       <ReviewsBlock />
       <section className="r-pad" style={rv('pad', ...SP.section)}>
         <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
-        <FAQBlock limit={5} />
+        <FAQBlock items={product.faq || undefined} />
       </section>
 
       <StickyBuyBar targetRef={buyRef} name={product.name} price={`${formatPrice(price, symbol)}${hasColors ? ` · ${size}, ${color}` : ` · ${size}`}`} onAdd={addToCart} disabled={!purchasable} label={purchasable ? 'Add to cart' : 'Coming soon'} />

@@ -6,7 +6,7 @@ const SECTIONS = {
     title: 'Privacy Policy',
     blocks: [
       ['What we collect', 'When you place an order or sign up for our newsletter we collect your name, email address, shipping address and order details. Payment data is processed by Shopify Payments and its payment providers; we never see or store your full card details.'],
-      ['How we use it', 'We use your data to fulfil orders, provide customer support, send order updates, and — only if you opted in — send marketing emails through Brevo. You can unsubscribe at any time via the link in every email.'],
+      ['How we use it', 'We use your data to fulfil orders, provide customer support, send order updates, and, only if you opted in, send marketing emails through Brevo. You can unsubscribe at any time via the link in every email.'],
       ['Analytics & advertising', 'We use Google Analytics and the Meta Pixel to understand how the site is used and to measure advertising. These tools may set cookies. You can control cookies in your browser settings.'],
       ['Sharing', 'We share data only with the service providers needed to run the store: Shopify (checkout and orders), our fulfilment and shipping partners, Brevo (email), Google and Meta (analytics/ads). We never sell your personal data.'],
       ['Your rights', 'You can request access to, correction of, or deletion of your personal data at any time by emailing support@flipnsleep.com. We respond within 30 days.'],
@@ -27,7 +27,7 @@ const SECTIONS = {
     title: 'Shipping & Returns',
     blocks: [
       ['Shipping', 'We ship across the United States and Canada. Shipping is free on every order. Orders placed before 11 PM ET ship the same business day where possible; delivery typically takes 2–6 business days. You receive tracking by email as soon as your order ships.'],
-      ['The 100-night trial', 'Sleep on your pillow for up to 100 nights. Adjust it, flip it, wash the cover — really use it. If it is not for you, we take it back.'],
+      ['The 100-night trial', 'Sleep on your pillow for up to 100 nights. Adjust it, flip it, wash the cover, really use it. If it is not for you, we take it back.'],
       ['How to return', 'Email support@flipnsleep.com with your order number. You receive a prepaid return label; drop the parcel off and your refund is processed within 5 business days of arrival at our warehouse.'],
       ['Refunds', 'Refunds go back to your original payment method and cover the full purchase price. Shipping was free, so there is nothing to deduct.'],
     ],

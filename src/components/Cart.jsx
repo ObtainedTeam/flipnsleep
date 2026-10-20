@@ -121,7 +121,7 @@ export default function Cart({ isOpen, onClose }) {
         </header>
 
         <div style={{ background: c.sky, borderBottom: '1px solid rgba(32,27,93,.10)', padding: '10px 20px', fontSize: T.xs[0], fontWeight: 600, color: c.navy }}>
-          🚚 Free shipping on every order — always included
+          🚚 Free shipping on every order, always included
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: 16 }}>

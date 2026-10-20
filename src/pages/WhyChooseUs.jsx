@@ -1,11 +1,11 @@
 import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, T, LH, SP, W, CARD } from '../theme';
 import { Link } from 'react-router-dom';
-import { ReviewsBlock, EmailCapture, CompareCards } from '../components/Blocks';
+import { ReviewsBlock, CompareCards } from '../components/Blocks';
 import Reveal from '../components/Reveal';
 
 
 const ROWS = [
-  ['Adjustable loft', 'Zip open, add or remove filling for your sleeping position', 'Fixed height — take it or leave it'],
+  ['Adjustable loft', 'Zip open, add or remove filling for your sleeping position', 'Fixed height, take it or leave it'],
   ['Temperature', 'Dual-sided: cool-touch (Q-max 0.26) and warm bamboo', 'One fabric, often too warm'],
   ['Filling', 'Generous shredded memory foam, air circulates freely', 'Solid block or thin fiber fill that flattens'],
   ['Hygiene', 'Removable, machine-washable outer cover', 'Often not removable or washable'],
@@ -20,7 +20,7 @@ export default function WhyChooseUs() {
         <div style={EYEBROW}>The honest comparison</div>
         <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, color: c.navy, margin: '8px 0 16px' }}>Why flip'nsleep?</h1>
         <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, maxWidth: W.narrow, margin: '0 auto' }}>
-          Most pillows make you adapt to them. Ours adapts to you — in height, in temperature, and in how much risk you take buying it.
+          Most pillows make you adapt to them. Ours adapts to you, in height, in temperature, and in how much risk you take buying it.
         </p>
       </section>
 
@@ -51,7 +51,6 @@ export default function WhyChooseUs() {
       </section>
 
       <ReviewsBlock />
-      <EmailCapture />
     </div>
   );
 }

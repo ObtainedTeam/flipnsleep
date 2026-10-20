@@ -29,7 +29,7 @@ export default function ExitPopup() {
         <button onClick={() => setShow(false)} aria-label="Close" style={{ position: 'absolute', top: 12, right: 16, background: 'none', border: 'none', fontSize: T.h3[0], cursor: 'pointer', color: c.white }}>×</button>
         <img src={IMG.icon1p1} {...dim(IMG.icon1p1)} loading="lazy" decoding="async" alt="Buy 1, Get 1 Free" style={{ height: 64, marginBottom: 12 }} />
         <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: T.h3[0], lineHeight: LH.head, marginBottom: 12, textShadow: SH.text }}>Leaving already?</h3>
-        <p style={{ fontSize: T.sm[0], lineHeight: LH.body, color: c.lilac, marginBottom: 24 }}>Buy one pillow and get the second free — and you can try them for 100 nights, risk-free. Nothing to lose but the night sweats.</p>
+        <p style={{ fontSize: T.sm[0], lineHeight: LH.body, color: c.lilac, marginBottom: 24 }}>Buy one pillow and get the second free, and you can try them for 100 nights, risk-free. Nothing to lose but the night sweats.</p>
         <a href="/product/signature-cold-pillow" onClick={() => setShow(false)} style={BTN}>Claim my deal</a>
       </div>
     </div>

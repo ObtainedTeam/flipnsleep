@@ -47,8 +47,6 @@ export default function ProductPillow({ onCartOpen }) {
     ['Certified', 'OEKO-TEX and CertiPUR-US', 'Certification varies'],
   ];
 
-  const trust = [['🌙', '100-night trial'], ['🚚', 'Free shipping & returns'], ['✅', 'OEKO-TEX & CertiPUR-US'], ['🛡️', '2-year warranty']];
-
   return (
     <div>
       {/* 1 — Above the fold + buy box */}
@@ -72,14 +70,12 @@ export default function ProductPillow({ onCartOpen }) {
           <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), color: c.navy, margin: '8px 0 8px', lineHeight: LH.tight }}>{PRODUCT.name}</h1>
           <p className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', ...T.lg), color: c.purple, fontWeight: 500, lineHeight: LH.head, margin: '0 0 12px' }}>Sleep cooler on a pillow that finally fits your head.</p>
 
-          {/* Proof: echte sterren zodra er reviews zijn, anders het verkoopcijfer */}
-          {hasReviews ? (
+          {/* Proof: echte sterren zodra er reviews zijn (geen verzonnen cijfers) */}
+          {hasReviews && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <Stars n={Math.round(rvw.avg)} size={T.md[1]} />
               <a href="#reviews" style={{ fontSize: T.sm[0], color: c.grayD, textDecoration: 'none' }}><b style={{ color: c.navy }}>{rvw.avg}</b> · {rvw.count} verified review{rvw.count === 1 ? '' : 's'}</a>
             </div>
-          ) : (
-            <div style={{ fontSize: T.sm[0], color: c.grayD, marginBottom: 12 }}>🌙 <b style={{ color: c.navy }}>500+ pillows</b> already shipped to hot sleepers</div>
           )}
 
           {/* Mechanisme-subhead */}
@@ -117,27 +113,8 @@ export default function ProductPillow({ onCartOpen }) {
             <button onClick={addToCart} style={{ ...BTN, flex: '1.4 0 auto' }}>Add to cart</button>
             <button onClick={() => buyNow(selected)} style={{ ...BTNO, flex: '1 0 auto' }}>Buy now</button>
           </div>
-          <div style={{ fontSize: T.xs[0], lineHeight: LH.body, color: c.grayD, textAlign: 'center', marginBottom: 16 }}>100 nights to feel the difference. Not sleeping cooler? Full refund, no return hassle.</div>
-
-          {/* Trust row */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 16px', marginBottom: 16 }}>
-            {trust.map(([i, t], k) => (
-              <span key={k} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: T.xs[0], color: c.grayD, fontFamily: FONT_SUB }}><span>{i}</span>{t}</span>
-            ))}
-          </div>
-
           <TrustAccordion specs={<ul style={{ listStyle: 'none' }}>{PRODUCT.specs.map(([k, v], i) => <li key={i} style={{ marginBottom: 5 }}><b>{k}:</b> {v}</li>)}</ul>} />
         </div></Reveal>
-      </section>
-
-      {/* 2 — Proof strip */}
-      <section className="r-pad" style={{ background: c.white, borderTop: '1px solid rgba(32,27,93,.08)', borderBottom: '1px solid rgba(32,27,93,.08)', ...rv('pad', '20px 40px', '16px 20px') }}>
-        <div className="r-gap" style={{ maxWidth: W.page, margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', ...rv('gap', '10px 26px', '10px 16px'), textAlign: 'center' }}>
-          {hasReviews && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: T.sm[0], fontWeight: 700, color: c.navy }}><Stars n={Math.round(rvw.avg)} size={T.sm[0]} /> {rvw.avg} · {rvw.count} reviews</span>}
-          {[['🌙', '500+ pillows sold'], ['🚚', 'Free shipping & returns'], ['🛌', '100-night sleep trial'], ['✅', 'OEKO-TEX & CertiPUR-US'], ['🛡️', '2-year warranty']].map(([i, t], k) => (
-            <span key={k} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: T.sm[0], fontWeight: 600, color: c.navy, fontFamily: FONT_SUB }}><span>{i}</span>{t}</span>
-          ))}
-        </div>
       </section>
 
       {/* 3 — The problem, up front */}

@@ -25,6 +25,7 @@ export default async function handler(req, res) {
         name: (x.reviewer && x.reviewer.name) || 'Anonymous',
         date: (x.created_at || '').slice(0, 10),
         verified: !!x.verified && x.verified !== 'nothing',
+        product: x.product_title || '',
       }));
     const count = reviews.length;
     const avg = count ? Math.round((reviews.reduce((s, x) => s + x.rating, 0) / count) * 10) / 10 : 0;

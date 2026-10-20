@@ -49,7 +49,7 @@ export default function NewsletterPopup() {
         <img src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" style={{ height: 34, marginBottom: 10 }} />
         <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: T.h3[0], lineHeight: LH.head, marginBottom: 12, color: c.navy }}>Sleep better, pay less</h3>
         {state === 'done' ? (
-          <p style={{ fontSize: T.sm[0], lineHeight: LH.body }}>Check your inbox — your 10% code is on its way. Sweet dreams!</p>
+          <p style={{ fontSize: T.sm[0], lineHeight: LH.body }}>Check your inbox, your 10% code is on its way. Sweet dreams!</p>
         ) : (
           <>
             <p style={{ fontSize: T.sm[0], lineHeight: LH.body, marginBottom: 20 }}>Get 10% off your first order and our best tips for cooler nights.</p>
@@ -58,7 +58,7 @@ export default function NewsletterPopup() {
                 style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: 'inherit', fontSize: T.md[1], padding: '10px 14px', color: c.navy, minWidth: 0, outline: 'none' }} />
               <button type="submit" disabled={state === 'busy'} style={{ ...BTN_SM, flexShrink: 0 }}>{state === 'busy' ? '…' : 'Get 10% off'}</button>
             </form>
-            {state === 'error' && <p style={{ fontSize: T.xs[0], color: c.danger, marginTop: 8 }}>Something went wrong — please try again.</p>}
+            {state === 'error' && <p style={{ fontSize: T.xs[0], color: c.danger, marginTop: 8 }}>Something went wrong, please try again.</p>}
             <p style={{ fontSize: T.xs[0], color: c.grayD, marginTop: 12 }}>No spam. Unsubscribe anytime.</p>
           </>
         )}

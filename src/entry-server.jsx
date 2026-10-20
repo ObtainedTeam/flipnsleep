@@ -12,3 +12,4 @@ export function render(url) {
     </StrictMode>
   );
 }
+export { PRODUCT, BUNDLES, products } from './data.js';

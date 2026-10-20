@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { c, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, T, LH, SP, W, CARD, CHIP } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { BUNDLES, PRODUCT, products, dim } from '../data';
-import { EmailCapture, ProductImageBlock } from '../components/Blocks';
+import { ProductImageBlock } from '../components/Blocks';
 import Reveal from '../components/Reveal';
 
 
@@ -15,7 +15,7 @@ export default function Shop() {
         <div style={EYEBROW}>Shop</div>
         <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, color: c.navy, margin: '8px 0 16px' }}>Pick your bundle</h1>
         <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, maxWidth: W.narrow, margin: '0 auto' }}>
-          Every order is a set — that's our buy-one-get-one-free promise. Choose two pillows or four, always with free shipping and a 100-night trial.
+          Every order is a set, that's our buy-one-get-one-free promise. Choose two pillows or four, always with free shipping and a 100-night trial.
         </p>
       </section>
 
@@ -30,8 +30,8 @@ export default function Shop() {
                 <span style={{ ...CHIP, position: 'absolute', top: 16, left: 16, background: c.amber, color: c.navy }}>{b.short}</span>
               </div>
               <div className="r-pad" style={rv('pad', ...SP.card)}>
-                <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 6 }}>{PRODUCT.name} — {b.short}</h2>
-                <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, marginBottom: 10 }}>{b.label} — {b.blurb}</div>
+                <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 6 }}>{PRODUCT.name}: {b.short}</h2>
+                <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, marginBottom: 10 }}>{b.label}. {b.blurb}</div>
                 <div className="r-fs" style={{ ...rv('fs', ...T.lg), fontWeight: 700, color: c.navy }}>{formatPrice(p, symbol)} <s style={{ fontWeight: 400, color: c.gray, fontSize: T.sm[0] }}>{formatPrice(cm, symbol)}</s></div>
                 <div style={{ fontSize: T.xs[0], color: c.purple, fontWeight: 600, marginTop: 4 }}>{formatPrice(p / b.pillows, symbol)} per pillow · free shipping</div>
                 <span style={{ ...BTN, marginTop: 20 }}>View deal</span>
@@ -71,8 +71,6 @@ export default function Shop() {
           })}
         </div>
       </section>
-
-      <EmailCapture />
     </div>
   );
 }

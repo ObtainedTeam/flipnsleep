@@ -160,7 +160,7 @@ export default function Quiz() {
                   style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: 'inherit', ...rv('fs', ...T.md), padding: '11px 16px', color: c.navy, minWidth: 0, outline: 'none' }} />
                 <button type="submit" disabled={state === 'busy'} style={{ ...BTN, flexShrink: 0 }}>{state === 'busy' ? '…' : 'Get 15% off'}</button>
               </form>
-              {state === 'error' && <p style={{ fontSize: T.xs[0], color: c.danger, marginTop: 12 }}>Something went wrong — please try again.</p>}
+              {state === 'error' && <p style={{ fontSize: T.xs[0], color: c.danger, marginTop: 12 }}>Something went wrong, please try again.</p>}
               <p style={{ fontSize: T.xs[0], color: c.grayD, marginTop: 12 }}>No spam. Unsubscribe anytime.</p>
               <button onClick={() => setStep(s => s - 1)} style={{ background: 'none', border: 'none', color: c.grayD, fontSize: T.sm[0], marginTop: 24, cursor: 'pointer', fontFamily: FONT_SUB }}>← Back</button>
             </>
