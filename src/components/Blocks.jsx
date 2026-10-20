@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { c, rv, FONT_DISPLAY, FONT_SUB } from '../theme';
+import { c, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH, SP, W, CARD, CARD_SOFT, CHIP, BTN_SM } from '../theme';
 import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT, productById, products, dim } from '../data';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { subscribe } from '../brevo';
@@ -22,7 +22,7 @@ export function CloudDivider({ fill = c.cream, flip = false }) {
 // productfoto staat.
 // `height` mag een getal zijn of [desktop, mobiel]; `priority` zet fetchpriority
 // op de hoofdfoto (LCP) in plaats van lazy loading.
-export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, bg = '#D5EBFA', style = {}, imgStyle = {}, priority = false }) {
+export function ProductImageBlock({ src, alt = '', height = 240, radius = R.lg, bg = c.sky, style = {}, imgStyle = {}, priority = false }) {
   const [hd, hm] = Array.isArray(height) ? height : [height, height];
   const load = priority ? { fetchPriority: 'high' } : { loading: 'lazy' };
   return (
@@ -38,7 +38,7 @@ export function ProductImageBlock({ src, alt = '', height = 240, radius = 16, bg
 // half over elkaar met schaduw, op de wolkenachtergrond zodat de wolkjes er
 // goed achter uit komen.
 // `height` mag een getal zijn of [desktop, mobiel]; `priority` voor de LCP-stapel.
-export function PillowDeck({ count = 2, height = 220, radius = 0, bg = '#D5EBFA', priority = false }) {
+export function PillowDeck({ count = 2, height = 220, radius = 0, bg = c.sky, priority = false }) {
   const [hd, hm] = Array.isArray(height) ? height : [height, height];
   const load = priority ? { fetchPriority: 'high' } : { loading: 'lazy' };
   const P = (extra, key) => (
@@ -98,34 +98,34 @@ export function SummerDealsSlider() {
   const stop = () => { drag.current.down = false; };
   const onClickCapture = (e) => { if (drag.current.moved) { e.preventDefault(); e.stopPropagation(); drag.current.moved = false; } };
 
-  const cardBase = { textDecoration: 'none', ...rv('flex', '0 0 320px', '0 0 78%'), borderRadius: 22, overflow: 'hidden', background: '#fff', display: 'flex', flexDirection: 'column' };
-  const panel = { background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', padding: '16px 16px 18px', textAlign: 'center', flex: 1 };
-  const chip = { display: 'inline-block', background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '9px 16px' };
-  const badge = { position: 'absolute', top: 12, left: 12, zIndex: 20, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' };
+  const cardBase = { textDecoration: 'none', ...rv('flex', '0 0 320px', '0 0 78%'), ...CARD, overflow: 'hidden', display: 'flex', flexDirection: 'column' };
+  const panel = { background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: c.white, ...rv('pad', ...SP.card), textAlign: 'center', flex: 1 };
+  const chip = { ...CHIP, background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, whiteSpace: 'normal' };
+  const badge = { ...CHIP, position: 'absolute', top: 16, left: 16, zIndex: 20, background: c.amber, color: c.navy };
 
   return (
-    <section style={{ position: 'relative', overflow: 'hidden', paddingBottom: 34, marginTop: -1 }}>
+    <section className="r-pad" style={{ position: 'relative', overflow: 'hidden', ...rv('pad', '0 0 48px', '0 0 32px'), marginTop: -1 }}>
       <style>{`.fns-scroll{scrollbar-width:none;-ms-overflow-style:none}.fns-scroll::-webkit-scrollbar{display:none}.fns-scroll img{-webkit-user-drag:none;user-drag:none}`}</style>
       <div aria-hidden="true" className="r-h" style={{ position: 'absolute', top: 0, left: 0, right: 0, ...rv('h', 430, 300), backgroundImage: `url(${IMG.sliderBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-      <div className="r-pad" style={{ position: 'relative', maxWidth: 1180, margin: '0 auto', ...rv('pad', '48px 40px 0', '34px 20px 0') }}>
-        <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 34, 28), color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2></Reveal>
-        <div ref={scroller} className="fns-scroll"
+      <div className="r-pad" style={{ position: 'relative', maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', ...SP.sectionTop) }}>
+        <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy }}>Summer <span style={{ fontFamily: FONT_SUB, fontWeight: 400 }}>Deals</span></h2></Reveal>
+        <div ref={scroller}
           onMouseDown={onDown} onMouseMove={onMove} onMouseUp={stop} onMouseLeave={stop} onClickCapture={onClickCapture}
-          style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '24px 4px 8px', cursor: 'grab', userSelect: 'none', WebkitOverflowScrolling: 'touch' }}>
+          className="fns-scroll r-gap" style={{ display: 'flex', ...rv('gap', ...SP.gap), overflowX: 'auto', padding: '24px 4px 32px', cursor: 'grab', userSelect: 'none', WebkitOverflowScrolling: 'touch' }}>
           {/* Kussenbundels — kussenstapel (2 of 4 kussens) op de wolkenachtergrond */}
           {BUNDLES.map(b => {
             const p = getPrice(b, isCA);
             const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
             return (
-              <a key={b.id} href="/product/signature-cold-pillow" className="r-flex" style={cardBase}>
+              <a key={b.id} href="/product/signature-cold-pillow" className="r-flex card-hover" style={cardBase}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                   <PillowDeck count={b.pillows} height={[210, 170]} radius={0} />
                   <span style={badge}>{b.short}</span>
                 </div>
-                <div style={panel}>
-                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 4 }}>{b.pillows} × {PRODUCT.name}</div>
-                  <div style={{ fontSize: 12, color: '#DDD9FF', lineHeight: 1.5, marginBottom: 8 }}>{PRODUCT.tagline}</div>
-                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 15, color: '#fff', marginBottom: 10 }}>{formatPrice(p, symbol)} <span style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 11.5, color: '#BDB7EE' }}>· {formatPrice(p / b.pillows, symbol)} each</span></div>
+                <div className="r-pad" style={panel}>
+                  <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, marginBottom: 6 }}>{b.pillows} × {PRODUCT.name}</div>
+                  <div style={{ fontSize: T.sm[0], color: c.lilac, lineHeight: LH.body, marginBottom: 10 }}>{PRODUCT.tagline}</div>
+                  <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.md), color: c.white, marginBottom: 14 }}>{formatPrice(p, symbol)} <span style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: T.xs[0], color: c.lilac }}>· {formatPrice(p / b.pillows, symbol)} each</span></div>
                   <span style={chip}>{b.short} — only {formatPrice(p, symbol)}</span>
                 </div>
               </a>
@@ -136,15 +136,15 @@ export function SummerDealsSlider() {
             const p = getPrice(prod, isCA);
             const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
             return (
-              <a key={prod.id} href={`/product/${prod.id}`} className="r-flex" style={cardBase}>
+              <a key={prod.id} href={`/product/${prod.id}`} className="r-flex card-hover" style={cardBase}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                   <img src={prod.images[0]} {...dim(prod.images[0])} loading="lazy" decoding="async" alt={prod.name} className="r-h" style={{ display: 'block', width: '100%', ...rv('h', 210, 170), objectFit: 'cover' }} />
                   {prod.badge && <span style={badge}>{prod.badge.toLowerCase()}</span>}
                 </div>
-                <div style={panel}>
-                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, marginBottom: 4 }}>{prod.name}</div>
-                  <div style={{ fontSize: 12, color: '#DDD9FF', lineHeight: 1.5, marginBottom: 8 }}>{prod.tagline}</div>
-                  <div style={{ fontFamily: FONT_DISPLAY, fontSize: 15, color: '#fff', marginBottom: 10 }}>From {formatPrice(p, symbol)} {cm && <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 11.5, color: '#BDB7EE' }}>{formatPrice(cm, symbol)}</s>}</div>
+                <div className="r-pad" style={panel}>
+                  <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, marginBottom: 6 }}>{prod.name}</div>
+                  <div style={{ fontSize: T.sm[0], color: c.lilac, lineHeight: LH.body, marginBottom: 10 }}>{prod.tagline}</div>
+                  <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.md), color: c.white, marginBottom: 14 }}>From {formatPrice(p, symbol)} {cm && <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: T.xs[0], color: c.lilac }}>{formatPrice(cm, symbol)}</s>}</div>
                   <span style={chip}>Shop the deal</span>
                 </div>
               </a>
@@ -182,7 +182,7 @@ export function ShippingCountdown() {
   }, []);
 
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#FFF6E3', border: `1px solid ${c.amberD}55`, borderRadius: 999, padding: '7px 14px', fontSize: 12, fontWeight: 600, color: '#8a6519' }}>
+    <div style={{ ...CHIP, gap: 8, background: c.cream, border: `1px solid ${c.amberD}`, fontSize: T.xs[0], fontWeight: 600, color: c.navy, whiteSpace: 'normal' }}>
       📦 {label}
     </div>
   );
@@ -193,10 +193,10 @@ export function ShippingCountdown() {
 export function TrustBar() {
   const items = [['🌙', '100-night sleep trial'], ['🚚', 'Free shipping, always'], ['✅', 'OEKO-TEX & CertiPUR-US certified'], ['🛡️', '2-year warranty']];
   return (
-    <div className="fns-scroll r-gap r-jc" style={{ background: '#fff', borderBottom: '1px solid rgba(32,27,93,.10)', display: 'flex', alignItems: 'center', ...rv('gap', 34, 18), ...rv('jc', 'center', 'flex-start'), overflowX: 'auto', padding: '9px 16px', whiteSpace: 'nowrap' }}>
+    <div className="fns-scroll r-gap r-jc" style={{ background: c.white, borderBottom: '1px solid rgba(32,27,93,.10)', display: 'flex', alignItems: 'center', ...rv('gap', 34, 18), ...rv('jc', 'center', 'flex-start'), overflowX: 'auto', padding: '9px 16px', whiteSpace: 'nowrap' }}>
       {items.map(([icon, label], i) => (
-        <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11.5, fontWeight: 600, color: c.navy, fontFamily: FONT_SUB, flexShrink: 0, lineHeight: 1 }}>
-          <span style={{ fontSize: 13, lineHeight: 1 }}>{icon}</span>{label}
+        <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: T.xs[0], fontWeight: 600, color: c.navy, fontFamily: FONT_SUB, flexShrink: 0, lineHeight: 1 }}>
+          <span style={{ fontSize: T.sm[0], lineHeight: 1 }}>{icon}</span>{label}
         </span>
       ))}
     </div>
@@ -215,16 +215,16 @@ export function CollectionsBlock() {
     ['Mattress Toppers', IMG.tileToppers, null, true],
   ];
   return (
-    <section className="r-pad" style={rv('pad', '54px 40px 10px', '40px 20px 8px')}>
-      <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'var(--h2-lg)', color: c.navy, textAlign: 'center' }}>Discover our <span style={{ fontFamily: FONT_SUB }}>collections</span></h2></Reveal>
-      <Reveal delay={120}><div className="grid-3m2 r-gap r-mw r-mar" style={{ ...rv('gap', 18, 12), ...rv('mw', 1040, 480), ...rv('mar', '30px auto 0', '22px auto 0') }}>
+    <section className="r-pad" style={rv('pad', ...SP.sectionTop)}>
+      <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center' }}>Discover our <span style={{ fontFamily: FONT_SUB }}>collections</span></h2></Reveal>
+      <Reveal delay={120}><div className="grid-3m2 r-gap r-mw r-mar" style={{ ...rv('gap', ...SP.gap), ...rv('mw', W.page, W.narrow), ...rv('mar', '32px auto 0', '24px auto 0') }}>
         {items.map(([label, img, to, soon], i) => {
           const inner = (
-            <div style={{ position: 'relative', borderRadius: 18, overflow: 'hidden', aspectRatio: '.85', display: 'flex', alignItems: 'flex-end', filter: soon ? 'saturate(.45) brightness(.92)' : 'none' }}>
+            <div className={to ? 'card-hover' : undefined} style={{ position: 'relative', borderRadius: R.lg, boxShadow: SH.card, overflow: 'hidden', aspectRatio: '.85', display: 'flex', alignItems: 'flex-end', filter: soon ? 'saturate(.45) brightness(.92)' : 'none' }}>
               <img src={img} {...dim(img)} loading="lazy" decoding="async" alt={label} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 40%, rgba(20,16,64,.65))' }} />
-              {soon && <span style={{ position: 'absolute', top: 10, right: 10, background: c.amber, color: c.navy, fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 10.5, borderRadius: 999, padding: '5px 10px' }}>Coming soon</span>}
-              <span className="r-fs r-pad" style={{ position: 'relative', color: '#fff', fontFamily: FONT_DISPLAY, ...rv('fs', 21, 18), ...rv('pad', 18, 14), textShadow: '0 2px 8px rgba(0,0,0,.4)' }}>{label}</span>
+              {soon && <span style={{ ...CHIP, position: 'absolute', top: 12, right: 12, background: c.amber, color: c.navy, fontSize: T.xs[0] }}>Coming soon</span>}
+              <span className="r-fs r-pad" style={{ position: 'relative', color: c.white, fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, ...rv('pad', 20, 16), textShadow: SH.textHero }}>{label}</span>
             </div>
           );
           return to
@@ -245,22 +245,22 @@ export function RangeCards({ title = 'Complete your bed', intro }) {
     ...products.map(p => ({ to: `/product/${p.id}`, name: p.name, tagline: p.tagline, img: p.images[0], pillow: false, price: getPrice(p, isCA), compareAt: p.compareAt ? (isCA ? p.compareAt.cad : p.compareAt.usd) : null, badge: p.badge, from: true })),
   ];
   return (
-    <section className="r-pad" style={rv('pad', '30px 40px 64px', '20px 20px 44px')}>
-      <Reveal><h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'var(--h2)', color: c.navy, textAlign: 'center', marginBottom: intro ? 6 : 20 }}>{title}</h2></Reveal>
-      {intro && <Reveal><p style={{ textAlign: 'center', fontSize: 13.5, color: c.grayD, maxWidth: 460, margin: '0 auto 24px', lineHeight: 1.6 }}>{intro}</p></Reveal>}
-      <div className="grid-4m2 r-gap" style={{ ...rv('gap', 18, 12), maxWidth: 1080, margin: '0 auto' }}>
+    <section className="r-pad" style={rv('pad', ...SP.section)}>
+      <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: intro ? 8 : 24 }}>{title}</h2></Reveal>
+      {intro && <Reveal><p className="r-fs" style={{ textAlign: 'center', ...rv('fs', ...T.md), color: c.grayD, maxWidth: W.narrow, margin: '0 auto 32px', lineHeight: LH.body }}>{intro}</p></Reveal>}
+      <div className="grid-4m2 r-gap" style={{ ...rv('gap', ...SP.gap), maxWidth: W.page, margin: '0 auto' }}>
         {cards.map((cd, i) => (
-          <Reveal key={i} delay={i * 70}><Link to={cd.to} style={{ textDecoration: 'none', background: '#fff', borderRadius: 18, overflow: 'hidden', boxShadow: '0 10px 26px rgba(32,27,93,.09)', display: 'block', height: '100%' }}>
+          <Reveal key={i} delay={i * 70}><Link to={cd.to} className="card-hover" style={{ textDecoration: 'none', ...CARD, overflow: 'hidden', display: 'block', height: '100%' }}>
             <div className="r-h" style={{ position: 'relative', ...rv('h', 170, 130), background: c.cream, overflow: 'hidden' }}>
               {cd.pillow
                 ? <PillowDeck count={2} height={[170, 130]} radius={0} />
                 : <img src={cd.img} {...dim(cd.img)} loading="lazy" decoding="async" alt={cd.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
-              {cd.badge && <span style={{ position: 'absolute', top: 10, left: 10, zIndex: 20, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 10.5, borderRadius: 999, padding: '4px 11px' }}>{cd.badge}</span>}
+              {cd.badge && <span style={{ ...CHIP, position: 'absolute', top: 12, left: 12, zIndex: 20, background: c.amber, color: c.navy, fontSize: T.xs[0] }}>{cd.badge}</span>}
             </div>
-            <div className="r-pad" style={rv('pad', '14px 16px 18px', '12px 12px 16px')}>
-              <h3 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 16, 14), color: c.navy, marginBottom: 4, lineHeight: 1.2 }}>{cd.name}</h3>
-              <div className="d-only" style={{ fontSize: 11.5, color: c.grayD, marginBottom: 8, lineHeight: 1.45 }}>{cd.tagline}</div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: c.navy }}>{cd.from ? 'From ' : ''}{formatPrice(cd.price, symbol)} {cd.compareAt && <s style={{ fontWeight: 400, color: '#999', fontSize: 11.5 }}>{formatPrice(cd.compareAt, symbol)}</s>}</div>
+            <div className="r-pad" style={rv('pad', 24, 16)}>
+              <h3 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.lg), color: c.navy, marginBottom: 6, lineHeight: LH.head }}>{cd.name}</h3>
+              <div className="d-only" style={{ fontSize: T.sm[0], color: c.grayD, marginBottom: 10, lineHeight: LH.body }}>{cd.tagline}</div>
+              <div className="r-fs" style={{ ...rv('fs', ...T.md), fontWeight: 700, color: c.navy }}>{cd.from ? 'From ' : ''}{formatPrice(cd.price, symbol)} {cd.compareAt && <s style={{ fontWeight: 400, color: c.gray, fontSize: T.xs[0] }}>{formatPrice(cd.compareAt, symbol)}</s>}</div>
             </div>
           </Link></Reveal>
         ))}
@@ -269,7 +269,7 @@ export function RangeCards({ title = 'Complete your bed', intro }) {
   );
 }
 
-export function Stars({ n = 5, size = 14 }) {
+export function Stars({ n = 5, size = T.sm[0] }) {
   return (
     <span aria-label={`${n} out of 5 stars`} style={{ color: c.amberD, fontSize: size, letterSpacing: 2 }}>
       {'★'.repeat(n)}{'☆'.repeat(5 - n)}
@@ -294,19 +294,19 @@ export function ReviewsBlock() {
     <div>
       {/* Wolkjes komen achter de donkere sectie vandaan: rand met gezichtje boven, kale rand onder */}
       <img src={IMG.cloudsUp} {...dim(IMG.cloudsUp)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginBottom: -1 }} />
-      <section className="r-pad" style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: '#fff', ...rv('pad', '64px 40px 70px', '38px 20px 40px') }}>
+      <section className="r-pad" style={{ background: `linear-gradient(180deg, ${c.purple}, ${c.navy})`, color: c.white, ...rv('pad', ...SP.section) }}>
         <Reveal>
-        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 'var(--h2-lg)', textAlign: 'center' }}>What our <span style={{ fontFamily: FONT_SUB }}>customers say</span></h2>
-        <div style={{ textAlign: 'center', margin: '10px 0 6px' }}><Stars n={Math.round(data.avg)} /> <span style={{ fontSize: 13, marginLeft: 6 }}>{data.avg} · {data.count} verified review{data.count === 1 ? '' : 's'}</span></div>
+        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, textAlign: 'center' }}>What our <span style={{ fontFamily: FONT_SUB }}>customers say</span></h2>
+        <div style={{ textAlign: 'center', margin: '10px 0 6px' }}><Stars n={Math.round(data.avg)} /> <span style={{ fontSize: T.sm[0], marginLeft: 6 }}>{data.avg} · {data.count} verified review{data.count === 1 ? '' : 's'}</span></div>
         </Reveal>
         <Reveal delay={120}>
-        <div className="fns-scroll" style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '18px 4px 8px', maxWidth: 1050, margin: '0 auto', scrollSnapType: 'x mandatory' }}>
+        <div className="fns-scroll r-gap" style={{ display: 'flex', ...rv('gap', ...SP.gap), overflowX: 'auto', padding: '24px 4px 8px', maxWidth: W.page, margin: '0 auto', scrollSnapType: 'x mandatory' }}>
           {shown.map((r, i) => (
-            <div key={i} className="r-flex r-minw" style={{ scrollSnapAlign: 'center', ...rv('flex', '1 1 0', '0 0 86%'), ...rv('minw', 300, 0), background: c.sky, color: c.navy, borderRadius: 20, padding: 20 }}>
+            <div key={i} className="r-flex r-minw r-pad" style={{ scrollSnapAlign: 'center', ...rv('flex', '1 1 0', '0 0 86%'), ...rv('minw', 300, 0), ...CARD_SOFT, color: c.navy, ...rv('pad', ...SP.card) }}>
               <Stars n={r.rating} />
-              <p style={{ fontSize: 13.5, lineHeight: 1.65, margin: '10px 0 14px' }}>"{r.body}"</p>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5 }}>
-                <b style={{ fontFamily: FONT_SUB, fontSize: 14 }}>{r.name}</b>
+              <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, margin: '10px 0 14px' }}>"{r.body}"</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: T.xs[0] }}>
+                <b style={{ fontFamily: FONT_SUB, fontSize: T.sm[0] }}>{r.name}</b>
                 <span style={{ color: c.grayD }}>{r.verified ? 'Verified buyer' : r.date}</span>
               </div>
             </div>
@@ -314,7 +314,7 @@ export function ReviewsBlock() {
         </div>
         </Reveal>
         <div style={{ textAlign: 'center', marginTop: 18 }}>
-          <Link to="/reviews" style={{ color: '#DDD9FF', fontSize: 13, textDecoration: 'underline' }}>Read all reviews</Link>
+          <Link to="/reviews" style={{ color: c.lilac, fontSize: T.sm[0], textDecoration: 'underline' }}>Read all reviews</Link>
         </div>
       </section>
       <img src={IMG.cloudsDown} {...dim(IMG.cloudsDown)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ display: 'block', width: '100%', marginTop: -1 }} />
@@ -325,13 +325,13 @@ export function ReviewsBlock() {
 export function FAQBlock({ items = FAQ_ITEMS, dark = false, limit }) {
   const list = limit ? items.slice(0, limit) : items;
   return (
-    <div style={{ maxWidth: 640, margin: '0 auto' }}>
+    <div style={{ maxWidth: W.text, margin: '0 auto' }}>
       {list.map(([q, a], i) => (
         <details key={i} style={{ borderBottom: `1px solid ${dark ? 'rgba(255,255,255,.25)' : 'rgba(32,27,93,.16)'}` }}>
-          <summary style={{ listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, padding: '15px 2px', fontSize: 14, fontWeight: 500, cursor: 'pointer', fontFamily: FONT_SUB }}>
-            {q}<span style={{ fontFamily: FONT_DISPLAY, fontSize: 16 }}>+</span>
+          <summary className="r-fs" style={{ listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, padding: '18px 2px', ...rv('fs', ...T.md), lineHeight: LH.head, fontWeight: 500, cursor: 'pointer', fontFamily: FONT_SUB }}>
+            {q}<span style={{ fontFamily: FONT_DISPLAY, fontSize: T.h4[0] }}>+</span>
           </summary>
-          <p style={{ fontSize: 13, lineHeight: 1.7, padding: '0 2px 15px', opacity: .85 }}>{a}</p>
+          <p className="r-fs" style={{ ...rv('fs', ...T.sm), lineHeight: LH.loose, padding: '0 2px 18px', opacity: .85 }}>{a}</p>
         </details>
       ))}
     </div>
@@ -350,22 +350,22 @@ export function EmailCapture() {
   };
 
   return (
-    <section className="r-pad" style={{ background: c.sky, ...rv('pad', '56px 40px', '42px 22px'), textAlign: 'center' }}>
+    <section className="r-pad" style={{ background: c.sky, ...rv('pad', ...SP.section), textAlign: 'center' }}>
       <Reveal>
       <img src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" style={{ height: 30, marginBottom: 8 }} />
-      <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 36, 24), color: c.navy }}>Sleep better, <span style={{ fontFamily: FONT_SUB }}>pay less</span></h2>
-      <p style={{ fontSize: 13.5, lineHeight: 1.6, maxWidth: 340, margin: '10px auto 0' }}>Get 10% off your first order and our best sleep tips for warm nights.</p>
+      <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy }}>Sleep better, <span style={{ fontFamily: FONT_SUB }}>pay less</span></h2>
+      <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, maxWidth: 400, margin: '12px auto 0' }}>Get 10% off your first order and our best sleep tips for warm nights.</p>
       {state === 'done' ? (
-        <p style={{ fontSize: 14, fontWeight: 600, marginTop: 20 }}>Check your inbox — your 10% code is on its way. 🌙</p>
+        <p className="r-fs" style={{ ...rv('fs', ...T.md), fontWeight: 600, marginTop: 24 }}>Check your inbox — your 10% code is on its way. 🌙</p>
       ) : (
         <>
-          <form onSubmit={submit} className="r-mw" style={{ display: 'flex', ...rv('mw', 460, 380), margin: '22px auto 0', background: '#fff', borderRadius: 999, padding: 5, boxShadow: '0 8px 22px rgba(32,27,93,.14)' }}>
-            <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Your email address" aria-label="Email address"
-              style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: 'Poppins,sans-serif', fontSize: 13, padding: '10px 16px', color: c.navy, minWidth: 0, outline: 'none' }} />
-            <button type="submit" disabled={state === 'busy'} style={{ border: 'none', borderRadius: 999, background: c.navy, color: '#fff', fontWeight: 700, fontSize: 13, padding: '11px 20px', cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>{state === 'busy' ? '…' : 'Get 10% off'}</button>
+          <form onSubmit={submit} className="r-mw" style={{ display: 'flex', alignItems: 'center', ...rv('mw', 460, 380), margin: '24px auto 0', background: c.white, borderRadius: R.pill, padding: 5, boxShadow: SH.card }}>
+            <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Your email address" aria-label="Email address" className="r-fs"
+              style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: 'inherit', ...rv('fs', ...T.md), padding: '10px 16px', color: c.navy, minWidth: 0, outline: 'none' }} />
+            <button type="submit" disabled={state === 'busy'} style={{ ...BTN_SM, flexShrink: 0 }}>{state === 'busy' ? '…' : 'Get 10% off'}</button>
           </form>
-          {state === 'error' && <p style={{ fontSize: 11.5, color: '#b3423f', marginTop: 8 }}>Something went wrong — please try again.</p>}
-          <p style={{ fontSize: 11, marginTop: 10, opacity: .65 }}>No spam. Unsubscribe anytime.</p>
+          {state === 'error' && <p style={{ fontSize: T.xs[0], color: c.danger, marginTop: 8 }}>Something went wrong — please try again.</p>}
+          <p style={{ fontSize: T.xs[0], marginTop: 12, opacity: .65 }}>No spam. Unsubscribe anytime.</p>
         </>
       )}
       </Reveal>
@@ -382,13 +382,13 @@ export function TrustAccordion({ specs }) {
     ['Product specifications', specs],
   ];
   return (
-    <div style={{ background: c.navy, color: '#fff', borderRadius: 20, padding: '10px 20px 14px' }}>
+    <div className="r-pad" style={{ background: c.navy, color: c.white, borderRadius: R.lg, ...rv('pad', '8px 28px 12px', '6px 20px 10px') }}>
       {items.map(([q, a], i) => (
         <details key={i} style={{ borderBottom: i < items.length - 1 ? '1px solid rgba(255,255,255,.25)' : 'none' }}>
-          <summary style={{ listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, padding: '14px 2px', fontSize: 13.5, fontWeight: 500, cursor: 'pointer', fontFamily: FONT_SUB }}>
-            {q}<span style={{ fontFamily: FONT_DISPLAY, fontSize: 16 }}>+</span>
+          <summary style={{ listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, padding: '16px 2px', fontSize: T.sm[0], lineHeight: LH.head, fontWeight: 500, cursor: 'pointer', fontFamily: FONT_SUB }}>
+            {q}<span style={{ fontFamily: FONT_DISPLAY, fontSize: T.h4[1] }}>+</span>
           </summary>
-          <div style={{ fontSize: 12.5, lineHeight: 1.7, padding: '0 2px 14px', opacity: .88 }}>{a}</div>
+          <div style={{ fontSize: T.sm[0], lineHeight: LH.body, padding: '0 2px 16px', opacity: .88 }}>{a}</div>
         </details>
       ))}
     </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { c, rv, FONT_SUB } from '../theme';
+import { c, rv, FONT_SUB, R, T, CHIP } from '../theme';
 import { CartContext } from './Cart';
 import { TrustBar } from './Blocks';
 import { IMG, dim } from '../data';
@@ -43,7 +43,7 @@ export default function Nav({ onCartOpen }) {
     <>
       {/* Announcement bar */}
       <div style={{ background: c.navy, overflow: 'hidden', whiteSpace: 'nowrap' }} aria-hidden="true">
-        <div style={{ display: 'inline-block', padding: '7px 0', color: c.amber, fontSize: 11.5, fontWeight: 600, letterSpacing: '0.04em', animation: 'fnsslide 22s linear infinite' }}>
+        <div style={{ display: 'inline-block', padding: '8px 0', color: c.amber, fontSize: T.xs[0], fontWeight: 600, letterSpacing: '0.04em', animation: 'fnsslide 22s linear infinite' }}>
           {Array(2).fill('☁️ FREE SHIPPING ACROSS THE US · ☁️ 100-NIGHT SLEEP TRIAL · ☁️ FREE RETURNS · ☁️ ORDER BY 11PM, SHIPS TODAY · ').join('')}
         </div>
         <style>{`@keyframes fnsslide { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
@@ -54,9 +54,9 @@ export default function Nav({ onCartOpen }) {
             header los van elkaar uitgelijnd blijven). Desktop: logo + links. */}
         <div className="m-only" style={{ display: 'contents' }}>
             <button aria-label="Menu" onClick={() => setOpen(!open)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 5, padding: 4 }}>
-              <i style={{ width: 22, height: 3, background: '#fff', borderRadius: 2, display: 'block' }} />
-              <i style={{ width: 22, height: 3, background: '#fff', borderRadius: 2, display: 'block' }} />
-              <i style={{ width: 22, height: 3, background: '#fff', borderRadius: 2, display: 'block' }} />
+              <i style={{ width: 22, height: 3, background: c.white, borderRadius: R.pill, display: 'block' }} />
+              <i style={{ width: 22, height: 3, background: c.white, borderRadius: R.pill, display: 'block' }} />
+              <i style={{ width: 22, height: 3, background: c.white, borderRadius: R.pill, display: 'block' }} />
             </button>
             <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
               <img src={IMG.logoFull} {...dim(IMG.logoFull)} decoding="async" alt="flip'nsleep" style={{ height: 30, width: 'auto' }} />
@@ -68,15 +68,15 @@ export default function Nav({ onCartOpen }) {
             </Link>
             <nav style={{ display: 'flex', gap: 28 }}>
               {LINKS.map(([to, label]) => (
-                <Link key={to} to={to} style={{ color: loc.pathname === to ? c.amber : '#fff', textDecoration: 'none', fontFamily: FONT_SUB, fontSize: 14, letterSpacing: '0.06em' }}>{label}</Link>
+                <Link key={to} to={to} className="nav-link" style={{ color: loc.pathname === to ? c.amber : c.white, fontFamily: FONT_SUB, fontSize: T.sm[0], letterSpacing: '0.06em' }}>{label}</Link>
               ))}
             </nav>
           </div>
 
-        <button aria-label="Cart" onClick={onCartOpen} style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', fontSize: 22, color: '#fff' }}>
+        <button aria-label="Cart" onClick={onCartOpen} style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', fontSize: T.h3[1], color: c.white }}>
           🛒
           {count > 0 && (
-            <b style={{ position: 'absolute', top: -6, right: -10, background: c.amber, color: c.navy, fontSize: 10, borderRadius: 10, padding: '1px 6px', fontFamily: 'Poppins, sans-serif' }}>{count}</b>
+            <b style={{ position: 'absolute', top: -6, right: -10, background: c.amber, color: c.navy, fontSize: T.xs[0], borderRadius: R.pill, padding: '1px 6px', fontFamily: 'Poppins, sans-serif' }}>{count}</b>
           )}
         </button>
       </header>
@@ -86,17 +86,17 @@ export default function Nav({ onCartOpen }) {
       {open && (
         <nav className="m-only" style={{ position: 'sticky', top: 55, zIndex: 89, background: c.navy, borderTop: '1px solid rgba(255,255,255,.12)', padding: '10px 0 16px' }}>
           {LINKS.map(([to, label]) => (
-            <Link key={to} to={to} style={{ display: 'block', padding: '11px 24px', color: loc.pathname === to ? c.amber : '#fff', textDecoration: 'none', fontFamily: FONT_SUB, fontSize: 15 }}>{label}</Link>
+            <Link key={to} to={to} className="nav-link" style={{ display: 'block', padding: '12px 24px', color: loc.pathname === to ? c.amber : c.white, fontFamily: FONT_SUB, fontSize: T.md[1] }}>{label}</Link>
           ))}
           <div style={{ borderTop: '1px solid rgba(255,255,255,.12)', margin: '8px 0 2px' }} />
-          <div style={{ padding: '8px 24px 4px', color: c.gray, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: FONT_SUB }}>Shop by category</div>
+          <div style={{ padding: '8px 24px 4px', color: c.gray, fontSize: T.xs[0], fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: FONT_SUB }}>Shop by category</div>
           {CATEGORIES.map(([to, label, soon]) => (
             soon ? (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '11px 24px', color: 'rgba(255,255,255,.45)', fontFamily: FONT_SUB, fontSize: 15 }}>
-                {label} <span style={{ fontSize: 10, background: 'rgba(255,255,255,.14)', color: '#fff', borderRadius: 999, padding: '2px 8px', fontWeight: 600, letterSpacing: '0.04em' }}>Soon</span>
+              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '11px 24px', color: 'rgba(255,255,255,.45)', fontFamily: FONT_SUB, fontSize: T.md[1] }}>
+                {label} <span style={{ ...CHIP, fontSize: T.xs[0], background: 'rgba(255,255,255,.14)', color: c.white, fontWeight: 600, padding: '4px 10px' }}>Soon</span>
               </div>
             ) : (
-              <Link key={label} to={to} style={{ display: 'block', padding: '11px 24px', color: loc.pathname === to ? c.amber : '#fff', textDecoration: 'none', fontFamily: FONT_SUB, fontSize: 15 }}>{label}</Link>
+              <Link key={label} to={to} className="nav-link" style={{ display: 'block', padding: '12px 24px', color: loc.pathname === to ? c.amber : c.white, fontFamily: FONT_SUB, fontSize: T.md[1] }}>{label}</Link>
             )
           ))}
         </nav>

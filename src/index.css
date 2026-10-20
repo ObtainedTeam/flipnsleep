@@ -142,3 +142,15 @@ img { max-width: 100%; width: auto; height: auto; }
   .grid-4m2, .grid-3m2 { grid-template-columns: 1fr 1fr; }
   .row-m-col { flex-direction: column; }
 }
+
+/* Blok 2: hover, focus en knoppen (tokens in theme.js) */
+a, button { transition: transform .15s ease, filter .15s ease, box-shadow .15s ease; }
+a:hover, button:hover { filter: brightness(1.06); }
+button:active, a:active { transform: translateY(1px); }
+:focus-visible { outline: 3px solid #3A217F; outline-offset: 3px; border-radius: 6px; }
+.card-hover { transition: transform .3s ease, box-shadow .3s ease; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 4px 10px rgba(32,27,93,.08), 0 28px 56px -16px rgba(32,27,93,.30); }
+
+/* Blok 2: link-hover voor navigatie en footer */
+.nav-link, .foot-link { text-decoration: none; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+.nav-link:hover, .foot-link:hover { text-decoration: underline; filter: none; }

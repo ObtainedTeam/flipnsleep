@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
+import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { productById, products, dim } from '../data';
 import { CartContext } from '../components/Cart';
@@ -26,8 +26,8 @@ export default function ProductVariable({ onCartOpen }) {
 
   if (!product) {
     return (
-      <section style={{ maxWidth: 640, margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
-        <h1 style={{ fontFamily: FONT_DISPLAY, fontSize: 28, color: c.navy, marginBottom: 12 }}>Product not found</h1>
+      <section className="r-pad" style={{ maxWidth: W.narrow, margin: '0 auto', ...rv('pad', ...SP.section), textAlign: 'center' }}>
+        <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.head, color: c.navy, marginBottom: 24 }}>Product not found</h1>
         <Link to="/shop" style={BTN}>Back to shop</Link>
       </section>
     );
@@ -54,17 +54,17 @@ export default function ProductVariable({ onCartOpen }) {
 
   return (
     <div>
-      <section className="r-pad r-cols r-gap" style={{ maxWidth: 1160, margin: '0 auto', ...rv('pad', '52px 24px', '20px 16px'), display: 'grid', ...rv('cols', '1.05fr 1fr', '1fr'), ...rv('gap', 60, 24) }}>
+      <section className="r-pad r-cols r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', '1.05fr 1fr', '1fr'), ...rv('gap', 56, 24) }}>
         {/* Gallery */}
         <Reveal><div>
-          <div className="r-h" style={{ background: c.cream, borderRadius: 22, overflow: 'hidden', ...rv('h', 460, 320) }}>
+          <div className="r-h" style={{ background: c.cream, borderRadius: R.lg, boxShadow: SH.card, overflow: 'hidden', ...rv('h', 460, 320) }}>
             <img src={product.images[img]} {...dim(product.images[img])} fetchPriority="high" decoding="async" alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </div>
-          <div className="fns-scroll" style={{ display: 'flex', gap: 8, marginTop: 10, overflowX: 'auto' }}>
+          <div className="fns-scroll" style={{ display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto' }}>
             {product.images.map((src, i) => (
               <button key={i} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}`}
-                style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: 12, padding: 0, cursor: 'pointer', background: c.cream, flexShrink: 0, overflow: 'hidden' }}>
-                <img src={src} {...dim(src)} loading="lazy" decoding="async" alt="" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 10, display: 'block' }} />
+                style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: R.sm, padding: 0, cursor: 'pointer', background: c.cream, flexShrink: 0, overflow: 'hidden' }}>
+                <img src={src} {...dim(src)} loading="lazy" decoding="async" alt="" style={{ width: 64, height: 64, objectFit: 'cover', display: 'block' }} />
               </button>
             ))}
           </div>
@@ -73,50 +73,50 @@ export default function ProductVariable({ onCartOpen }) {
         {/* Info */}
         <Reveal delay={120}><div>
           <div style={EYEBROW}>{product.badge || 'flip\u2019nsleep'}</div>
-          <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 42, 28), color: c.navy, margin: '6px 0 6px', lineHeight: 1.15 }}>{product.name}</h1>
-          {product.tagline && <p style={{ fontFamily: FONT_SUB, fontSize: 14.5, color: c.grayD, marginBottom: 10 }}>{product.tagline}</p>}
-          <div style={{ marginBottom: 10, fontSize: 12.5, color: c.grayD }}>🌙 100-night sleep trial · 🛡️ 2-year warranty · 📦 Free shipping</div>
+          <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), color: c.navy, margin: '8px 0 8px', lineHeight: LH.tight }}>{product.name}</h1>
+          {product.tagline && <p className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', ...T.lg), lineHeight: LH.head, color: c.grayD, marginBottom: 12 }}>{product.tagline}</p>}
+          <div style={{ marginBottom: 12, fontSize: T.sm[0], color: c.grayD }}>🌙 100-night sleep trial · 🛡️ 2-year warranty · 📦 Free shipping</div>
 
-          <div style={{ fontFamily: FONT_DISPLAY, fontSize: 24, color: c.navy }}>
+          <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h3), color: c.navy }}>
             {formatPrice(price, symbol)}
-            {compare && <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: 14, color: '#999', marginLeft: 8 }}>{formatPrice(compare, symbol)}</s>}
+            {compare && <s style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: T.sm[0], color: c.gray, marginLeft: 8 }}>{formatPrice(compare, symbol)}</s>}
           </div>
-          {compare && <div style={{ fontSize: 12.5, color: '#2e6b4f', fontWeight: 600, marginBottom: 8 }}>Save {formatPrice(compare - price, symbol)} · free shipping included</div>}
-          <div style={{ margin: '10px 0 16px' }}><ShippingCountdown /></div>
+          {compare && <div style={{ fontSize: T.sm[0], color: c.purple, fontWeight: 600, marginBottom: 8 }}>Save {formatPrice(compare - price, symbol)} · free shipping included</div>}
+          <div style={{ margin: '12px 0 16px' }}><ShippingCountdown /></div>
 
-          <p style={{ fontSize: 14, color: c.grayD, lineHeight: 1.7, marginBottom: 18 }}>{product.desc}</p>
+          <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.body, marginBottom: 20 }}>{product.desc}</p>
 
           {/* Size selector */}
           <div style={{ marginBottom: hasColors ? 16 : 20 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: c.navy, letterSpacing: .4, marginBottom: 8, fontFamily: FONT_SUB }}>Size: <span style={{ color: c.grayD, fontWeight: 500 }}>{size}</span></div>
+            <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.navy, letterSpacing: .4, marginBottom: 8, fontFamily: FONT_SUB }}>Size: <span style={{ color: c.grayD, fontWeight: 500 }}>{size}</span></div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {product.sizes.map(s => {
                 const active = s === size;
                 return (
                   <button key={s} onClick={() => setSize(s)} style={{
-                    border: `2px solid ${active ? c.navy : 'rgba(32,27,93,.18)'}`, background: active ? c.navy : '#fff',
-                    color: active ? '#fff' : c.navy, borderRadius: 12, padding: '9px 16px', cursor: 'pointer',
-                    fontSize: 13, fontWeight: 600, fontFamily: FONT_SUB, transition: 'all .12s',
+                    border: `2px solid ${active ? c.navy : 'rgba(32,27,93,.18)'}`, background: active ? c.navy : c.white,
+                    color: active ? c.white : c.navy, borderRadius: R.sm, padding: '10px 16px', cursor: 'pointer',
+                    fontSize: T.sm[0], fontWeight: 600, fontFamily: FONT_SUB, transition: 'all .12s',
                   }}>{s}</button>
                 );
               })}
             </div>
-            {product.sizeInfo && <div style={{ fontSize: 12.5, color: c.grayD, marginTop: 10, fontFamily: FONT_SUB }}>{product.sizeInfo[size]}</div>}
+            {product.sizeInfo && <div style={{ fontSize: T.sm[0], color: c.grayD, marginTop: 12, fontFamily: FONT_SUB }}>{product.sizeInfo[size]}</div>}
           </div>
 
           {/* Colour selector */}
           {hasColors && (
             <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: c.navy, letterSpacing: .4, marginBottom: 8, fontFamily: FONT_SUB }}>Colour: <span style={{ color: c.grayD, fontWeight: 500 }}>{color}</span></div>
+              <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.navy, letterSpacing: .4, marginBottom: 8, fontFamily: FONT_SUB }}>Colour: <span style={{ color: c.grayD, fontWeight: 500 }}>{color}</span></div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                 {product.colors.map((col, i) => {
-                  const hex = product.colorHex[i] || '#ccc';
+                  const hex = product.colorHex[i] || c.gray;
                   const active = col === color;
                   return (
                     <button key={col} onClick={() => setColor(col)} aria-label={col} title={col} style={{
-                      width: 34, height: 34, borderRadius: '50%', background: hex, cursor: 'pointer',
+                      width: 34, height: 34, borderRadius: R.pill, background: hex, cursor: 'pointer',
                       border: swatchBorder(hex),
-                      boxShadow: active ? `0 0 0 2px #fff, 0 0 0 4px ${c.navy}` : 'none', transition: 'box-shadow .12s',
+                      outline: active ? `2px solid ${c.navy}` : 'none', outlineOffset: 2, transition: 'outline-color .12s',
                     }} />
                   );
                 })}
@@ -125,13 +125,13 @@ export default function ProductVariable({ onCartOpen }) {
           )}
 
           {/* CTA's */}
-          <div className="row-m-col" style={{ display: 'flex', gap: 10, margin: '4px 0 18px' }}>
+          <div className="row-m-col" style={{ display: 'flex', gap: 12, margin: '4px 0 20px' }}>
             <button onClick={() => buyNowProduct(product.id, size, color)} disabled={!purchasable}
-              style={{ ...BTN, flex: 1, textAlign: 'center', fontSize: 14, opacity: purchasable ? 1 : .5, cursor: purchasable ? 'pointer' : 'not-allowed' }}>
+              style={{ ...BTN, flex: '1 0 auto', opacity: purchasable ? 1 : .5, cursor: purchasable ? 'pointer' : 'not-allowed' }}>
               {purchasable ? 'Buy now' : 'Coming soon'}
             </button>
             <button onClick={addToCart} disabled={!purchasable}
-              style={{ ...BTNO, flex: 1, textAlign: 'center', opacity: purchasable ? 1 : .5, cursor: purchasable ? 'pointer' : 'not-allowed' }}>
+              style={{ ...BTNO, flex: '1 0 auto', opacity: purchasable ? 1 : .5, cursor: purchasable ? 'pointer' : 'not-allowed' }}>
               Add to cart
             </button>
           </div>
@@ -143,33 +143,33 @@ export default function ProductVariable({ onCartOpen }) {
       </section>
 
       {/* Why you'll love it: longDesc + highlights + features */}
-      <section className="r-pad" style={{ maxWidth: 1000, margin: '0 auto', ...rv('pad', '20px 24px 50px', '14px 16px 30px') }}>
+      <section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '24px 40px 80px', '16px 20px 56px') }}>
         <Reveal><div>
           <div style={EYEBROW}>Why you'll love it</div>
           {product.longDesc.split('\n\n').map((para, i) => (
-            <p key={i} style={{ fontSize: 14, color: c.grayD, lineHeight: 1.75, margin: '10px 0 0' }}>{para}</p>
+            <p key={i} className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.loose, margin: '12px 0 0', maxWidth: W.text + 80 }}>{para}</p>
           ))}
         </div></Reveal>
 
         {product.highlights && (
-          <Reveal delay={100}><div className="grid-3m1" style={{ gap: 14, margin: '26px 0 6px' }}>
+          <Reveal delay={100}><div className="grid-3m1 r-gap" style={{ ...rv('gap', ...SP.gap), margin: '32px 0 8px' }}>
             {product.highlights.map((h, i) => (
-              <div key={i} style={{ background: c.sky, borderRadius: 16, padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: 24 }}>{h.icon}</span>
+              <div key={i} style={{ background: c.sky, borderRadius: R.sm, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: T.h3[0] }}>{h.icon}</span>
                 <div>
-                  <div style={{ fontFamily: FONT_SUB, fontSize: 13.5, fontWeight: 600, color: c.navy }}>{h.label}</div>
-                  <div style={{ fontSize: 12, color: c.grayD }}>{h.sub}</div>
+                  <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], fontWeight: 600, color: c.navy }}>{h.label}</div>
+                  <div style={{ fontSize: T.xs[0], color: c.grayD }}>{h.sub}</div>
                 </div>
               </div>
             ))}
           </div></Reveal>
         )}
 
-        <Reveal delay={140}><div style={{ marginTop: 24 }}>
-          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 26, 22), color: c.navy, marginBottom: 12 }}>What's inside</h2>
+        <Reveal delay={140}><div style={{ marginTop: 40 }}>
+          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h3), lineHeight: LH.head, color: c.navy, marginBottom: 16 }}>What's inside</h2>
           <ul className="grid-2m1" style={{ listStyle: 'none', gap: '8px 24px' }}>
             {product.features.map((f, i) => (
-              <li key={i} style={{ display: 'flex', gap: 10, fontSize: 13.5, lineHeight: 1.6, color: c.grayD }}>
+              <li key={i} style={{ display: 'flex', gap: 12, fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD }}>
                 <span style={{ color: c.amberD, flexShrink: 0 }}>✓</span>{f}
               </li>
             ))}
@@ -179,18 +179,18 @@ export default function ProductVariable({ onCartOpen }) {
 
       {/* Pairing / cross-sell */}
       {others.length > 0 && (
-        <section className="r-pad" style={{ maxWidth: 1000, margin: '0 auto', ...rv('pad', '0 24px 50px', '0 16px 34px') }}>
-          <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 26, 22), color: c.navy, textAlign: 'center', marginBottom: 18 }}>Complete your <span style={{ fontFamily: FONT_SUB }}>bed</span></h2></Reveal>
-          <Reveal delay={100}><div className="grid-2m1 r-gap" style={rv('gap', 24, 16)}>
+        <section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '0 40px 80px', '0 20px 56px') }}>
+          <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Complete your <span style={{ fontFamily: FONT_SUB }}>bed</span></h2></Reveal>
+          <Reveal delay={100}><div className="grid-2m1 r-gap" style={rv('gap', ...SP.gap)}>
             {others.map(o => {
               const op = getPrice(o, isCA);
               return (
-                <Link key={o.id} to={`/product/${o.id}`} style={{ textDecoration: 'none', background: '#fff', borderRadius: 20, overflow: 'hidden', boxShadow: '0 10px 26px rgba(32,27,93,.10)', display: 'flex', alignItems: 'center', gap: 14 }}>
+                <Link key={o.id} to={`/product/${o.id}`} className="card-hover" style={{ textDecoration: 'none', ...CARD, overflow: 'hidden', display: 'flex', alignItems: 'center', gap: 16 }}>
                   <div className="r-w r-h" style={{ ...rv('w', 140, 110), ...rv('h', 130, 110), flexShrink: 0, background: c.cream, overflow: 'hidden' }}><img src={o.images[0]} {...dim(o.images[0])} loading="lazy" decoding="async" alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>
-                  <div style={{ padding: '12px 14px 12px 0' }}>
-                    <div style={{ fontFamily: FONT_DISPLAY, fontSize: 16, color: c.navy, marginBottom: 3 }}>{o.name}</div>
-                    <div style={{ fontSize: 12, color: c.grayD, marginBottom: 6, lineHeight: 1.45 }}>{o.tagline}</div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: c.navy }}>From {formatPrice(op, symbol)}</div>
+                  <div style={{ padding: '16px 20px 16px 0' }}>
+                    <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.lg), lineHeight: LH.head, color: c.navy, marginBottom: 4 }}>{o.name}</div>
+                    <div style={{ fontSize: T.xs[0], color: c.grayD, marginBottom: 8, lineHeight: LH.body }}>{o.tagline}</div>
+                    <div style={{ fontSize: T.sm[0], fontWeight: 700, color: c.navy }}>From {formatPrice(op, symbol)}</div>
                   </div>
                 </Link>
               );
@@ -200,8 +200,8 @@ export default function ProductVariable({ onCartOpen }) {
       )}
 
       <ReviewsBlock />
-      <section className="r-pad" style={rv('pad', '40px 40px 60px', '30px 22px 40px')}>
-        <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 24, color: c.navy, textAlign: 'center', marginBottom: 12 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
+      <section className="r-pad" style={rv('pad', ...SP.section)}>
+        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
         <FAQBlock limit={5} />
       </section>
     </div>

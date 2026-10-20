@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { c, BTN, rv, FONT_DISPLAY, FONT_SUB } from '../theme';
+import { c, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { cartCheckoutUrl, CART_CROSSSELL_ANCHOR, CART_CROSSSELL_CONTEXTUAL } from '../shopify';
 import { bundleById, productById, dim } from '../data';
@@ -114,62 +114,62 @@ export default function Cart({ isOpen, onClose }) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 200 }}>
       <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,.55)' }} />
-      <aside className="r-w" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, ...rv('w', 420, '100%'), background: c.cream, display: 'flex', flexDirection: 'column', boxShadow: '-10px 0 40px rgba(32,27,93,.25)' }}>
-        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 20px', background: c.navy, color: '#fff' }}>
-          <span style={{ fontFamily: FONT_DISPLAY, fontSize: 18 }}>Your cart</span>
-          <button onClick={onClose} aria-label="Close cart" style={{ background: 'none', border: 'none', color: '#fff', fontSize: 22, cursor: 'pointer' }}>×</button>
+      <aside className="r-w" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, ...rv('w', 420, '100%'), background: c.cream, display: 'flex', flexDirection: 'column', boxShadow: SH.float }}>
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 20px', background: c.navy, color: c.white }}>
+          <span style={{ fontFamily: FONT_DISPLAY, fontSize: T.lg[0] }}>Your cart</span>
+          <button onClick={onClose} aria-label="Close cart" style={{ background: 'none', border: 'none', color: c.white, fontSize: T.h3[0], cursor: 'pointer' }}>×</button>
         </header>
 
-        <div style={{ background: '#EAF4EE', borderBottom: '1px solid #d4e6da', padding: '10px 20px', fontSize: 12, fontWeight: 600, color: '#2e6b4f' }}>
+        <div style={{ background: c.sky, borderBottom: '1px solid rgba(32,27,93,.10)', padding: '10px 20px', fontSize: T.xs[0], fontWeight: 600, color: c.navy }}>
           🚚 Free shipping on every order — always included
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: 16 }}>
           {lines.length === 0 ? (
             <div style={{ textAlign: 'center', marginTop: 60 }}>
-              <p style={{ fontSize: 14, color: c.grayD, marginBottom: 16 }}>Your cart is empty.</p>
+              <p style={{ fontSize: T.sm[0], color: c.grayD, marginBottom: 20 }}>Your cart is empty.</p>
               <a href="/product/signature-cold-pillow" style={BTN}>Shop the deal</a>
             </div>
           ) : lines.map(l => (
-            <div key={l.key} style={{ display: 'flex', gap: 12, background: '#fff', borderRadius: 16, padding: 12, marginBottom: 12, boxShadow: '0 4px 14px rgba(32,27,93,.06)' }}>
-              <img src={l.image} {...dim(l.image)} loading="lazy" decoding="async" alt="" style={{ width: 74, height: 74, objectFit: l.imgFit, borderRadius: 12, background: c.sky }} />
+            <div key={l.key} style={{ display: 'flex', gap: 12, background: c.white, borderRadius: R.sm, padding: 16, marginBottom: 12, boxShadow: SH.card }}>
+              <img src={l.image} {...dim(l.image)} loading="lazy" decoding="async" alt="" style={{ width: 74, height: 74, objectFit: l.imgFit, borderRadius: R.sm, background: c.sky }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SUB, fontSize: 14, marginBottom: 2 }}>{l.name}</div>
-                <div style={{ fontSize: 12, color: c.grayD, marginBottom: 6 }}>{l.sub}</div>
-                <div style={{ fontSize: 13, fontWeight: 700 }}>{formatPrice(l.unit, symbol)} {l.compare && <s style={{ fontWeight: 400, color: '#aaa', fontSize: 11.5 }}>{formatPrice(l.compare, symbol)}</s>}</div>
+                <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], marginBottom: 2 }}>{l.name}</div>
+                <div style={{ fontSize: T.xs[0], color: c.grayD, marginBottom: 6 }}>{l.sub}</div>
+                <div style={{ fontSize: T.sm[0], fontWeight: 700 }}>{formatPrice(l.unit, symbol)} {l.compare && <s style={{ fontWeight: 400, color: c.gray, fontSize: T.xs[0] }}>{formatPrice(l.compare, symbol)}</s>}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 6 }}>
-                  <button onClick={l.dec} style={{ width: 26, height: 26, background: 'none', border: `1px solid ${c.navy}22`, borderRadius: 6, cursor: 'pointer' }}>−</button>
-                  <span style={{ minWidth: 22, textAlign: 'center', fontSize: 13 }}>{l.qty}</span>
-                  <button onClick={l.inc} style={{ width: 26, height: 26, background: 'none', border: `1px solid ${c.navy}22`, borderRadius: 6, cursor: 'pointer' }}>+</button>
+                  <button onClick={l.dec} style={{ width: 26, height: 26, background: 'none', border: `1px solid ${c.navy}22`, borderRadius: R.sm, cursor: 'pointer' }}>−</button>
+                  <span style={{ minWidth: 22, textAlign: 'center', fontSize: T.sm[0] }}>{l.qty}</span>
+                  <button onClick={l.inc} style={{ width: 26, height: 26, background: 'none', border: `1px solid ${c.navy}22`, borderRadius: R.sm, cursor: 'pointer' }}>+</button>
                 </div>
               </div>
-              <button onClick={l.del} aria-label="Remove" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ccc', fontSize: 15, alignSelf: 'flex-start' }}>🗑</button>
+              <button onClick={l.del} aria-label="Remove" style={{ background: 'none', border: 'none', cursor: 'pointer', color: c.gray, fontSize: T.sm[0], alignSelf: 'flex-start' }}>🗑</button>
             </div>
           ))}
 
           {/* Upsell 1+1 -> 2+2 (alleen bij louter 1+1-bundels) */}
           {onlyOnePlusOne && (
-            <div style={{ background: '#F0F5F2', border: '1px solid #d4e6da', borderRadius: 14, padding: 14, marginTop: 4 }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, marginBottom: 4 }}>Make it 4 pillows for less per pillow</div>
-              <div style={{ fontSize: 11.5, color: c.grayD, marginBottom: 10 }}>Buy 2, Get 2 Free brings the price down to {isCA ? 'CA$65.00' : '$47.50'} per pillow.</div>
-              <button onClick={() => { CartContext.remove('1p1'); CartContext.add('2p2', 1); }} style={{ ...BTN, padding: '9px 18px', fontSize: 11.5 }}>Upgrade to 4 pillows</button>
+            <div style={{ background: c.sky, borderRadius: R.sm, padding: 16, marginTop: 4 }}>
+              <div style={{ fontSize: T.sm[0], fontWeight: 700, marginBottom: 4 }}>Make it 4 pillows for less per pillow</div>
+              <div style={{ fontSize: T.xs[0], lineHeight: LH.body, color: c.grayD, marginBottom: 12 }}>Buy 2, Get 2 Free brings the price down to {isCA ? 'CA$65.00' : '$47.50'} per pillow.</div>
+              <button onClick={() => { CartContext.remove('1p1'); CartContext.add('2p2', 1); }} style={BTN_SM}>Upgrade to 4 pillows</button>
             </div>
           )}
 
           {/* Cross-sell: bijbehorende deken / lakens */}
           {lines.length > 0 && recs.length > 0 && (
             <div style={{ marginTop: 8 }}>
-              <div style={{ fontSize: 11.5, fontWeight: 700, color: c.grayD, letterSpacing: .4, textTransform: 'uppercase', margin: '6px 2px 8px', fontFamily: FONT_SUB }}>Complete your bed</div>
+              <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.grayD, letterSpacing: .4, textTransform: 'uppercase', margin: '16px 2px 8px', fontFamily: FONT_SUB }}>Complete your bed</div>
               {recs.map(r => {
                 const rp = getPrice(r, isCA);
                 return (
-                  <Link key={r.id} to={`/product/${r.id}`} onClick={onClose} style={{ display: 'flex', gap: 10, alignItems: 'center', background: '#fff', borderRadius: 14, padding: 10, marginBottom: 8, textDecoration: 'none', boxShadow: '0 3px 12px rgba(32,27,93,.05)' }}>
-                    <img src={r.images[0]} {...dim(r.images[0])} loading="lazy" decoding="async" alt="" style={{ width: 48, height: 48, objectFit: 'contain', borderRadius: 10, background: c.sky, flexShrink: 0 }} />
+                  <Link key={r.id} to={`/product/${r.id}`} onClick={onClose} className="card-hover" style={{ display: 'flex', gap: 12, alignItems: 'center', background: c.white, borderRadius: R.sm, padding: '12px 16px', marginBottom: 8, textDecoration: 'none', boxShadow: SH.card }}>
+                    <img src={r.images[0]} {...dim(r.images[0])} loading="lazy" decoding="async" alt="" style={{ width: 48, height: 48, objectFit: 'contain', borderRadius: R.sm, background: c.sky, flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontFamily: FONT_SUB, fontSize: 12.5, color: c.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
-                      <div style={{ fontSize: 11.5, color: c.grayD }}>From {formatPrice(rp, symbol)}</div>
+                      <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], color: c.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
+                      <div style={{ fontSize: T.xs[0], color: c.grayD }}>From {formatPrice(rp, symbol)}</div>
                     </div>
-                    <span style={{ fontSize: 11.5, fontWeight: 700, color: c.purple, flexShrink: 0 }}>View →</span>
+                    <span style={{ fontSize: T.xs[0], fontWeight: 700, color: c.purple, flexShrink: 0 }}>View →</span>
                   </Link>
                 );
               })}
@@ -178,25 +178,25 @@ export default function Cart({ isOpen, onClose }) {
         </div>
 
         {lines.length > 0 && (
-          <footer style={{ padding: 18, background: '#fff', borderTop: `1px solid ${c.navy}14` }}>
+          <footer style={{ padding: 20, background: c.white, borderTop: `1px solid ${c.navy}14` }}>
             {savings > 0 && (
               <>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <span style={{ fontSize: 13, color: c.grayD }}>Value</span>
-                  <span style={{ fontSize: 13, color: '#999', textDecoration: 'line-through' }}>{formatPrice(compareTotal, symbol)}</span>
+                  <span style={{ fontSize: T.sm[0], color: c.grayD }}>Value</span>
+                  <span style={{ fontSize: T.sm[0], color: c.gray, textDecoration: 'line-through' }}>{formatPrice(compareTotal, symbol)}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <span style={{ fontSize: 13, color: '#2e6b4f', fontWeight: 600 }}>{onlyPillows && pillowCount > 0 ? `Your savings (${pillowCount} pillows)` : 'Your savings'}</span>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#2e6b4f' }}>−{formatPrice(savings, symbol)}</span>
+                  <span style={{ fontSize: T.sm[0], color: c.purple, fontWeight: 600 }}>{onlyPillows && pillowCount > 0 ? `Your savings (${pillowCount} pillows)` : 'Your savings'}</span>
+                  <span style={{ fontSize: T.sm[0], fontWeight: 700, color: c.purple }}>−{formatPrice(savings, symbol)}</span>
                 </div>
               </>
             )}
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span style={{ fontSize: 14, fontWeight: 700 }}>Total</span>
-              <span style={{ fontSize: 16, fontWeight: 700 }}>{formatPrice(total, symbol)}</span>
+              <span style={{ fontSize: T.sm[0], fontWeight: 700 }}>Total</span>
+              <span style={{ fontSize: T.lg[0], fontWeight: 700 }}>{formatPrice(total, symbol)}</span>
             </div>
-            <p style={{ fontSize: 10.5, color: '#aaa', marginBottom: 12 }}>Free shipping included. Taxes calculated at checkout.</p>
-            <button onClick={handleCheckout} style={{ ...BTN, width: '100%', textAlign: 'center', fontSize: 14 }}>Checkout</button>
+            <p style={{ fontSize: T.xs[0], color: c.gray, marginBottom: 16 }}>Free shipping included. Taxes calculated at checkout.</p>
+            <button onClick={handleCheckout} style={{ ...BTN, width: '100%' }}>Checkout</button>
           </footer>
         )}
       </aside>

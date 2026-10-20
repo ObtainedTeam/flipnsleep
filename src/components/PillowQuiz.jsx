@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
+import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
 
 // Gratis kussenvulling-quiz. Volledig op dezelfde pagina (geen redirect, geen
 // e-mail). Geeft een concreet aantal handjes schuim dat je uit het volle kussen
@@ -48,43 +48,43 @@ export default function PillowQuiz() {
   const range = r ? (r.lo === r.hi ? `${r.lo}` : `${r.lo}–${r.hi}`) : '';
 
   return (
-    <section className="r-pad" style={{ background: '#fff', ...rv('pad', '64px 40px', '44px 20px') }}>
-      <div className="r-pad r-mh" style={{ maxWidth: 620, margin: '0 auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: 24, ...rv('pad', '38px 40px 42px', '26px 20px 30px'), textAlign: 'center', ...rv('mh', 470, 520) }}>
+    <section className="r-pad" style={{ background: c.white, ...rv('pad', ...SP.section) }}>
+      <div className="r-pad r-mh" style={{ maxWidth: W.text, margin: '0 auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: R.lg, boxShadow: SH.card, ...rv('pad', 40, SP.card[1]), textAlign: 'center', ...rv('mh', 470, 520) }}>
         <div style={EYEBROW}>Free filling finder</div>
-        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 32, 24), color: c.navy, margin: '8px 0 8px' }}>Get your filling just right 🪶</h2>
-        <p style={{ fontSize: 13.5, lineHeight: 1.6, color: c.grayD, maxWidth: 450, margin: '0 auto 20px' }}>
+        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, margin: '8px 0 12px' }}>Get your filling just right 🪶</h2>
+        <p className="r-fs" style={{ ...rv('fs', ...T.sm), lineHeight: LH.body, color: c.grayD, maxWidth: W.narrow, margin: '0 auto 24px' }}>
           Your Signature Cold Pillow arrives generously filled with shredded memory foam. Answer four quick questions and we'll tell you roughly how many handfuls to take out for your perfect height. No email needed, and you can re-tune anytime.
         </p>
 
         {!done ? (
           <div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: c.purple, marginBottom: 12, fontFamily: FONT_SUB }}>Question {step + 1} of {QUESTIONS.length}</div>
-            <h3 className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', 18, 16), fontWeight: 600, color: c.navy, marginBottom: 16 }}>{QUESTIONS[step].q}</h3>
-            <div style={{ display: 'grid', gap: 10, maxWidth: 380, margin: '0 auto' }}>
+            <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.purple, marginBottom: 12, fontFamily: FONT_SUB }}>Question {step + 1} of {QUESTIONS.length}</div>
+            <h3 className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', ...T.lg), lineHeight: LH.head, fontWeight: 600, color: c.navy, marginBottom: 16 }}>{QUESTIONS[step].q}</h3>
+            <div style={{ display: 'grid', gap: 12, maxWidth: 400, margin: '0 auto' }}>
               {QUESTIONS[step].opts.map(([emoji, label, val], i) => (
                 <button key={i} onClick={() => answer(QUESTIONS[step].key, val)}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = c.amber; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent'; }}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#fff', border: '2px solid transparent', borderRadius: 14, padding: '13px 16px', cursor: 'pointer', fontFamily: 'inherit', fontSize: 14, color: c.navy, textAlign: 'left', boxShadow: '0 4px 12px rgba(32,27,93,.08)', transition: 'border-color .12s' }}>
-                  <span style={{ fontSize: 22 }}>{emoji}</span> {label}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, background: c.white, border: '2px solid transparent', borderRadius: R.sm, padding: '14px 16px', cursor: 'pointer', fontFamily: 'inherit', fontSize: T.sm[0], color: c.navy, textAlign: 'left', boxShadow: SH.card, transition: 'border-color .12s' }}>
+                  <span style={{ fontSize: T.h3[1] }}>{emoji}</span> {label}
                 </button>
               ))}
             </div>
           </div>
         ) : (
-          <div className="r-pad" style={{ background: '#fff', borderRadius: 18, ...rv('pad', '26px 24px', '22px 18px'), boxShadow: '0 8px 22px rgba(32,27,93,.10)', maxWidth: 440, margin: '0 auto' }}>
-            <div style={{ fontSize: 34, marginBottom: 4 }}>🪶</div>
-            <h3 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 23, 20), color: c.navy, marginBottom: 4 }}>Take out about {range} {r.hi === 1 ? 'handful' : 'handfuls'}</h3>
-            <p style={{ fontSize: 12.5, color: c.purple, fontWeight: 700, marginBottom: 12, fontFamily: FONT_SUB }}>of shredded memory foam, from the full pillow</p>
-            <p style={{ fontSize: 13.5, lineHeight: 1.7, color: c.grayD, marginBottom: 12 }}>
+          <div className="r-pad" style={{ ...CARD, ...rv('pad', ...SP.card), maxWidth: W.narrow, margin: '0 auto' }}>
+            <div style={{ fontSize: T.h2[1], marginBottom: 4 }}>🪶</div>
+            <h3 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h3), lineHeight: LH.head, color: c.navy, marginBottom: 6 }}>Take out about {range} {r.hi === 1 ? 'handful' : 'handfuls'}</h3>
+            <p style={{ fontSize: T.sm[0], color: c.purple, fontWeight: 700, marginBottom: 12, fontFamily: FONT_SUB }}>of shredded memory foam, from the full pillow</p>
+            <p style={{ fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, marginBottom: 12 }}>
               {r.posText} Take out around {range} loose fistfuls, lie down, and check that your head and neck stay level. Add or remove one more handful either way until it feels right.
             </p>
-            <p style={{ fontSize: 12.5, lineHeight: 1.6, color: c.grayD, background: c.sky, borderRadius: 12, padding: '10px 14px', marginBottom: 16 }}>
+            <p style={{ fontSize: T.xs[0], lineHeight: LH.body, color: c.grayD, background: c.sky, borderRadius: R.sm, padding: '12px 16px', marginBottom: 20 }}>
               🧵 Took out too much, or want to firm it up again later? Spare bags of shredded memory foam filling are sold separately, so you can top your pillow back up whenever you like.
             </p>
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="#offer" style={{ ...BTN, fontSize: 13 }}>Shop the pillow</a>
-              <button onClick={restart} style={{ background: 'none', border: `2px solid ${c.navy}`, color: c.navy, borderRadius: 999, fontFamily: 'inherit', fontWeight: 600, fontSize: 13, padding: '11px 22px', cursor: 'pointer' }}>Start over</button>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href="#offer" style={BTN}>Shop the pillow</a>
+              <button onClick={restart} style={BTNO}>Start over</button>
             </div>
           </div>
         )}

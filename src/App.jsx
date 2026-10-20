@@ -1,3 +1,4 @@
+import { c } from './theme';
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Nav from './components/Nav';
@@ -28,7 +29,7 @@ export function AppShell() {
         <ScrollToTop />
         <style>{`
           * { box-sizing: border-box; margin: 0; padding: 0; }
-          body { font-family: 'Poppins', sans-serif; background: #F9F8F3; color: #201B5D; overflow-x: hidden; }
+          body { font-family: 'Poppins', sans-serif; background: ${c.cream}; color: ${c.navy}; overflow-x: hidden; }
           a { color: inherit; }
           img { max-width: 100%; }
           summary::-webkit-details-marker { display: none; }

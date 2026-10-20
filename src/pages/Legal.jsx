@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { c, rv, FONT_DISPLAY } from '../theme';
+import { c, rv, FONT_DISPLAY, T, LH, SP, W } from '../theme';
 
 const SECTIONS = {
   '/privacy': {
@@ -39,13 +39,13 @@ export default function Legal() {
   const page = SECTIONS[pathname] || SECTIONS['/terms'];
 
   return (
-    <div className="r-pad" style={{ maxWidth: 720, margin: '0 auto', ...rv('pad', '54px 24px 70px', '36px 22px 50px') }}>
-      <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 36, 28), color: c.navy, marginBottom: 6 }}>{page.title}</h1>
-      <p style={{ fontSize: 12, color: c.gray, marginBottom: 26 }}>Last updated: July 2026 · flip'nsleep is part of Obtained VOF</p>
+    <div className="r-pad" style={{ maxWidth: W.text + 80, margin: '0 auto', ...rv('pad', ...SP.section) }}>
+      <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, color: c.navy, marginBottom: 12 }}>{page.title}</h1>
+      <p style={{ fontSize: T.xs[0], color: c.grayD, marginBottom: 32 }}>Last updated: July 2026 · flip'nsleep is part of Obtained VOF</p>
       {page.blocks.map(([h, t], i) => (
-        <div key={i} style={{ marginBottom: 22 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, color: c.navy, marginBottom: 6 }}>{h}</h2>
-          <p style={{ fontSize: 13.5, lineHeight: 1.75, color: c.grayD }}>{t}</p>
+        <div key={i} style={{ marginBottom: 24 }}>
+          <h2 className="r-fs" style={{ ...rv('fs', ...T.lg), lineHeight: LH.head, fontWeight: 700, color: c.navy, marginBottom: 8 }}>{h}</h2>
+          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, color: c.grayD }}>{t}</p>
         </div>
       ))}
     </div>

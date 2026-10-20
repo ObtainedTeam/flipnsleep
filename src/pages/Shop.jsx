@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, EYEBROW } from '../theme';
+import { c, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, T, LH, SP, W, CARD, CHIP } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { BUNDLES, PRODUCT, products, dim } from '../data';
 import { EmailCapture, ProductImageBlock } from '../components/Blocks';
@@ -11,30 +11,30 @@ export default function Shop() {
 
   return (
     <div>
-      <section className="r-pad" style={{ textAlign: 'center', ...rv('pad', '54px 40px 16px', '36px 20px 10px') }}>
+      <section className="r-pad" style={{ textAlign: 'center', ...rv('pad', ...SP.sectionTop) }}>
         <div style={EYEBROW}>Shop</div>
-        <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 48, 30), color: c.navy, margin: '8px 0 12px' }}>Pick your bundle</h1>
-        <p style={{ fontSize: 14, lineHeight: 1.65, maxWidth: 420, margin: '0 auto' }}>
+        <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, color: c.navy, margin: '8px 0 16px' }}>Pick your bundle</h1>
+        <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, maxWidth: W.narrow, margin: '0 auto' }}>
           Every order is a set — that's our buy-one-get-one-free promise. Choose two pillows or four, always with free shipping and a 100-night trial.
         </p>
       </section>
 
-      <section className="grid-2m1 r-gap r-mw r-mar" style={{ ...rv('gap', 30, 22), ...rv('mw', 1040, 860), ...rv('mar', '36px auto 0', '26px auto 0'), padding: '0 20px' }}>
+      <section className="grid-2m1 r-gap r-mw r-mar r-pad" style={{ ...rv('gap', ...SP.gap), ...rv('mw', W.page, W.narrow), ...rv('mar', '40px auto 0', '32px auto 0'), ...rv('pad', `0 ${SP.gutter[0]}px`, `0 ${SP.gutter[1]}px`) }}>
         {BUNDLES.map(b => {
           const p = getPrice(b, isCA);
           const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
           return (
-            <Reveal key={b.id} delay={BUNDLES.indexOf(b) * 130}><Link to="/product/signature-cold-pillow" style={{ textDecoration: 'none', background: '#fff', borderRadius: 24, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', display: 'block' }}>
+            <Reveal key={b.id} delay={BUNDLES.indexOf(b) * 130}><Link to="/product/signature-cold-pillow" className="card-hover" style={{ textDecoration: 'none', ...CARD, overflow: 'hidden', display: 'block', height: '100%' }}>
               <div style={{ position: 'relative' }}>
                 <ProductImageBlock src={b.image} alt={b.label} height={[280, 210]} radius={0} priority={b.id === BUNDLES[0].id} />
-                <span style={{ position: 'absolute', top: 14, left: 14, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 12, borderRadius: 999, padding: '6px 14px' }}>{b.short}</span>
+                <span style={{ ...CHIP, position: 'absolute', top: 16, left: 16, background: c.amber, color: c.navy }}>{b.short}</span>
               </div>
-              <div style={{ padding: '18px 20px 22px' }}>
-                <h2 style={{ fontFamily: FONT_DISPLAY, fontSize: 20, color: c.navy, marginBottom: 4 }}>{PRODUCT.name} — {b.short}</h2>
-                <div style={{ fontFamily: FONT_SUB, fontSize: 13.5, color: c.grayD, marginBottom: 8 }}>{b.label} — {b.blurb}</div>
-                <div style={{ fontSize: 17, fontWeight: 700, color: c.navy }}>{formatPrice(p, symbol)} <s style={{ fontWeight: 400, color: '#999', fontSize: 13 }}>{formatPrice(cm, symbol)}</s></div>
-                <div style={{ fontSize: 12, color: '#2e6b4f', fontWeight: 600, marginTop: 2 }}>{formatPrice(p / b.pillows, symbol)} per pillow · free shipping</div>
-                <span style={{ ...BTN, marginTop: 14, padding: '11px 26px', fontSize: 12 }}>View deal</span>
+              <div className="r-pad" style={rv('pad', ...SP.card)}>
+                <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 6 }}>{PRODUCT.name} — {b.short}</h2>
+                <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, marginBottom: 10 }}>{b.label} — {b.blurb}</div>
+                <div className="r-fs" style={{ ...rv('fs', ...T.lg), fontWeight: 700, color: c.navy }}>{formatPrice(p, symbol)} <s style={{ fontWeight: 400, color: c.gray, fontSize: T.sm[0] }}>{formatPrice(cm, symbol)}</s></div>
+                <div style={{ fontSize: T.xs[0], color: c.purple, fontWeight: 600, marginTop: 4 }}>{formatPrice(p / b.pillows, symbol)} per pillow · free shipping</div>
+                <span style={{ ...BTN, marginTop: 20 }}>View deal</span>
               </div>
             </Link></Reveal>
           );
@@ -42,29 +42,29 @@ export default function Shop() {
       </section>
 
       {/* De volledige flip'nsleep-range: deken, lakens, comforter */}
-      <section className="r-pad" style={rv('pad', '64px 40px 10px', '46px 20px 8px')}>
+      <section className="r-pad" style={rv('pad', ...SP.section)}>
         <Reveal><div style={{ textAlign: 'center' }}>
           <div style={EYEBROW}>More for your bed</div>
-          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', 34, 26), color: c.navy, margin: '8px 0 6px' }}>The full <span style={{ fontFamily: FONT_SUB }}>flip'nsleep</span> range</h2>
-          <p style={{ fontSize: 13.5, color: c.grayD, maxWidth: 440, margin: '0 auto' }}>Cooling bedding built on the same idea as the pillow: stay comfortable without trapping heat.</p>
+          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, margin: '8px 0 12px' }}>The full <span style={{ fontFamily: FONT_SUB }}>flip'nsleep</span> range</h2>
+          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.grayD, maxWidth: W.narrow, margin: '0 auto' }}>Cooling bedding built on the same idea as the pillow: stay comfortable without trapping heat.</p>
         </div></Reveal>
 
-        <div className="grid-3m1 r-gap r-mar" style={{ ...rv('gap', 24, 18), maxWidth: 1080, ...rv('mar', '34px auto 0', '26px auto 0') }}>
+        <div className="grid-3m1 r-gap r-mar" style={{ ...rv('gap', ...SP.gap), maxWidth: W.page, ...rv('mar', '40px auto 0', '28px auto 0') }}>
           {products.map((prod, idx) => {
             const p = getPrice(prod, isCA);
             const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
             return (
-              <Reveal key={prod.id} delay={idx * 120}><Link to={`/product/${prod.id}`} style={{ textDecoration: 'none', background: '#fff', borderRadius: 22, overflow: 'hidden', boxShadow: '0 12px 30px rgba(32,27,93,.10)', display: 'block', height: '100%' }}>
+              <Reveal key={prod.id} delay={idx * 120}><Link to={`/product/${prod.id}`} className="card-hover" style={{ textDecoration: 'none', ...CARD, overflow: 'hidden', display: 'block', height: '100%' }}>
                 <div className="r-h" style={{ position: 'relative', ...rv('h', 240, 220), background: c.cream, overflow: 'hidden' }}>
                   <img src={prod.images[0]} {...dim(prod.images[0])} loading="lazy" decoding="async" alt={prod.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                  {prod.badge && <span style={{ position: 'absolute', top: 14, left: 14, background: c.amber, color: c.navy, fontWeight: 700, fontSize: 11.5, borderRadius: 999, padding: '5px 13px' }}>{prod.badge}</span>}
+                  {prod.badge && <span style={{ ...CHIP, position: 'absolute', top: 16, left: 16, background: c.amber, color: c.navy }}>{prod.badge}</span>}
                 </div>
-                <div style={{ padding: '16px 18px 20px' }}>
-                  <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: 18, color: c.navy, marginBottom: 4 }}>{prod.name}</h3>
-                  <div style={{ fontSize: 12.5, color: c.grayD, marginBottom: 8, lineHeight: 1.5 }}>{prod.tagline}</div>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: c.navy }}>From {formatPrice(p, symbol)} {cm && <s style={{ fontWeight: 400, color: '#999', fontSize: 12.5 }}>{formatPrice(cm, symbol)}</s>}</div>
-                  <div style={{ fontSize: 11.5, color: '#2e6b4f', fontWeight: 600, marginTop: 2 }}>Free shipping · 100-night trial</div>
-                  <span style={{ ...BTN, marginTop: 13, padding: '10px 22px', fontSize: 11.5 }}>View product</span>
+                <div className="r-pad" style={rv('pad', ...SP.card)}>
+                  <h3 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 6 }}>{prod.name}</h3>
+                  <div style={{ fontSize: T.sm[0], color: c.grayD, marginBottom: 10, lineHeight: LH.body }}>{prod.tagline}</div>
+                  <div className="r-fs" style={{ ...rv('fs', ...T.md), fontWeight: 700, color: c.navy }}>From {formatPrice(p, symbol)} {cm && <s style={{ fontWeight: 400, color: c.gray, fontSize: T.xs[0] }}>{formatPrice(cm, symbol)}</s>}</div>
+                  <div style={{ fontSize: T.xs[0], color: c.purple, fontWeight: 600, marginTop: 4 }}>Free shipping · 100-night trial</div>
+                  <span style={{ ...BTN_SM, marginTop: 16 }}>View product</span>
                 </div>
               </Link></Reveal>
             );
@@ -72,7 +72,7 @@ export default function Shop() {
         </div>
       </section>
 
-      <div style={{ marginTop: 50 }}><EmailCapture /></div>
+      <EmailCapture />
     </div>
   );
 }
