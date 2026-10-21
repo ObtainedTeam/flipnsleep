@@ -1,0 +1,10 @@
+/* About-pagina: bento-raster (Mellow-stijl). 4 kolommen desktop, 2 mobiel. */
+.ab-bento { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 230px; grid-auto-flow: row dense; }
+.ab-bento > * { min-width: 0; }
+.ab-t-big { grid-column: span 2; grid-row: span 2; }
+.ab-t-wide { grid-column: span 2; }
+@media (max-width: 767px) {
+  .ab-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 190px; }
+  .ab-t-big { grid-column: 1 / -1; grid-row: span 2; }
+  .ab-t-wide, .ab-m-full { grid-column: 1 / -1; }
+}

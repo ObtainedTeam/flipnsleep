@@ -1,7 +1,9 @@
 import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
 import { IMG, dim } from '../data';
 import { Link } from 'react-router-dom';
-import { CloudDivider } from '../components/Blocks';
+import { ProductImageBlock } from '../components/Blocks';
+import CloudEdge from '../components/about/CloudEdge';
+import Bento from '../components/about/Bento';
 import Reveal from '../components/Reveal';
 
 
@@ -18,11 +20,12 @@ export default function About() {
           </p>
         </div>
         {/* Boven de donkere foto-overlay leggen, anders kleurt de wolkenrand grijs */}
-        <div style={{ position: 'relative', zIndex: 1 }}><CloudDivider fill={c.cream} /></div>
+        {/* Negatieve marge = sectie-gutter, zodat de wolkenrand tot aan beide paginaranden loopt */}
+        <div className="r-mar" style={{ position: 'relative', zIndex: 1, ...rv('mar', `0 -${SP.gutter[0]}px`, `0 -${SP.gutter[1]}px`) }}><CloudEdge fill={c.cream} /></div>
       </section>
 
       <Reveal><section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 0', '32px 20px 0') }}>
-        <img src={IMG.bed} {...dim(IMG.bed)} loading="lazy" decoding="async" alt="The Signature Cold Pillow on a made bed" className="r-h" style={{ display: 'block', width: '100%', ...rv('h', 460, 240), objectFit: 'cover', borderRadius: R.lg, boxShadow: SH.strong }} />
+        <ProductImageBlock src={IMG.coverDuo} alt="Two Signature Cold Pillows, cool side and bamboo side" height={[460, 260]} style={{ boxShadow: SH.strong }} imgStyle={{ maxHeight: '78%', maxWidth: '70%', filter: 'drop-shadow(0 24px 30px rgba(32,27,93,.28))' }} />
         <div className="grid-3m1 r-gap" style={{ ...rv('gap', ...SP.gap), marginTop: 40 }}>
           {[
             ['Honest', 'Real specs, real certifications and no made-up reviews. If we say it, you can check it.'],
@@ -36,6 +39,8 @@ export default function About() {
           ))}
         </div>
       </section></Reveal>
+
+      <Bento />
 
       <Reveal><section className="r-pad" style={{ maxWidth: W.text + 80, margin: '0 auto', ...rv('pad', ...SP.section) }}>
         <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, marginBottom: 16 }}>What we believe</h2>

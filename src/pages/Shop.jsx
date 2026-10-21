@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { c, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, T, LH, SP, W, CARD, CHIP } from '../theme';
+import { c, R, SH, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, T, LH, SP, W, CARD, CHIP } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { BUNDLES, PRODUCT, products, dim } from '../data';
+import { BUNDLES, PRODUCT, products, dim, IMG } from '../data';
 import { ProductImageBlock } from '../components/Blocks';
 import Reveal from '../components/Reveal';
 
@@ -11,9 +11,21 @@ export default function Shop() {
 
   return (
     <div>
-      <section className="r-pad" style={{ textAlign: 'center', ...rv('pad', ...SP.sectionTop) }}>
-        <div style={EYEBROW}>Shop</div>
-        <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, color: c.navy, margin: '8px 0 16px' }}>Pick your bundle</h1>
+      {/* Fotobanner bovenaan (Mellow-stijl): sfeerfoto, donker verloop, h1 + CTA naar de bundels */}
+      <section className="r-h r-pad" style={{ position: 'relative', overflow: 'hidden', background: c.night, ...rv('h', 420, 300), borderRadius: `0 0 ${R.lg}px ${R.lg}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', ...rv('pad', `0 ${SP.gutter[0]}px`, `0 ${SP.gutter[1]}px`) }}>
+        <img src={IMG.heroPoster} {...dim(IMG.heroPoster)} fetchPriority="high" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 55%' }} />
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(20,16,64,.55) 0%, rgba(20,16,64,.45) 45%, rgba(20,16,64,.8) 100%)' }} />
+        <div style={{ position: 'relative', maxWidth: W.text, color: c.white }}>
+          <div style={{ ...EYEBROW, color: c.amber }}>Shop</div>
+          <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, margin: '8px 0 14px', textShadow: SH.textHero }}>Shop the <span style={{ fontFamily: FONT_SUB }}>flip'nsleep</span> range</h1>
+          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.lilac, margin: '0 auto 24px', maxWidth: W.narrow }}>Buy 1, Get 1 Free on the Signature Cold Pillow. Free shipping to the US &amp; Canada.</p>
+          <a href="#bundles" style={BTN}>Shop the pillow deal</a>
+        </div>
+      </section>
+
+      <section id="bundles" className="r-pad" style={{ textAlign: 'center', scrollMarginTop: 96, ...rv('pad', ...SP.sectionTop) }}>
+        <div style={EYEBROW}>Pillow bundles</div>
+        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, margin: '8px 0 16px' }}>Pick your bundle</h2>
         <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, maxWidth: W.narrow, margin: '0 auto' }}>
           Every order is a set, that's our buy-one-get-one-free promise. Choose two pillows or four, always with free shipping and a 100-night trial.
         </p>
