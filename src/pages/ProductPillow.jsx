@@ -9,6 +9,7 @@ import Reveal from '../components/Reveal';
 import PillowQuiz from '../components/PillowQuiz';
 import { Stars, FAQBlock, TrustAccordion, ProductImageBlock, ShippingCountdown, CompareCards } from '../components/Blocks';
 import StickyBuyBar from '../components/StickyBuyBar';
+import LookInside from '../components/product/LookInside.jsx';
 import { useReviews, GalleryReview, ExplainAccordion, Bento, SplitImages, DesignedForSleep, HotSleeperStats, ProductReviews, CompleteYourBed, padBottom } from '../components/product/ProductSections';
 import { PRODUCT_MEDIA, PRODUCT_BENTO, PILLOW_ACCORDION, PILLOW_DESIGN, PILLOW_SPLIT, PILLOW_STATS, EXAMPLE_REVIEWS, completeYourBed } from '../data/product-content.js';
 
@@ -118,6 +119,9 @@ export default function ProductPillow({ onCartOpen }) {
       <ExplainAccordion eyebrow="The real reason you wake up hot" title="The problem was never you. It was the pillow."
         intro="Dense memory foam holds heat, so it warms up under your head and keeps you there. The Signature Cold Pillow is built the other way around: it breathes, feels cool on contact and fits the way you sleep."
         items={PILLOW_ACCORDION} />
+
+      {/* 2b — Look inside the pillow: sticky exploded view */}
+      <LookInside />
 
       {/* 3 — Bento: afwisselende media + tekst */}
       <Bento rows={PRODUCT_BENTO} eyebrow="Feel the difference" title="A pillow that works with you" />

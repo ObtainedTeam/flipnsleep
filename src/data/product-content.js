@@ -129,3 +129,37 @@ export const VARIANT_EXAMPLE_REVIEWS = {
     { name: 'Marcus T.', title: 'Holds up in the wash', body: 'A few washes in and no pilling. It still looks new.' },
   ],
 };
+
+// "Look inside the pillow": scroll-gestuurde exploded view (LookInside.jsx).
+// Vervang door Higgsfield-renders met dezelfde bestandsnamen (prompts-exploded-pillow.md).
+// Thomas levert .png; zet die om naar .webp met dezelfde basisnaam (1600x1200, transparant,
+// laag gecentreerd op ~70% breedte) zodat de component niets hoeft te weten.
+const LAYER_DIR = '/images/layers/';
+export const LAYER_IMAGES = {
+  closed: `${LAYER_DIR}layer-0-closed.webp`,
+  exploded: `${LAYER_DIR}layer-exploded.webp`,
+  layers: [
+    `${LAYER_DIR}layer-1-cool-cover.webp`,
+    `${LAYER_DIR}layer-2-inner-top.webp`,
+    `${LAYER_DIR}layer-3-foam.webp`,
+    `${LAYER_DIR}layer-4-inner-bottom.webp`,
+    `${LAYER_DIR}layer-5-bamboo-cover.webp`,
+  ],
+};
+export const LAYERS = [
+  { id: 'cool-cover', title: 'Cool-touch outer cover',
+    text: 'The white and blue quilted side is woven from a cool-touch fabric with a tested Q-max of 0.26, so it feels cold the moment your cheek lands on it.',
+    img: LAYER_IMAGES.layers[0] },
+  { id: 'inner-top', title: 'Inner mesh case, top',
+    text: 'A breathable mesh case holds the filling in place, so it stays evenly spread while air keeps moving through it.',
+    img: LAYER_IMAGES.layers[1] },
+  { id: 'foam', title: 'Shredded memory foam',
+    text: 'Recycled 35-40D shredded foam. Air flows between the pieces instead of getting trapped, and you set the height by adding or removing fill.',
+    img: LAYER_IMAGES.layers[2] },
+  { id: 'inner-bottom', title: 'Inner mesh case, bottom',
+    text: 'The second half of the inner case closes the filling in, so you can unzip the outer cover and wash it without the foam spilling out.',
+    img: LAYER_IMAGES.layers[3] },
+  { id: 'bamboo-cover', title: 'Bamboo outer cover, warm side',
+    text: 'Soft bamboo-viscose for cooler nights. When the bedroom gets chilly, flip the pillow over. Same fit, cozier feel.',
+    img: LAYER_IMAGES.layers[4] },
+];

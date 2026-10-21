@@ -1,0 +1,120 @@
+/* Look inside the pillow (LookInside.jsx). Kleuren/radius/schaduw komen als
+   --li-* variabelen uit theme.js; --e (0..1) is de uitklapstand, gezet door JS. */
+
+.li { max-width: 1220px; margin: 0 auto; }
+
+/* ---- Desktop: hoge track met sticky podium ---- */
+.li-track { position: relative; height: 300vh; margin-top: 8px; }
+.li-stage {
+  --e: 0; --gap: 21%;
+  position: sticky; top: 96px; height: calc(100vh - 120px); min-height: 520px;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 48px; align-items: center;
+}
+
+.li-visual { position: relative; display: flex; justify-content: center; align-items: center; height: 100%; perspective: 1800px; }
+.li-visual::before { /* zachte lucht-gloed achter de stapel */
+  content: ""; position: absolute; inset: 6% 2%; border-radius: 50%;
+  background: radial-gradient(closest-side, var(--li-sky2), transparent 78%); opacity: .75;
+}
+.li-box {
+  position: relative; width: 100%; max-width: 660px; aspect-ratio: 4 / 3;
+  transform: rotateX(10deg); transform-style: preserve-3d;
+}
+.li-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; }
+.li-closed {
+  opacity: calc(1 - var(--e) * 5);
+  transform: scale(calc(.86 + var(--e) * .1));
+  filter: drop-shadow(0 24px 30px rgba(32, 27, 93, .18));
+}
+.li-layer {
+  position: absolute; inset: 0; pointer-events: none;
+  transform: translateY(calc(var(--i) * var(--gap) * var(--e))) scale(calc(.94 + var(--e) * .02));
+  opacity: min(calc(var(--e) * 6), 1);
+  will-change: transform;
+}
+/* niet-actieve lagen dimmen licht (op de img, zodat de hotspot vol zichtbaar blijft) */
+.li-layer img { opacity: calc(1 - var(--e) * .4); transition: filter .35s ease, opacity .35s ease, transform .35s ease; }
+.li-layer.is-active img {
+  opacity: 1; transform: translateY(-1.5%);
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, .95)) drop-shadow(0 0 16px rgba(143, 196, 244, .95)) drop-shadow(0 14px 18px rgba(32, 27, 93, .16));
+}
+
+/* "+" hotspot, rechts op elke laag; verschijnt zodra de stapel open ligt */
+.li-hot {
+  position: absolute; left: 84%; top: 50%; width: 34px; height: 34px; margin: -17px 0 0 -17px;
+  border-radius: 50%; border: 2px solid var(--li-white); background: var(--li-navy); color: var(--li-white);
+  font: 600 20px/1 var(--li-body); display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--li-sh); cursor: pointer; opacity: 0; transform: scale(.6);
+  transition: opacity .25s ease, transform .25s ease, background .2s ease;
+}
+.li-hot span { margin-top: -2px; }
+.li-stage.is-open .li-hot { opacity: 1; transform: scale(1); pointer-events: auto; }
+.li-stage.is-open .li-layer.is-active .li-hot { background: var(--li-amber); color: var(--li-navy); transform: scale(1.12); }
+.li-hot::after { /* zachte pulsring */
+  content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--li-white); opacity: .0;
+}
+.li-stage.is-open .li-layer.is-active .li-hot::after { animation: li-pulse 1.8s ease-out infinite; }
+@keyframes li-pulse { 0% { transform: scale(.8); opacity: .8; } 100% { transform: scale(1.5); opacity: 0; } }
+.li-hot:focus-visible, .li-card:focus-visible, .li-acc button:focus-visible { outline: 3px solid var(--li-amber); outline-offset: 3px; }
+
+/* Kaartenlijst */
+.li-cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; max-width: 480px; }
+.li-card {
+  width: 100%; display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; text-align: left;
+  padding: 16px 20px; border-radius: var(--li-r); border: 1px solid rgba(32, 27, 93, .08);
+  background: rgba(255, 255, 255, .6); color: var(--li-navy); cursor: pointer; font-family: var(--li-body);
+  transition: background .3s ease, color .3s ease, box-shadow .3s ease, transform .3s ease;
+}
+.li-card:hover { background: var(--li-white); }
+.li-card.is-active { background: var(--li-navy); color: var(--li-white); box-shadow: var(--li-sh); border-color: transparent; transform: translateX(-6px); }
+.li-num {
+  width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  background: var(--li-sky); color: var(--li-navy); font: 600 13px/1 var(--li-sub); letter-spacing: .02em; flex: none;
+  transition: background .3s ease, color .3s ease;
+}
+.li-card.is-active .li-num { background: var(--li-amber); }
+.li-ct { display: block; font-family: var(--li-sub); font-weight: 600; line-height: 1.25; margin: 7px 0 4px; }
+.li-cx { display: block; color: var(--li-gray); transition: color .3s ease; }
+.li-card.is-active .li-cx { color: var(--li-lilac); }
+
+/* Korte schermen: compactere kaarten */
+@media (min-width: 768px) and (max-height: 820px) {
+  .li-card { padding: 12px 18px; }
+  .li-cards { gap: 8px; }
+  .li-cx { font-size: 13px !important; line-height: 1.5 !important; }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .li-stage { gap: 24px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+
+/* Reduced motion of statische stand: uitgeklapt, geen sticky track */
+.li-track.is-static { height: auto; }
+.li-track.is-static .li-stage { position: relative; top: auto; height: auto; min-height: 0; padding: 32px 0; }
+.li-track.is-static .li-box { height: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .li-track { height: auto; }
+  .li-stage { --e: 1 !important; position: relative; top: auto; height: auto; min-height: 0; padding: 32px 0; }
+  .li-layer, .li-layer img, .li-card, .li-hot, .li-num { transition: none; }
+  .li-hot::after { animation: none !important; }
+}
+
+/* ---- Mobiel ---- */
+.li-mob-img {
+  margin: 24px 0 16px; border-radius: var(--li-r); aspect-ratio: 4 / 3; position: relative; overflow: hidden;
+  background: radial-gradient(closest-side, var(--li-sky2), var(--li-sky) 92%);
+}
+.li-mob-img img { position: absolute; inset: 4%; width: 92%; height: 92%; object-fit: contain; }
+.li-acc { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.li-acc li { background: var(--li-white); border-radius: var(--li-rs); box-shadow: var(--li-sh); overflow: hidden; }
+.li-acc button {
+  width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: none; border: 0;
+  color: var(--li-navy); text-align: left; cursor: pointer; font-family: var(--li-body);
+}
+.li-acc .li-num { width: 30px; height: 30px; font-size: 13px; }
+.li-acc li.is-open .li-num { background: var(--li-navy); color: var(--li-white); }
+.li-acc .li-ct { margin: 0; flex: 1; }
+.li-chev { width: 9px; height: 9px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); margin: -4px 4px 0 0; transition: transform .2s ease; flex: none; }
+.li-acc li.is-open .li-chev { transform: rotate(-135deg); margin-top: 4px; }
+.li-acc-body { padding: 0 16px 14px 56px; color: var(--li-gray); }
+.li-acc-body p { margin: 0; }
