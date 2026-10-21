@@ -240,7 +240,6 @@ const BTNO_SM = { ...BTNO, height: BTN_SM.height, padding: BTN_SM.padding, fontS
 // ---------------------------------------------------------------------------
 export function ProductGrid() {
   const { symbol, isCA } = useCurrency();
-  const imgH = rv('h', 240, 150);
   const items = [
     ...BUNDLES.map(b => ({
       key: b.id, to: '/product/signature-cold-pillow', pillows: b.pillows,
@@ -254,31 +253,33 @@ export function ProductGrid() {
       price: getPrice(p, isCA), compare: p.compareAt ? (isCA ? p.compareAt.cad : p.compareAt.usd) : null, from: true,
     })),
   ];
-  const soon = [['Silk Series', IMG.tileSilk, 'Mulberry silk pillowcases that stay smooth and cool.'], ['Mattress Toppers', IMG.tileToppers, 'A cooler layer between you and your mattress.']];
-  const badgeStyle = (dark) => ({ ...CHIP, position: 'absolute', top: 12, left: 12, zIndex: 20, fontSize: T.xs[0], background: dark ? c.navy : c.amber, color: dark ? c.white : c.navy });
-  const body = { display: 'flex', flexDirection: 'column', flex: 1, ...rv('pad', 20, 14) };
-  const nameStyle = { fontFamily: FONT_DISPLAY, ...rv('fs', ...T.lg), lineHeight: LH.head, color: c.navy, marginBottom: 6 };
-  const descStyle = { fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, marginBottom: 12 };
+  // Silk Series en Mattress Toppers samen in één 'coming soon'-kaart, zodat het raster 3 + 3 blijft.
+  const soon = [['Silk Series', IMG.tileSilk], ['Mattress Toppers', IMG.tileToppers]];
+  const badgeStyle = (dark) => ({ ...CHIP, position: 'absolute', top: 14, left: 14, zIndex: 20, fontSize: T.xs[0], background: dark ? c.navy : c.amber, color: dark ? c.white : c.navy });
+  const body = { display: 'flex', flexDirection: 'column', flex: 1, ...rv('pad', 24, 14) };
+  const nameStyle = { fontFamily: FONT_DISPLAY, fontWeight: 400, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 6 };
+  const descStyle = { fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, marginBottom: 14 };
+  const square = { position: 'relative', aspectRatio: '1 / 1', background: c.sky, overflow: 'hidden', flexShrink: 0 };
 
   return (
     <section className="r-pad" style={rv('pad', ...SP.section)}>
       <SectionHead title="Explore our most loved" accent="sleep products" intro="Cooling comfort from head to toe, built on one simple idea: stay comfortable without trapping heat." />
-      <div className="grid-4m2 r-gap" style={{ ...rv('gap', ...SP.gap), maxWidth: W.page, margin: '0 auto' }}>
+      <div className="home-pgrid r-gap" style={{ ...rv('gap', 28, 12), maxWidth: W.page, margin: '0 auto' }}>
         {items.map((it, i) => (
-          <Reveal key={it.key} delay={i * 60} style={{ height: '100%' }}>
+          <Reveal key={it.key} delay={(i % 3) * 70} style={{ height: '100%' }}>
             <Link to={it.to} className="card-hover" style={{ ...CARD, textDecoration: 'none', overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <div className="r-h" style={{ position: 'relative', ...imgH, background: c.sky, overflow: 'hidden', flexShrink: 0 }}>
+              <div style={square}>
                 {it.pillows
-                  ? <PillowDeck count={it.pillows} height={[240, 150]} />
-                  : <img src={it.img} {...dim(it.img)} loading="lazy" decoding="async" alt={it.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
+                  ? <div style={{ position: 'absolute', inset: 0 }}><PillowDeck count={it.pillows} height={['100%', '100%']} /></div>
+                  : <img src={it.img} {...dim(it.img)} loading="lazy" decoding="async" alt={it.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
                 <span style={badgeStyle(it.badge === 'Best value')}>{it.badge}</span>
               </div>
               <div className="r-pad" style={body}>
                 <h3 className="r-fs" style={nameStyle}>{it.name}</h3>
-                <p style={descStyle}>{it.desc}</p>
+                <p className="d-only" style={descStyle}>{it.desc}</p>
                 <div style={{ marginTop: 'auto' }}>
                   <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '4px 8px', marginBottom: 14 }}>
-                    <span className="r-fs" style={{ ...rv('fs', ...T.md), fontWeight: 700, color: c.navy }}>{it.from ? 'From ' : ''}{formatPrice(it.price, symbol)}</span>
+                    <span className="r-fs" style={{ ...rv('fs', ...T.lg), fontWeight: 700, color: c.navy }}>{it.from ? 'From ' : ''}{formatPrice(it.price, symbol)}</span>
                     {it.compare && <s style={{ fontSize: T.sm[0], color: c.gray }}>{formatPrice(it.compare, symbol)}</s>}
                     {it.compare && <span style={{ ...CHIP, fontSize: T.xs[0], padding: '4px 10px', background: c.sky, color: c.purple }}>Save {formatPrice(it.compare - it.price, symbol)}</span>}
                   </div>
@@ -288,24 +289,27 @@ export function ProductGrid() {
             </Link>
           </Reveal>
         ))}
-        {soon.map(([name, img, desc], i) => (
-          <Reveal key={name} delay={(items.length + i) * 60} style={{ height: '100%' }}>
-            <div style={{ ...CARD, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <div className="r-h" style={{ position: 'relative', ...imgH, overflow: 'hidden', flexShrink: 0 }}>
-                <img src={img} {...dim(img)} loading="lazy" decoding="async" alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(.6)' }} />
-                <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(249,248,243,.45)' }} />
-                <span style={badgeStyle(true)}>Coming soon</span>
-              </div>
-              <div className="r-pad" style={body}>
-                <h3 className="r-fs" style={{ ...nameStyle, color: c.grayD }}>{name}</h3>
-                <p style={descStyle}>{desc}</p>
-                <div style={{ marginTop: 'auto' }}>
-                  <a href="#newsletter" style={{ ...BTNO_SM, width: '100%' }}>Notify me</a>
+        <Reveal delay={140} style={{ height: '100%' }}>
+          <div style={{ ...CARD, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div style={{ ...square, display: 'grid', gridTemplateRows: '1fr 1fr', gap: 2, background: c.white }}>
+              {soon.map(([name, img]) => (
+                <div key={name} style={{ position: 'relative', overflow: 'hidden' }}>
+                  <img src={img} {...dim(img)} loading="lazy" decoding="async" alt={name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(.6)' }} />
+                  <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(249,248,243,.40)' }} />
+                  <span style={{ ...CHIP, position: 'absolute', right: 10, bottom: 10, fontSize: T.xs[0], background: c.white, color: c.navy }}>{name}</span>
                 </div>
+              ))}
+              <span style={badgeStyle(true)}>Coming soon</span>
+            </div>
+            <div className="r-pad" style={body}>
+              <h3 className="r-fs" style={{ ...nameStyle, color: c.grayD }}>Silk Series & Toppers</h3>
+              <p className="d-only" style={descStyle}>Mulberry silk pillowcases and a cooler mattress layer are on the way.</p>
+              <div style={{ marginTop: 'auto' }}>
+                <a href="#newsletter" style={{ ...BTNO_SM, width: '100%' }}>Notify me</a>
               </div>
             </div>
-          </Reveal>
-        ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -346,28 +350,38 @@ function VideoModal({ video, onClose }) {
   );
 }
 
-export function VideoRow({ videos }) {
+function VideoCard({ v, ratio, onOpen, large = false }) {
+  const inner = (
+    <>
+      <img src={v.poster} {...(v.width ? { width: v.width, height: v.height } : dim(v.poster))} loading="lazy" decoding="async" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(20,16,64,0) 45%, rgba(20,16,64,.78))' }} />
+      {!v.src && <span style={{ ...CHIP, position: 'absolute', top: 12, left: 12, fontSize: T.xs[0], background: c.cream, color: c.navy }}>Video coming soon</span>}
+      <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: v.src ? 1 : .85 }}><PlayIcon size={large ? 72 : 56} /></span>
+      <span className={large ? 'r-fs' : undefined} style={{ position: 'absolute', left: large ? 24 : 16, right: large ? 24 : 16, bottom: large ? 22 : 16, color: c.white, fontFamily: FONT_SUB, ...(large ? rv('fs', ...T.h3) : { fontSize: T.md[0] }), lineHeight: LH.head, textShadow: SH.text, textAlign: 'left' }}>{v.caption}</span>
+    </>
+  );
+  const box = { position: 'relative', display: 'block', width: '100%', aspectRatio: ratio, borderRadius: R.lg, overflow: 'hidden', boxShadow: SH.card, background: c.night, border: 'none', padding: 0 };
+  return v.src
+    ? <button type="button" className="card-hover" onClick={() => onOpen(v)} aria-label={`Play video: ${v.caption}`} style={{ ...box, cursor: 'pointer', fontFamily: 'inherit' }}>{inner}</button>
+    : <div className="card-hover" style={box}>{inner}</div>;
+}
+
+// `big`: optionele grote kaarten (elk zo breed als twee kleine) boven de rij.
+export function VideoRow({ videos, big = [] }) {
   const [open, setOpen] = useState(null);
   return (
     <section className="r-pad" style={{ ...rv('pad', ...SP.section), overflow: 'hidden' }}>
       <SectionHead title="Sleep better with" accent="flip'nsleep" intro="Watch why hot sleepers are making the switch." />
-      <Reveal delay={100}><div style={{ maxWidth: W.page, margin: '0 auto' }}><div className="vid-row r-gap" style={rv('gap', ...SP.gap)}>
-        {videos.map((v, i) => {
-          const inner = (
-            <>
-              <img src={v.poster} {...dim(v.poster)} loading="lazy" decoding="async" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-              <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(20,16,64,0) 45%, rgba(20,16,64,.78))' }} />
-              {!v.src && <span style={{ ...CHIP, position: 'absolute', top: 12, left: 12, fontSize: T.xs[0], background: c.cream, color: c.navy }}>Video coming soon</span>}
-              <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: v.src ? 1 : .85 }}><PlayIcon /></span>
-              <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, color: c.white, fontFamily: FONT_SUB, fontSize: T.md[0], lineHeight: LH.head, textShadow: SH.text, textAlign: 'left' }}>{v.caption}</span>
-            </>
-          );
-          const box = { position: 'relative', display: 'block', width: '100%', aspectRatio: '9 / 16', borderRadius: R.lg, overflow: 'hidden', boxShadow: SH.card, background: c.night, border: 'none', padding: 0 };
-          return v.src
-            ? <button key={i} type="button" className="card-hover" onClick={() => setOpen(v)} aria-label={`Play video: ${v.caption}`} style={{ ...box, cursor: 'pointer', fontFamily: 'inherit' }}>{inner}</button>
-            : <div key={i} className="card-hover" style={box}>{inner}</div>;
-        })}
-      </div></div></Reveal>
+      <Reveal delay={100}><div style={{ maxWidth: W.page, margin: '0 auto' }}>
+        {big.length > 0 && (
+          <div className="vid-big r-gap r-mb" style={{ ...rv('gap', ...SP.gap), ...rv('mb', ...SP.gap) }}>
+            {big.map((v, i) => <VideoCard key={i} v={v} ratio="9 / 8" onOpen={setOpen} large />)}
+          </div>
+        )}
+        <div className="vid-row r-gap" style={rv('gap', ...SP.gap)}>
+          {videos.map((v, i) => <VideoCard key={i} v={v} ratio="9 / 16" onOpen={setOpen} />)}
+        </div>
+      </div></Reveal>
       <VideoModal video={open} onClose={() => setOpen(null)} />
     </section>
   );
@@ -387,7 +401,9 @@ function Arrow({ dir, onClick }) {
   );
 }
 
-export function ReviewsBlock() {
+// `demo` (homepage): zonder echte reviews toch tonen, met gelabelde
+// video-placeholders en voorbeeldreviews. Elders: zonder reviews geen sectie.
+export function ReviewsBlock({ demo = null }) {
   const [data, setData] = useState(null); // { reviews, count, avg } uit /api/reviews (Judge.me)
   const row = useRef(null);
 
@@ -395,9 +411,8 @@ export function ReviewsBlock() {
     fetch('/api/reviews').then((r) => r.json()).then(setData).catch(() => setData(null));
   }, []);
 
-  // Geen echte reviews = geen sectie (ook geen placeholdertekst).
   const reviews = (data && data.reviews) || [];
-  if (reviews.length === 0) return null;
+  if (reviews.length === 0) return demo ? <ReviewsDemo {...demo} /> : null;
   const shown = reviews.slice(0, 12);
   const scroll = (d) => { const el = row.current; if (el) el.scrollBy({ left: d * el.clientWidth * .9, behavior: 'smooth' }); };
   const starStr = (n) => '★'.repeat(n) + '☆'.repeat(5 - n);
@@ -430,6 +445,45 @@ export function ReviewsBlock() {
           ))}
         </div>
         <div style={{ textAlign: 'center', marginTop: 8 }}><Link to="/reviews" style={BTNO}>Read all reviews</Link></div>
+      </div>
+    </section>
+  );
+}
+
+// Demo-staat van de reviewsectie: video-placeholders + voorbeeldreviews, allebei zichtbaar gelabeld.
+function ReviewsDemo({ videos = [], reviews = [] }) {
+  return (
+    <section className="r-pad" style={{ ...rv('pad', ...SP.section), overflow: 'hidden' }}>
+      <div style={{ maxWidth: W.page, margin: '0 auto' }}>
+        <Reveal><div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, fontWeight: 400, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy }}>What happy sleepers <span style={{ fontFamily: FONT_SUB }}>are saying</span></h2>
+          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.grayD, marginTop: 10 }}>Reviews from verified buyers appear here automatically.</p>
+        </div></Reveal>
+        <Reveal delay={80}><div className="rev-vids r-gap" style={rv('gap', ...SP.gap)}>
+          {videos.map((v, i) => (
+            <div key={i} style={{ position: 'relative', aspectRatio: '9 / 16', borderRadius: R.lg, overflow: 'hidden', boxShadow: SH.card, background: c.night }}>
+              <img src={v.poster} width={v.width} height={v.height} loading="lazy" decoding="async" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(20,16,64,0) 45%, rgba(20,16,64,.78))' }} />
+              <span style={{ ...CHIP, position: 'absolute', top: 12, left: 12, fontSize: T.xs[0], background: c.cream, color: c.navy }}>Video review coming soon</span>
+              <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: .85 }}><PlayIcon /></span>
+              <span style={{ position: 'absolute', left: 16, right: 16, bottom: 16, color: c.white, fontFamily: FONT_SUB, fontSize: T.md[0], lineHeight: LH.head, textShadow: SH.text }}>{v.caption}</span>
+            </div>
+          ))}
+        </div></Reveal>
+        <div className="grid-3m1 r-gap r-mt" style={{ ...rv('gap', ...SP.gap), ...rv('mt', 32, 24) }}>
+          {reviews.map((r, i) => (
+            <Reveal key={i} delay={i * 80} style={{ height: '100%' }}><article className="r-pad" style={{ ...CARD, ...rv('pad', ...SP.card), display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
+                <span aria-label="5 out of 5 stars" style={{ color: c.amber, fontSize: T.lg[0], letterSpacing: 2 }}>★★★★★</span>
+                <span style={{ ...CHIP, fontSize: T.xs[0], padding: '4px 10px', background: c.cream, color: c.grayD }}>Example review</span>
+              </div>
+              <h3 style={{ fontFamily: FONT_SUB, fontWeight: 600, fontSize: T.md[0], lineHeight: LH.head, color: c.navy, margin: '12px 0 0' }}>{r.title}</h3>
+              <p style={{ fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, margin: '8px 0 16px' }}>{r.body}</p>
+              <b style={{ marginTop: 'auto', fontFamily: FONT_SUB, fontSize: T.sm[0], color: c.navy }}>{r.name}</b>
+            </article></Reveal>
+          ))}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: 32 }}><Link to="/reviews" style={BTNO}>Read all reviews</Link></div>
       </div>
     </section>
   );

@@ -7,17 +7,13 @@ import { buyNow } from '../shopify';
 import { trackAddToCart, trackViewContent } from '../track';
 import Reveal from '../components/Reveal';
 import PillowQuiz from '../components/PillowQuiz';
-import { Stars, ReviewsBlock, FAQBlock, TrustAccordion, ProductImageBlock, ShippingCountdown, CompareCards } from '../components/Blocks';
+import { Stars, FAQBlock, TrustAccordion, ProductImageBlock, ShippingCountdown, CompareCards } from '../components/Blocks';
 import StickyBuyBar from '../components/StickyBuyBar';
+import { useReviews, GalleryReview, ExplainAccordion, Bento, SplitImages, DesignedForSleep, HotSleeperStats, ProductReviews, CompleteYourBed, padBottom } from '../components/product/ProductSections';
+import { PRODUCT_MEDIA, PRODUCT_BENTO, PILLOW_ACCORDION, PILLOW_DESIGN, PILLOW_SPLIT, PILLOW_STATS, EXAMPLE_REVIEWS, completeYourBed } from '../data/product-content.js';
 
-// Echte Judge.me-review-samenvatting. Toont sterren + aantal zodra er
-// geverifieerde reviews zijn; tot die tijd het eerlijke verkoopcijfer.
-// Nooit verzonnen sterren of aantallen.
-function useReviews() {
-  const [data, setData] = useState(null);
-  useEffect(() => { fetch('/api/reviews').then(r => r.json()).then(setData).catch(() => setData(null)); }, []);
-  return data;
-}
+// Echte Judge.me-reviews (useReviews): sterren + aantal zodra er geverifieerde
+// reviews zijn. Nooit verzonnen sterren of aantallen; voorbeelden dragen een chip.
 
 export default function ProductPillow({ onCartOpen }) {
   const { symbol, isCA } = useCurrency();
@@ -50,9 +46,9 @@ export default function ProductPillow({ onCartOpen }) {
   return (
     <div>
       {/* 1 — Above the fold + buy box */}
-      <section className="r-pad r-cols r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', 'minmax(0, 1.05fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24) }}>
-        {/* Gallery */}
-        <Reveal><div>
+      <section className="r-pad r-cols r-gap pd-top" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', 'minmax(0, 1.05fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24) }}>
+        {/* Gallery: sticky op desktop tot het eind van de koopsectie */}
+        <div className="pd-sticky"><Reveal><div>
           <ProductImageBlock src={PRODUCT.images[img]} alt={PRODUCT.name} height={[460, 320]} radius={R.lg} priority />
           <div className="thumbs">
             {PRODUCT.images.map((src, i) => (
@@ -62,7 +58,8 @@ export default function ProductPillow({ onCartOpen }) {
               </button>
             ))}
           </div>
-        </div></Reveal>
+          <GalleryReview rvw={rvw} productName={PRODUCT.name} example={EXAMPLE_REVIEWS[0]} />
+        </div></Reveal></div>
 
         {/* Info / buy box */}
         <Reveal delay={120}><div>
@@ -117,20 +114,18 @@ export default function ProductPillow({ onCartOpen }) {
         </div></Reveal>
       </section>
 
-      {/* 3 — The problem, up front */}
-      <section className="r-pad" style={rv('pad', ...SP.sectionTop)}>
-        <Reveal><div style={{ maxWidth: W.text, margin: '0 auto', textAlign: 'center' }}>
-          <div style={EYEBROW}>The real reason you wake up hot</div>
-          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), color: c.navy, margin: '8px 0 16px', lineHeight: LH.head }}>The problem was never you. It was the pillow.</h2>
-          <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.loose }}>
-            Waking up hot is one of the most common reasons people stir at night, and a solid memory foam pillow makes it worse. Dense foam holds heat, so it warms up under your head and keeps you there. You flip to the cold side, and a minute later it's warm again. You're not a bad sleeper. You've been sleeping on a heat trap.
-          </p>
-        </div></Reveal>
-      </section>
+      {/* 2 — Uitleg als accordeon (Mellow-stijl) */}
+      <ExplainAccordion eyebrow="The real reason you wake up hot" title="The problem was never you. It was the pillow."
+        intro="Dense memory foam holds heat, so it warms up under your head and keeps you there. The Signature Cold Pillow is built the other way around: it breathes, feels cool on contact and fits the way you sleep."
+        items={PILLOW_ACCORDION} />
+
+      {/* 3 — Bento: afwisselende media + tekst */}
+      <Bento rows={PRODUCT_BENTO} eyebrow="Feel the difference" title="A pillow that works with you" />
 
       {/* 4 — Mechanism */}
-      <section className="r-pad grid-2m1 r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', ...SP.section), ...rv('gap', 56, 24), alignItems: 'center' }}>
-        <Reveal><img src={IMG.coverInside} {...dim(IMG.coverInside)} loading="lazy" decoding="async" alt="Inside the Signature Cold Pillow: shredded memory foam that breathes" style={{ borderRadius: R.lg, boxShadow: SH.card, width: '100%' }} /></Reveal>
+      <section className="r-pad r-cols r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', ...SP.section), display: 'grid', ...rv('cols', 'minmax(0, 1.15fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24), alignItems: 'center' }}>
+        {/* Uitsnede zweeft vrij op de pagina-achtergrond, geen wit vlak */}
+        <Reveal><img src={IMG.coverInside} {...dim(IMG.coverInside)} loading="lazy" decoding="async" alt="Inside the Signature Cold Pillow: shredded memory foam that breathes" style={{ display: 'block', width: '100%', filter: 'drop-shadow(0 24px 30px rgba(32,27,93,.22))' }} /></Reveal>
         <Reveal delay={120}><div>
           <div style={EYEBROW}>Why it's different</div>
           <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), color: c.navy, margin: '8px 0 16px', lineHeight: LH.head }}>Built to lose heat, not hold it</h2>
@@ -151,8 +146,8 @@ export default function ProductPillow({ onCartOpen }) {
         </div></Reveal>
       </section>
 
-      {/* 5 — Made to fit you + Filling Finder */}
-      <section className="r-pad" style={rv('pad', `0 ${SP.gutter[0]}px`, `0 ${SP.gutter[1]}px`)}>
+      {/* 5 — Made to fit you + Filling Finder (ruimte onder, de quiz is wit) */}
+      <section className="r-pad" style={padBottom(...SP.section)}>
         <Reveal><div style={{ maxWidth: W.text, margin: '0 auto', textAlign: 'center' }}>
           <div style={EYEBROW}>Made to fit you</div>
           <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), color: c.navy, margin: '8px 0 16px', lineHeight: LH.head }}>One pillow that actually fits you</h2>
@@ -163,8 +158,18 @@ export default function ProductPillow({ onCartOpen }) {
       </section>
       <PillowQuiz />
 
-      {/* 6 — Reviews wall (verschijnt vanzelf zodra er reviews zijn) */}
-      <div id="reviews"><ReviewsBlock /></div>
+      {/* 6 — Split-beeldpaar, volle breedte */}
+      <SplitImages items={PILLOW_SPLIT} />
+
+      {/* 7 — Designed for real sleep: accordeon + grote video */}
+      <DesignedForSleep items={PILLOW_DESIGN} media={PRODUCT_MEDIA.feature} />
+
+      {/* 8 — Made for hot sleepers: stats */}
+      <HotSleeperStats stats={PILLOW_STATS}
+        text="Most pillows hold heat and come in one height for everyone. This one breathes, adjusts to the way you sleep and gives you plenty of time to decide." />
+
+      {/* 9 — Reviews: echte Judge.me, anders voorbeelden met chip */}
+      <ProductReviews rvw={rvw} productName={PRODUCT.name} examples={EXAMPLE_REVIEWS} />
 
       {/* 7 — Comparison vs a generic cooling pillow */}
       <section className="r-pad" style={rv('pad', ...SP.sectionTop)}>
@@ -234,6 +239,8 @@ export default function ProductPillow({ onCartOpen }) {
           </div>
         </div></Reveal>
       </section>
+
+      <CompleteYourBed items={completeYourBed(PRODUCT.id)} />
 
       <StickyBuyBar targetRef={buyRef} name="Signature Cold Pillow" price={`${formatPrice(price, symbol)} · ${bundle.pillows} pillows`} onAdd={addToCart} />
     </div>

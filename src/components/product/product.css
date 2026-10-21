@@ -1,0 +1,42 @@
+/* Productpagina-helpers (sticky galerij, accordeon, split-beelden, bento).
+   Breakpoint gelijk aan index.css: 767px. */
+
+/* 1. Sticky galerij: alleen desktop. Het grid-item zelf is sticky, de
+   sectie is de container, dus de galerij laat los aan het eind van de koopsectie. */
+.pd-top { align-items: start; }
+@media (min-width: 768px) {
+  .pd-sticky { position: sticky; top: 96px; align-self: start; }
+}
+
+/* 2. Mellow-achtige accordeon */
+.pd-acc details { border-top: 1px solid rgba(32,27,93,.16); }
+.pd-acc details:last-child { border-bottom: 1px solid rgba(32,27,93,.16); }
+.pd-acc summary { list-style: none; cursor: pointer; }
+.pd-acc summary::-webkit-details-marker { display: none; }
+.pd-acc .pd-acc-icon { transition: transform .25s ease; flex-shrink: 0; }
+.pd-acc details[open] .pd-acc-icon { transform: rotate(45deg); }
+
+/* 3. Split-beeldpaar over de volle breedte */
+.pd-split { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+.pd-split-cell { position: relative; aspect-ratio: 1 / 1; overflow: hidden; }
+@media (max-width: 767px) {
+  .pd-split { grid-template-columns: 1fr; }
+  .pd-split-cell { aspect-ratio: 4 / 5; }
+}
+
+/* 4. Bento: afwisselende rijen; op mobiel altijd media boven tekst */
+.pd-bento-row { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+.pd-bento-row.is-rev .pd-bento-media { order: 2; }
+@media (max-width: 767px) {
+  .pd-bento-row { grid-template-columns: 1fr; }
+  .pd-bento-row.is-rev .pd-bento-media { order: 0; }
+}
+
+/* 5. Twee-koloms secties (uitleg, designed for real sleep, stats) */
+.pd-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+.pd-two.is-center { align-items: center; }
+@media (max-width: 767px) {
+  .pd-two { grid-template-columns: minmax(0, 1fr); }
+}
+
+.clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }

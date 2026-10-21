@@ -1,0 +1,87 @@
+/* Homepage-specifieke layout. Breekpunt gelijk aan index.css (767px). */
+
+/* ---------- Hero ---------- */
+.home-hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,16,64,.55) 0%, rgba(20,16,64,.22) 45%, rgba(20,16,64,0) 70%); }
+.home-hero-copy { max-width: 600px; text-align: left; }
+.home-hero-sub { max-width: 520px; }
+.home-hero-ctas { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.home-hero-trust { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+
+/* ---------- Redefining sleep ---------- */
+.home-innov { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); grid-template-areas: "head media" "acc media"; grid-template-rows: auto 1fr; column-gap: 72px; align-items: start; }
+.home-innov-head { grid-area: head; }
+.home-innov-acc { grid-area: acc; }
+.home-innov-media { grid-area: media; position: sticky; top: 110px; }
+.home-acc-btn { width: 100%; display: flex; align-items: center; gap: 16px; background: none; border: none; padding: 20px 2px; cursor: pointer; text-align: left; font-family: inherit; color: inherit; }
+.home-acc-btn:hover { filter: none; }
+.home-acc-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
+.home-acc-panel.is-open { grid-template-rows: 1fr; }
+.home-acc-panel > div { overflow: hidden; }
+.home-acc-plus { margin-left: auto; transition: transform .25s ease; flex-shrink: 0; }
+.home-acc-btn[aria-expanded="true"] .home-acc-plus { transform: rotate(45deg); }
+
+/* ---------- Product grid (home) ---------- */
+.home-pgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1023px) { .home-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- Video row: grote kaarten ---------- */
+.vid-big { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* ---------- Reviews demo ---------- */
+.rev-vids { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 860px; margin: 0 auto; }
+
+/* ---------- Just flip it ---------- */
+.home-flip { display: grid; grid-template-columns: minmax(0, 580px) minmax(0, 1fr); grid-template-areas: "media head" "media steps"; column-gap: 72px; row-gap: 32px; align-items: center; }
+.home-flip-media { grid-area: media; }
+.home-flip-head { grid-area: head; align-self: end; }
+.home-flip-steps { grid-area: steps; align-self: start; }
+.home-flip-stage { perspective: 1400px; width: 100%; aspect-ratio: 1500 / 1180; }
+.home-flip-card { position: relative; width: 100%; height: 100%; transition: transform .8s cubic-bezier(.3,.7,.2,1); transform-style: preserve-3d; }
+.home-flip-card.is-warm { transform: rotateY(180deg); }
+.home-flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; align-items: center; justify-content: center; }
+.home-flip-face.back { transform: rotateY(180deg); }
+.home-flip-face img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 30px 34px rgba(32,27,93,.28)); }
+.home-seg { display: inline-grid; grid-template-columns: 1fr 1fr; position: relative; height: 56px; padding: 5px; border-radius: 999px; }
+.home-seg-thumb { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc(50% - 5px); border-radius: 999px; transition: transform .35s ease; }
+.home-seg.is-warm .home-seg-thumb { transform: translateX(100%); }
+.home-seg button { position: relative; z-index: 1; border: none; background: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 26px; cursor: pointer; font-family: inherit; border-radius: 999px; transition: color .3s ease; }
+.home-seg button:hover { filter: none; }
+
+/* ---------- Vergelijking ---------- */
+.home-vs { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 56px; align-items: center; position: relative; }
+.home-vs-chip { position: absolute; left: calc(52% - 4px); top: 50%; transform: translate(-50%, -50%); z-index: 3; }
+
+/* ---------- Merkstatement ---------- */
+.home-brand-panel { position: relative; aspect-ratio: 5 / 4; display: flex; align-items: center; justify-content: center; overflow: visible; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-flip-card, .home-seg-thumb, .home-acc-panel { transition: none; }
+}
+
+@media (max-width: 767px) {
+  .home-hero-shade { background: linear-gradient(180deg, rgba(20,16,64,.35) 0%, rgba(20,16,64,.15) 60%, rgba(20,16,64,.35) 100%); }
+  .home-hero-copy { max-width: none; text-align: center; margin: 0 auto; }
+  .home-hero-sub { margin-left: auto !important; margin-right: auto !important; }
+  .home-hero-ctas { justify-content: center; flex-direction: column; gap: 6px; }
+  .home-hero-trust { justify-content: center; gap: 10px 16px; }
+  .home-hero-trust li { font-size: 12px !important; }
+
+  .home-innov { grid-template-columns: 1fr; grid-template-areas: "head" "media" "acc"; grid-template-rows: auto; }
+  .home-innov-media { position: static; max-width: 420px; width: 100%; margin: 0 auto 28px; }
+
+  .home-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .vid-big { grid-template-columns: 1fr; }
+
+  .rev-vids { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin: 0 -20px; padding: 0 20px 8px; scroll-padding: 0 20px; }
+  .rev-vids::-webkit-scrollbar { display: none; }
+  .rev-vids > * { flex: 0 0 62%; scroll-snap-align: start; }
+
+  .home-flip { grid-template-columns: 1fr; grid-template-areas: "head" "media" "steps"; row-gap: 32px; }
+  .home-flip-head { text-align: center; }
+  .home-flip-head p { margin: 0 auto; }
+  .home-seg button { padding: 0 18px; }
+
+  .home-vs { grid-template-columns: 1fr; }
+}

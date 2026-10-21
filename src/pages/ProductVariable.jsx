@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { c, BTN, BTNO, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
+import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { productById, products, dim } from '../data';
+import { productById, dim } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNowProduct, isProductPurchasable } from '../shopify';
 import { trackAddToCart, trackViewContent } from '../track';
 import Reveal from '../components/Reveal';
 import StickyBuyBar from '../components/StickyBuyBar';
-import { ProductImageBlock, TrustAccordion, ReviewsBlock, FAQBlock, ShippingCountdown } from '../components/Blocks';
+import { TrustAccordion, FAQBlock, ShippingCountdown } from '../components/Blocks';
+import { useReviews, GalleryReview, ExplainAccordion, SplitImages, HotSleeperStats, ProductReviews, CompleteYourBed } from '../components/product/ProductSections';
+import { VARIANT_SPLIT, VARIANT_STATS, VARIANT_EXAMPLE_REVIEWS, variantAccordion, completeYourBed } from '../data/product-content.js';
 
 // Productpagina voor de variantproducten (maat + kleur). Zelfde bouwstenen en
 // wolk-achtergronden als de kussenpagina, gevoed uit products[] in data.js.
@@ -21,6 +23,7 @@ export default function ProductVariable({ onCartOpen }) {
   const [color, setColor] = useState(product ? product.colors[0] : null);
   const [img, setImg] = useState(0);
   const buyRef = useRef(null);
+  const rvw = useReviews();
 
   useEffect(() => {
     if (product) trackViewContent({ content_type: 'product', content_name: product.id });
@@ -39,7 +42,8 @@ export default function ProductVariable({ onCartOpen }) {
   const compare = product.compareAt ? (isCA ? product.compareAt.cad : product.compareAt.usd) : null;
   const purchasable = isProductPurchasable(product.id, size, color);
   const hasColors = product.colors.length > 1;
-  const others = products.filter(p => p.id !== product.id).slice(0, 2);
+  const examples = VARIANT_EXAMPLE_REVIEWS[product.id] || [];
+  const split = VARIANT_SPLIT[product.id] || product.images.slice(1, 3).map((image) => ({ image, caption: product.tagline, fit: 'cover' }));
 
   const addToCart = () => {
     if (!purchasable) return;
@@ -56,9 +60,9 @@ export default function ProductVariable({ onCartOpen }) {
 
   return (
     <div>
-      <section className="r-pad r-cols r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', 'minmax(0, 1.05fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24) }}>
-        {/* Gallery */}
-        <Reveal><div>
+      <section className="r-pad r-cols r-gap pd-top" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', 'minmax(0, 1.05fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24) }}>
+        {/* Gallery: sticky op desktop tot het eind van de koopsectie */}
+        <div className="pd-sticky"><Reveal><div>
           <div className="r-h" style={{ background: c.cream, borderRadius: R.lg, boxShadow: SH.card, overflow: 'hidden', ...rv('h', 460, 320) }}>
             <img src={product.images[img]} {...dim(product.images[img])} fetchPriority="high" decoding="async" alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </div>
@@ -70,7 +74,8 @@ export default function ProductVariable({ onCartOpen }) {
               </button>
             ))}
           </div>
-        </div></Reveal>
+          {examples[0] && <GalleryReview rvw={rvw} productName={product.name} example={examples[0]} />}
+        </div></Reveal></div>
 
         {/* Info */}
         <Reveal delay={120}><div>
@@ -143,69 +148,23 @@ export default function ProductVariable({ onCartOpen }) {
         </div></Reveal>
       </section>
 
-      {/* Why you'll love it: longDesc + highlights + features */}
-      <section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '24px 40px 80px', '16px 20px 56px') }}>
-        <Reveal><div>
-          <div style={EYEBROW}>Why you'll love it</div>
-          {product.longDesc.split('\n\n').map((para, i) => (
-            <p key={i} className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.loose, margin: '12px 0 0', maxWidth: W.text + 80 }}>{para}</p>
-          ))}
-        </div></Reveal>
+      {/* Uitleg als accordeon */}
+      <ExplainAccordion eyebrow="Why you'll love it" title={product.tagline}
+        chips={product.highlights} items={variantAccordion(product)} />
 
-        {product.highlights && (
-          <Reveal delay={100}><div className="grid-3m1 r-gap" style={{ ...rv('gap', ...SP.gap), margin: '32px 0 8px' }}>
-            {product.highlights.map((h, i) => (
-              <div key={i} style={{ background: c.sky, borderRadius: R.sm, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: T.h3[0] }}>{h.icon}</span>
-                <div>
-                  <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], fontWeight: 600, color: c.navy }}>{h.label}</div>
-                  <div style={{ fontSize: T.xs[0], color: c.grayD }}>{h.sub}</div>
-                </div>
-              </div>
-            ))}
-          </div></Reveal>
-        )}
+      <SplitImages items={split} />
 
-        <Reveal delay={140}><div style={{ marginTop: 40 }}>
-          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h3), lineHeight: LH.head, color: c.navy, marginBottom: 16 }}>What's inside</h2>
-          <ul className="grid-2m1" style={{ listStyle: 'none', gap: '8px 24px' }}>
-            {product.features.map((f, i) => (
-              <li key={i} style={{ display: 'flex', gap: 12, fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD }}>
-                <span style={{ color: c.amberD, flexShrink: 0 }}>✓</span>{f}
-              </li>
-            ))}
-          </ul>
-        </div></Reveal>
-      </section>
+      <HotSleeperStats stats={VARIANT_STATS}
+        text="Built for people who sleep warm, in breathable materials that don't trap heat. Try it at home with free shipping and plenty of time to decide." />
 
-      {/* Pairing / cross-sell */}
-      {others.length > 0 && (
-        <section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '0 40px 80px', '0 20px 56px') }}>
-          <Reveal><h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Complete your <span style={{ fontFamily: FONT_SUB }}>bed</span></h2></Reveal>
-          <Reveal delay={100}><div className="grid-2m1 r-gap" style={rv('gap', ...SP.gap)}>
-            {others.map(o => {
-              const op = getPrice(o, isCA);
-              return (
-                <Link key={o.id} to={`/product/${o.id}`} className="card-hover" style={{ textDecoration: 'none', ...CARD, overflow: 'hidden', display: 'flex', alignItems: 'center', gap: 16 }}>
-                  <div className="r-w r-h" style={{ ...rv('w', 140, 110), ...rv('h', 130, 110), flexShrink: 0, background: c.cream, overflow: 'hidden' }}><img src={o.images[0]} {...dim(o.images[0])} loading="lazy" decoding="async" alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>
-                  <div style={{ padding: '16px 20px 16px 0' }}>
-                    <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.lg), lineHeight: LH.head, color: c.navy, marginBottom: 4 }}>{o.name}</div>
-                    <div style={{ fontSize: T.xs[0], color: c.grayD, marginBottom: 8, lineHeight: LH.body }}>{o.tagline}</div>
-                    <div style={{ fontSize: T.sm[0], fontWeight: 700, color: c.navy, marginBottom: 12 }}>From {formatPrice(op, symbol)}</div>
-                    <span style={BTN_SM}>View</span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div></Reveal>
-        </section>
-      )}
+      {examples.length > 0 && <ProductReviews rvw={rvw} productName={product.name} examples={examples} />}
 
-      <ReviewsBlock />
       <section className="r-pad" style={rv('pad', ...SP.section)}>
         <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
         <FAQBlock items={product.faq || undefined} />
       </section>
+
+      <CompleteYourBed items={completeYourBed(product.id)} />
 
       <StickyBuyBar targetRef={buyRef} name={product.name} price={`${formatPrice(price, symbol)}${hasColors ? ` · ${size}, ${color}` : ` · ${size}`}`} onAdd={addToCart} disabled={!purchasable} label={purchasable ? 'Add to cart' : 'Coming soon'} />
     </div>
