@@ -108,9 +108,16 @@ async function handleCheckout(c) {
 }
 
 export default async function handler(req, res) {
+  if (req.method === 'GET') {
+    // Alleen of de sleutels gezet zijn, nooit de waarden zelf.
+    return res.status(200).json({ secret: !!process.env.SHOPIFY_WEBHOOK_SECRET, brevo: !!process.env.BREVO_API_KEY });
+  }
   if (req.method !== 'POST') return res.status(405).end();
   const raw = await rawBody(req);
-  if (!validHmac(raw, req.headers['x-shopify-hmac-sha256'])) return res.status(401).end();
+  if (!validHmac(raw, req.headers['x-shopify-hmac-sha256'])) {
+    console.error('[shopify-webhook] hmac mismatch', { len: raw.length, hasHeader: !!req.headers['x-shopify-hmac-sha256'] });
+    return res.status(401).end();
+  }
 
   const topic = String(req.headers['x-shopify-topic'] || '');
   let payload;
