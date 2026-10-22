@@ -9,6 +9,7 @@ import crypto from 'node:crypto';
 
 export const config = { api: { bodyParser: false } };
 
+let LAST = null; // laatste verwerking (alleen status, geen data)
 const CUSTOMERS_LIST = 9; // Brevo-lijst "flipnsleep buyers"
 
 async function rawBody(req) {
@@ -110,11 +111,12 @@ async function handleCheckout(c) {
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     // Alleen of de sleutels gezet zijn, nooit de waarden zelf.
-    return res.status(200).json({ secret: !!process.env.SHOPIFY_WEBHOOK_SECRET, brevo: !!process.env.BREVO_API_KEY });
+    return res.status(200).json({ secret: !!process.env.SHOPIFY_WEBHOOK_SECRET, brevo: !!process.env.BREVO_API_KEY, last: LAST });
   }
   if (req.method !== 'POST') return res.status(405).end();
   const raw = await rawBody(req);
   if (!validHmac(raw, req.headers['x-shopify-hmac-sha256'])) {
+    LAST = { at: new Date().toISOString(), step: 'hmac', ok: false };
     console.error('[shopify-webhook] hmac mismatch', { len: raw.length, hasHeader: !!req.headers['x-shopify-hmac-sha256'] });
     return res.status(401).end();
   }
@@ -127,8 +129,10 @@ export default async function handler(req, res) {
     let result = 'ignored';
     if (topic === 'orders/create') result = await handleOrder(payload);
     else if (topic === 'checkouts/create' || topic === 'checkouts/update') result = await handleCheckout(payload);
+    LAST = { at: new Date().toISOString(), topic, ok: true, result };
     return res.status(200).json({ ok: true, result });
   } catch (err) {
+    LAST = { at: new Date().toISOString(), topic, ok: false, error: String(err.message).replace(/[\w.+-]+@[\w.-]+/g, '<email>').slice(0, 200) };
     console.error('[shopify-webhook]', topic, err.message);
     // 500 laat Shopify het later opnieuw proberen
     return res.status(500).json({ ok: false });
