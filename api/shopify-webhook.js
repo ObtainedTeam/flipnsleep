@@ -9,7 +9,7 @@ import crypto from 'node:crypto';
 
 export const config = { api: { bodyParser: false } };
 
-const CUSTOMERS_LIST = 7; // Brevo-lijst "Customers"
+const CUSTOMERS_LIST = 9; // Brevo-lijst "flipnsleep buyers"
 
 async function rawBody(req) {
   const chunks = [];
