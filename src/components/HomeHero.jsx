@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useRef } from 'react';
+import { useLazyVideo, videoHtml } from '../lazyVideo';
 import { Link } from 'react-router-dom';
 import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH, CHIP } from '../theme';
-import { IMG } from '../data';
 import { HERO } from '../data/home-content';
 
 // Kleine lijn-iconen voor de trustrij in de hero.
@@ -12,33 +12,15 @@ const ICONS = {
 };
 
 export default function HomeHero() {
-  // iOS-vangnet: als autoplay geblokkeerd werd (bv. energiebesparende modus),
-  // start de video alsnog bij de eerste aanraking of klik.
-  useEffect(() => {
-    // Vangnet voor browsers die het media-attribuut op <source> negeren (o.a.
-    // Firefox): kies daar handmatig de mobiele video. Alleen DOM, dus hydration-veilig.
-    const v0 = document.querySelector('.home-hero video');
-    if (v0 && window.innerWidth < 760 && !/hero-mobile/.test(v0.currentSrc || '')) {
-      v0.src = '/videos/hero-mobile.mp4';
-    }
-    const kick = () => {
-      const v = document.querySelector('.home-hero video');
-      if (v && v.paused) { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
-    };
-    kick();
-    window.addEventListener('touchstart', kick, { once: true, passive: true });
-    window.addEventListener('click', kick, { once: true });
-    return () => { window.removeEventListener('touchstart', kick); window.removeEventListener('click', kick); };
-  }, []);
+  // Video pas na de paginalading: eerst telt de poster (LCP), daarna start de film.
+  const ref = useRef(null);
+  useLazyVideo(ref, { afterLoad: true });
 
   return (
-    <section className="home-hero r-mh r-jc r-pad" style={{ backgroundImage: `url(${IMG.heroPoster})`, backgroundSize: 'cover', backgroundPosition: 'center', ...rv('mh', 720, 600), display: 'flex', flexDirection: 'column', ...rv('jc', 'center', 'flex-start'), ...rv('pad', '50px 40px 120px', '40px 20px 84px'), position: 'relative', overflow: 'hidden' }}>
-      {/* Achtergrondvideo: ongewijzigd. Mobiel krijgt de kleine variant via het media-attribuut. */}
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
-        `<video autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="${IMG.heroPoster}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:translateZ(0);backface-visibility:hidden">` +
-        `<source src="/videos/hero-mobile.mp4" type="video/mp4" media="(max-width: 759px)">` +
-        `<source src="/videos/hero.mp4" type="video/mp4">` +
-        `</video>`
+    <section className="home-hero r-mh r-jc r-pad" style={{ ...rv('mh', 720, 600), display: 'flex', flexDirection: 'column', ...rv('jc', 'center', 'flex-start'), ...rv('pad', '50px 40px 120px', '40px 20px 84px'), position: 'relative', overflow: 'hidden' }}>
+      {/* Achtergrondvideo: mobiel krijgt de kleine variant, geladen na de poster. */}
+      <div ref={ref} aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
+        videoHtml({ src: '/videos/hero.mp4', srcMobile: '/videos/hero-mobile.mp4' })
       }} />
       <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,0.30)' }} />
       {/* Extra verloop achter de linkse tekst (desktop) of onderin (mobiel) */}

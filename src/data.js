@@ -1,3 +1,4 @@
+import { VARIANTS } from './data/variants';
 // flip'nsleep — productdata.
 // Kussen: één product met twee bundels (prijsladder goedgekeurd 21 juli 2026).
 // Daarnaast drie variantproducten (weighted blanket, bamboe lakenset, cooling
@@ -19,7 +20,7 @@ export const IMG = {
   coverDuo: "/images/pillow-cover-duo.webp",
   coverInside: "/images/pillow-cover-inside.webp",
   heroBg: "/images/hero-bg.jpg",
-  heroPoster: "/images/hero-poster.jpg",
+  heroPoster: "/images/hero-poster.webp",
   sliderBg: "/images/slider-bg.jpg",
   cloudsUp: "/images/clouds-up.png",
   cloudsDown: "/images/clouds-down.png",
@@ -66,7 +67,8 @@ export const IMG_DIM = {
   "/images/flip-cool.webp": [1500, 1103],
   "/images/flip-warm.webp": [1500, 1181],
   "/images/hero-bg.jpg": [391, 453],
-  "/images/hero-poster.jpg": [1080, 1080],
+  "/images/hero-poster.webp": [1080, 1080],
+  "/images/hero-poster-720.webp": [720, 720],
   "/images/icon-1plus1.png": [170, 126],
   "/images/icon-cloud-white.png": [199, 98],
   "/images/icon-cloud.png": [228, 136],
@@ -105,6 +107,15 @@ export const IMG_DIM = {
 export const dim = (src) => {
   const d = IMG_DIM[src];
   return d ? { width: d[0], height: d[1] } : {};
+};
+
+// srcset/sizes voor afbeeldingen met kleinere varianten (scripts/gen-variants.py).
+// Gebruik: <img src={src} {...dim(src)} {...rs(src, '(max-width: 759px) 80vw, 480px')} />
+export const rs = (src, sizes = '100vw') => {
+  if (!VARIANTS.has(src)) return {};
+  const base = src.replace(/\.\w+$/, '');
+  const w = (IMG_DIM[src] || [1500])[0];
+  return { srcSet: `${base}-480.webp 480w, ${base}-960.webp 960w, ${src} ${w}w`, sizes };
 };
 
 export const PRODUCT = {

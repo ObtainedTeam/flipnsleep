@@ -15,7 +15,11 @@ export default function Reveal({ children, delay = 0, y = 20, once = false, styl
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const el = ref.current;
     if (!el) return;
-    setState('hidden');
+    // Al in beeld bij het laden (boven de vouw): niet eerst verbergen. Dat
+    // voorkomt een extra fade bij de eerste paint en een latere LCP.
+    const r = el.getBoundingClientRect();
+    const inView = r.top < window.innerHeight && r.bottom > 0;
+    if (!inView) setState('hidden');
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) {
         setState('shown');

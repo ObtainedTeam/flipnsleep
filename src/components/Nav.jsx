@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { c, FONT_SUB, FONT_DISPLAY, R, SH, T, LH, W, BTN, CHIP, CARD } from '../theme';
 import { CartContext } from './Cart';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { IMG, PRODUCT, BUNDLES, productById, dim } from '../data';
+import { IMG, PRODUCT, BUNDLES, productById, dim, rs } from '../data';
 
 // Navigatie in cloudpillo-stijl: aankondigingsbalk + categoriemenu met
 // dropdownpanelen (desktop) en een drawer met accordeon (mobiel/tablet).
@@ -82,7 +82,7 @@ function PanelCard({ card, symbol, onPick }) {
   return (
     <Link to={card.to} onClick={onPick} className="card-hover" style={{ ...CARD, textDecoration: 'none', overflow: 'hidden', display: 'block' }}>
       <div style={{ position: 'relative', background: c.sky, height: 150 }}>
-        <img src={card.img} {...dim(card.img)} loading="lazy" decoding="async" alt="" style={{ width: '100%', height: '100%', objectFit: card.cover ? 'cover' : 'contain', display: 'block', padding: card.cover ? 0 : 10 }} />
+        <img src={card.img} {...dim(card.img)} {...rs(card.img, '180px')} loading="lazy" decoding="async" alt="" style={{ width: '100%', height: '100%', objectFit: card.cover ? 'cover' : 'contain', display: 'block', padding: card.cover ? 0 : 10 }} />
         <span style={{ ...CHIP, position: 'absolute', top: 10, left: 10, fontSize: T.xs[0], padding: '5px 10px', background: card.badge === 'Bestseller' ? c.amber : c.navy, color: card.badge === 'Bestseller' ? c.navy : c.white }}>{card.badge}</span>
       </div>
       <div style={{ padding: '14px 16px 16px' }}>
@@ -221,7 +221,7 @@ export default function Nav({ onCartOpen }) {
                 <div style={{ background: c.white, borderRadius: R.lg, boxShadow: SH.float, padding: 24 }}>
                   {cat.soon ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-                      <img src={cat.soon} {...dim(cat.soon)} loading="lazy" decoding="async" alt="" style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: R.sm, flexShrink: 0 }} />
+                      <img src={cat.soon} {...dim(cat.soon)} {...rs(cat.soon, '120px')} loading="lazy" decoding="async" alt="" style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: R.sm, flexShrink: 0 }} />
                       <div>
                         <span style={{ ...SOON_CHIP, background: c.sky, color: c.navy, marginBottom: 8 }}>Coming soon</span>
                         <div style={{ fontFamily: FONT_DISPLAY, fontSize: T.h4[0], lineHeight: LH.head, color: c.navy, margin: '6px 0' }}>{cat.label}</div>
@@ -274,14 +274,14 @@ export default function Nav({ onCartOpen }) {
                   <div id={`nav-acc-${cat.key}`} hidden={!open} style={{ padding: '0 20px 14px' }}>
                     {cat.soon ? (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <img src={cat.soon} {...dim(cat.soon)} loading="lazy" decoding="async" alt="" style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: R.sm, flexShrink: 0 }} />
+                        <img src={cat.soon} {...dim(cat.soon)} {...rs(cat.soon, '56px')} loading="lazy" decoding="async" alt="" style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: R.sm, flexShrink: 0 }} />
                         <div style={{ fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD }}>
                           Coming soon. <a href="#newsletter" onClick={(e) => { setDrawer(false); openNewsletter(e); }} style={{ color: c.purple, fontWeight: 600 }}>Join the list to hear first</a>
                         </div>
                       </div>
                     ) : cat.cards(isCA).map((card, i) => (
                       <Link key={i} to={card.to} onClick={() => setDrawer(false)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 0', textDecoration: 'none', color: c.navy }}>
-                        <img src={card.img} {...dim(card.img)} loading="lazy" decoding="async" alt="" style={{ width: 56, height: 56, objectFit: 'contain', background: c.sky, borderRadius: R.sm, flexShrink: 0 }} />
+                        <img src={card.img} {...dim(card.img)} {...rs(card.img, '56px')} loading="lazy" decoding="async" alt="" style={{ width: 56, height: 56, objectFit: 'contain', background: c.sky, borderRadius: R.sm, flexShrink: 0 }} />
                         <span style={{ minWidth: 0 }}>
                           <span style={{ display: 'block', fontFamily: FONT_SUB, fontWeight: 600, fontSize: T.sm[0], lineHeight: LH.head }}>{card.name}</span>
                           <Price card={card} symbol={symbol} size={T.xs[0]} />

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD, CHIP } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { PRODUCT, BUNDLES, IMG, dim } from '../data';
+import { PRODUCT, BUNDLES, IMG, dim, rs } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNow } from '../shopify';
 import { trackAddToCart, trackViewContent } from '../track';
@@ -55,7 +55,7 @@ export default function ProductPillow({ onCartOpen }) {
             {PRODUCT.images.map((src, i) => (
               <button key={i} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}`}
                 style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: R.sm, padding: 0, cursor: 'pointer', background: c.sky, flexShrink: 0, overflow: 'hidden' }}>
-                <img src={src} {...dim(src)} loading="lazy" decoding="async" alt="" style={{ width: 64, height: 64, objectFit: 'cover', display: 'block' }} />
+                <img src={src} {...dim(src)} {...rs(src, '64px')} loading="lazy" decoding="async" alt="" style={{ width: 64, height: 64, objectFit: 'cover', display: 'block' }} />
               </button>
             ))}
           </div>
@@ -129,7 +129,7 @@ export default function ProductPillow({ onCartOpen }) {
       {/* 4 — Mechanism */}
       <section className="r-pad r-cols r-gap" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', ...SP.section), display: 'grid', ...rv('cols', 'minmax(0, 1.15fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24), alignItems: 'center' }}>
         {/* Uitsnede zweeft vrij op de pagina-achtergrond, geen wit vlak */}
-        <Reveal><img src={IMG.coverInside} {...dim(IMG.coverInside)} loading="lazy" decoding="async" alt="Inside the Signature Cold Pillow: shredded memory foam that breathes" style={{ display: 'block', width: '100%', filter: 'drop-shadow(0 24px 30px rgba(32,27,93,.22))' }} /></Reveal>
+        <Reveal><img src={IMG.coverInside} {...dim(IMG.coverInside)} {...rs(IMG.coverInside, '(max-width: 759px) 100vw, 600px')} loading="lazy" decoding="async" alt="Inside the Signature Cold Pillow: shredded memory foam that breathes" style={{ display: 'block', width: '100%', filter: 'drop-shadow(0 24px 30px rgba(32,27,93,.22))' }} /></Reveal>
         <Reveal delay={120}><div>
           <div style={EYEBROW}>Why it's different</div>
           <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), color: c.navy, margin: '8px 0 16px', lineHeight: LH.head }}>Built to lose heat, not hold it</h2>

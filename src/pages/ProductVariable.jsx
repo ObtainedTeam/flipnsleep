@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { productById, dim } from '../data';
+import { productById, dim, rs } from '../data';
 import { CartContext } from '../components/Cart';
 import { buyNowProduct, isProductPurchasable } from '../shopify';
 import { trackAddToCart, trackViewContent } from '../track';
@@ -64,7 +64,7 @@ export default function ProductVariable({ onCartOpen }) {
         {/* Gallery: sticky op desktop tot het eind van de koopsectie */}
         <div className="pd-sticky"><Reveal><div>
           <div className="r-h" style={{ background: c.cream, borderRadius: R.lg, boxShadow: SH.card, overflow: 'hidden', ...rv('h', 460, 320) }}>
-            <img src={product.images[img]} {...dim(product.images[img])} fetchPriority="high" decoding="async" alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            <img src={product.images[img]} {...dim(product.images[img])} {...rs(product.images[img], '(max-width: 759px) 100vw, 600px')} fetchPriority="high" decoding="async" alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           </div>
           <div className="thumbs">
             {product.images.map((src, i) => (

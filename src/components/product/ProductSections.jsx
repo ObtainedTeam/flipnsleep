@@ -4,6 +4,7 @@ import { c, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD, CHIP
 import { BUNDLES, dim } from '../../data';
 import { useCurrency, formatPrice, getPrice } from '../../currency.jsx';
 import Reveal from '../Reveal';
+import { useLazyVideo, videoHtml } from '../../lazyVideo';
 import './product.css';
 
 // Bouwstenen voor de productpagina's (Mellow/Cloudpillo-indeling).
@@ -26,10 +27,10 @@ export const padBottom = (...vals) => rv('pad', ...vals.map(bottomOnly));
 
 // Gedempte achtergrond-video (zelfde patroon als Home: innerHTML zodat muted/autoplay ook in SSR-HTML staan).
 function MutedVideo({ src, poster }) {
+  const ref = useRef(null);
+  useLazyVideo(ref);
   return (
-    <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{
-      __html: `<video muted loop playsinline webkit-playsinline autoplay preload="none"${poster ? ` poster="${poster}"` : ''} style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"><source src="${src}" type="video/mp4"></video>`,
-    }} />
+    <div ref={ref} aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html: videoHtml({ src, poster }) }} />
   );
 }
 

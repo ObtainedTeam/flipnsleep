@@ -126,6 +126,15 @@ async function main() {
   // De SPA-shell blijft beschikbaar als app.html voor de Vercel-rewrite.
   await writeFile(path.join(OUT_DIR, 'app.html'), template);
 
+  // De (kleine) CSS inline in de HTML zetten: scheelt een render-blokkerend
+  // verzoek, vooral merkbaar op mobiel. app.html houdt de gewone <link>.
+  let pageTemplate = template;
+  const cssLink = template.match(/<link rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/);
+  if (cssLink) {
+    const css = await readFile(path.join(OUT_DIR, cssLink[1]), 'utf8');
+    pageTemplate = template.replace(cssLink[0], `<style>${css}</style>`);
+  }
+
   const mod = await import(SSR_ENTRY);
   const { render } = mod;
   DATA = { PRODUCT: mod.PRODUCT, BUNDLES: mod.BUNDLES, products: mod.products };
@@ -136,7 +145,7 @@ async function main() {
     try {
       const appHtml = render(route);
       words += appHtml.split(/\s+/).length;
-      html = applyMeta(template.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`), route);
+      html = applyMeta((route === '/' ? pageTemplate : pageTemplate.replace(/\s*<link rel="preload" as="image" href="\/images\/hero-poster[^>]*>/g, '')).replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`), route);
       ok++;
     } catch (e) {
       log(`FOUT bij ${route}: ${e.message} — schrijf head-only fallback`);

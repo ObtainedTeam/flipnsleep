@@ -1,0 +1,61 @@
+import { useEffect } from 'react';
+
+// Achtergrondvideo's pas laden als ze nodig zijn. De markup heeft geen src
+// (alleen data-src en eventueel data-src-mobile) en geen autoplay, zodat de
+// browser bij paginalading alleen de poster ophaalt. Deze hook zet de juiste
+// bron zodra de video in beeld komt; met { afterLoad: true } pas na de
+// paginalading en een rustig moment (voor de hero, zodat de poster de LCP is).
+export function startVideo(v) {
+  if (!v || v.dataset.started) return;
+  v.dataset.started = '1';
+  const mobile = v.dataset.srcMobile && window.matchMedia('(max-width: 759px)').matches;
+  v.src = mobile ? v.dataset.srcMobile : v.dataset.src;
+  v.muted = true;
+  const p = v.play();
+  if (p && p.catch) p.catch(() => {});
+}
+
+export function useLazyVideo(ref, { afterLoad = false } = {}) {
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return undefined;
+    const videos = [...root.querySelectorAll('video[data-src]')];
+    if (!videos.length) return undefined;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return undefined; // alleen de poster tonen
+    let cancelled = false;
+
+    if (afterLoad) {
+      const go = () => {
+        if (cancelled) return;
+        const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 300));
+        idle(() => { if (!cancelled) videos.forEach(startVideo); }, { timeout: 2500 });
+      };
+      if (document.readyState === 'complete') go();
+      else window.addEventListener('load', go, { once: true });
+      // iOS energiebesparing: start alsnog bij de eerste aanraking
+      const kick = () => videos.forEach((v) => { if (v.dataset.started && v.paused) v.play().catch(() => {}); });
+      window.addEventListener('touchstart', kick, { once: true, passive: true });
+      return () => { cancelled = true; window.removeEventListener('load', go); window.removeEventListener('touchstart', kick); };
+    }
+
+    if (!('IntersectionObserver' in window)) { videos.forEach(startVideo); return undefined; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { startVideo(e.target); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '200px 0px' });
+    videos.forEach((v) => io.observe(v));
+    return () => { cancelled = true; io.disconnect(); };
+  }, [ref, afterLoad]);
+}
+
+// HTML-string voor een gedempte achtergrondvideo (via innerHTML, zodat de
+// attributen ook in de geprerenderde HTML staan).
+export function videoHtml({ src, srcMobile, poster, width, height }) {
+  return `<video muted loop playsinline webkit-playsinline preload="none"` +
+    (poster ? ` poster="${poster}"` : '') +
+    (width ? ` width="${width}" height="${height}"` : '') +
+    ` data-src="${src}"` + (srcMobile ? ` data-src-mobile="${srcMobile}"` : '') +
+    ` style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>`;
+}

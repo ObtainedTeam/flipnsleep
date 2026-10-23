@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { useLazyVideo, videoHtml } from '../../lazyVideo';
 import { Link } from 'react-router-dom';
 import { c, BTNO, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH, SP, W, CHIP } from '../../theme';
 import { HOME_IMG } from '../../data/home-content';
@@ -20,6 +21,8 @@ const ITEMS = [
 ];
 
 export default function Innovation() {
+  const vidRef = useRef(null);
+  useLazyVideo(vidRef);
   const [open, setOpen] = useState(0);
   const poster = HOME_IMG.innovationPoster;
   return (
@@ -67,10 +70,8 @@ export default function Innovation() {
         <div className="home-innov-media">
           <Reveal delay={120}>
             <div style={{ position: 'relative', aspectRatio: '4 / 5', borderRadius: R.lg, overflow: 'hidden', boxShadow: SH.strong, background: c.night }}>
-              <div aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
-                `<video muted loop playsinline webkit-playsinline autoplay preload="none" poster="${poster.src}" width="${poster.width}" height="${poster.height}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">` +
-                `<source src="${HOME_IMG.innovationVideo}" type="video/mp4">` +
-                `</video>`
+              <div ref={vidRef} aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
+                videoHtml({ src: HOME_IMG.innovationVideo, poster: poster.src, width: poster.width, height: poster.height })
               }} />
               <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(20,16,64,0) 55%, rgba(20,16,64,.7))' }} />
               <div style={{ position: 'absolute', left: 20, right: 20, bottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>

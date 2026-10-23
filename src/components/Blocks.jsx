@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { c, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH, SP, W, CARD, CARD_SOFT, CHIP, BTN, BTNO, BTN_SM } from '../theme';
-import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT, products, dim } from '../data';
+import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT, products, dim, rs } from '../data';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { subscribe } from '../brevo';
 import Reveal from './Reveal';
@@ -29,7 +29,7 @@ export function ProductImageBlock({ src, alt = '', height = 240, radius = R.lg, 
     <div className="r-h" style={{ position: 'relative', background: bg, borderRadius: radius, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', ...rv('h', hd, hm), ...style }}>
       <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', left: '-4%', top: '11%', width: '44%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
       <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '7%', width: '50%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
-      <img src={src} {...dim(src)} {...load} decoding="async" alt={alt} style={{ position: 'relative', maxHeight: '80%', maxWidth: '80%', objectFit: 'contain', ...imgStyle }} />
+      <img src={src} {...dim(src)} {...rs(src, '(max-width: 759px) 80vw, 480px')} {...load} decoding="async" alt={alt} style={{ position: 'relative', maxHeight: '80%', maxWidth: '80%', objectFit: 'contain', ...imgStyle }} />
     </div>
   );
 }

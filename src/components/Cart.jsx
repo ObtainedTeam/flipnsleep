@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { c, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { cartCheckoutUrl, CART_CROSSSELL_ANCHOR, CART_CROSSSELL_CONTEXTUAL } from '../shopify';
-import { bundleById, productById, dim } from '../data';
+import { bundleById, productById, dim, rs } from '../data';
 
 // Module-level cart store met pub/sub. Items zijn óf een kussenbundel
 // { bundleId, qty } óf een variantproduct { productId, size, color, qty }.
@@ -132,7 +132,7 @@ export default function Cart({ isOpen, onClose }) {
             </div>
           ) : lines.map(l => (
             <div key={l.key} style={{ display: 'flex', gap: 12, background: c.white, borderRadius: R.sm, padding: 16, marginBottom: 12, boxShadow: SH.card }}>
-              <img src={l.image} {...dim(l.image)} loading="lazy" decoding="async" alt="" style={{ width: 74, height: 74, objectFit: l.imgFit, borderRadius: R.sm, background: c.sky }} />
+              <img src={l.image} {...dim(l.image)} {...rs(l.image, '74px')} loading="lazy" decoding="async" alt="" style={{ width: 74, height: 74, objectFit: l.imgFit, borderRadius: R.sm, background: c.sky }} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], marginBottom: 2 }}>{l.name}</div>
                 <div style={{ fontSize: T.xs[0], color: c.grayD, marginBottom: 6 }}>{l.sub}</div>
@@ -164,7 +164,7 @@ export default function Cart({ isOpen, onClose }) {
                 const rp = getPrice(r, isCA);
                 return (
                   <Link key={r.id} to={`/product/${r.id}`} onClick={onClose} className="card-hover" style={{ display: 'flex', gap: 12, alignItems: 'center', background: c.white, borderRadius: R.sm, padding: '12px 16px', marginBottom: 8, textDecoration: 'none', boxShadow: SH.card }}>
-                    <img src={r.images[0]} {...dim(r.images[0])} loading="lazy" decoding="async" alt="" style={{ width: 48, height: 48, objectFit: 'contain', borderRadius: R.sm, background: c.sky, flexShrink: 0 }} />
+                    <img src={r.images[0]} {...dim(r.images[0])} {...rs(r.images[0], '48px')} loading="lazy" decoding="async" alt="" style={{ width: 48, height: 48, objectFit: 'contain', borderRadius: R.sm, background: c.sky, flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], color: c.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
                       <div style={{ fontSize: T.xs[0], color: c.grayD }}>From {formatPrice(rp, symbol)}</div>
