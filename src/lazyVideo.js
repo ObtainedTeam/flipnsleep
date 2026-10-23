@@ -19,34 +19,36 @@ export function useLazyVideo(ref, { afterLoad = false } = {}) {
   useEffect(() => {
     const root = ref.current;
     if (!root) return undefined;
-    const videos = [...root.querySelectorAll('video[data-src]')];
-    if (!videos.length) return undefined;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) return undefined; // alleen de poster tonen
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined; // alleen de poster
+    // Video's steeds opnieuw opzoeken in de container: React kan de innerHTML
+    // na de hydration vervangen, de container zelf blijft hetzelfde element.
+    const start = () => root.querySelectorAll('video[data-src]').forEach(startVideo);
     let cancelled = false;
 
     if (afterLoad) {
       const go = () => {
         if (cancelled) return;
         const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 300));
-        idle(() => { if (!cancelled) videos.forEach(startVideo); }, { timeout: 2500 });
+        idle(() => { if (!cancelled) start(); }, { timeout: 2500 });
       };
       if (document.readyState === 'complete') go();
       else window.addEventListener('load', go, { once: true });
       // iOS energiebesparing: start alsnog bij de eerste aanraking
-      const kick = () => videos.forEach((v) => { if (v.dataset.started && v.paused) v.play().catch(() => {}); });
+      const kick = () => root.querySelectorAll('video[data-started]').forEach((v) => { if (v.paused) v.play().catch(() => {}); });
       window.addEventListener('touchstart', kick, { once: true, passive: true });
       return () => { cancelled = true; window.removeEventListener('load', go); window.removeEventListener('touchstart', kick); };
     }
 
-    if (!('IntersectionObserver' in window)) { videos.forEach(startVideo); return undefined; }
+    if (!('IntersectionObserver' in window)) { start(); return undefined; }
+    let seen = false;
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) { startVideo(e.target); io.unobserve(e.target); }
-      });
+      if (entries.some((e) => e.isIntersecting)) { seen = true; start(); }
     }, { rootMargin: '200px 0px' });
-    videos.forEach((v) => io.observe(v));
-    return () => { cancelled = true; io.disconnect(); };
+    io.observe(root);
+    // Wordt de video na het starten vervangen (nieuwe innerHTML), start die dan ook.
+    const mo = new MutationObserver(() => { if (seen) start(); });
+    mo.observe(root, { childList: true, subtree: true });
+    return () => { cancelled = true; io.disconnect(); mo.disconnect(); };
   }, [ref, afterLoad]);
 }
 
