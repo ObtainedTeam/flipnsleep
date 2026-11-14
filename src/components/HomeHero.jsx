@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useLazyVideo, videoHtml } from '../lazyVideo';
 import { Link } from 'react-router-dom';
-import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH, CHIP } from '../theme';
+import { c, BTN, rv, FONT_DISPLAY, FONT_HERO, FONT_SUB, R, SH, T, LH, CHIP } from '../theme';
 import { HERO } from '../data/home-content';
 
 // Kleine lijn-iconen voor de trustrij in de hero.
@@ -31,7 +31,7 @@ export default function HomeHero() {
           <span style={{ ...CHIP, background: 'rgba(255,255,255,.16)', color: c.white, border: '1px solid rgba(255,255,255,.45)', fontSize: T.xs[0], letterSpacing: '0.04em', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', whiteSpace: 'normal' }}>
             {HERO.eyebrow}
           </span>
-          <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, fontWeight: 400, ...rv('fs', 64, 40), color: c.white, margin: '18px 0 16px', lineHeight: LH.tight, textShadow: SH.textHero }}>
+          <h1 className="r-fs" style={{ fontFamily: FONT_HERO, fontWeight: 400, ...rv('fs', 64, 40), color: c.white, margin: '18px 0 16px', lineHeight: LH.tight, textShadow: SH.textHero }}>
             {HERO.title[0]}<br /><span style={{ color: c.amber }}>{HERO.title[1]}</span>
           </h1>
           <p className="r-fs home-hero-sub" style={{ ...rv('fs', ...T.lg), lineHeight: LH.body, color: c.white, textShadow: SH.textHero, fontFamily: FONT_SUB, margin: '0 0 28px' }}>

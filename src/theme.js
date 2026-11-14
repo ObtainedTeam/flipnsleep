@@ -1,7 +1,7 @@
 // flip'nsleep brand tokens — afgeleid uit het Figma-ontwerp.
 export const c = {
-  navy:"#201B5D", purple:"#3A217F", night:"#141040",
-  cream:"#F9F8F3", sky:"#D5EBF9", sky2:"#C0E5FF", skyDeep:"#8FC4F4",
+  navy:"#201B5D", purple:"#201B5D", night:"#201B5D",
+  cream:"#FFFFFF", sky:"#EAF4FC", sky2:"#C0E5FF", skyDeep:"#8FC4F4",
   amber:"#FDCA6F", amberD:"#F5B54A",
   pastelYellow:"#FBDD8E", pastelPink:"#F4A0B5", pastelMint:"#B9E4C1", pastelBlue:"#BFE0F8",
   white:"#FFFFFF", ink:"#201B5D", grayD:"#55507A", gray:"#8B86C9",
@@ -9,7 +9,9 @@ export const c = {
   danger:"#B3423F", // foutmeldingen in formulieren
 };
 
-export const FONT_DISPLAY = "'Palo Wide Black','Archivo Black',sans-serif";
+export const FONT_HERO = "'Palo Wide Black','Archivo Black',sans-serif";
+// Variant B: koppen in Masiva (één gewicht), Palo Wide alleen nog in de hero.
+export const FONT_DISPLAY = "'Masiva Medium','Poppins',sans-serif";
 export const FONT_SUB = "'Masiva Medium','Poppins',sans-serif";
 export const FONT_BODY = "'Poppins','Poppins Fallback',sans-serif";
 
