@@ -1,68 +1,82 @@
-/* Look inside the pillow (LookInside.jsx). Kleuren/radius/schaduw komen als
-   --li-* variabelen uit theme.js; --e (0..1) is de uitklapstand, gezet door JS. */
+/* Look inside the pillow (LookInside.jsx). Kleuren/radius/schaduw komen als --li-* variabelen
+   uit theme.js. De stand van het kussen (uitklap, uitgelichte laag) schrijft JS direct als
+   transform/opacity op .li-layer, .li-closed en .li-shadow. */
 
 .li { max-width: 1220px; margin: 0 auto; }
 
-/* ---- Desktop: hoge track met sticky podium ---- */
-.li-track { position: relative; height: 300vh; margin-top: 8px; }
+/* ---- De track: hoog, met een sticky podium ---- */
+.li-track { position: relative; height: 440vh; margin-top: 8px; }
 .li-stage {
-  --e: 0; --gap: 21%;
-  position: sticky; top: 96px; height: calc(100vh - 120px); min-height: 520px;
-  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-  gap: 48px; align-items: center;
+  position: sticky; top: 96px; height: calc(100vh - 120px); min-height: 540px;
+  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 44px; align-items: center;
 }
 
-.li-visual { position: relative; display: flex; justify-content: center; align-items: center; height: 100%; perspective: 1800px; }
-.li-visual::before { /* zachte lucht-gloed achter de stapel */
-  content: ""; position: absolute; inset: 6% 2%; border-radius: 50%;
-  background: radial-gradient(closest-side, var(--li-sky2), transparent 78%); opacity: .75;
+/* ---- Het podium ---- */
+.li-visual { position: relative; display: flex; justify-content: center; align-items: center; height: 100%; min-width: 0; }
+.li-visual::before { /* zachte lucht-gloed achter het kussen */
+  content: ""; position: absolute; inset: 4% 0; border-radius: 50%;
+  background: radial-gradient(closest-side, var(--li-sky2), transparent 80%); opacity: .8;
 }
 .li-box {
-  position: relative; width: 100%; max-width: 660px; aspect-ratio: 4 / 3;
-  transform: rotateX(10deg); transform-style: preserve-3d;
+  position: relative; aspect-ratio: var(--li-ratio);
+  width: min(100%, calc((100vh - 200px) * 1.165)); max-width: 700px;
 }
-.li-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; }
+.li-box img { display: block; user-select: none; -webkit-user-drag: none; }
+
+.li-stack, .li-sect { transition: opacity .35s ease; }
+.li-stack { position: absolute; inset: 0; }
 .li-closed {
-  opacity: calc(1 - var(--e) * 5);
-  transform: scale(calc(.86 + var(--e) * .1));
-  filter: drop-shadow(0 24px 30px rgba(32, 27, 93, .18));
+  position: absolute; left: 50%; top: 50%; height: auto;
+  transform: translate(-50%, -50%); will-change: transform, opacity;
+}
+.li-shadow {
+  position: absolute; left: 50%; top: 67%; width: 66%; height: 10%; border-radius: 50%;
+  transform: translate(-50%, 0); will-change: transform, opacity;
+  background: radial-gradient(closest-side, rgba(32, 27, 93, .34), rgba(32, 27, 93, .12) 60%, rgba(32, 27, 93, 0));
 }
 .li-layer {
-  position: absolute; inset: 0; pointer-events: none;
-  transform: translateY(calc(var(--i) * var(--gap) * var(--e))) scale(calc(.94 + var(--e) * .02));
-  opacity: min(calc(var(--e) * 6), 1);
-  will-change: transform;
+  position: absolute; left: 50%; top: 50%; opacity: 0;
+  transform: translate(-50%, -50%); will-change: transform, opacity; pointer-events: none;
 }
-/* niet-actieve lagen dimmen licht (op de img, zodat de hotspot vol zichtbaar blijft) */
-.li-layer img { opacity: calc(1 - var(--e) * .4); transition: filter .35s ease, opacity .35s ease, transform .35s ease; }
-.li-layer.is-active img {
-  opacity: 1; transform: translateY(-1.5%);
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, .95)) drop-shadow(0 0 16px rgba(143, 196, 244, .95)) drop-shadow(0 14px 18px rgba(32, 27, 93, .16));
-}
+.li-layer img { width: 100%; height: auto; transition: filter .35s ease; }
+.li-layer.is-active img { filter: drop-shadow(0 16px 20px rgba(32, 27, 93, .2)); }
+.li-box .li-exploded { display: none; }
 
-/* "+" hotspot, rechts op elke laag; verschijnt zodra de stapel open ligt */
-.li-hot {
-  position: absolute; left: 84%; top: 50%; width: 34px; height: 34px; margin: -17px 0 0 -17px;
+/* genummerde badge links van elke laag */
+.li-badge {
+  position: absolute; left: -6.5%; top: 50%; width: 30px; height: 30px; margin: -15px 0 0 -15px;
   border-radius: 50%; border: 2px solid var(--li-white); background: var(--li-navy); color: var(--li-white);
-  font: 600 20px/1 var(--li-body); display: flex; align-items: center; justify-content: center;
-  box-shadow: var(--li-sh); cursor: pointer; opacity: 0; transform: scale(.6);
-  transition: opacity .25s ease, transform .25s ease, background .2s ease;
+  display: flex; align-items: center; justify-content: center;
+  font: 600 12px/1 var(--li-sub); letter-spacing: .02em; box-shadow: 0 4px 10px rgba(32, 27, 93, .25);
+  transition: background .25s ease, color .25s ease, transform .25s ease;
 }
-.li-hot span { margin-top: -2px; }
-.li-stage.is-open .li-hot { opacity: 1; transform: scale(1); pointer-events: auto; }
-.li-stage.is-open .li-layer.is-active .li-hot { background: var(--li-amber); color: var(--li-navy); transform: scale(1.12); }
-.li-hot::after { /* zachte pulsring */
-  content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--li-white); opacity: .0;
-}
-.li-stage.is-open .li-layer.is-active .li-hot::after { animation: li-pulse 1.8s ease-out infinite; }
-@keyframes li-pulse { 0% { transform: scale(.8); opacity: .8; } 100% { transform: scale(1.5); opacity: 0; } }
-.li-hot:focus-visible, .li-card:focus-visible, .li-acc button:focus-visible { outline: 3px solid var(--li-amber); outline-offset: 3px; }
+.li-layer .li-badge { opacity: var(--li-b, 0); }
+.li-layer.is-active .li-badge { background: var(--li-amber); color: var(--li-navy); transform: scale(1.12); }
 
-/* Kaartenlijst */
-.li-cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; max-width: 480px; }
+/* ---- De doorsnede ("Look inside") ---- */
+.li-sect {
+  position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%);
+  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s;
+}
+.li-sect > img { width: 100%; height: auto; }
+.li-sect svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.li-sect path { fill: none; stroke: var(--li-navy); stroke-width: 1.4px; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.li-sect circle { fill: var(--li-amber); stroke: var(--li-navy); stroke-width: 1.4px; vector-effect: non-scaling-stroke; }
+.li-zip {
+  position: absolute; transform: translate(calc(-100% + 14px), -50%); white-space: nowrap;
+  padding: 6px 11px; border-radius: 999px; background: var(--li-white); color: var(--li-navy);
+  font: 600 11.5px/1 var(--li-body); box-shadow: 0 2px 6px rgba(32, 27, 93, .08), 0 8px 18px -8px rgba(32, 27, 93, .3);
+}
+.li-stage.is-inside .li-stack { opacity: 0; }
+.li-stage.is-inside .li-sect { opacity: 1; visibility: visible; transition: opacity .35s ease, visibility 0s; }
+
+/* ---- De kaarten en de knop ---- */
+.li-side { display: flex; flex-direction: column; gap: 14px; max-width: 480px; min-width: 0; }
+.li-cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .li-card {
   width: 100%; display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; text-align: left;
-  padding: 16px 20px; border-radius: var(--li-r); border: 1px solid rgba(32, 27, 93, .08);
+  padding: 14px 20px; border-radius: var(--li-r); border: 1px solid rgba(32, 27, 93, .08);
   background: rgba(255, 255, 255, .6); color: var(--li-navy); cursor: pointer; font-family: var(--li-body);
   transition: background .3s ease, color .3s ease, box-shadow .3s ease, transform .3s ease;
 }
@@ -78,43 +92,75 @@
 .li-cx { display: block; color: var(--li-gray); transition: color .3s ease; }
 .li-card.is-active .li-cx { color: var(--li-lilac); }
 
+.li-inside { align-self: flex-start; }
+.li-inside[aria-pressed="true"] { background: var(--li-navy) !important; color: var(--li-white) !important; }
+.li-inside:hover { filter: brightness(.96); }
+.li-card:focus-visible, .li-num:focus-visible, .li-inside:focus-visible { outline: 3px solid var(--li-amber); outline-offset: 3px; }
+
 /* Korte schermen: compactere kaarten */
-@media (min-width: 768px) and (max-height: 820px) {
-  .li-card { padding: 12px 18px; }
-  .li-cards { gap: 8px; }
-  .li-cx { font-size: 13px !important; line-height: 1.5 !important; }
+@media (min-width: 768px) and (max-height: 860px) {
+  .li-card { padding: 10px 18px; }
+  .li-cards { gap: 7px; }
+  .li-side { gap: 10px; }
+  .li-cx { font-size: 13px !important; line-height: 1.45 !important; }
+  .li-ct { margin-top: 6px; }
+}
+/* Lage schermen (laptops): alleen de uitgelichte kaart toont zijn tekst, zodat alles in beeld past */
+@media (min-width: 768px) and (max-height: 760px) {
+  .li-stage { min-height: 460px; }
+  .li-card { padding: 8px 16px; align-items: center; }
+  .li-card:not(.is-active) .li-cx { display: none; }
+  .li-ct { margin: 0; }
+  .li-card.is-active .li-ct { margin-bottom: 3px; }
+  .li-box { width: min(100%, calc((100vh - 170px) * 1.165)); }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
   .li-stage { gap: 24px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
 
-/* Reduced motion of statische stand: uitgeklapt, geen sticky track */
-.li-track.is-static { height: auto; }
-.li-track.is-static .li-stage { position: relative; top: auto; height: auto; min-height: 0; padding: 32px 0; }
-.li-track.is-static .li-box { height: auto; }
-@media (prefers-reduced-motion: reduce) {
-  .li-track { height: auto; }
-  .li-stage { --e: 1 !important; position: relative; top: auto; height: auto; min-height: 0; padding: 32px 0; }
-  .li-layer, .li-layer img, .li-card, .li-hot, .li-num { transition: none; }
-  .li-hot::after { animation: none !important; }
+/* ---- Mobiel: het podium boven, eronder de nummers met een kaart ---- */
+@media (max-width: 767px) {
+  .li-track { height: 400vh; }
+  .li-stage {
+    top: 70px; height: calc(100vh - 82px); height: calc(100svh - 82px); min-height: 0;
+    display: flex; flex-direction: column; gap: 8px; align-items: stretch; justify-content: center;
+    padding-bottom: 70px; /* ruimte voor de sticky koopbalk onderin */
+  }
+  .li-visual { height: auto; flex: none; padding: 0 14px; }
+  .li-box { width: min(100%, calc(46vh * 1.165)); width: min(100%, calc(46svh * 1.165)); }
+  .li-badge { width: 24px; height: 24px; margin: -12px 0 0 -12px; font-size: 10px; border-width: 1.5px; }
+  .li-zip { font-size: 10px; padding: 5px 8px; }
+
+  .li-side { max-width: none; gap: 10px; }
+  .li-steps { display: flex; justify-content: center; gap: 10px; }
+  .li-steps .li-num { border: 0; cursor: pointer; padding: 0; }
+  .li-steps .li-num.is-active { background: var(--li-navy); color: var(--li-white); }
+  .li-hint { margin: 0; text-align: center; color: var(--li-gray); }
+  .li-stage.has-active:not(.is-inside) .li-hint { display: none; }
+  .li-cards { display: block; }
+  .li-cards li { display: none; }
+  .li-cards li.is-active { display: block; }
+  .li-card, .li-card.is-active { transform: none; padding: 14px 16px; }
+  .li-card .li-num { display: none; }
+  .li-card { grid-template-columns: 1fr; }
+  .li-ct { margin-top: 0; }
+  /* in de doorsnede: de vijf lagen als korte lijst bij de nummers op het snijvlak */
+  .li-stage.is-inside .li-cards { display: grid; gap: 4px; }
+  .li-stage.is-inside .li-cards li { display: block; }
+  .li-stage.is-inside .li-card { grid-template-columns: 26px 1fr; gap: 10px; padding: 3px 4px; background: none; border: 0; align-items: center; }
+  .li-stage.is-inside .li-card .li-num { display: inline-flex; width: 26px; height: 26px; font-size: 11px; }
+  .li-stage.is-inside .li-ct { margin: 0; font-size: 14px !important; }
+  .li-stage.is-inside .li-cx, .li-stage.is-inside .li-steps { display: none; }
+  .li-inside { align-self: stretch; }
 }
 
-/* ---- Mobiel ---- */
-.li-mob-img {
-  margin: 24px 0 16px; border-radius: var(--li-r); aspect-ratio: 4 / 3; position: relative; overflow: hidden;
-  background: radial-gradient(closest-side, var(--li-sky2), var(--li-sky) 92%);
+/* ---- Reduced motion: geen sticky track, de uitgeklapte stapel als een beeld ---- */
+.li-track.is-static { height: auto; }
+.li-track.is-static .li-stage { position: relative; top: auto; height: auto; min-height: 0; padding: 32px 0; }
+.li-track.is-static .li-closed, .li-track.is-static .li-layer, .li-track.is-static .li-shadow { display: none; }
+.li-track.is-static .li-exploded { display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.li-track.is-static .li-cards li { display: block; }
+.li-track.is-static .li-steps, .li-track.is-static .li-hint { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .li-stack, .li-sect, .li-card, .li-num, .li-badge, .li-layer img { transition: none; }
 }
-.li-mob-img img { position: absolute; inset: 4%; width: 92%; height: 92%; object-fit: contain; }
-.li-acc { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.li-acc li { background: var(--li-white); border-radius: var(--li-rs); box-shadow: var(--li-sh); overflow: hidden; }
-.li-acc button {
-  width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: none; border: 0;
-  color: var(--li-navy); text-align: left; cursor: pointer; font-family: var(--li-body);
-}
-.li-acc .li-num { width: 30px; height: 30px; font-size: 13px; }
-.li-acc li.is-open .li-num { background: var(--li-navy); color: var(--li-white); }
-.li-acc .li-ct { margin: 0; flex: 1; }
-.li-chev { width: 9px; height: 9px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); margin: -4px 4px 0 0; transition: transform .2s ease; flex: none; }
-.li-acc li.is-open .li-chev { transform: rotate(-135deg); margin-top: 4px; }
-.li-acc-body { padding: 0 16px 14px 56px; color: var(--li-gray); }
-.li-acc-body p { margin: 0; }

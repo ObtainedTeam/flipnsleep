@@ -131,35 +131,45 @@ export const VARIANT_EXAMPLE_REVIEWS = {
 };
 
 // "Look inside the pillow": scroll-gestuurde exploded view (LookInside.jsx).
-// Vervang door Higgsfield-renders met dezelfde bestandsnamen (prompts-exploded-pillow.md).
-// Thomas levert .png; zet die om naar .webp met dezelfde basisnaam (1600x1200, transparant,
-// laag gecentreerd op ~70% breedte) zodat de component niets hoeft te weten.
+// De beelden zijn fotorealistische renders met transparante achtergrond, per laag uitgesneden op het
+// object zelf (scripts/gen-layers.py maakt ze uit de bron-PNG's: 1200 px breed plus een -640 variant).
+// Vaste bestandsnamen: een nieuwe render met dezelfde naam vervangt het beeld zonder codewijziging,
+// zolang w/h/fw hieronder kloppen (gen-layers.py print ze).
+//   w, h  = pixelmaat van het webp-bestand
+//   fw    = breedte van het object in het 2048 px render-frame (bepaalt hoe groot het in beeld staat)
+//   off   = plek van de laag in de uitgeklapte stapel, in frame-px vanaf het midden (omlaag = positief)
 const LAYER_DIR = '/images/layers/';
+const layerImg = (name, w, h) => ({ src: `${LAYER_DIR}${name}.webp`, srcSet: `${LAYER_DIR}${name}-640.webp 640w, ${LAYER_DIR}${name}.webp 1200w`, w, h });
 export const LAYER_IMAGES = {
-  closed: `${LAYER_DIR}layer-0-closed.webp`,
-  exploded: `${LAYER_DIR}layer-exploded.webp`,
-  layers: [
-    `${LAYER_DIR}layer-1-cool-cover.webp`,
-    `${LAYER_DIR}layer-2-inner-top.webp`,
-    `${LAYER_DIR}layer-3-foam.webp`,
-    `${LAYER_DIR}layer-4-inner-bottom.webp`,
-    `${LAYER_DIR}layer-5-bamboo-cover.webp`,
-  ],
+  closed: { ...layerImg('layer-0-closed', 1200, 535), fw: 1989 },
+  exploded: layerImg('layer-exploded', 1200, 1030),
 };
 export const LAYERS = [
   { id: 'cool-cover', title: 'Cool-touch outer cover',
     text: 'The white and blue quilted side is woven from a cool-touch fabric with a tested Q-max of 0.26, so it feels cold the moment your cheek lands on it.',
-    img: LAYER_IMAGES.layers[0] },
+    img: layerImg('layer-1-cool-cover', 1200, 430), fw: 1986, off: -560 },
   { id: 'inner-top', title: 'Inner mesh case, top',
     text: 'A breathable mesh case holds the filling in place, so it stays evenly spread while air keeps moving through it.',
-    img: LAYER_IMAGES.layers[1] },
+    img: layerImg('layer-2-inner-top', 1200, 422), fw: 1816, off: -270 },
   { id: 'foam', title: 'Shredded memory foam',
     text: 'Recycled 35-40D shredded foam. Air flows between the pieces instead of getting trapped, and you set the height by adding or removing fill.',
-    img: LAYER_IMAGES.layers[2] },
+    img: layerImg('layer-3-foam', 1200, 506), fw: 1799, off: 20 },
   { id: 'inner-bottom', title: 'Inner mesh case, bottom',
     text: 'The second half of the inner case closes the filling in, so you can unzip the outer cover and wash it without the foam spilling out.',
-    img: LAYER_IMAGES.layers[3] },
-  { id: 'bamboo-cover', title: 'Bamboo outer cover, warm side',
+    img: layerImg('layer-4-inner-bottom', 1200, 421), fw: 1862, off: 320 },
+  { id: 'bamboo-cover', title: 'Bamboo outer cover, cozy side',
     text: 'Soft bamboo-viscose for cooler nights. When the bedroom gets chilly, flip the pillow over. Same fit, cozier feel.',
-    img: LAYER_IMAGES.layers[4] },
+    img: layerImg('layer-5-bamboo-cover', 1200, 468), fw: 1989, off: 585 },
 ];
+// De doorsnede achter de knop "Look inside": hetzelfde kussen, het voorste derde weggesneden.
+// at = punt op elke laag van het snijvlak (boven naar onder), als fractie van het beeld; zips = de twee
+// ritsen op de korte zijde (at = de rits, to = waar het label staat).
+export const LAYER_SECTION = {
+  img: layerImg('layer-section', 1200, 604), fw: 2036,
+  alt: 'Cross-section of the Signature Cold Pillow: cool-touch cover, inner mesh case, shredded foam core, inner mesh case and cozy bamboo cover, with a zipper on the inner case and one on the outer cover',
+  at: [[0.12, 0.515], [0.22, 0.53], [0.30, 0.70], [0.16, 0.86], [0.12, 0.885]],
+  zips: [
+    { label: 'Outer cover zipper', at: [0.868, 0.72], to: [0.92, 1.05] },
+    { label: 'Inner case zipper', at: [0.842, 0.755], to: [0.80, 1.19] },
+  ],
+};
