@@ -4,7 +4,7 @@ import Ico from '../components/Ico.jsx';
 import { Link } from 'react-router-dom';
 import { c, BTN, BTNO, ON_DARK, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD, CHIP } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { PRODUCT, BUNDLES, IMG, dim, UGC_VIDEOS } from '../data';
+import { PRODUCT, BUNDLES, IMG, dim, rs, UGC_VIDEOS } from '../data';
 import { UGC_BIG, VIDEO_REVIEWS, EXAMPLE_REVIEWS } from '../data/home-content';
 import { CartContext } from '../components/Cart';
 import Reveal from '../components/Reveal';
@@ -31,21 +31,21 @@ export default function Home({ onCartOpen }) {
       <HomeHero />
 
       {/* ============ PRODUCT CARD + OFFER ============ */}
-      <Reveal className="r-mt" style={{ position: 'relative', zIndex: 2, ...rv('mt', -84, -50) }}><section id="offer" className="r-mw r-mar r-disp" style={{ ...rv('mw', W.page, W.narrow), ...rv('mar', '0 auto 64px', '0 16px 48px'), background: c.sky, borderRadius: R.lg, overflow: 'hidden', boxShadow: SH.strong, ...rv('disp', 'grid', 'block'), gridTemplateColumns: '1.05fr 1fr' }}>
+      <Reveal className="r-mt" style={{ position: 'relative', zIndex: 2, ...rv('mt', 80, 40) }}><section id="offer" className="r-mw r-mar r-disp" style={{ ...rv('mw', W.page, W.narrow), ...rv('mar', '0 auto 64px', '0 16px 48px'), background: c.sky, borderRadius: R.lg, overflow: 'hidden', border: `1px solid ${c.line}`, ...rv('disp', 'grid', 'block'), gridTemplateColumns: '1.05fr 1fr' }}>
         <div className="r-pad" style={{ ...rv('pad', 28, 16), position: 'relative', display: 'flex', alignItems: 'center' }}>
           <PillowDeck count={bundle.pillows} height={[460, 230]} radius={R.lg} bg="transparent" priority />
           <span className="r-top r-left r-fs r-pad" style={{ position: 'absolute', ...rv('top', 44, 28), ...rv('left', 44, 28), zIndex: 20, background: c.white, color: c.navy, fontWeight: 600, ...rv('fs', ...T.sm), borderRadius: 8, ...rv('pad', '6px 12px', '6px 12px') }}>{bundle.short}</span>
         </div>
-        <div className="r-bg r-pad" style={{ ...rv('bg', c.navy, c.navy), color: c.white, ...rv('pad', 40, SP.card[1]), display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div className="r-bg r-pad" style={{ ...rv('bg', c.white, c.white), color: c.navy, ...rv('pad', 48, SP.card[1]), display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, marginBottom: 8 }}>{PRODUCT.name}</h2>
-          <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h3), color: c.amber }}>
-            {formatPrice(price, symbol)} <span style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: T.sm[0], color: c.lilac, opacity: .6 }}>{formatPrice(compare, symbol)}</span>
+          <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h3), color: c.navy }}>
+            {formatPrice(price, symbol)} <span style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: T.sm[0], color: c.grayD, textDecoration: 'line-through' }}>{formatPrice(compare, symbol)}</span>
           </div>
-          <div style={{ margin: '8px 0 2px', fontSize: T.sm[0], color: c.lilac }}>100-night sleep trial, 2-year warranty</div>
+          <div style={{ margin: '8px 0 2px', fontSize: T.sm[0], color: c.grayD }}>100-night sleep trial, 2-year warranty</div>
           <ul style={{ listStyle: 'none', margin: '16px 0 6px' }}>
             {PRODUCT.usps.map((u, i) => (
               <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: T.sm[0], lineHeight: LH.body, marginBottom: 8 }}>
-                <Check size={16} strokeWidth={2} aria-hidden="true" style={{ flexShrink: 0, marginTop: 4, color: c.amber }} />{u}
+                <Check size={16} strokeWidth={2} aria-hidden="true" style={{ flexShrink: 0, marginTop: 5, color: c.navy }} />{u}
               </li>
             ))}
           </ul>
@@ -57,12 +57,12 @@ export default function Home({ onCartOpen }) {
               <div key={b.id} role="button" tabIndex={0}
                 onClick={() => setSelected(b.id)}
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected(b.id); } }}
-                style={{ display: 'flex', alignItems: 'center', gap: 10, background: active ? 'rgba(255,255,255,.24)' : 'rgba(255,255,255,.12)', border: `2px solid ${active ? c.amber : 'transparent'}`, borderRadius: R.sm, padding: '14px 16px', marginTop: 12, cursor: 'pointer', transition: 'background-color .15s, border-color .15s' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 10, background: active ? c.tint : c.white, border: `1.5px solid ${active ? c.navy : c.line}`, borderRadius: R.sm, padding: '16px 20px', marginTop: 12, cursor: 'pointer', transition: 'background-color .15s, border-color .15s' }}>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: T.sm[0], fontFamily: FONT_SUB }}>{b.label}</div>
                   <div style={{ fontSize: T.sm[0] }}>{formatPrice(p, symbol)} <s style={{ opacity: .6, marginLeft: 6 }}>{formatPrice(cm, symbol)}</s></div>
                 </div>
-                <span style={{ marginLeft: 'auto', fontSize: T.xs[0], color: c.amber, fontWeight: 600 }}>Save {formatPrice(cm - p, symbol)}</span>
+                <span style={{ marginLeft: 'auto', fontSize: T.xs[0], color: c.navy, fontWeight: 600 }}>Save {formatPrice(cm - p, symbol)}</span>
               </div>
             );
           })}
@@ -71,7 +71,7 @@ export default function Home({ onCartOpen }) {
             <button onClick={addToCart} style={{ ...BTN, flex: '1 0 auto' }}>Add to cart</button>
           </div>
           <div style={{ textAlign: 'center', marginTop: 16 }}>
-            <Link to="/product/signature-cold-pillow" style={{ color: c.white, fontSize: T.sm[0], fontWeight: 600, fontFamily: FONT_SUB, textDecoration: 'underline', textUnderlineOffset: 4 }}>See full product details</Link>
+            <Link to="/product/signature-cold-pillow" style={{ color: c.navy, fontSize: T.sm[0], fontWeight: 600, fontFamily: FONT_SUB, textDecoration: 'underline', textUnderlineOffset: 4 }}>See full product details</Link>
           </div>
         </div>
       </section>
@@ -83,22 +83,24 @@ export default function Home({ onCartOpen }) {
       </div></Reveal>
 
       {/* ============ EMPATHY / NIGHT (breed publiek) ============ */}
-      <section className="r-pad" style={{ background: c.night, color: c.white, ...rv('pad', ...SP.section), position: 'relative', overflow: 'hidden' }}>
-        <img src={IMG.night} {...dim(IMG.night)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: .28 }} />
-        <Reveal><div style={{ position: 'relative', maxWidth: W.text, margin: '0 auto', textAlign: 'center' }}>
-          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.head, textShadow: SH.text }}>
-            3 AM. Awake.<br /><span style={{ color: c.amber }}>Too warm to settle.</span>
-          </h2>
-          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, margin: '20px auto 0', maxWidth: W.narrow, color: c.lilac }}>
-            A warm bedroom, a restless mind, or the way sleep shifts as we get older: waking up hot is one of the most common reasons people stir in the middle of the night. A pillow that traps heat keeps you there. Cooling your head is one of the quickest ways to drift back to sleep.
-          </p>
-          <div className="r-gap" style={{ display: 'flex', ...rv('gap', ...SP.gap), justifyContent: 'center', marginTop: 32, flexWrap: 'wrap' }}>
-            {[['Both sides', 'cool-touch for warm nights, soft bamboo for cold ones'], ['Q-max 0.26', 'tested cool-touch value of the cold side'], ['100 nights', 'to try it risk-free']].map(([b, s], i) => (
-              <div key={i} style={{ background: 'rgba(255,255,255,.10)', borderRadius: R.sm, padding: '16px 18px', textAlign: 'center', minWidth: 110, maxWidth: 160 }}>
-                <b style={{ display: 'block', fontFamily: FONT_DISPLAY, fontSize: T.lg[0], color: c.amber }}>{b}</b>
-                <span style={{ fontSize: T.xs[0], lineHeight: LH.body, display: 'block', marginTop: 6, color: c.lilac }}>{s}</span>
-              </div>
-            ))}
+      <section className="r-pad" style={{ background: c.tint, ...rv('pad', ...SP.section) }}>
+        <Reveal><div className="home-night" style={{ maxWidth: W.page, margin: '0 auto' }}>
+          <img src={IMG.night} {...dim(IMG.night)} {...rs(IMG.night, '(max-width: 767px) 100vw, 560px')} loading="lazy" decoding="async" alt="The Signature Cold Pillow on a bed at night" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: R.lg, display: 'block', aspectRatio: '5 / 4' }} />
+          <div>
+            <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, color: c.navy, letterSpacing: '-0.01em' }}>
+              3 AM. Awake.<br />Too warm to settle.
+            </h2>
+            <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, margin: '20px 0 0', maxWidth: 520, color: c.grayD }}>
+              A warm bedroom, a restless mind, or the way sleep shifts as we get older: waking up hot is one of the most common reasons people stir in the middle of the night. A pillow that traps heat keeps you there. Cooling your head is one of the quickest ways to drift back to sleep.
+            </p>
+            <dl className="home-night-facts">
+              {[['Both sides', 'cool-touch for warm nights, soft bamboo for cold ones'], ['Q-max 0.26', 'tested cool-touch value of the cold side'], ['100 nights', 'to try it risk-free']].map(([b, s], i) => (
+                <div key={i}>
+                  <dt style={{ fontFamily: FONT_DISPLAY, fontSize: T.h3[1], color: c.navy, lineHeight: LH.head }}>{b}</dt>
+                  <dd style={{ fontSize: T.sm[1], lineHeight: 1.5, margin: '6px 0 0', color: c.grayD }}>{s}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div></Reveal>
       </section>
@@ -114,27 +116,30 @@ export default function Home({ onCartOpen }) {
 
       {/* ============ WAAROM SLAAP OP LEEFTIJD (geen medische claims) ============ */}
       <Reveal><section className="r-pad" style={{ ...rv('pad', ...SP.section), maxWidth: W.page, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', maxWidth: W.text, margin: '0 auto' }}>
-          <div style={EYEBROW}>Rest, at every age</div>
-          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), color: c.navy, margin: '8px 0 12px', lineHeight: LH.head }}>Good sleep gets more precious with age</h2>
-          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, color: c.grayD, maxWidth: W.text, margin: '0 auto' }}>
-            Sleep tends to get lighter and easier to interrupt as the years add up, and a warm room or a pillow that holds heat is often all it takes to cut a night short. Experts generally suggest most adults aim for seven to nine hours, yet comfortable, unbroken sleep gets harder to come by. We can't change your body clock, but we can make the bed a cooler, calmer place to be, so drifting off and staying asleep is a little easier.
-          </p>
+        <div className="home-age">
+          <div>
+            <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), color: c.navy, margin: '0 0 20px', lineHeight: LH.head, letterSpacing: '-0.01em' }}>Good sleep gets more precious with age</h2>
+            <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, color: c.grayD, maxWidth: 560 }}>
+              Sleep tends to get lighter and easier to interrupt as the years add up, and a warm room or a pillow that holds heat is often all it takes to cut a night short. Experts generally suggest most adults aim for seven to nine hours, yet comfortable, unbroken sleep gets harder to come by. We can't change your body clock, but we can make the bed a cooler, calmer place to be, so drifting off and staying asleep is a little easier.
+            </p>
+          </div>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, borderTop: `1px solid ${c.line}` }}>
+            {[
+              ['😴', 'Lighter with age', 'Sleep naturally becomes shorter and easier to disturb over the years.'],
+              ['🌡️', 'Temperature matters', 'A cooler sleep surface helps many people settle down and stay settled.'],
+              ['🛏️', 'Comfort you control', 'Your pillow and bedding are the part of a good night you can actually change tonight.'],
+            ].map(([icon, t, s], i) => (
+              <li key={i} style={{ display: 'flex', gap: 20, padding: '24px 0', borderBottom: `1px solid ${c.line}` }}>
+                <Ico e={icon} size={24} style={{ color: c.navy, marginTop: 2 }} />
+                <div>
+                  <h3 className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', ...T.h4), fontWeight: 500, color: c.navy, marginBottom: 6, lineHeight: LH.head }}>{t}</h3>
+                  <p className="r-fs" style={{ ...rv('fs', ...T.sm), lineHeight: LH.body, color: c.grayD }}>{s}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div className="grid-3m1 r-gap r-mar" style={{ ...rv('gap', ...SP.gap), ...rv('mar', '40px auto 0', '28px auto 0') }}>
-          {[
-            ['😴', 'Lighter with age', 'Sleep naturally becomes shorter and easier to disturb over the years.'],
-            ['🌡️', 'Temperature matters', 'A cooler sleep surface helps many people settle down and stay settled.'],
-            ['🛏️', 'Comfort you control', 'Your pillow and bedding are the part of a good night you can actually change tonight.'],
-          ].map(([icon, t, s], i) => (
-            <div key={i} className="card-hover r-pad" style={{ ...CARD, ...rv('pad', ...SP.card) }}>
-              <div style={{ marginBottom: 12, color: c.navy }}><Ico e={icon} size={24} /></div>
-              <h3 className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', ...T.h4), fontWeight: 600, color: c.navy, marginBottom: 8, lineHeight: LH.head }}>{t}</h3>
-              <p className="r-fs" style={{ ...rv('fs', ...T.sm), lineHeight: LH.body, color: c.grayD }}>{s}</p>
-            </div>
-          ))}
-        </div>
-        <p style={{ fontSize: T.xs[0], lineHeight: LH.body, color: c.grayD, textAlign: 'center', maxWidth: W.text, margin: '24px auto 0' }}>
+        <p style={{ fontSize: T.xs[0], lineHeight: LH.body, color: c.grayD, maxWidth: W.text, margin: '32px 0 0' }}>
           flip'nsleep makes comfort products, not medical devices. Nothing on this page is medical advice or a claim to diagnose, treat or prevent any condition. If sleep problems persist, please speak to a doctor.
         </p>
       </section></Reveal>
@@ -155,34 +160,36 @@ export default function Home({ onCartOpen }) {
 
       {/* ============ FAQ TEASER ============ */}
       <Reveal><section className="r-pad" style={rv('pad', ...SP.section)}>
-        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
+        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions, answered</h2>
         <FAQBlock limit={4} />
         <div style={{ textAlign: 'center', marginTop: 32 }}><Link to="/faq" style={BTNO}>All questions</Link></div>
       </section></Reveal>
 
       {/* ============ FINAL CTA (breder) ============ */}
-      <section className="r-pad" style={{ background: c.navy, color: c.white, textAlign: 'center', ...rv('pad', ...SP.section), position: 'relative', overflow: 'hidden' }}>
-        <img src={IMG.logoMark} {...dim(IMG.logoMark)} loading="lazy" decoding="async" alt="" aria-hidden="true" className="r-left" style={{ position: 'absolute', ...rv('left', '8%', -30), bottom: -20, height: 160, opacity: .25 }} />
-        <Reveal><div style={{ position: 'relative' }}>
-          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.display), lineHeight: LH.tight, textShadow: SH.text }}>Your coolest night<span className="r-fs" style={{ display: 'block', ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.sky2, fontFamily: FONT_SUB }}>starts tonight.</span></h2>
-          <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.lilac, margin: '20px auto 32px', maxWidth: W.narrow, lineHeight: LH.body }}>
-            Whatever keeps you up when the nights get warm, flip'nsleep makes the bed a cooler place to be. Try it for 100 nights, risk-free, with free shipping across the US and Canada.
-          </p>
-          <a href="#offer" style={BTN}>Order your Cold Pillow now</a>
+      <section className="r-pad" style={{ background: c.navy, color: c.white, ...rv('pad', ...SP.section) }}>
+        <Reveal><div className="home-cta" style={{ maxWidth: W.page, margin: '0 auto' }}>
+          <div>
+            <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, letterSpacing: '-0.01em' }}>Your coolest night starts tonight</h2>
+            <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.lilac, margin: '16px 0 0', maxWidth: 560, lineHeight: LH.body }}>
+              Whatever keeps you up when the nights get warm, flip'nsleep makes the bed a cooler place to be. Try it for 100 nights, risk-free, with free shipping across the US and Canada.
+            </p>
+          </div>
+          <a href="#offer" style={BTN}>Order your Cold Pillow</a>
         </div></Reveal>
       </section>
 
       {/* ============ SEO-TEKSTBLOK — koeler slapen, breder publiek ============ */}
-      <Reveal y={16}><section className="r-pad" style={{ ...rv('pad', ...SP.section), color: c.grayD }}><div style={{ maxWidth: W.text, margin: '0 auto', textAlign: 'center' }}>
+      <Reveal y={16}><section className="r-pad" style={{ ...rv('pad', ...SP.section), color: c.grayD }}><div className="home-seo" style={{ maxWidth: W.page, margin: '0 auto' }}><div>
         <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 12 }}>The cooling pillow for hot sleepers</h2>
         <p style={{ fontSize: T.sm[0], lineHeight: LH.loose, marginBottom: 24 }}>
           If you regularly wake up hot, you're in good company: overheating at night is one of the most common sleep complaints, whether it comes from a warm bedroom, the way the body holds heat as we get older, or hormonal changes during menopause and perimenopause. An ordinary pillow that traps heat under your head only makes it harder to drift back off. A cooling pillow tackles the problem where it starts, since your head is one of the fastest places your body sheds heat.
         </p>
+        </div><div>
         <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 12 }}>How the Signature Cold Pillow helps you sleep cooler</h2>
         <p style={{ fontSize: T.sm[0], lineHeight: LH.loose, marginBottom: 24 }}>
           The flip'nsleep Signature Cold Pillow combines a cool-touch fabric side (tested Q-max cooling value of 0.26) with an adjustable shredded memory foam core that lets air circulate instead of building up heat. Flip it to the soft bamboo side in colder months, so it's one pillow for hot sleepers all year round. The loft adjusts to every sleeping position: side sleepers keep more filling for neck support, back and stomach sleepers take some out. Pair it with the Breeze Bamboo Sheet Set, the Cloudweight Weighted Blanket or the Arctic Air Cooling Comforter for a bed that stays cool from top to bottom. Every order comes with free shipping, a 100-night sleep trial and a 2-year warranty, so trying a better night is risk-free. We ship across the United States and Canada.
         </p>
-      </div></section></Reveal>
+      </div></div></section></Reveal>
     </div>
   );
 }

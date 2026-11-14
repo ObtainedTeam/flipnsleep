@@ -15,7 +15,7 @@ export const HERO = {
   title: ['Sleep cool.', 'Wake rested.'],
   sub: 'One pillow, two sides: cool-touch for warm nights, soft bamboo for cooler ones. Adjustable fill for every sleeper.',
   cta: { label: 'Shop the pillow', to: '/product/signature-cold-pillow' },
-  quiz: { label: 'Take the sleep quiz →', to: '/quiz' },
+  quiz: { label: 'Take the sleep quiz', to: '/quiz' },
   trust: [
     ['moon', '100-night trial'],
     ['truck', 'Free shipping US & Canada'],

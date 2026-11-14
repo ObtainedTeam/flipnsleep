@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { c, FONT_SUB, FONT_DISPLAY, R, SH, T, LH, W, BTN, CHIP, CARD } from '../theme';
+import { c, rv, FONT_SUB, FONT_DISPLAY, R, SH, T, LH, W, BTN, CHIP, CARD } from '../theme';
 import { CartContext } from './Cart';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { IMG, PRODUCT, BUNDLES, productById, dim, rs } from '../data';
@@ -152,22 +152,22 @@ export default function Nav({ onCartOpen }) {
   return (
     <>
       {/* Aankondigingsbalk: één regel, gecentreerd */}
-      <div style={{ background: c.navy, color: c.white, textAlign: 'center', padding: '9px 16px', fontSize: T.sm[0], lineHeight: LH.head, fontFamily: FONT_SUB }}>
+      <div className="r-fs" style={{ background: c.navy, color: c.white, textAlign: 'center', padding: '10px 16px', ...rv('fs', 14, 13), lineHeight: LH.head, fontFamily: FONT_SUB }}>
         <Link to={`/product/${PRODUCT.id}`} className="nav-link" style={{ color: c.white }}>
           <b style={{ color: c.amber, fontWeight: 600 }}>Buy 1, Get 1 Free</b> on the Signature Cold Pillow<span className="d-only" style={{ display: 'inline' }}> · Free shipping to the US &amp; Canada</span>
         </Link>
       </div>
 
       <header ref={headerRef} onMouseLeave={close}
-        style={{ position: 'sticky', top: 0, zIndex: 90, background: `${c.navy}EB`, backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: scrolled ? SH.card : 'none', transition: 'box-shadow .2s ease' }}>
+        style={{ position: 'sticky', top: 0, zIndex: 90, background: 'rgba(255,255,255,.94)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: `1px solid ${scrolled ? c.line : 'transparent'}`, transition: 'border-color .2s ease' }}>
         <div className="nav-bar" style={{ maxWidth: W.page + 80, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 16 }}>
           <button className="nav-sm" aria-label="Open menu" aria-expanded={drawer} aria-controls="nav-drawer" onClick={() => setDrawer(true)}
             style={{ background: 'none', border: 'none', cursor: 'pointer', flexDirection: 'column', gap: 5, padding: 8, marginLeft: -8 }}>
-            {[0, 1, 2].map(i => <i key={i} style={{ width: 22, height: 2, background: c.white, borderRadius: R.pill, display: 'block' }} />)}
+            {[0, 1, 2].map(i => <i key={i} style={{ width: 22, height: 2, background: c.navy, borderRadius: R.pill, display: 'block' }} />)}
           </button>
 
           <Link to="/" onMouseEnter={close} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            <img src={IMG.logoFull} {...dim(IMG.logoFull)} decoding="async" alt="flip'nsleep" className="nav-logo" style={{ width: 'auto' }} />
+            <img src={IMG.logoDark} {...dim(IMG.logoDark)} decoding="async" alt="flip'nsleep" className="nav-logo" style={{ width: 'auto' }} />
           </Link>
 
           {/* Desktop categorieën */}
@@ -182,9 +182,9 @@ export default function Nav({ onCartOpen }) {
                       onMouseEnter={() => setOpenCat(cat.key)}
                       onClick={(e) => setOpenCat(open && e.detail === 0 ? null : cat.key)}
                       className="nav-cat"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', padding: '10px 10px', borderRadius: R.pill, color: open ? c.amber : c.white, fontFamily: FONT_SUB, fontSize: T.sm[0], letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', padding: '10px 10px', borderRadius: R.pill, color: c.navy, fontFamily: FONT_SUB, fontSize: 15, letterSpacing: 0, whiteSpace: 'nowrap', textDecoration: open ? 'underline' : 'none', textUnderlineOffset: 6 }}>
                       {cat.label}
-                      {cat.soon && <span style={{ fontSize: 12, fontWeight: 500, color: c.lilac, opacity: .8 }}>soon</span>}
+                      {cat.soon && <span style={{ fontSize: 12, fontWeight: 500, color: c.grayD }}>soon</span>}
                       <Chevron open={open} />
                     </button>
                   </li>
@@ -196,11 +196,11 @@ export default function Nav({ onCartOpen }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginLeft: 'auto' }} onMouseEnter={close}>
             <div className="nav-lg" style={{ gap: 20 }}>
               {SECONDARY.map(([to, label]) => (
-                <Link key={to} to={to} className="nav-link" style={{ color: loc.pathname === to ? c.amber : c.white, fontFamily: FONT_SUB, fontSize: T.sm[0], letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{label}</Link>
+                <Link key={to} to={to} className="nav-link" style={{ color: c.navy, fontFamily: FONT_SUB, fontSize: 15, letterSpacing: 0, whiteSpace: 'nowrap', textDecoration: loc.pathname === to ? 'underline' : undefined }}>{label}</Link>
               ))}
             </div>
             <button aria-label={`Cart, ${count} item${count === 1 ? '' : 's'}`} onClick={onCartOpen}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', color: c.white, display: 'flex', padding: 6, marginRight: -6 }}>
+              style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', color: c.navy, display: 'flex', padding: 6, marginRight: -6 }}>
               <BagIcon />
               {count > 0 && (
                 <b style={{ position: 'absolute', top: -2, right: -4, minWidth: 18, height: 18, padding: '0 5px', background: c.amber, color: c.navy, fontSize: T.xs[0], lineHeight: 1, borderRadius: R.pill, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_SUB }}>{count}</b>
@@ -225,7 +225,7 @@ export default function Nav({ onCartOpen }) {
                       <div>
                         <span style={{ ...SOON_CHIP, background: c.sky, color: c.navy, marginBottom: 8 }}>Coming soon</span>
                         <div style={{ fontFamily: FONT_DISPLAY, fontSize: T.h4[0], lineHeight: LH.head, color: c.navy, margin: '6px 0' }}>{cat.label}</div>
-                        <a href="#newsletter" onClick={(e) => { close(); openNewsletter(e); }} className="nav-link" style={{ fontSize: T.sm[0], fontWeight: 600, color: c.purple }}>Join the list to hear first →</a>
+                        <a href="#newsletter" onClick={(e) => { close(); openNewsletter(e); }} className="nav-link" style={{ fontSize: T.sm[0], fontWeight: 600, color: c.purple }}>Join the list to hear first</a>
                       </div>
                     </div>
                   ) : (
@@ -233,7 +233,7 @@ export default function Nav({ onCartOpen }) {
                       <div>
                         <div style={{ fontFamily: FONT_DISPLAY, fontSize: T.h4[0], lineHeight: LH.head, color: c.navy, marginBottom: 8 }}>{cat.label}</div>
                         <p style={{ fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, marginBottom: 14 }}>{cat.intro}</p>
-                        <Link to="/shop" onClick={close} className="nav-link" style={{ fontSize: T.sm[0], fontWeight: 600, color: c.purple }}>Shop all →</Link>
+                        <Link to="/shop" onClick={close} className="nav-link" style={{ fontSize: T.sm[0], fontWeight: 600, color: c.purple }}>Shop all</Link>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cards.length}, minmax(0, 1fr))`, gap: 16 }}>
                         {cards.map((card, i) => <PanelCard key={i} card={card} symbol={symbol} onPick={close} />)}

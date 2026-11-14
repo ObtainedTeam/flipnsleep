@@ -17,7 +17,7 @@ export default function BrandStatement() {
           </p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
             <Link to="/about" style={BTN}>Our story</Link>
-            <Link to="/how-it-works" className="nav-link" style={{ fontSize: T.sm[0], fontWeight: 700, color: c.navy, letterSpacing: 0 }}>How it works →</Link>
+            <Link to="/how-it-works" className="nav-link" style={{ fontSize: T.sm[0], fontWeight: 700, color: c.navy, letterSpacing: 0 }}>How it works</Link>
           </div>
         </div></Reveal>
         <Reveal delay={120}><div className="home-brand-panel" style={{ ...CARD_SOFT, background: c.sky }}>

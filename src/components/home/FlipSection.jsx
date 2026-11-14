@@ -67,7 +67,6 @@ export default function FlipSection() {
 
           <div className="home-flip-head">
             <Reveal>
-              <div style={EYEBROW}>How it works</div>
               <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, fontWeight: 400, ...rv('fs', ...T.h1), lineHeight: LH.head, color: c.navy, margin: '10px 0 14px' }}>
                 Just <span style={{ fontFamily: FONT_SUB, color: c.purple }}>flip it.</span>
               </h2>

@@ -83,7 +83,6 @@ export function ExplainAccordion({ eyebrow, title, intro, items, chips }) {
     <section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', ...SP.section) }}>
       <div className="pd-two r-gap" style={rv('gap', 56, 24)}>
         <Reveal><div>
-          <div style={EYEBROW}>{eyebrow}</div>
           <h2 className="r-fs" style={{ ...H2S, margin: '8px 0 16px' }}>{title}</h2>
           {intro && <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.body }}>{intro}</p>}
           {chips && <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 }}>
@@ -103,7 +102,6 @@ export function Bento({ rows, eyebrow, title }) {
   return (
     <section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', ...SP.section) }}>
       {title && <Reveal><div style={{ textAlign: 'center', maxWidth: W.text, margin: '0 auto 40px' }}>
-        {eyebrow && <div style={EYEBROW}>{eyebrow}</div>}
         <h2 className="r-fs" style={{ ...H2S, marginTop: 8 }}>{title}</h2>
       </div></Reveal>}
       <div style={{ display: 'grid', ...rv('gap', 64, 40) }} className="r-gap">
@@ -157,7 +155,6 @@ export function DesignedForSleep({ items, media }) {
     <section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', ...SP.section) }}>
       <div className="pd-two is-center r-gap" style={rv('gap', 64, 32)}>
         <Reveal><div>
-          <div style={EYEBROW}>The flip'nsleep design</div>
           <h2 className="r-fs" style={{ ...H2S, margin: '8px 0 24px' }}>Designed for real sleep</h2>
           <Accordion items={items} size="lg" />
         </div></Reveal>
@@ -206,7 +203,6 @@ export function HotSleeperStats({ stats, title = 'Made for hot sleepers', text }
     <section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', ...SP.section) }}>
       <div className="pd-two is-center r-gap" style={rv('gap', 56, 28)}>
         <Reveal><div>
-          <div style={EYEBROW}>Sleep cooler, risk-free</div>
           <h2 className="r-fs" style={{ ...H2S, margin: '8px 0 16px' }}>{title}</h2>
           <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.body, maxWidth: W.narrow }}>{text}</p>
         </div></Reveal>

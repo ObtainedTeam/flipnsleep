@@ -160,7 +160,7 @@ export default function ProductVariable({ onCartOpen }) {
       {examples.length > 0 && <ProductReviews rvw={rvw} productName={product.name} examples={examples} />}
 
       <section className="r-pad" style={rv('pad', ...SP.section)}>
-        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
+        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions, answered</h2>
         <FAQBlock items={product.faq || undefined} />
       </section>
 

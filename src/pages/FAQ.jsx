@@ -10,7 +10,7 @@ export default function FAQ() {
     <div>
       <section className="r-pad" style={{ textAlign: 'center', ...rv('pad', ...SP.sectionTop) }}>
         <div style={EYEBROW}>Support</div>
-        <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, color: c.navy, margin: '8px 0 16px' }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h1>
+        <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, color: c.navy, margin: '8px 0 16px' }}>Questions, answered</h1>
         <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, maxWidth: W.narrow, margin: '0 auto' }}>
           Everything about the trial, shipping, washing and adjusting. Still stuck? Email <a href="mailto:info@flipnsleep.com" style={{ fontWeight: 600 }}>info@flipnsleep.com</a>.
         </p>

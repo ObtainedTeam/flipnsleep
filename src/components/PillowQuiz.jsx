@@ -50,7 +50,6 @@ export default function PillowQuiz() {
   return (
     <section className="r-pad" style={{ background: c.white, ...rv('pad', ...SP.section) }}>
       <div className="r-pad r-mh" style={{ maxWidth: W.text, margin: '0 auto', background: c.sky, borderRadius: R.lg, boxShadow: SH.card, ...rv('pad', 40, SP.card[1]), textAlign: 'center', ...rv('mh', 470, 520) }}>
-        <div style={EYEBROW}>Free filling finder</div>
         <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, margin: '8px 0 12px' }}>Get your filling just right</h2>
         <p className="r-fs" style={{ ...rv('fs', ...T.sm), lineHeight: LH.body, color: c.grayD, maxWidth: W.narrow, margin: '0 auto 24px' }}>
           Your Signature Cold Pillow arrives generously filled with shredded memory foam. Answer four quick questions and we'll tell you roughly how many handfuls to take out for your perfect height. No email needed, and you can re-tune anytime.
@@ -61,7 +60,7 @@ export default function PillowQuiz() {
             <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.purple, marginBottom: 12, fontFamily: FONT_SUB }}>Question {step + 1} of {QUESTIONS.length}</div>
             <h3 className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', ...T.lg), lineHeight: LH.head, fontWeight: 600, color: c.navy, marginBottom: 16 }}>{QUESTIONS[step].q}</h3>
             <div style={{ display: 'grid', gap: 12, maxWidth: 400, margin: '0 auto' }}>
-              {QUESTIONS[step].opts.map(([emoji, label, val], i) => (
+              {QUESTIONS[step].opts.map(([, label, val], i) => (
                 <button key={i} onClick={() => answer(QUESTIONS[step].key, val)}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = c.amber; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'transparent'; }}

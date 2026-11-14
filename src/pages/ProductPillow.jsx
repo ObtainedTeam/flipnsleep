@@ -65,7 +65,6 @@ export default function ProductPillow({ onCartOpen }) {
 
         {/* Info / buy box */}
         <Reveal delay={120}><div>
-          <div style={EYEBROW}>Signature series</div>
           <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), color: c.navy, margin: '8px 0 8px', lineHeight: LH.tight }}>{PRODUCT.name}</h1>
           <p className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', ...T.lg), color: c.purple, fontWeight: 500, lineHeight: LH.head, margin: '0 0 12px' }}>Sleep cooler on a pillow that finally fits your head.</p>
 
@@ -132,7 +131,6 @@ export default function ProductPillow({ onCartOpen }) {
         {/* Uitsnede zweeft vrij op de pagina-achtergrond, geen wit vlak */}
         <Reveal><img src={IMG.coverInside} {...dim(IMG.coverInside)} {...rs(IMG.coverInside, '(max-width: 759px) 100vw, 600px')} loading="lazy" decoding="async" alt="Inside the Signature Cold Pillow: shredded memory foam that breathes" style={{ display: 'block', width: '100%', filter: 'drop-shadow(0 24px 30px rgba(32,27,93,.22))' }} /></Reveal>
         <Reveal delay={120}><div>
-          <div style={EYEBROW}>Why it's different</div>
           <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), color: c.navy, margin: '8px 0 16px', lineHeight: LH.head }}>Built to lose heat, not hold it</h2>
           <ol style={{ listStyle: 'none' }}>
             {[
@@ -154,7 +152,6 @@ export default function ProductPillow({ onCartOpen }) {
       {/* 5 — Made to fit you + Filling Finder (ruimte onder, de quiz is wit) */}
       <section className="r-pad" style={padBottom(...SP.section)}>
         <Reveal><div style={{ maxWidth: W.text, margin: '0 auto', textAlign: 'center' }}>
-          <div style={EYEBROW}>Made to fit you</div>
           <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), color: c.navy, margin: '8px 0 16px', lineHeight: LH.head }}>One pillow that actually fits you</h2>
           <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.loose }}>
             Most pillows are a single height for every head, which is why they work for some people and fail everyone else. Side sleepers need loft. Stomach sleepers need almost none. Your Signature Cold Pillow arrives generously filled, and you take out handfuls until it's exactly right. Answer four quick questions and we'll tell you roughly how much to remove. No email needed, and you can re-tune any time.
@@ -220,7 +217,7 @@ export default function ProductPillow({ onCartOpen }) {
 
       {/* 9 — FAQ */}
       <section className="r-pad" style={rv('pad', `0 ${SP.gutter[0]}px`, `0 ${SP.gutter[1]}px`)}>
-        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions? <span style={{ fontFamily: FONT_SUB }}>Answered.</span></h2>
+        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, textAlign: 'center', marginBottom: 24 }}>Questions, answered</h2>
         <FAQBlock limit={8} />
       </section>
 

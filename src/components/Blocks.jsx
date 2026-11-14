@@ -89,7 +89,7 @@ export function ShippingCountdown() {
   }, []);
 
   return (
-    <div style={{ ...CHIP, gap: 8, background: c.cream, border: `1px solid ${c.amberD}`, fontSize: T.xs[0], fontWeight: 600, color: c.navy, whiteSpace: 'normal' }}>
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: T.xs[0], fontWeight: 500, color: c.grayD }}>
       <Ico e="📦" size={16} /> {label}
     </div>
   );
@@ -178,13 +178,13 @@ export function TrustAccordion({ specs }) {
     ['Product specifications', specs],
   ];
   return (
-    <div className="r-pad" style={{ background: c.navy, color: c.white, borderRadius: R.lg, ...rv('pad', '8px 28px 12px', '6px 20px 10px') }}>
+    <div style={{ color: c.navy, borderTop: `1px solid ${c.line}` }}>
       {items.map(([q, a], i) => (
-        <details key={i} style={{ borderBottom: i < items.length - 1 ? '1px solid rgba(255,255,255,.25)' : 'none' }}>
-          <summary style={{ listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, padding: '16px 2px', fontSize: T.sm[0], lineHeight: LH.head, fontWeight: 500, cursor: 'pointer', fontFamily: FONT_SUB }}>
-            {q}<span style={{ fontFamily: FONT_DISPLAY, fontSize: T.h4[1] }}>+</span>
+        <details key={i} style={{ borderBottom: `1px solid ${c.line}` }}>
+          <summary style={{ listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, padding: '20px 2px', fontSize: T.md[0], lineHeight: LH.head, fontWeight: 500, cursor: 'pointer', fontFamily: FONT_SUB }}>
+            {q}<span style={{ fontFamily: FONT_DISPLAY, fontSize: T.h4[0] }}>+</span>
           </summary>
-          <div style={{ fontSize: T.sm[0], lineHeight: LH.body, padding: '0 2px 16px', opacity: .88 }}>{a}</div>
+          <div style={{ fontSize: T.sm[0], lineHeight: LH.body, padding: '0 2px 20px', color: c.grayD, maxWidth: 720 }}>{a}</div>
         </details>
       ))}
     </div>
@@ -222,8 +222,8 @@ export function CompareCards({ rows, ours, theirs }) {
 export function SectionHead({ title, accent, intro, align = 'center', mb = 32 }) {
   return (
     <Reveal><div style={{ textAlign: align, maxWidth: W.page, margin: align === 'center' ? `0 auto ${mb}px` : `0 0 ${mb}px` }}>
-      <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, fontWeight: 400, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy }}>
-        {title}{accent && <> <span style={{ fontFamily: FONT_SUB }}>{accent}</span></>}
+      <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, fontWeight: 400, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, letterSpacing: '-0.01em' }}>
+        {title}{accent && <> {accent}</>}
       </h2>
       {intro && <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.grayD, margin: '12px auto 0', maxWidth: W.narrow }}>{intro}</p>}
     </div></Reveal>

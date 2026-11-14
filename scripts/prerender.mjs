@@ -145,7 +145,7 @@ async function main() {
     try {
       const appHtml = render(route);
       words += appHtml.split(/\s+/).length;
-      html = applyMeta((route === '/' ? pageTemplate : pageTemplate.replace(/\s*<link rel="preload" as="image" href="\/images\/hero-poster[^>]*>/g, '')).replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`), route);
+      html = applyMeta((route === '/' ? pageTemplate : pageTemplate.replace(/\s*<link rel="preload" as="image" href="\/images\/pillow-bed[^>]*>/g, '')).replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`), route);
       ok++;
     } catch (e) {
       log(`FOUT bij ${route}: ${e.message} — schrijf head-only fallback`);

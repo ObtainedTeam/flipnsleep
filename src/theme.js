@@ -1,7 +1,7 @@
 // flip'nsleep brand tokens — afgeleid uit het Figma-ontwerp.
 export const c = {
   navy:"#201B5D", purple:"#201B5D", night:"#201B5D",
-  cream:"#FFFFFF", sky:"#EAF4FC", sky2:"#C0E5FF", skyDeep:"#8FC4F4",
+  cream:"#FFFFFF", sky:"#E9F3FB", tint:"#F3F8FC", line:"rgba(32,27,93,.12)", sky2:"#C0E5FF", skyDeep:"#8FC4F4",
   amber:"#FDCA6F", amberD:"#F5B54A",
   pastelYellow:"#FBDD8E", pastelPink:"#F4A0B5", pastelMint:"#B9E4C1", pastelBlue:"#BFE0F8",
   white:"#FFFFFF", ink:"#201B5D", grayD:"#55507A", gray:"#8B86C9",
@@ -27,13 +27,13 @@ export const rv = (prop, d, m) => ({ [`--d-${prop}`]: px(d), [`--m-${prop}`]: px
 // ---------------------------------------------------------------------------
 
 // Radius: twee maten plus pill. sm = chips, inputs, kleine kaarten; lg = kaarten, panelen, hero-foto's.
-export const R = { sm: 12, lg: 24, pill: 999 };
+export const R = { sm: 12, lg: 20, pill: 999 };
 
 // Schaduwen: zacht, laag en getint in navy zodat ze zichtbaar zijn op crème (#F9F8F3).
 export const SH = {
-  card:   "0 0 0 1px rgba(32,27,93,.07), 0 8px 24px -16px rgba(32,27,93,.18)",
-  strong: "0 0 0 1px rgba(32,27,93,.07), 0 16px 40px -24px rgba(32,27,93,.28)",
-  float:  "0 24px 48px -28px rgba(32,27,93,.32)",
+  card:   "none",
+  strong: "none",
+  float:  "0 16px 40px -20px rgba(32,27,93,.25)",
   btn:    "none",
   text:   "0 1px 2px rgba(0,0,0,.25)",
   textHero: "0 2px 18px rgba(20,16,64,.45)",
@@ -41,20 +41,20 @@ export const SH = {
 
 // Typografische trap [desktop, mobiel] in px. Gebruik met rv('fs', ...T.h1).
 export const T = {
-  display: [56, 36], h1: [44, 32], h2: [36, 27], h3: [24, 20], h4: [20, 18],
-  lg: [18, 16], md: [17, 16], sm: [15, 15], xs: [13, 13],
+  display: [60, 38], h1: [48, 32], h2: [40, 28], h3: [26, 22], h4: [21, 18],
+  lg: [20, 17], md: [18, 16], sm: [16, 15], xs: [14, 13],
 };
-export const LH = { tight: 1.1, head: 1.2, body: 1.65, loose: 1.75 };
+export const LH = { tight: 1.08, head: 1.15, body: 1.6, loose: 1.7 };
 
 // Ruimte: sectiepadding [desktop, mobiel], kaartmarge, gutter, maximale breedtes.
 export const SP = {
-  section: ["80px 40px", "56px 20px"],
-  sectionTop: ["80px 40px 0", "56px 20px 0"],
-  card: [28, 22],
+  section: ["104px 40px", "64px 20px"],
+  sectionTop: ["104px 40px 0", "64px 20px 0"],
+  card: [32, 24],
   gutter: [40, 20],
   gap: [24, 16],
 };
-export const W = { page: 1140, text: 720, narrow: 560 };
+export const W = { page: 1200, text: 720, narrow: 600 };
 
 // Knoppen: precies drie varianten. Altijd inline-flex en gecentreerd, vaste hoogte.
 const BTN_BASE = {
@@ -65,15 +65,15 @@ const BTN_BASE = {
   transition: "background-color .15s ease, color .15s ease, transform .15s ease",
 };
 export const BTN = {
-  ...BTN_BASE, height: 52, padding: "0 34px",
+  ...BTN_BASE, height: 56, padding: "0 36px", fontSize: 16,
   background: c.amber, color: c.navy, border: "none",
 };
 export const BTNO = {
-  ...BTN_BASE, height: 52, padding: "0 30px",
-  background: "transparent", color: c.navy, border: `2px solid ${c.navy}`,
+  ...BTN_BASE, height: 56, padding: "0 32px", fontSize: 16,
+  background: "transparent", color: c.navy, border: `1.5px solid ${c.navy}`,
 };
 export const BTN_SM = {
-  ...BTN_BASE, height: 44, padding: "0 24px", fontSize: 14,
+  ...BTN_BASE, height: 48, padding: "0 24px", fontSize: 15,
   background: c.navy, color: c.white, border: "none",
 };
 // Varianten op donkere achtergrond: spread erna, bv. {...BTNO, ...ON_DARK}
@@ -87,7 +87,7 @@ export const CHIP = {
 };
 
 // Kaartbasis
-export const CARD = { background: c.white, borderRadius: R.lg, boxShadow: SH.card };
+export const CARD = { background: c.white, borderRadius: R.lg, border: `1px solid ${c.line}` };
 export const CARD_SOFT = { background: c.sky, borderRadius: R.lg };
 
 export const H2 = {

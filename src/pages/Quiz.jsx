@@ -125,7 +125,7 @@ export default function Quiz() {
             {current.q[0]}<span style={{ fontFamily: FONT_DISPLAY }}>{current.q[1]}</span>{current.q[2]}
           </h1>
           <div style={{ display: 'grid', gap: 12 }}>
-            {current.options.map(([emoji, label]) => (
+            {current.options.map(([, label]) => (
               <button key={label} onClick={() => pick(current.id, label)}
                 className="r-pad r-fs card-hover" style={{ display: 'flex', alignItems: 'center', gap: 16, background: c.sky, border: '2px solid transparent', borderRadius: R.sm, ...rv('pad', '20px 24px', '16px 20px'), cursor: 'pointer', fontFamily: FONT_SUB, ...rv('fs', ...T.md), color: c.navy, textAlign: 'left', transition: 'transform .1s, border .1s' }}
                 onMouseDown={e => e.currentTarget.style.transform = 'scale(.98)'}

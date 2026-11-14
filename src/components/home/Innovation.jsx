@@ -14,7 +14,7 @@ const ITEMS = [
   [<><path d="M3 18V8" /><path d="M3 14h18v4" /><path d="M21 14v-2a3 3 0 0 0-3-3h-7v5" /><circle cx="7" cy="11" r="2" /></>,
     'Built for every sleeper',
     'Side, back or stomach: the shredded memory foam adjusts to you. Side sleepers keep more filling, stomach sleepers take some out.',
-    <Link to="/quiz" className="nav-link" style={{ display: 'inline-block', marginTop: 10, fontSize: T.sm[0], fontWeight: 700, color: c.purple }}>Find your fill →</Link>],
+    <Link to="/quiz" className="nav-link" style={{ display: 'inline-block', marginTop: 10, fontSize: T.sm[0], fontWeight: 700, color: c.purple }}>Find your fill</Link>],
   [<><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.4l-4.8 2.5.9-5.4-3.9-3.8 5.4-.8L12 3Z" /></>,
     'Innovation in every detail',
     'A cool side with a tested Q-max of 0.26, so it feels cool the moment you touch it. OEKO-TEX Standard 100 fabrics, CertiPUR-US certified foam and a cover that zips off for the wash.'],

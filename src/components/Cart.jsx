@@ -170,7 +170,7 @@ export default function Cart({ isOpen, onClose }) {
                       <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], color: c.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
                       <div style={{ fontSize: T.xs[0], color: c.grayD }}>From {formatPrice(rp, symbol)}</div>
                     </div>
-                    <span style={{ fontSize: T.xs[0], fontWeight: 700, color: c.purple, flexShrink: 0 }}>View →</span>
+                    <span style={{ fontSize: T.xs[0], fontWeight: 700, color: c.purple, flexShrink: 0 }}>View</span>
                   </Link>
                 );
               })}

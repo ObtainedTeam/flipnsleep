@@ -196,7 +196,6 @@ export default function LookInside() {
   return (
     <section className="li r-pad" style={{ ...VARS, ...rv('pad', ...SP.sectionTop) }} aria-labelledby="li-title">
       <div style={{ textAlign: 'center', maxWidth: W.text, margin: '0 auto' }}>
-        <div style={EYEBROW}>Inside the pillow</div>
         <h2 id="li-title" className="r-fs" style={h2}>Five layers, one cool night.</h2>
         <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.body, maxWidth: W.narrow, margin: '0 auto' }}>
           Every layer has one job, from the cool-touch face you feel first to the foam you tune to your height.{reduced ? '' : ' Scroll to take the pillow apart.'}
