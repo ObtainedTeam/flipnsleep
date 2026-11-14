@@ -34,7 +34,7 @@ export default function FlipSection() {
   const side = warm ? FLIP_SIDES.warm : FLIP_SIDES.cool;
 
   return (
-    <section className="r-pad" style={{ background: `linear-gradient(180deg, ${c.cream} 0%, ${c.sky} 100%)`, ...rv('pad', '96px 40px', '64px 20px') }}>
+    <section className="r-pad" style={{ background: c.sky, ...rv('pad', '96px 40px', '64px 20px') }}>
       <div style={{ maxWidth: W.page, margin: '0 auto' }}>
         <div className="home-flip">
           <div className="home-flip-media" style={{ textAlign: 'center' }}>

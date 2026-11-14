@@ -25,7 +25,7 @@ export default function ExitPopup() {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       <div onClick={() => setShow(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,.6)' }} />
-      <div style={{ position: 'relative', background: `linear-gradient(180deg, ${c.navy}, ${c.purple})`, color: c.white, borderRadius: R.lg, padding: '40px 28px', maxWidth: 420, width: '100%', textAlign: 'center', boxShadow: SH.float }}>
+      <div style={{ position: 'relative', background: c.navy, color: c.white, borderRadius: R.lg, padding: '40px 28px', maxWidth: 420, width: '100%', textAlign: 'center', boxShadow: SH.float }}>
         <button onClick={() => setShow(false)} aria-label="Close" style={{ position: 'absolute', top: 12, right: 16, background: 'none', border: 'none', fontSize: T.h3[0], cursor: 'pointer', color: c.white }}>×</button>
         <img src={IMG.icon1p1} {...dim(IMG.icon1p1)} loading="lazy" decoding="async" alt="Buy 1, Get 1 Free" style={{ height: 64, marginBottom: 12 }} />
         <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: T.h3[0], lineHeight: LH.head, marginBottom: 12, textShadow: SH.text }}>Leaving already?</h3>

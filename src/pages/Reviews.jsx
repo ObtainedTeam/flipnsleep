@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Ico from '../components/Ico.jsx';
 import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, T, LH, SP, W, CARD, CARD_SOFT } from '../theme';
 import { Link } from 'react-router-dom';
 import Reveal from '../components/Reveal';
@@ -67,7 +68,7 @@ export default function Reviews() {
               ['🚚', 'Free shipping, always', 'Across the US and Canada, on every order. Free returns within the trial.'],
             ].map(([icon, t, d], i) => (
               <div key={i} className="r-pad" style={{ ...CARD_SOFT, ...rv('pad', ...SP.card), textAlign: 'center' }}>
-                <div style={{ fontSize: T.h3[0], marginBottom: 8 }}>{icon}</div>
+                <div style={{ marginBottom: 8, color: c.navy }}><Ico e={icon} size={24} /></div>
                 <div style={{ fontFamily: FONT_SUB, fontWeight: 600, fontSize: T.md[1], color: c.navy, marginBottom: 6 }}>{t}</div>
                 <div style={{ fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD }}>{d}</div>
               </div>

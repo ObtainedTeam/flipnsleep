@@ -184,7 +184,7 @@ export default function Nav({ onCartOpen }) {
                       className="nav-cat"
                       style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', padding: '10px 10px', borderRadius: R.pill, color: open ? c.amber : c.white, fontFamily: FONT_SUB, fontSize: T.sm[0], letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
                       {cat.label}
-                      {cat.soon && <span style={{ ...SOON_CHIP, background: `${c.white}24`, color: c.white }}>Soon</span>}
+                      {cat.soon && <span style={{ fontSize: 12, fontWeight: 500, color: c.lilac, opacity: .8 }}>soon</span>}
                       <Chevron open={open} />
                     </button>
                   </li>
@@ -260,7 +260,7 @@ export default function Nav({ onCartOpen }) {
           </div>
 
           <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
-            <div style={{ padding: '12px 20px 4px', color: c.grayD, fontSize: T.xs[0], fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: FONT_SUB }}>Shop by category</div>
+            <div style={{ padding: '12px 20px 4px', color: c.grayD, fontSize: T.xs[0], fontWeight: 700, letterSpacing: 0, fontFamily: FONT_SUB }}>Shop by category</div>
             {CATS.map(cat => {
               const open = acc === cat.key;
               return (
@@ -268,7 +268,7 @@ export default function Nav({ onCartOpen }) {
                   <button type="button" aria-expanded={open} aria-controls={`nav-acc-${cat.key}`} onClick={() => setAcc(open ? null : cat.key)}
                     style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '14px 20px', color: c.navy, fontFamily: FONT_SUB, fontSize: T.md[1], textAlign: 'left' }}>
                     {cat.label}
-                    {cat.soon && <span style={{ ...SOON_CHIP, background: c.sky, color: c.navy }}>Soon</span>}
+                    {cat.soon && <span style={{ fontSize: 13, fontWeight: 500, color: c.grayD }}>soon</span>}
                     <span style={{ marginLeft: 'auto', display: 'flex' }}><Chevron open={open} /></span>
                   </button>
                   <div id={`nav-acc-${cat.key}`} hidden={!open} style={{ padding: '0 20px 14px' }}>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Ico from './Ico.jsx';
 import { Link } from 'react-router-dom';
 import { c, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH, SP, W, CARD, CARD_SOFT, CHIP, BTN, BTNO, BTN_SM } from '../theme';
 import { FAQ_ITEMS, IMG, BUNDLES, PRODUCT, products, dim, rs } from '../data';
@@ -27,8 +28,7 @@ export function ProductImageBlock({ src, alt = '', height = 240, radius = R.lg, 
   const load = priority ? { fetchPriority: 'high' } : { loading: 'lazy' };
   return (
     <div className="r-h" style={{ position: 'relative', background: bg, borderRadius: radius, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', ...rv('h', hd, hm), ...style }}>
-      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', left: '-4%', top: '11%', width: '44%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
-      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '7%', width: '50%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+
       <img src={src} {...dim(src)} {...rs(src, '(max-width: 759px) 80vw, 480px')} {...load} decoding="async" alt={alt} style={{ position: 'relative', maxHeight: '80%', maxWidth: '80%', objectFit: 'contain', ...imgStyle }} />
     </div>
   );
@@ -57,8 +57,7 @@ export function PillowDeck({ count = 2, height = 220, radius = 0, bg = c.sky, pr
   ];
   return (
     <div className="r-h" style={{ position: 'relative', width: '100%', background: bg, borderRadius: radius, overflow: 'hidden', ...rv('h', hd, hm) }}>
-      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', left: '-5%', top: '9%', width: '40%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
-      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '6%', width: '46%', opacity: 1, filter: 'drop-shadow(0 6px 10px rgba(32,27,93,.14))' }} />
+
       {count >= 4 ? four : two}
     </div>
   );
@@ -91,7 +90,7 @@ export function ShippingCountdown() {
 
   return (
     <div style={{ ...CHIP, gap: 8, background: c.cream, border: `1px solid ${c.amberD}`, fontSize: T.xs[0], fontWeight: 600, color: c.navy, whiteSpace: 'normal' }}>
-      📦 {label}
+      <Ico e="📦" size={16} /> {label}
     </div>
   );
 }
@@ -104,7 +103,7 @@ export function TrustBar() {
     <div className="fns-scroll r-gap r-jc" style={{ background: c.white, borderBottom: '1px solid rgba(32,27,93,.10)', display: 'flex', alignItems: 'center', ...rv('gap', 34, 18), ...rv('jc', 'center', 'flex-start'), overflowX: 'auto', padding: '9px 16px', whiteSpace: 'nowrap' }}>
       {items.map(([icon, label], i) => (
         <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: T.xs[0], fontWeight: 600, color: c.navy, fontFamily: FONT_SUB, flexShrink: 0, lineHeight: 1 }}>
-          <span style={{ fontSize: T.sm[0], lineHeight: 1 }}>{icon}</span>{label}
+          <Ico e={icon} size={16} style={{ color: c.grayD }} />{label}
         </span>
       ))}
     </div>

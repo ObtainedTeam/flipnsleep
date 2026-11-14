@@ -30,8 +30,8 @@ export default function WhyChooseUs() {
           <thead>
             <tr style={{ background: c.navy, color: c.white }}>
               <th style={{ padding: '16px 20px', textAlign: 'left', fontFamily: FONT_SUB, fontSize: T.sm[0] }}></th>
-              <th style={{ padding: '16px 20px', textAlign: 'left', fontFamily: FONT_DISPLAY, fontSize: T.md[1] }}>flip<span style={{ color: c.amber }}>'</span>nsleep ✅</th>
-              <th style={{ padding: '16px 20px', textAlign: 'left', fontFamily: FONT_SUB, fontSize: T.sm[0], opacity: .8 }}>Standard pillow ❌</th>
+              <th style={{ padding: '16px 20px', textAlign: 'left', fontFamily: FONT_DISPLAY, fontSize: T.md[1] }}>flip<span style={{ color: c.amber }}>'</span>nsleep</th>
+              <th style={{ padding: '16px 20px', textAlign: 'left', fontFamily: FONT_SUB, fontSize: T.sm[0], opacity: .8 }}>Standard pillow</th>
             </tr>
           </thead>
           <tbody>

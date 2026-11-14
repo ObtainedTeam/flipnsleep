@@ -10,7 +10,7 @@ import Reveal from '../components/Reveal';
 export default function About() {
   return (
     <div>
-      <section className="r-pad" style={{ background: `linear-gradient(180deg, ${c.navy}, ${c.purple})`, color: c.white, textAlign: 'center', ...rv('pad', ...SP.sectionTop), position: 'relative', overflow: 'hidden' }}>
+      <section className="r-pad" style={{ background: c.navy, color: c.white, textAlign: 'center', ...rv('pad', ...SP.sectionTop), position: 'relative', overflow: 'hidden' }}>
         <img src={IMG.night} {...dim(IMG.night)} decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: .25 }} />
         <div style={{ position: 'relative', maxWidth: W.text, margin: '0 auto' }}>
           <div style={{ ...EYEBROW, color: c.amber }}>Our story</div>

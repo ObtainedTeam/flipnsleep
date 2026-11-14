@@ -112,7 +112,7 @@ export default function Quiz() {
       {/* Voortgangsbalk */}
       <div className="r-mb" style={{ width: '100%', maxWidth: W.narrow, ...rv('mb', 48, 32) }}>
         <div style={{ height: 8, background: 'rgba(32,27,93,.10)', borderRadius: R.pill, overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${progress}%`, background: `linear-gradient(90deg, ${c.purple}, ${c.navy})`, borderRadius: R.pill, transition: 'width .4s ease' }} />
+          <div style={{ height: '100%', width: `${progress}%`, background: c.navy, borderRadius: R.pill, transition: 'width .4s ease' }} />
         </div>
         <div style={{ fontSize: T.xs[0], color: c.grayD, marginTop: 8, textAlign: 'right', fontFamily: FONT_SUB }}>
           {emailStep ? 'Last step' : `Question ${step + 1} of ${QUESTIONS.length}`}
@@ -130,7 +130,7 @@ export default function Quiz() {
                 className="r-pad r-fs card-hover" style={{ display: 'flex', alignItems: 'center', gap: 16, background: c.sky, border: '2px solid transparent', borderRadius: R.sm, ...rv('pad', '20px 24px', '16px 20px'), cursor: 'pointer', fontFamily: FONT_SUB, ...rv('fs', ...T.md), color: c.navy, textAlign: 'left', transition: 'transform .1s, border .1s' }}
                 onMouseDown={e => e.currentTarget.style.transform = 'scale(.98)'}
                 onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}>
-                <span style={{ fontSize: T.h3[0] }}>{emoji}</span>
+                
                 <span><b style={{ fontFamily: FONT_DISPLAY, fontWeight: 400 }}>{label.split(' ')[0]}</b> {label.split(' ').slice(1).join(' ')}</span>
               </button>
             ))}
@@ -143,7 +143,7 @@ export default function Quiz() {
         <div style={{ width: '100%', maxWidth: W.narrow, textAlign: 'center' }}>
           {state === 'done' ? (
             <>
-              <div style={{ fontSize: T.h1[0], marginBottom: 12 }}>🌙</div>
+              
               <h1 className="r-fs" style={{ ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, fontFamily: FONT_DISPLAY, fontWeight: 400, marginBottom: 12 }}>Check your inbox!</h1>
               <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.grayD }}>Your 15% discount code is on its way. We're taking you to your perfect pillow…</p>
             </>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Ico from '../components/Ico.jsx';
 import { c, BTN, BTNO, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD, CHIP } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { PRODUCT, BUNDLES, IMG, dim, rs } from '../data';
@@ -146,7 +147,7 @@ export default function ProductPillow({ onCartOpen }) {
               </li>
             ))}
           </ol>
-          <p style={{ fontSize: T.xs[0], color: c.grayD, lineHeight: LH.body, marginTop: 8, fontStyle: 'italic' }}>It loses heat and feels cool to the touch. Like every cool-touch fabric it doesn't stay ice-cold all night, so flip for a fresh cool side and use a breathable pillowcase.</p>
+          <p style={{ fontSize: T.xs[0], color: c.grayD, lineHeight: LH.body, marginTop: 8 }}>It loses heat and feels cool to the touch. Like every cool-touch fabric it doesn't stay ice-cold all night, so flip for a fresh cool side and use a breathable pillowcase.</p>
         </div></Reveal>
       </section>
 
@@ -204,7 +205,7 @@ export default function ProductPillow({ onCartOpen }) {
 
       {/* 8 — Offer, guarantee, final CTA */}
       <section id="offer" className="r-pad" style={rv('pad', ...SP.section)}>
-        <Reveal><div className="r-pad" style={{ maxWidth: W.text, margin: '0 auto', background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: R.lg, boxShadow: SH.card, ...rv('pad', 40, SP.card[1]), textAlign: 'center' }}>
+        <Reveal><div className="r-pad" style={{ maxWidth: W.text, margin: '0 auto', background: c.sky, borderRadius: R.lg, boxShadow: SH.card, ...rv('pad', 40, SP.card[1]), textAlign: 'center' }}>
           <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), color: c.navy, marginBottom: 16, lineHeight: LH.head }}>Sleep cooler tonight, or your money back</h2>
           <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.body, maxWidth: W.narrow, margin: '0 auto 20px' }}>
             Buy one, get one free: two pillows for {formatPrice(dealPrice, symbol)}, {formatPrice(dealPrice / 2, symbol)} a pillow, with free shipping. Sleep on it for 100 nights under our <b style={{ color: c.navy }}>100-Night Cool Sleep Promise</b>. If you're not sleeping cooler, we refund you in full, with no return-shipping hassle. Backed by a 2-year warranty.
@@ -235,7 +236,7 @@ export default function ProductPillow({ onCartOpen }) {
               ['🛡️', 'CertiPUR-US foam', 'No harmful flame retardants or heavy metals, low VOC.'],
             ].map(([icon, t, d], i) => (
               <div key={i} style={{ background: c.sky, borderRadius: R.sm, padding: '20px 16px', textAlign: 'center' }}>
-                <div style={{ fontSize: T.h3[0], marginBottom: 8 }}>{icon}</div>
+                <div style={{ marginBottom: 8, color: c.navy }}><Ico e={icon} size={24} /></div>
                 <div style={{ fontFamily: FONT_SUB, fontWeight: 600, fontSize: T.sm[0], color: c.navy, marginBottom: 6 }}>{t}</div>
                 <div style={{ fontSize: T.xs[0], lineHeight: LH.body, color: c.grayD }}>{d}</div>
               </div>

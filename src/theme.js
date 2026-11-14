@@ -29,10 +29,10 @@ export const R = { sm: 12, lg: 24, pill: 999 };
 
 // Schaduwen: zacht, laag en getint in navy zodat ze zichtbaar zijn op crème (#F9F8F3).
 export const SH = {
-  card:   "0 2px 6px rgba(32,27,93,.06), 0 16px 36px -12px rgba(32,27,93,.20)",
-  strong: "0 4px 10px rgba(32,27,93,.08), 0 28px 56px -16px rgba(32,27,93,.30)",
-  float:  "0 36px 64px -24px rgba(32,27,93,.38), 0 12px 24px -12px rgba(32,27,93,.16)",
-  btn:    "0 2px 6px rgba(32,27,93,.12), 0 10px 22px -8px rgba(245,181,74,.60)",
+  card:   "0 0 0 1px rgba(32,27,93,.07), 0 8px 24px -16px rgba(32,27,93,.18)",
+  strong: "0 0 0 1px rgba(32,27,93,.07), 0 16px 40px -24px rgba(32,27,93,.28)",
+  float:  "0 24px 48px -28px rgba(32,27,93,.32)",
+  btn:    "none",
   text:   "0 1px 2px rgba(0,0,0,.25)",
   textHero: "0 2px 18px rgba(20,16,64,.45)",
 };
@@ -40,7 +40,7 @@ export const SH = {
 // Typografische trap [desktop, mobiel] in px. Gebruik met rv('fs', ...T.h1).
 export const T = {
   display: [56, 36], h1: [44, 32], h2: [36, 27], h3: [24, 20], h4: [20, 18],
-  lg: [18, 16], md: [17, 16], sm: [14, 13], xs: [12, 12],
+  lg: [18, 16], md: [17, 16], sm: [15, 15], xs: [13, 13],
 };
 export const LH = { tight: 1.1, head: 1.2, body: 1.65, loose: 1.75 };
 
@@ -57,32 +57,31 @@ export const W = { page: 1140, text: 720, narrow: 560 };
 // Knoppen: precies drie varianten. Altijd inline-flex en gecentreerd, vaste hoogte.
 const BTN_BASE = {
   display: "inline-flex", alignItems: "center", justifyContent: "center",
-  borderRadius: R.pill, fontFamily: FONT_BODY, fontWeight: 700, fontSize: 13,
-  letterSpacing: "0.06em", textTransform: "uppercase", cursor: "pointer",
+  borderRadius: R.pill, fontFamily: FONT_BODY, fontWeight: 600, fontSize: 15,
+  letterSpacing: 0, cursor: "pointer",
   textDecoration: "none", whiteSpace: "nowrap", lineHeight: 1,
-  transition: "transform .15s ease, filter .15s ease, box-shadow .15s ease",
+  transition: "background-color .15s ease, color .15s ease, transform .15s ease",
 };
 export const BTN = {
   ...BTN_BASE, height: 52, padding: "0 34px",
-  background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, border: "none",
-  boxShadow: SH.btn,
+  background: c.amber, color: c.navy, border: "none",
 };
 export const BTNO = {
   ...BTN_BASE, height: 52, padding: "0 30px",
   background: "transparent", color: c.navy, border: `2px solid ${c.navy}`,
 };
 export const BTN_SM = {
-  ...BTN_BASE, height: 42, padding: "0 22px", fontSize: 12,
-  background: c.navy, color: c.white, border: "none", boxShadow: SH.card,
+  ...BTN_BASE, height: 44, padding: "0 24px", fontSize: 14,
+  background: c.navy, color: c.white, border: "none",
 };
 // Varianten op donkere achtergrond: spread erna, bv. {...BTNO, ...ON_DARK}
 export const ON_DARK = { color: c.white, borderColor: c.white };
 
 // Chip: niet-klikbare badge/label. Kleur en achtergrond per plek erbij zetten.
 export const CHIP = {
-  display: "inline-flex", alignItems: "center", gap: 6, borderRadius: R.pill,
-  fontFamily: FONT_BODY, fontSize: T.sm[0], fontWeight: 700, lineHeight: 1.2,
-  padding: "7px 14px", whiteSpace: "nowrap",
+  display: "inline-flex", alignItems: "center", gap: 6, borderRadius: 8,
+  fontFamily: FONT_BODY, fontSize: 13, fontWeight: 500, lineHeight: 1.2,
+  padding: "4px 8px", whiteSpace: "nowrap",
 };
 
 // Kaartbasis
@@ -94,7 +93,7 @@ export const H2 = {
   marginBottom:12, letterSpacing:"0", lineHeight:LH.head,
 };
 
+// Kleine kop boven een sectie: gewone zinsbouw, geen hoofdletters of brede spatiëring.
 export const EYEBROW = {
-  fontFamily:FONT_SUB, fontSize:12, fontWeight:500, letterSpacing:"0.14em",
-  textTransform:"uppercase", color:c.purple,
+  fontFamily:FONT_BODY, fontSize:15, fontWeight:500, letterSpacing:0, color:c.grayD,
 };

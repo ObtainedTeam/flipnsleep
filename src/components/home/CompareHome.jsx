@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { c, BTNO, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH, SP, W } from '../../theme';
+import { c, BTNO, rv, FONT_DISPLAY, FONT_BODY, FONT_SUB, R, SH, T, LH, SP, W } from '../../theme';
 import { IMG, dim } from '../../data';
 import { COMPARE_ROWS } from '../../data/home-content';
 import { CompareCards } from '../Blocks';
@@ -28,7 +28,7 @@ export default function CompareHome() {
 
       <div className="d-only">
         <Reveal><div className="home-vs" style={{ maxWidth: W.page - 120, margin: '0 auto' }}>
-          <div style={{ background: `linear-gradient(160deg, ${c.purple}, ${c.navy})`, color: c.white, borderRadius: R.lg, boxShadow: SH.strong, padding: '40px 44px', position: 'relative', zIndex: 2 }}>
+          <div style={{ background: c.navy, color: c.white, borderRadius: R.lg, boxShadow: SH.strong, padding: '40px 44px', position: 'relative', zIndex: 2 }}>
             <h3 style={{ fontFamily: FONT_DISPLAY, fontWeight: 400, fontSize: T.h3[0], lineHeight: LH.head, textAlign: 'center' }}>flip<span style={{ color: c.amber }}>'</span>nsleep</h3>
             <div style={{ height: 170, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '12px 0 16px' }}>
               <img src={IMG.coverFront} {...dim(IMG.coverFront)} loading="lazy" decoding="async" alt="flip'nsleep Signature Cold Pillow" style={{ maxHeight: 170, filter: 'drop-shadow(0 16px 20px rgba(0,0,0,.35))' }} />
@@ -39,7 +39,7 @@ export default function CompareHome() {
               ))}
             </ul>
           </div>
-          <span className="home-vs-chip" aria-hidden="true" style={{ width: 64, height: 64, borderRadius: R.pill, background: c.amber, color: c.navy, boxShadow: SH.strong, border: `4px solid ${c.cream}`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_DISPLAY, fontSize: T.lg[0] }}>VS</span>
+          <span className="home-vs-chip" aria-hidden="true" style={{ width: 44, height: 44, borderRadius: R.pill, background: c.cream, color: c.grayD, border: '1px solid rgba(32,27,93,.12)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_BODY, fontWeight: 500, fontSize: 14 }}>vs</span>
           <div style={{ background: c.white, color: c.grayD, borderRadius: R.lg, boxShadow: SH.card, padding: '32px 36px' }}>
             <h3 style={{ fontFamily: FONT_DISPLAY, fontWeight: 400, fontSize: T.h4[0], lineHeight: LH.head, textAlign: 'center', color: c.grayD }}>Sweaty old pillow</h3>
             <div style={{ height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '12px 0 14px' }}>
@@ -56,7 +56,7 @@ export default function CompareHome() {
 
       <div className="m-only" style={{ maxWidth: W.narrow, margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
-          <div style={{ background: `linear-gradient(160deg, ${c.purple}, ${c.navy})`, borderRadius: R.lg, boxShadow: SH.strong, padding: 14, textAlign: 'center' }}>
+          <div style={{ background: c.navy, borderRadius: R.lg, boxShadow: SH.strong, padding: 14, textAlign: 'center' }}>
             <img src={IMG.coverFront} {...dim(IMG.coverFront)} loading="lazy" decoding="async" alt="flip'nsleep Signature Cold Pillow" style={{ height: 90, objectFit: 'contain', filter: 'drop-shadow(0 10px 14px rgba(0,0,0,.35))' }} />
             <div style={{ fontFamily: FONT_DISPLAY, fontSize: T.sm[0], color: c.white, marginTop: 6 }}>flip<span style={{ color: c.amber }}>'</span>nsleep</div>
           </div>

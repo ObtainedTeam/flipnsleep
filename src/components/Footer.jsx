@@ -3,7 +3,7 @@ import { c, rv, FONT_SUB, R, T, LH, SP, W, CHIP } from '../theme';
 import { IMG, dim, PRODUCT, products } from '../data';
 import { NewsletterSignup } from './Blocks';
 
-const HEAD = { fontFamily: FONT_SUB, fontSize: T.xs[0], fontWeight: 600, marginBottom: 14, color: c.amber, letterSpacing: '0.08em', textTransform: 'uppercase' };
+const HEAD = { fontFamily: FONT_SUB, fontSize: T.xs[0], fontWeight: 600, marginBottom: 14, color: c.amber, letterSpacing: 0 };
 const LINK = { display: 'block', color: c.lilac, fontSize: T.sm[0], lineHeight: LH.head, marginBottom: 10 };
 const LINE = '1px solid rgba(255,255,255,.14)';
 const PILL = { ...CHIP, fontSize: T.xs[0], padding: '5px 12px', fontWeight: 600, background: 'rgba(255,255,255,.08)', color: c.white, border: '1px solid rgba(255,255,255,.18)' };

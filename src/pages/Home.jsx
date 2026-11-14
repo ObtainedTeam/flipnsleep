@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import { Check } from 'lucide-react';
+import Ico from '../components/Ico.jsx';
 import { Link } from 'react-router-dom';
 import { c, BTN, BTNO, ON_DARK, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD, CHIP } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { PRODUCT, BUNDLES, IMG, dim, UGC_VIDEOS } from '../data';
 import { UGC_BIG, VIDEO_REVIEWS, EXAMPLE_REVIEWS } from '../data/home-content';
 import { CartContext } from '../components/Cart';
-import { buyNow } from '../shopify';
 import Reveal from '../components/Reveal';
 import { ReviewsBlock, FAQBlock, TrustAccordion, PillowDeck, ShippingCountdown, ProductGrid, VideoRow } from '../components/Blocks';
 import PillowQuiz from '../components/PillowQuiz';
@@ -30,21 +31,21 @@ export default function Home({ onCartOpen }) {
       <HomeHero />
 
       {/* ============ PRODUCT CARD + OFFER ============ */}
-      <Reveal className="r-mt" style={{ position: 'relative', zIndex: 2, ...rv('mt', -84, -50) }}><section id="offer" className="r-mw r-mar r-disp" style={{ ...rv('mw', W.page, W.narrow), ...rv('mar', '0 auto 64px', '0 16px 48px'), background: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 100%)`, borderRadius: R.lg, overflow: 'hidden', boxShadow: SH.strong, ...rv('disp', 'grid', 'block'), gridTemplateColumns: '1.05fr 1fr' }}>
+      <Reveal className="r-mt" style={{ position: 'relative', zIndex: 2, ...rv('mt', -84, -50) }}><section id="offer" className="r-mw r-mar r-disp" style={{ ...rv('mw', W.page, W.narrow), ...rv('mar', '0 auto 64px', '0 16px 48px'), background: c.sky, borderRadius: R.lg, overflow: 'hidden', boxShadow: SH.strong, ...rv('disp', 'grid', 'block'), gridTemplateColumns: '1.05fr 1fr' }}>
         <div className="r-pad" style={{ ...rv('pad', 28, 16), position: 'relative', display: 'flex', alignItems: 'center' }}>
           <PillowDeck count={bundle.pillows} height={[460, 230]} radius={R.lg} bg="transparent" priority />
-          <span className="r-top r-left r-fs r-pad" style={{ position: 'absolute', ...rv('top', 44, 28), ...rv('left', 44, 28), zIndex: 20, background: c.amber, color: c.navy, fontWeight: 700, ...rv('fs', ...T.sm), borderRadius: R.pill, ...rv('pad', '9px 20px', '7px 16px'), boxShadow: SH.btn }}>{bundle.short}</span>
+          <span className="r-top r-left r-fs r-pad" style={{ position: 'absolute', ...rv('top', 44, 28), ...rv('left', 44, 28), zIndex: 20, background: c.white, color: c.navy, fontWeight: 600, ...rv('fs', ...T.sm), borderRadius: 8, ...rv('pad', '6px 12px', '6px 12px') }}>{bundle.short}</span>
         </div>
-        <div className="r-bg r-pad" style={{ ...rv('bg', `linear-gradient(135deg, ${c.purple}, ${c.navy})`, `linear-gradient(180deg, ${c.purple}, ${c.navy})`), color: c.white, ...rv('pad', 40, SP.card[1]), display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, marginBottom: 6, textShadow: SH.text }}>{PRODUCT.name}</h2>
+        <div className="r-bg r-pad" style={{ ...rv('bg', c.navy, c.navy), color: c.white, ...rv('pad', 40, SP.card[1]), display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, marginBottom: 8 }}>{PRODUCT.name}</h2>
           <div className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h3), color: c.amber }}>
             {formatPrice(price, symbol)} <span style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 400, fontSize: T.sm[0], color: c.lilac, opacity: .6 }}>{formatPrice(compare, symbol)}</span>
           </div>
-          <div style={{ margin: '8px 0 2px', fontSize: T.sm[0], color: c.lilac }}>🌙 100-night sleep trial · 🛡️ 2-year warranty</div>
+          <div style={{ margin: '8px 0 2px', fontSize: T.sm[0], color: c.lilac }}>100-night sleep trial, 2-year warranty</div>
           <ul style={{ listStyle: 'none', margin: '16px 0 6px' }}>
             {PRODUCT.usps.map((u, i) => (
               <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: T.sm[0], lineHeight: LH.body, marginBottom: 8 }}>
-                <img src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" style={{ height: 14, marginTop: 3 }} />{u}
+                <Check size={16} strokeWidth={2} aria-hidden="true" style={{ flexShrink: 0, marginTop: 4, color: c.amber }} />{u}
               </li>
             ))}
           </ul>
@@ -56,22 +57,21 @@ export default function Home({ onCartOpen }) {
               <div key={b.id} role="button" tabIndex={0}
                 onClick={() => setSelected(b.id)}
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected(b.id); } }}
-                style={{ display: 'flex', alignItems: 'center', gap: 10, background: active ? 'rgba(255,255,255,.24)' : 'rgba(255,255,255,.12)', border: `2px solid ${active ? c.amber : 'transparent'}`, borderRadius: R.sm, padding: '14px 16px', marginTop: 12, cursor: 'pointer', transition: 'all .15s' }}>
+                style={{ display: 'flex', alignItems: 'center', gap: 10, background: active ? 'rgba(255,255,255,.24)' : 'rgba(255,255,255,.12)', border: `2px solid ${active ? c.amber : 'transparent'}`, borderRadius: R.sm, padding: '14px 16px', marginTop: 12, cursor: 'pointer', transition: 'background-color .15s, border-color .15s' }}>
                 <div>
                   <div style={{ fontWeight: 700, fontSize: T.sm[0], fontFamily: FONT_SUB }}>{b.label}</div>
                   <div style={{ fontSize: T.sm[0] }}>{formatPrice(p, symbol)} <s style={{ opacity: .6, marginLeft: 6 }}>{formatPrice(cm, symbol)}</s></div>
                 </div>
-                <span style={{ ...CHIP, marginLeft: 'auto', background: c.navy, color: c.white, fontSize: T.xs[0] }}>Save {formatPrice(cm - p, symbol)}</span>
+                <span style={{ marginLeft: 'auto', fontSize: T.xs[0], color: c.amber, fontWeight: 600 }}>Save {formatPrice(cm - p, symbol)}</span>
               </div>
             );
           })}
           <div style={{ textAlign: 'center', marginTop: 16 }}><ShippingCountdown /></div>
           <div className="row-m-col" style={{ display: 'flex', gap: 12, marginTop: 16, justifyContent: 'center' }}>
-            <button onClick={() => buyNow(selected)} style={{ ...BTN, flex: '1 0 auto' }}>Order your Cold Pillow now</button>
-            <button onClick={addToCart} className="r-flex" style={{ ...BTNO, ...ON_DARK, ...rv('flex', '0 0 auto', '0 1 auto') }}>Add to cart</button>
+            <button onClick={addToCart} style={{ ...BTN, flex: '1 0 auto' }}>Add to cart</button>
           </div>
           <div style={{ textAlign: 'center', marginTop: 16 }}>
-            <Link to="/product/signature-cold-pillow" style={{ color: c.white, fontSize: T.sm[0], fontWeight: 600, fontFamily: FONT_SUB, textDecoration: 'underline', textUnderlineOffset: 3, opacity: .9 }}>See full product details →</Link>
+            <Link to="/product/signature-cold-pillow" style={{ color: c.white, fontSize: T.sm[0], fontWeight: 600, fontFamily: FONT_SUB, textDecoration: 'underline', textUnderlineOffset: 4 }}>See full product details</Link>
           </div>
         </div>
       </section>
@@ -83,7 +83,7 @@ export default function Home({ onCartOpen }) {
       </div></Reveal>
 
       {/* ============ EMPATHY / NIGHT (breed publiek) ============ */}
-      <section className="r-pad" style={{ background: `linear-gradient(180deg, ${c.night} 0%, ${c.navy} 100%)`, color: c.white, ...rv('pad', ...SP.section), position: 'relative', overflow: 'hidden' }}>
+      <section className="r-pad" style={{ background: c.night, color: c.white, ...rv('pad', ...SP.section), position: 'relative', overflow: 'hidden' }}>
         <img src={IMG.night} {...dim(IMG.night)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: .28 }} />
         <Reveal><div style={{ position: 'relative', maxWidth: W.text, margin: '0 auto', textAlign: 'center' }}>
           <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.head, textShadow: SH.text }}>
@@ -128,7 +128,7 @@ export default function Home({ onCartOpen }) {
             ['🛏️', 'Comfort you control', 'Your pillow and bedding are the part of a good night you can actually change tonight.'],
           ].map(([icon, t, s], i) => (
             <div key={i} className="card-hover r-pad" style={{ ...CARD, ...rv('pad', ...SP.card) }}>
-              <div style={{ fontSize: T.h3[0], marginBottom: 12 }}>{icon}</div>
+              <div style={{ marginBottom: 12, color: c.navy }}><Ico e={icon} size={24} /></div>
               <h3 className="r-fs" style={{ fontFamily: FONT_SUB, ...rv('fs', ...T.h4), fontWeight: 600, color: c.navy, marginBottom: 8, lineHeight: LH.head }}>{t}</h3>
               <p className="r-fs" style={{ ...rv('fs', ...T.sm), lineHeight: LH.body, color: c.grayD }}>{s}</p>
             </div>
@@ -161,7 +161,7 @@ export default function Home({ onCartOpen }) {
       </section></Reveal>
 
       {/* ============ FINAL CTA (breder) ============ */}
-      <section className="r-pad" style={{ background: `linear-gradient(180deg, ${c.navy}, ${c.purple})`, color: c.white, textAlign: 'center', ...rv('pad', ...SP.section), position: 'relative', overflow: 'hidden' }}>
+      <section className="r-pad" style={{ background: c.navy, color: c.white, textAlign: 'center', ...rv('pad', ...SP.section), position: 'relative', overflow: 'hidden' }}>
         <img src={IMG.logoMark} {...dim(IMG.logoMark)} loading="lazy" decoding="async" alt="" aria-hidden="true" className="r-left" style={{ position: 'absolute', ...rv('left', '8%', -30), bottom: -20, height: 160, opacity: .25 }} />
         <Reveal><div style={{ position: 'relative' }}>
           <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.display), lineHeight: LH.tight, textShadow: SH.text }}>Your coolest night<span className="r-fs" style={{ display: 'block', ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.sky2, fontFamily: FONT_SUB }}>starts tonight.</span></h2>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Ico from './Ico.jsx';
 import { Link } from 'react-router-dom';
 import { c, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
@@ -121,7 +122,7 @@ export default function Cart({ isOpen, onClose }) {
         </header>
 
         <div style={{ background: c.sky, borderBottom: '1px solid rgba(32,27,93,.10)', padding: '10px 20px', fontSize: T.xs[0], fontWeight: 600, color: c.navy }}>
-          🚚 Free shipping on every order, always included
+          <Ico e="🚚" size={16} /> Free shipping on every order, always included
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: 16 }}>
@@ -143,7 +144,7 @@ export default function Cart({ isOpen, onClose }) {
                   <button onClick={l.inc} style={{ width: 26, height: 26, background: 'none', border: `1px solid ${c.navy}22`, borderRadius: R.sm, cursor: 'pointer' }}>+</button>
                 </div>
               </div>
-              <button onClick={l.del} aria-label="Remove" style={{ background: 'none', border: 'none', cursor: 'pointer', color: c.gray, fontSize: T.sm[0], alignSelf: 'flex-start' }}>🗑</button>
+              <button onClick={l.del} aria-label="Remove" style={{ background: 'none', border: 'none', cursor: 'pointer', color: c.gray, fontSize: T.sm[0], alignSelf: 'flex-start' }}><Ico e="🗑" size={16} /></button>
             </div>
           ))}
 
@@ -159,7 +160,7 @@ export default function Cart({ isOpen, onClose }) {
           {/* Cross-sell: bijbehorende deken / lakens */}
           {lines.length > 0 && recs.length > 0 && (
             <div style={{ marginTop: 8 }}>
-              <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.grayD, letterSpacing: .4, textTransform: 'uppercase', margin: '16px 2px 8px', fontFamily: FONT_SUB }}>Complete your bed</div>
+              <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.grayD,  margin: '16px 2px 8px', fontFamily: FONT_SUB }}>Complete your bed</div>
               {recs.map(r => {
                 const rp = getPrice(r, isCA);
                 return (

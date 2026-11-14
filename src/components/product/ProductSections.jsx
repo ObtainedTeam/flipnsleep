@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Ico from '../Ico.jsx';
 import { Link } from 'react-router-dom';
 import { c, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD, CHIP, BTN_SM, BTNO } from '../../theme';
 import { BUNDLES, dim } from '../../data';
@@ -86,7 +87,7 @@ export function ExplainAccordion({ eyebrow, title, intro, items, chips }) {
           <h2 className="r-fs" style={{ ...H2S, margin: '8px 0 16px' }}>{title}</h2>
           {intro && <p className="r-fs" style={{ ...rv('fs', ...T.md), color: c.grayD, lineHeight: LH.body }}>{intro}</p>}
           {chips && <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 }}>
-            {chips.map((h, i) => <span key={i} style={{ ...CHIP, background: c.sky, color: c.navy }}>{h.icon} {h.label}</span>)}
+            {chips.map((h, i) => <span key={i} style={{ ...CHIP, background: c.sky, color: c.navy }}><Ico e={h.icon} size={16} /> {h.label}</span>)}
           </div>}
         </div></Reveal>
         <Reveal delay={100}><Accordion items={items} /></Reveal>
@@ -108,7 +109,7 @@ export function Bento({ rows, eyebrow, title }) {
       <div style={{ display: 'grid', ...rv('gap', 64, 40) }} className="r-gap">
         {rows.map((r, i) => (
           <div key={i} className={`pd-bento-row r-gap${i % 2 ? ' is-rev' : ''}`} style={rv('gap', 56, 20)}>
-            <Reveal className="pd-bento-media"><div style={{ position: 'relative', aspectRatio: '4 / 3', borderRadius: R.lg, overflow: 'hidden', boxShadow: SH.card, background: `linear-gradient(160deg, ${c.sky} 0%, ${c.sky2} 100%)` }}>
+            <Reveal className="pd-bento-media"><div style={{ position: 'relative', aspectRatio: '4 / 3', borderRadius: R.lg, overflow: 'hidden', boxShadow: SH.card, background: c.sky }}>
               {r.video
                 ? <MutedVideo src={r.video} poster={r.image} />
                 : <img src={r.image} {...dim(r.image)} loading="lazy" decoding="async" alt={r.title} style={{ position: 'absolute', inset: '10%', width: '80%', height: '80%', objectFit: 'contain', filter: 'drop-shadow(0 18px 24px rgba(32,27,93,.20))' }} />}
@@ -128,8 +129,8 @@ export function Bento({ rows, eyebrow, title }) {
 // Split-beeldpaar over de volle breedte, met onderschrift linksonder
 // ---------------------------------------------------------------------------
 const SPLIT_BG = {
-  sky: `linear-gradient(180deg, ${c.sky} 0%, ${c.sky2} 55%, ${c.skyDeep} 100%)`,
-  lilac: `linear-gradient(180deg, ${c.cream} 0%, ${c.lilac} 100%)`,
+  sky: c.sky,
+  lilac: c.lilac,
 };
 export function SplitImages({ items }) {
   return (
@@ -278,7 +279,7 @@ export function CompleteYourBed({ items }) {
           const price = o.pillow ? getPrice(BUNDLES[0], isCA) : getPrice(o.product, isCA);
           return (
             <Reveal key={o.id} delay={i * 70}><Link to={`/product/${o.id}`} className="card-hover" style={{ textDecoration: 'none', ...CARD, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}>
-              <div style={{ position: 'relative', aspectRatio: '4 / 3', background: o.contain ? `linear-gradient(160deg, ${c.sky} 0%, ${c.sky2} 100%)` : c.cream, overflow: 'hidden' }}>
+              <div style={{ position: 'relative', aspectRatio: '4 / 3', background: o.contain ? c.sky : c.cream, overflow: 'hidden' }}>
                 <img src={o.image} {...dim(o.image)} loading="lazy" decoding="async" alt={o.name} style={o.contain
                   ? { position: 'absolute', inset: '12%', width: '76%', height: '76%', objectFit: 'contain', filter: 'drop-shadow(0 12px 16px rgba(32,27,93,.20))' }
                   : { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />

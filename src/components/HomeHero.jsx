@@ -39,7 +39,7 @@ export default function HomeHero() {
           </p>
           <div className="home-hero-ctas">
             <Link to={HERO.cta.to} style={BTN}>{HERO.cta.label}</Link>
-            <Link to={HERO.quiz.to} className="nav-link" style={{ color: c.white, fontWeight: 700, fontSize: T.sm[0], letterSpacing: '0.06em', textTransform: 'uppercase', textShadow: SH.textHero, padding: '12px 4px' }}>{HERO.quiz.label}</Link>
+            <Link to={HERO.quiz.to} className="nav-link" style={{ color: c.white, fontWeight: 700, fontSize: T.sm[0], letterSpacing: 0, textShadow: SH.textHero, padding: '12px 4px' }}>{HERO.quiz.label}</Link>
           </div>
           <ul className="home-hero-trust" style={{ listStyle: 'none', margin: '28px 0 0', padding: 0 }}>
             {HERO.trust.map(([icon, label]) => (
