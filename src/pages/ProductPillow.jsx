@@ -21,6 +21,15 @@ export default function ProductPillow({ onCartOpen }) {
   const [selected, setSelected] = useState('1p1');
   const [img, setImg] = useState(0);
   const buyRef = useRef(null);
+  // Galerij: vorige/volgende met knoppen, pijltjestoetsen op de knoppen en vegen op mobiel.
+  const thumbsRef = useRef(null);
+  const touchX = useRef(null);
+  const total = PRODUCT.gallery.length;
+  const step = (d) => setImg((i) => (i + d + total) % total);
+  useEffect(() => {
+    const strip = thumbsRef.current, el = strip?.children[img];
+    if (el) strip.scrollTo({ left: el.offsetLeft - strip.clientWidth / 2 + el.clientWidth / 2, behavior: 'smooth' });
+  }, [img]);
   useEffect(() => { trackViewContent({ content_type: 'product', content_name: 'flipnsleep-pillow' }); }, []);
   const rvw = useReviews();
   const hasReviews = !!(rvw && rvw.count > 0);
@@ -50,14 +59,23 @@ export default function ProductPillow({ onCartOpen }) {
       <section className="r-pad r-cols r-gap pd-top" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', 'minmax(0, 1.05fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24) }}>
         {/* Gallery: sticky op desktop tot het eind van de koopsectie */}
         <div className="pd-sticky"><Reveal><div>
-          <div style={{ aspectRatio: '1 / 1', borderRadius: R.lg, overflow: 'hidden', background: c.sky }}>
+          <div className="pd-gallery" role="group" aria-roledescription="carousel" aria-label="Product photos"
+            onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }}
+            onTouchEnd={(e) => { const d = e.changedTouches[0].clientX - (touchX.current ?? 0); touchX.current = null; if (Math.abs(d) > 40) step(d < 0 ? 1 : -1); }}
+            style={{ position: 'relative', aspectRatio: '1 / 1', borderRadius: R.lg, overflow: 'hidden', background: c.sky }}>
             <img key={img} src={PRODUCT.gallery[img][0]} {...dim(PRODUCT.gallery[img][0])} {...rs(PRODUCT.gallery[img][0], '(max-width: 759px) 100vw, 600px')} fetchPriority={img === 0 ? 'high' : undefined} decoding="async" alt={PRODUCT.gallery[img][1]} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            {[[-1, 'Previous photo', 'M15 5l-7 7 7 7'], [1, 'Next photo', 'M9 5l7 7-7 7']].map(([d, label, path]) => (
+              <button key={label} type="button" onClick={() => step(d)} aria-label={label} className="pd-gallery-nav" style={{ [d < 0 ? 'left' : 'right']: 12 }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={path} /></svg>
+              </button>
+            ))}
+            <span aria-live="polite" className="pd-gallery-count">{img + 1} / {total}</span>
           </div>
-          <div className="thumbs">
+          <div className="thumbs" ref={thumbsRef}>
             {PRODUCT.gallery.map(([src, alt], i) => (
               <button key={src} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}: ${alt}`} aria-pressed={i === img}
                 style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: R.sm, padding: 0, cursor: 'pointer', background: c.sky, flexShrink: 0, overflow: 'hidden' }}>
-                <img src={src.replace('.webp', '-480.webp')} width={72} height={72} loading="lazy" decoding="async" alt="" style={{ width: 72, height: 72, objectFit: 'cover', display: 'block' }} />
+                <img src={src.replace('.webp', '-480.webp')} width={64} height={64} loading="lazy" decoding="async" alt="" style={{ width: 64, height: 64, objectFit: 'cover', display: 'block' }} />
               </button>
             ))}
           </div>

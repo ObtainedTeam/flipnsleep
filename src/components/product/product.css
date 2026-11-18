@@ -40,3 +40,13 @@
 }
 
 .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Galerij: vorige/volgende-knoppen en teller op de hoofdfoto */
+.pd-gallery-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 999px; border: 0; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  background: rgba(255,255,255,.92); color: #201B5D; box-shadow: 0 2px 8px rgba(32,27,93,.18); transition: background-color .15s ease; }
+.pd-gallery-nav:hover { filter: none; background: #fff; }
+.pd-gallery-nav:active { transform: translateY(-50%) scale(.96); }
+.pd-gallery-count { position: absolute; right: 12px; bottom: 12px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.92); color: #201B5D;
+  font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.pd-gallery { touch-action: pan-y; }
