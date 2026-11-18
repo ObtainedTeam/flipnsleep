@@ -6,6 +6,7 @@ export const VARIANTS = new Set([
   "/images/flip-warm.webp",
   "/images/gallery-compare.webp",
   "/images/gallery-flip.webp",
+  "/images/gallery-hero.webp",
   "/images/gallery-size.webp",
   "/images/gallery-special.webp",
   "/images/gallery-steps.webp",
