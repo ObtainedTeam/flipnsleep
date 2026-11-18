@@ -101,6 +101,12 @@ export const IMG_DIM = {
   "/images/weighted-2.webp": [750, 750],
   "/images/weighted-4.webp": [750, 750],
   "/images/weighted-5.webp": [1300, 1201],
+  "/images/gallery-compare.webp": [1600, 1600],
+  "/images/gallery-flip.webp": [1600, 1600],
+  "/images/gallery-size.webp": [1600, 1600],
+  "/images/gallery-special.webp": [1600, 1600],
+  "/images/gallery-steps.webp": [1600, 1600],
+  "/images/gallery-wash.webp": [1600, 1600],
   "/images/weighted-hero.webp": [500, 415],
 };
 // Gebruik: <img src={src} {...dim(src)} />
@@ -126,6 +132,15 @@ export const PRODUCT = {
   // Ankerprijs per kussen — doorgestreept naast elk aanbod.
   anchorPerPillow: { usd: 109.99, cad: 151 },
   images: [IMG.coverFront, IMG.coverDuo, IMG.coverInside, IMG.coverBack],
+  // Productfoto's op de kussenpagina (vierkant, met tekst in beeld): [bestand, alt-tekst].
+  gallery: [
+    ["/images/gallery-flip.webp", "Two sides, one pillow: a cool-touch side for warm nights and a soft bamboo side for colder nights"],
+    ["/images/gallery-special.webp", "What makes it special: flip to cool, adjustable fill, breathable shredded foam, washable cover, OEKO-TEX Standard 100 and CertiPUR-US"],
+    ["/images/gallery-steps.webp", "Ready in 3 steps: unpack and fluff, take out a few handfuls of foam, sleep on it"],
+    ["/images/gallery-compare.webp", "flip'nsleep compared with an ordinary pillow: flip-to-cool side, adjustable height, breathable foam, washable cover, 100-night trial"],
+    ["/images/gallery-size.webp", "Size guide: 50 cm by 76 cm (20 in by 30 in), US standard size with a removable cover"],
+    ["/images/gallery-wash.webp", "The cover comes off and goes in the washing machine at 40°C / 104°F; the foam stays out"],
+  ],
   usps: [
     "50 × 76 cm (20 × 30 in), shredded memory foam filling",
     "Adjust the filling to your sleeping position",

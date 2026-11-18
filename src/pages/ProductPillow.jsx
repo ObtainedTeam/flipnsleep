@@ -7,7 +7,7 @@ import { buyNow } from '../shopify';
 import { trackAddToCart, trackViewContent } from '../track';
 import Reveal from '../components/Reveal';
 import PillowQuiz from '../components/PillowQuiz';
-import { Stars, FAQBlock, TrustAccordion, ProductImageBlock, ShippingCountdown, CompareCards } from '../components/Blocks';
+import { Stars, FAQBlock, TrustAccordion, ShippingCountdown, CompareCards } from '../components/Blocks';
 import StickyBuyBar from '../components/StickyBuyBar';
 import LookInside from '../components/product/LookInside.jsx';
 import { useReviews, GalleryReview, ExplainAccordion, Bento, SplitImages, DesignedForSleep, HotSleeperStats, ProductReviews, CompleteYourBed, padBottom } from '../components/product/ProductSections';
@@ -50,12 +50,14 @@ export default function ProductPillow({ onCartOpen }) {
       <section className="r-pad r-cols r-gap pd-top" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 56px', '24px 20px 40px'), display: 'grid', ...rv('cols', 'minmax(0, 1.05fr) minmax(0, 1fr)', 'minmax(0, 1fr)'), ...rv('gap', 56, 24) }}>
         {/* Gallery: sticky op desktop tot het eind van de koopsectie */}
         <div className="pd-sticky"><Reveal><div>
-          <ProductImageBlock src={PRODUCT.images[img]} alt={PRODUCT.name} height={[460, 320]} radius={R.lg} priority />
+          <div style={{ aspectRatio: '1 / 1', borderRadius: R.lg, overflow: 'hidden', background: c.sky }}>
+            <img key={img} src={PRODUCT.gallery[img][0]} {...dim(PRODUCT.gallery[img][0])} {...rs(PRODUCT.gallery[img][0], '(max-width: 759px) 100vw, 600px')} fetchPriority={img === 0 ? 'high' : undefined} decoding="async" alt={PRODUCT.gallery[img][1]} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
           <div className="thumbs">
-            {PRODUCT.images.map((src, i) => (
-              <button key={i} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}`}
+            {PRODUCT.gallery.map(([src, alt], i) => (
+              <button key={src} onClick={() => setImg(i)} aria-label={`Photo ${i + 1}: ${alt}`} aria-pressed={i === img}
                 style={{ border: `2px solid ${i === img ? c.navy : 'transparent'}`, borderRadius: R.sm, padding: 0, cursor: 'pointer', background: c.sky, flexShrink: 0, overflow: 'hidden' }}>
-                <img src={src} {...dim(src)} {...rs(src, '64px')} loading="lazy" decoding="async" alt="" style={{ width: 64, height: 64, objectFit: 'cover', display: 'block' }} />
+                <img src={src.replace('.webp', '-480.webp')} width={72} height={72} loading="lazy" decoding="async" alt="" style={{ width: 72, height: 72, objectFit: 'cover', display: 'block' }} />
               </button>
             ))}
           </div>
