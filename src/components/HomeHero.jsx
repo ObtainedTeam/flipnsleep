@@ -1,58 +1,39 @@
-import { useRef } from 'react';
-import { useLazyVideo, videoHtml } from '../lazyVideo';
 import { Link } from 'react-router-dom';
-import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH, CHIP } from '../theme';
 import { HERO } from '../data/home-content';
+import { IMG, BUNDLES, dim, rs } from '../data';
+import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
+import { Cloud, CloudStrip } from './Sky';
 
-// Kleine lijn-iconen voor de trustrij in de hero.
-const ICONS = {
-  moon: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" />,
-  truck: <><path d="M3 6h11v9H3z" /><path d="M14 9h4l3 3v3h-7" /><circle cx="7" cy="17" r="1.8" /><circle cx="17" cy="17" r="1.8" /></>,
-  shield: <><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" /><path d="M9 12l2 2 4-4" /></>,
-};
-
+// Hero als papieren hemel, zoals op de productfoto's: één hemelkaart met de
+// zwevende kussens, de maan, drijvende wolken en de wolkenrand onderaan.
+// Geen video meer; het kussenbeeld is de LCP en laadt met voorrang.
 export default function HomeHero() {
-  // Video pas na de paginalading: eerst telt de poster (LCP), daarna start de film.
-  const ref = useRef(null);
-  useLazyVideo(ref, { afterLoad: true });
-
+  const { symbol, isCA } = useCurrency();
+  const deal = formatPrice(getPrice(BUNDLES[0], isCA), symbol);
   return (
-    <section className="home-hero r-mh r-jc r-pad" style={{ ...rv('mh', 720, 600), display: 'flex', flexDirection: 'column', ...rv('jc', 'center', 'flex-start'), ...rv('pad', '50px 40px 120px', '40px 20px 84px'), position: 'relative', overflow: 'hidden' }}>
-      {/* Achtergrondvideo: mobiel krijgt de kleine variant, geladen na de poster. */}
-      <div ref={ref} aria-hidden="true" style={{ position: 'absolute', inset: 0 }} dangerouslySetInnerHTML={{ __html:
-        videoHtml({ src: '/videos/hero.mp4', srcMobile: '/videos/hero-mobile.mp4' })
-      }} />
-      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,0.30)' }} />
-      {/* Extra verloop achter de linkse tekst (desktop) of onderin (mobiel) */}
-      <div aria-hidden="true" className="home-hero-shade" />
-
-      <div className="home-hero-inner" style={{ position: 'relative', width: '100%', maxWidth: 1100, margin: '0 auto' }}>
-        <div className="home-hero-copy">
-          <span style={{ ...CHIP, background: 'rgba(255,255,255,.16)', color: c.white, border: '1px solid rgba(255,255,255,.45)', fontSize: T.xs[0], letterSpacing: '0.04em', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', whiteSpace: 'normal' }}>
-            {HERO.eyebrow}
-          </span>
-          <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, fontWeight: 400, ...rv('fs', 64, 40), color: c.white, margin: '18px 0 16px', lineHeight: LH.tight, textShadow: SH.textHero }}>
-            {HERO.title[0]}<br /><span style={{ color: c.amber }}>{HERO.title[1]}</span>
-          </h1>
-          <p className="r-fs home-hero-sub" style={{ ...rv('fs', ...T.lg), lineHeight: LH.body, color: c.white, textShadow: SH.textHero, fontFamily: FONT_SUB, margin: '0 0 28px' }}>
-            {HERO.sub}
-          </p>
-          <div className="home-hero-ctas">
-            <Link to={HERO.cta.to} style={BTN}>{HERO.cta.label}</Link>
-            <Link to={HERO.quiz.to} className="nav-link" style={{ color: c.white, fontWeight: 700, fontSize: T.sm[0], letterSpacing: '0.06em', textTransform: 'uppercase', textShadow: SH.textHero, padding: '12px 4px' }}>{HERO.quiz.label}</Link>
+    <section className="sk-hero-sec"><div className="sk-wrap">
+      <div className="sk-hero">
+        <div className="sk-hero-copy">
+          <span className="sk-kicker">{HERO.eyebrow}</span>
+          <h1 className="sk-h1">{HERO.title[0]}<br />{HERO.title[1]}</h1>
+          <p className="sk-lead">{HERO.sub}</p>
+          <div className="sk-hero-cta">
+            <Link className="sk-btn" to={HERO.cta.to}>{HERO.cta.label}</Link>
+            <Link className="sk-tlink" to={HERO.quiz.to}>{HERO.quiz.label}</Link>
           </div>
-          <ul className="home-hero-trust" style={{ listStyle: 'none', margin: '28px 0 0', padding: 0 }}>
-            {HERO.trust.map(([icon, label]) => (
-              <li key={label} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: c.white, fontSize: T.sm[0], fontWeight: 600, fontFamily: FONT_SUB, textShadow: SH.text, whiteSpace: 'nowrap' }}>
-                <span aria-hidden="true" style={{ width: 30, height: 30, borderRadius: R.pill, background: 'rgba(255,255,255,.16)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={c.amber} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{ICONS[icon]}</svg>
-                </span>
-                {label}
-              </li>
-            ))}
-          </ul>
+          <p className="sk-hero-note">Two pillows for {deal}, {HERO.note}</p>
         </div>
+        <div className="sk-stage" aria-hidden="true">
+          <i className="is-disc" />
+          <Cloud className="is-c1 sk-drift" />
+          <Cloud className="is-c2 sk-drift" />
+          <img className="is-moon sk-rock" src={IMG.logoMark} {...dim(IMG.logoMark)} decoding="async" alt="" />
+          <img className="is-pillows sk-bob" src={IMG.coverDuo} {...dim(IMG.coverDuo)} {...rs(IMG.coverDuo, '(max-width: 899px) 84vw, 540px')} fetchPriority="high" decoding="async" alt="" />
+          <span className="sk-sticker sk-bob"><Cloud /><b>1+1 free</b></span>
+        </div>
+        <div className="sk-hero-pad" />
+        <CloudStrip className="sk-hero-strip" eager />
       </div>
-    </section>
+    </div></section>
   );
 }

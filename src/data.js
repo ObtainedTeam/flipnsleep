@@ -45,6 +45,13 @@ export const IMG = {
   ugc2: "/images/ugc-2.webp",
   ugc3: "/images/ugc-3.webp",
   ugc4: "/images/ugc-4.webp",
+  // Redesign nov 2026: uitsnedes uit de productfoto's en de laagbeelden.
+  specialModel: "/images/special-model.webp",
+  step1: "/images/step-1.webp",
+  step2: "/images/step-2.webp",
+  step3: "/images/step-3.webp",
+  cloudsUpEdge: "/images/clouds-up-1600.webp",
+  cloudsDownEdge: "/images/clouds-down-1600.webp",
 };
 
 // Intrinsieke afmetingen van elke afbeelding (voor width/height-attributen,
@@ -109,6 +116,12 @@ export const IMG_DIM = {
   "/images/gallery-steps.webp": [1600, 1600],
   "/images/gallery-wash.webp": [1600, 1600],
   "/images/weighted-hero.webp": [500, 415],
+  "/images/special-model.webp": [800, 1701],
+  "/images/step-1.webp": [600, 860],
+  "/images/step-2.webp": [600, 860],
+  "/images/step-3.webp": [600, 862],
+  "/images/clouds-up-1600.webp": [1600, 203],
+  "/images/clouds-down-1600.webp": [1600, 180],
 };
 // Gebruik: <img src={src} {...dim(src)} />
 export const dim = (src) => {
@@ -153,7 +166,7 @@ export const PRODUCT = {
     ["Size", "50 × 76 cm (20 × 30 in, US standard)"],
     ["Filling", "Recycled shredded memory foam, 35–40D"],
     ["Cool side", "Cool-touch fabric, tested Q-max cooling value 0.26"],
-    ["Warm side", "Soft bamboo fiber fabric"],
+    ["Cozy side", "Soft bamboo fiber fabric"],
     ["Cover", "Removable and machine-washable at 40°C / 104°F (do not wash the foam)"],
     ["Certifications", "OEKO-TEX Standard 100 · CertiPUR-US certified foam"],
     ["Country of origin", "China"],

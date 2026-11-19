@@ -30,7 +30,7 @@ export function AppShell() {
         <ScrollToTop />
         <style>{`
           * { box-sizing: border-box; margin: 0; padding: 0; }
-          body { font-family: 'Poppins', sans-serif; background: ${c.cream}; color: ${c.navy}; overflow-x: hidden; }
+          body { font-family: 'Poppins', 'Poppins Fallback', sans-serif; background: ${c.white}; color: ${c.ink}; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
           a { color: inherit; }
           img { max-width: 100%; }
           summary::-webkit-details-marker { display: none; }

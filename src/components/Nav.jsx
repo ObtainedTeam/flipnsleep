@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { c, FONT_SUB, FONT_DISPLAY, R, SH, T, LH, W, BTN, CHIP, CARD } from '../theme';
+import { c, FONT_SUB, FONT_DISPLAY, R, SH, T, LH, W, BTN, CHIP } from '../theme';
 import { CartContext } from './Cart';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { IMG, PRODUCT, BUNDLES, productById, dim, rs } from '../data';
+import { Cloud } from './Sky';
 
 // Navigatie in cloudpillo-stijl: aankondigingsbalk + categoriemenu met
 // dropdownpanelen (desktop) en een drawer met accordeon (mobiel/tablet).
@@ -13,12 +14,12 @@ import { IMG, PRODUCT, BUNDLES, productById, dim, rs } from '../data';
 const pillowCard = (isCA) => ({
   to: `/product/${PRODUCT.id}`, name: PRODUCT.name, img: IMG.coverFront,
   price: getPrice(BUNDLES[0], isCA), compare: isCA ? BUNDLES[0].compareAt.cad : BUNDLES[0].compareAt.usd,
-  badge: 'Bestseller', from: true,
+  badge: 'Buy 1, get 1 free', from: true,
 });
 const bundleCard = (b, isCA) => ({
   to: `/product/${PRODUCT.id}`, name: b.short, sub: `${b.pillows} Signature Cold Pillows`, img: b.id === '2p2' ? IMG.coverDuo : b.image,
   price: getPrice(b, isCA), compare: isCA ? b.compareAt.cad : b.compareAt.usd,
-  badge: b.id === '2p2' ? 'Best value' : 'Our deal',
+  badge: b.short.replace('Get', 'get').replace('Free', 'free'),
 });
 const prodCard = (id, isCA) => {
   const p = productById(id);
@@ -40,7 +41,10 @@ const CATS = [
 
 const SECONDARY = [['/about', 'Our story'], ['/quiz', 'Quiz'], ['/faq', 'Help']];
 
-const LINE = `1px solid ${c.navy}1A`;
+const LINE = `1px solid ${c.line}`;
+
+// Lopende band bovenaan: dezelfde beloftes als voorheen, gescheiden door wolkjes.
+const MARQUEE = ['Buy 1, get 1 free on the Signature Cold Pillow', 'Free shipping across the US and Canada', '100-night trial', '2-year warranty', 'OEKO-TEX Standard 100 and CertiPUR-US'];
 const SOON_CHIP = { ...CHIP, fontSize: T.xs[0], padding: '3px 8px', fontWeight: 600 };
 
 // Nieuwsbrief: scroll naar het formulier op de pagina, of open de popup.
@@ -71,7 +75,7 @@ function Chevron({ open }) {
 
 function Price({ card, symbol, size = T.sm[0] }) {
   return (
-    <span style={{ fontSize: size, fontWeight: 700, color: c.navy }}>
+    <span style={{ fontSize: size, fontWeight: 600, color: c.navy, fontVariantNumeric: 'tabular-nums' }}>
       {card.from ? 'From ' : ''}{formatPrice(card.price, symbol)}
       {card.compare && <s style={{ fontWeight: 400, color: c.gray, fontSize: T.xs[0], marginLeft: 6 }}>{formatPrice(card.compare, symbol)}</s>}
     </span>
@@ -80,12 +84,12 @@ function Price({ card, symbol, size = T.sm[0] }) {
 
 function PanelCard({ card, symbol, onPick }) {
   return (
-    <Link to={card.to} onClick={onPick} className="card-hover" style={{ ...CARD, textDecoration: 'none', overflow: 'hidden', display: 'block' }}>
-      <div style={{ position: 'relative', background: c.sky, height: 150 }}>
+    <Link to={card.to} onClick={onPick} className="card-hover" style={{ textDecoration: 'none', display: 'block' }}>
+      <div style={{ position: 'relative', background: c.sky, height: 150, borderRadius: R.sm, overflow: 'hidden' }}>
         <img src={card.img} {...dim(card.img)} {...rs(card.img, '180px')} loading="lazy" decoding="async" alt="" style={{ width: '100%', height: '100%', objectFit: card.cover ? 'cover' : 'contain', display: 'block', padding: card.cover ? 0 : 10 }} />
-        <span style={{ ...CHIP, position: 'absolute', top: 10, left: 10, fontSize: T.xs[0], padding: '5px 10px', background: card.badge === 'Bestseller' ? c.amber : c.navy, color: card.badge === 'Bestseller' ? c.navy : c.white }}>{card.badge}</span>
+        <span style={{ ...CHIP, position: 'absolute', top: 10, left: 10, fontSize: T.xs[0], padding: '5px 10px', background: c.navy, color: c.white }}>{card.badge}</span>
       </div>
-      <div style={{ padding: '14px 16px 16px' }}>
+      <div style={{ padding: '12px 2px 4px' }}>
         <div style={{ fontFamily: FONT_SUB, fontWeight: 600, fontSize: T.sm[0], lineHeight: LH.head, color: c.navy, marginBottom: 4 }}>{card.name}</div>
         {card.sub && <div style={{ fontSize: T.xs[0], color: c.grayD, marginBottom: 4 }}>{card.sub}</div>}
         <Price card={card} symbol={symbol} />
@@ -99,7 +103,6 @@ export default function Nav({ onCartOpen }) {
   const [drawer, setDrawer] = useState(false);
   const [acc, setAcc] = useState(null);          // mobiel accordeon
   const [openCat, setOpenCat] = useState(null);  // desktop dropdown
-  const [scrolled, setScrolled] = useState(false);
   const [count, setCount] = useState(CartContext.count());
   const loc = useLocation();
   const headerRef = useRef(null);
@@ -110,13 +113,6 @@ export default function Nav({ onCartOpen }) {
     const update = () => setCount(CartContext.count());
     CartContext.subscribe(update);
     return () => CartContext.unsubscribe(update);
-  }, []);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   // Bij routewissel menu's sluiten (tijdens render, geen effect nodig)
@@ -152,22 +148,26 @@ export default function Nav({ onCartOpen }) {
   return (
     <>
       {/* Aankondigingsbalk: één regel, gecentreerd */}
-      <div style={{ background: c.navy, color: c.white, textAlign: 'center', padding: '9px 16px', fontSize: T.sm[0], lineHeight: LH.head, fontFamily: FONT_SUB }}>
-        <Link to={`/product/${PRODUCT.id}`} className="nav-link" style={{ color: c.white }}>
-          <b style={{ color: c.amber, fontWeight: 600 }}>Buy 1, Get 1 Free</b> on the Signature Cold Pillow<span className="d-only" style={{ display: 'inline' }}> · Free shipping to the US &amp; Canada</span>
-        </Link>
-      </div>
+      <Link to={`/product/${PRODUCT.id}`} className="sk-mq" aria-label={`${MARQUEE.join('. ')}. Shop the Signature Cold Pillow.`}>
+        <span className="sk-mq-track" aria-hidden="true">
+          {[0, 1].map(k => (
+            <span key={k} className="sk-mq-set">
+              {MARQUEE.map(t => <span key={t} style={{ display: 'contents' }}><span>{t}</span><Cloud /></span>)}
+            </span>
+          ))}
+        </span>
+      </Link>
 
       <header ref={headerRef} onMouseLeave={close}
-        style={{ position: 'sticky', top: 0, zIndex: 90, background: `${c.navy}EB`, backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: scrolled ? SH.card : 'none', transition: 'box-shadow .2s ease' }}>
+        style={{ position: 'sticky', top: 0, zIndex: 90, background: c.white, borderBottom: LINE }}>
         <div className="nav-bar" style={{ maxWidth: W.page + 80, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 16 }}>
           <button className="nav-sm" aria-label="Open menu" aria-expanded={drawer} aria-controls="nav-drawer" onClick={() => setDrawer(true)}
             style={{ background: 'none', border: 'none', cursor: 'pointer', flexDirection: 'column', gap: 5, padding: 8, marginLeft: -8 }}>
-            {[0, 1, 2].map(i => <i key={i} style={{ width: 22, height: 2, background: c.white, borderRadius: R.pill, display: 'block' }} />)}
+            {[0, 1, 2].map(i => <i key={i} style={{ width: 22, height: 2, background: c.navy, borderRadius: R.pill, display: 'block' }} />)}
           </button>
 
           <Link to="/" onMouseEnter={close} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            <img src={IMG.logoFull} {...dim(IMG.logoFull)} decoding="async" alt="flip'nsleep" className="nav-logo" style={{ width: 'auto' }} />
+            <img src={IMG.logoDark} {...dim(IMG.logoDark)} decoding="async" alt="flip'nsleep" className="nav-logo" style={{ width: 'auto' }} />
           </Link>
 
           {/* Desktop categorieën */}
@@ -182,9 +182,9 @@ export default function Nav({ onCartOpen }) {
                       onMouseEnter={() => setOpenCat(cat.key)}
                       onClick={(e) => setOpenCat(open && e.detail === 0 ? null : cat.key)}
                       className="nav-cat"
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', padding: '10px 10px', borderRadius: R.pill, color: open ? c.amber : c.white, fontFamily: FONT_SUB, fontSize: T.sm[0], letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: open ? c.sky : 'none', border: 'none', cursor: 'pointer', padding: '10px 12px', borderRadius: R.pill, color: c.navy, fontFamily: FONT_SUB, fontSize: T.sm[0], fontWeight: 500, whiteSpace: 'nowrap' }}>
                       {cat.label}
-                      {cat.soon && <span style={{ ...SOON_CHIP, background: `${c.white}24`, color: c.white }}>Soon</span>}
+                      {cat.soon && <span style={{ ...SOON_CHIP, background: c.sky, color: c.navy }}>Soon</span>}
                       <Chevron open={open} />
                     </button>
                   </li>
@@ -196,14 +196,14 @@ export default function Nav({ onCartOpen }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginLeft: 'auto' }} onMouseEnter={close}>
             <div className="nav-lg" style={{ gap: 20 }}>
               {SECONDARY.map(([to, label]) => (
-                <Link key={to} to={to} className="nav-link" style={{ color: loc.pathname === to ? c.amber : c.white, fontFamily: FONT_SUB, fontSize: T.sm[0], letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{label}</Link>
+                <Link key={to} to={to} className="nav-link" style={{ color: c.navy, fontFamily: FONT_SUB, fontSize: T.sm[0], fontWeight: 500, whiteSpace: 'nowrap', textDecoration: loc.pathname === to ? 'underline' : undefined }}>{label}</Link>
               ))}
             </div>
             <button aria-label={`Cart, ${count} item${count === 1 ? '' : 's'}`} onClick={onCartOpen}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', color: c.white, display: 'flex', padding: 6, marginRight: -6 }}>
+              style={{ background: 'none', border: 'none', cursor: 'pointer', position: 'relative', color: c.navy, display: 'flex', padding: 10, marginRight: -10 }}>
               <BagIcon />
               {count > 0 && (
-                <b style={{ position: 'absolute', top: -2, right: -4, minWidth: 18, height: 18, padding: '0 5px', background: c.amber, color: c.navy, fontSize: T.xs[0], lineHeight: 1, borderRadius: R.pill, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_SUB }}>{count}</b>
+                <b style={{ position: 'absolute', top: 2, right: 0, minWidth: 18, height: 18, padding: '0 5px', background: c.amber, color: c.navy, fontSize: T.xs[0], lineHeight: 1, borderRadius: R.pill, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: FONT_SUB }}>{count}</b>
               )}
             </button>
           </div>
@@ -225,7 +225,7 @@ export default function Nav({ onCartOpen }) {
                       <div>
                         <span style={{ ...SOON_CHIP, background: c.sky, color: c.navy, marginBottom: 8 }}>Coming soon</span>
                         <div style={{ fontFamily: FONT_DISPLAY, fontSize: T.h4[0], lineHeight: LH.head, color: c.navy, margin: '6px 0' }}>{cat.label}</div>
-                        <a href="#newsletter" onClick={(e) => { close(); openNewsletter(e); }} className="nav-link" style={{ fontSize: T.sm[0], fontWeight: 600, color: c.purple }}>Join the list to hear first →</a>
+                        <a href="#newsletter" onClick={(e) => { close(); openNewsletter(e); }} className="sk-tlink" style={{ fontSize: T.sm[0] }}>Join the list to hear first</a>
                       </div>
                     </div>
                   ) : (
@@ -233,7 +233,7 @@ export default function Nav({ onCartOpen }) {
                       <div>
                         <div style={{ fontFamily: FONT_DISPLAY, fontSize: T.h4[0], lineHeight: LH.head, color: c.navy, marginBottom: 8 }}>{cat.label}</div>
                         <p style={{ fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, marginBottom: 14 }}>{cat.intro}</p>
-                        <Link to="/shop" onClick={close} className="nav-link" style={{ fontSize: T.sm[0], fontWeight: 600, color: c.purple }}>Shop all →</Link>
+                        <Link to="/shop" onClick={close} className="sk-tlink" style={{ fontSize: T.sm[0] }}>Shop all</Link>
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cards.length}, minmax(0, 1fr))`, gap: 16 }}>
                         {cards.map((card, i) => <PanelCard key={i} card={card} symbol={symbol} onPick={close} />)}
@@ -260,13 +260,13 @@ export default function Nav({ onCartOpen }) {
           </div>
 
           <div style={{ flex: 1, overflowY: 'auto', padding: '8px 0' }}>
-            <div style={{ padding: '12px 20px 4px', color: c.grayD, fontSize: T.xs[0], fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: FONT_SUB }}>Shop by category</div>
+            <div style={{ padding: '12px 20px 4px', color: c.gray, fontSize: T.sm[0], fontWeight: 600, fontFamily: FONT_SUB }}>Shop by category</div>
             {CATS.map(cat => {
               const open = acc === cat.key;
               return (
                 <div key={cat.key} style={{ borderBottom: LINE }}>
                   <button type="button" aria-expanded={open} aria-controls={`nav-acc-${cat.key}`} onClick={() => setAcc(open ? null : cat.key)}
-                    style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '14px 20px', color: c.navy, fontFamily: FONT_SUB, fontSize: T.md[1], textAlign: 'left' }}>
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '14px 20px', color: c.navy, fontFamily: FONT_SUB, fontSize: T.md[1], fontWeight: 600, textAlign: 'left' }}>
                     {cat.label}
                     {cat.soon && <span style={{ ...SOON_CHIP, background: c.sky, color: c.navy }}>Soon</span>}
                     <span style={{ marginLeft: 'auto', display: 'flex' }}><Chevron open={open} /></span>
@@ -295,7 +295,7 @@ export default function Nav({ onCartOpen }) {
 
             <div style={{ padding: '12px 0' }}>
               {[...SECONDARY, ['/how-it-works', 'How it works'], ['/why-flipnsleep', "Why flip'nsleep"], ['/reviews', 'Reviews']].map(([to, label]) => (
-                <Link key={to} to={to} onClick={() => setDrawer(false)} className="nav-link" style={{ display: 'block', padding: '10px 20px', color: loc.pathname === to ? c.purple : c.navy, fontFamily: FONT_SUB, fontSize: T.md[1] }}>{label}</Link>
+                <Link key={to} to={to} onClick={() => setDrawer(false)} className="nav-link" style={{ display: 'block', padding: '10px 20px', color: c.navy, fontFamily: FONT_SUB, fontSize: T.md[1], fontWeight: loc.pathname === to ? 600 : 400 }}>{label}</Link>
               ))}
             </div>
           </div>

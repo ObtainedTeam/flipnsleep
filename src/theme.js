@@ -1,17 +1,28 @@
-// flip'nsleep brand tokens — afgeleid uit het Figma-ontwerp.
+// flip'nsleep brand tokens: kleurset 1 van het redesign (nov 2026).
+// Vier kleuren met een vaste rol, geen verlopen:
+//   ink   #141040  tekst en de nachtvlakken
+//   sky   #D5EBF9  wolken en lichte banden
+//   amber #FFB022  kopen, en de maan
+//   pop   #8ACEFF  de hemel (hero, flip-band)
+// De oude namen (navy, purple, cream, sky2, amberD ...) blijven bestaan als alias
+// zodat elke pagina dezelfde kleuren krijgt.
+const INK = "#141040", SKY = "#D5EBF9", AMBER = "#FFB022", POP = "#8ACEFF", WHITE = "#FFFFFF";
 export const c = {
-  navy:"#201B5D", purple:"#3A217F", night:"#141040",
-  cream:"#F9F8F3", sky:"#D5EBF9", sky2:"#C0E5FF", skyDeep:"#8FC4F4",
-  amber:"#FDCA6F", amberD:"#F5B54A",
-  pastelYellow:"#FBDD8E", pastelPink:"#F4A0B5", pastelMint:"#B9E4C1", pastelBlue:"#BFE0F8",
-  white:"#FFFFFF", ink:"#201B5D", grayD:"#55507A", gray:"#8B86C9",
-  lilac:"#DDD9FF", // gedempte tekst op donkere (navy/purple) vlakken
-  danger:"#B3423F", // foutmeldingen in formulieren
+  ink: INK, sky: SKY, amber: AMBER, pop: POP, white: WHITE,
+  navy: INK, purple: INK, night: INK,
+  cream: WHITE, sky2: SKY, skyDeep: POP, amberD: AMBER,
+  pastelYellow: SKY, pastelPink: "#F4A0B5", pastelMint: SKY, pastelBlue: SKY,
+  grayD: "#4D4A70",  // ink op 76%: lopende tekst
+  gray: "#6E6C8A",   // ink op 60%: bijschriften, doorgestreepte prijzen
+  lilac: "#D5D4DC",  // gedempte tekst op de nachtvlakken (wit op 82%)
+  line: "rgba(20,16,64,.14)",
+  danger: "#B3423F", // foutmeldingen in formulieren
 };
 
 export const FONT_DISPLAY = "'Palo Wide Black','Archivo Black',sans-serif";
-export const FONT_SUB = "'Masiva Medium','Poppins',sans-serif";
 export const FONT_BODY = "'Poppins','Poppins Fallback',sans-serif";
+// Tussenkoppen en labels staan in Poppins (600); Masiva is uit het ontwerp.
+export const FONT_SUB = FONT_BODY;
 
 // Responsive helper (zie index.css): rv('fs', 62, 36) geeft
 // { '--d-fs': '62px', '--m-fs': '36px' }; combineer met className="r-fs".
@@ -25,55 +36,55 @@ export const rv = (prop, d, m) => ({ [`--d-${prop}`]: px(d), [`--m-${prop}`]: px
 // ---------------------------------------------------------------------------
 
 // Radius: twee maten plus pill. sm = chips, inputs, kleine kaarten; lg = kaarten, panelen, hero-foto's.
-export const R = { sm: 12, lg: 24, pill: 999 };
+export const R = { sm: 14, lg: 24, xl: 28, pill: 999 };
 
-// Schaduwen: zacht, laag en getint in navy zodat ze zichtbaar zijn op crème (#F9F8F3).
+// Schaduwen: het ontwerp is vlak. Kaarten krijgen een haarlijn in plaats van een
+// schaduw; alleen wat echt boven de pagina zweeft (menu, winkelwagen, popup)
+// houdt een zachte, neutrale schaduw.
 export const SH = {
-  card:   "0 2px 6px rgba(32,27,93,.06), 0 16px 36px -12px rgba(32,27,93,.20)",
-  strong: "0 4px 10px rgba(32,27,93,.08), 0 28px 56px -16px rgba(32,27,93,.30)",
-  float:  "0 36px 64px -24px rgba(32,27,93,.38), 0 12px 24px -12px rgba(32,27,93,.16)",
-  btn:    "0 2px 6px rgba(32,27,93,.12), 0 10px 22px -8px rgba(245,181,74,.60)",
-  text:   "0 1px 2px rgba(0,0,0,.25)",
-  textHero: "0 2px 18px rgba(20,16,64,.45)",
+  card:   "inset 0 0 0 1px rgba(20,16,64,.12)",
+  strong: "inset 0 0 0 1px rgba(20,16,64,.12)",
+  float:  "0 24px 48px -16px rgba(20,16,64,.28), 0 0 0 1px rgba(20,16,64,.06)",
+  btn:    "none",
+  text:   "0 1px 2px rgba(20,16,64,.35)",
+  textHero: "0 1px 2px rgba(20,16,64,.35)",
 };
 
 // Typografische trap [desktop, mobiel] in px. Gebruik met rv('fs', ...T.h1).
 export const T = {
-  display: [56, 36], h1: [44, 32], h2: [36, 27], h3: [24, 20], h4: [20, 18],
-  lg: [18, 16], md: [17, 16], sm: [14, 13], xs: [12, 12],
+  display: [58, 34], h1: [46, 30], h2: [38, 26], h3: [24, 20], h4: [20, 18],
+  lg: [18, 17], md: [17, 16], sm: [15, 14], xs: [13, 13],
 };
-export const LH = { tight: 1.1, head: 1.2, body: 1.65, loose: 1.75 };
+export const LH = { tight: 1.08, head: 1.2, body: 1.6, loose: 1.7 };
 
 // Ruimte: sectiepadding [desktop, mobiel], kaartmarge, gutter, maximale breedtes.
 export const SP = {
-  section: ["80px 40px", "56px 20px"],
-  sectionTop: ["80px 40px 0", "56px 20px 0"],
+  section: ["96px 40px", "64px 20px"],
+  sectionTop: ["96px 40px 0", "64px 20px 0"],
   card: [28, 22],
   gutter: [40, 20],
   gap: [24, 16],
 };
-export const W = { page: 1140, text: 720, narrow: 560 };
+export const W = { page: 1200, text: 760, narrow: 560 };
 
 // Knoppen: precies drie varianten. Altijd inline-flex en gecentreerd, vaste hoogte.
 const BTN_BASE = {
-  display: "inline-flex", alignItems: "center", justifyContent: "center",
-  borderRadius: R.pill, fontFamily: FONT_BODY, fontWeight: 700, fontSize: 13,
-  letterSpacing: "0.06em", textTransform: "uppercase", cursor: "pointer",
-  textDecoration: "none", whiteSpace: "nowrap", lineHeight: 1,
-  transition: "transform .15s ease, filter .15s ease, box-shadow .15s ease",
+  display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 8,
+  borderRadius: R.pill, fontFamily: FONT_BODY, fontWeight: 600, fontSize: 16,
+  cursor: "pointer", textDecoration: "none", whiteSpace: "nowrap", lineHeight: 1,
 };
+// Amber is alleen voor kopen (en de hoofdactie van een pagina).
 export const BTN = {
-  ...BTN_BASE, height: 52, padding: "0 34px",
-  background: `linear-gradient(180deg, ${c.amber}, ${c.amberD})`, color: c.navy, border: "none",
-  boxShadow: SH.btn,
+  ...BTN_BASE, height: 54, padding: "0 30px",
+  background: c.amber, color: c.ink, border: "none",
 };
 export const BTNO = {
-  ...BTN_BASE, height: 52, padding: "0 30px",
-  background: "transparent", color: c.navy, border: `2px solid ${c.navy}`,
+  ...BTN_BASE, height: 54, padding: "0 28px",
+  background: "transparent", color: c.ink, border: `2px solid ${c.ink}`,
 };
 export const BTN_SM = {
-  ...BTN_BASE, height: 42, padding: "0 22px", fontSize: 12,
-  background: c.navy, color: c.white, border: "none", boxShadow: SH.card,
+  ...BTN_BASE, height: 44, padding: "0 22px", fontSize: 15,
+  background: c.ink, color: c.white, border: "none",
 };
 // Varianten op donkere achtergrond: spread erna, bv. {...BTNO, ...ON_DARK}
 export const ON_DARK = { color: c.white, borderColor: c.white };
@@ -81,8 +92,8 @@ export const ON_DARK = { color: c.white, borderColor: c.white };
 // Chip: niet-klikbare badge/label. Kleur en achtergrond per plek erbij zetten.
 export const CHIP = {
   display: "inline-flex", alignItems: "center", gap: 6, borderRadius: R.pill,
-  fontFamily: FONT_BODY, fontSize: T.sm[0], fontWeight: 700, lineHeight: 1.2,
-  padding: "7px 14px", whiteSpace: "nowrap",
+  fontFamily: FONT_BODY, fontSize: T.sm[0], fontWeight: 600, lineHeight: 1.2,
+  padding: "8px 14px", whiteSpace: "nowrap",
 };
 
 // Kaartbasis
@@ -91,10 +102,10 @@ export const CARD_SOFT = { background: c.sky, borderRadius: R.lg };
 
 export const H2 = {
   fontFamily:FONT_DISPLAY, fontWeight:400, color:c.navy,
-  marginBottom:12, letterSpacing:"0", lineHeight:LH.head,
+  marginBottom:12, letterSpacing:"0", lineHeight:1.12,
 };
 
+// Klein label boven een kop. Geen hoofdletters of spatiëring meer: gewoon een rustige regel.
 export const EYEBROW = {
-  fontFamily:FONT_SUB, fontSize:12, fontWeight:500, letterSpacing:"0.14em",
-  textTransform:"uppercase", color:c.purple,
+  fontFamily:FONT_BODY, fontSize:15, fontWeight:600, lineHeight:1.3, color:c.gray,
 };

@@ -3,10 +3,10 @@ import { c, rv, FONT_SUB, R, T, LH, SP, W, CHIP } from '../theme';
 import { IMG, dim, PRODUCT, products } from '../data';
 import { NewsletterSignup } from './Blocks';
 
-const HEAD = { fontFamily: FONT_SUB, fontSize: T.xs[0], fontWeight: 600, marginBottom: 14, color: c.amber, letterSpacing: '0.08em', textTransform: 'uppercase' };
+const HEAD = { fontFamily: FONT_SUB, fontSize: 16, fontWeight: 600, lineHeight: LH.head, marginBottom: 14, color: c.white };
 const LINK = { display: 'block', color: c.lilac, fontSize: T.sm[0], lineHeight: LH.head, marginBottom: 10 };
 const LINE = '1px solid rgba(255,255,255,.14)';
-const PILL = { ...CHIP, fontSize: T.xs[0], padding: '5px 12px', fontWeight: 600, background: 'rgba(255,255,255,.08)', color: c.white, border: '1px solid rgba(255,255,255,.18)' };
+const PILL = { ...CHIP, fontSize: T.xs[0], padding: '6px 12px', fontWeight: 500, background: 'transparent', color: c.white, border: '1px solid rgba(255,255,255,.3)' };
 
 // Social-iconen (simpele lijn-SVG's, currentColor).
 const SOCIAL = [
@@ -40,7 +40,7 @@ const COLS = [
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="r-pad r-mt" style={{ background: c.night, color: c.white, ...rv('pad', '64px 40px 32px', '48px 20px 28px'), ...rv('mt', 64, 48) }}>
+    <footer className="r-pad" style={{ background: c.night, color: c.white, ...rv('pad', '72px 40px 32px', '56px 20px 28px') }}>
       <div style={{ maxWidth: W.page, margin: '0 auto' }}>
         {/* Nieuwsbrief */}
         <div className="r-pad" style={{ borderBottom: LINE, ...rv('pad', '0 0 48px', '0 0 36px') }}>
@@ -57,7 +57,7 @@ export default function Footer() {
             <div style={{ display: 'flex', gap: 10 }}>
               {/* TODO: echte social-URL's invullen zodra de accounts live zijn */}
               {SOCIAL.map(([label, icon]) => (
-                <a key={label} href="#" aria-label={label} style={{ width: 40, height: 40, borderRadius: R.pill, border: '1px solid rgba(255,255,255,.25)', color: c.white, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                <a key={label} href="#" aria-label={label} style={{ width: 40, height: 40, borderRadius: R.pill, border: '1px solid rgba(255,255,255,.3)', color: c.white, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icon}</svg>
                 </a>
               ))}
@@ -67,7 +67,7 @@ export default function Footer() {
             <nav key={title} aria-label={title}>
               <h3 style={HEAD}>{title}</h3>
               {links.map(([to, label]) => {
-                if (!to) return <span key={label} style={{ ...LINK, color: c.gray }}>{label}</span>;
+                if (!to) return <span key={label} style={{ ...LINK, opacity: .6 }}>{label}</span>;
                 if (to.startsWith('mailto:')) return <a key={label} href={to} className="foot-link" style={LINK}>{label}</a>;
                 return <Link key={label} to={to} className="foot-link" style={LINK}>{label}</Link>;
               })}
@@ -79,9 +79,9 @@ export default function Footer() {
         <div className="foot-bottom" style={{ borderTop: LINE, paddingTop: 24 }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }} aria-label="Accepted payment methods">
             {['Visa', 'Mastercard', 'Amex', 'Apple Pay', 'Shop Pay'].map(p => <span key={p} style={PILL}>{p}</span>)}
-            <span style={{ ...PILL, background: 'transparent', color: c.lilac }}>OEKO-TEX &amp; CertiPUR-US certified</span>
+            <span style={{ ...PILL, border: 'none', paddingLeft: 4, color: c.lilac }}>OEKO-TEX and CertiPUR-US certified</span>
           </div>
-          <p style={{ fontSize: T.xs[0], lineHeight: LH.body, color: c.gray }}>© {year} flip'nsleep · flip'nsleep is part of Obtained VOF</p>
+          <p style={{ fontSize: T.xs[0], lineHeight: LH.body, color: c.lilac }}>© {year} flip'nsleep, part of Obtained VOF. We make comfort products, not medical devices.</p>
         </div>
       </div>
     </footer>
