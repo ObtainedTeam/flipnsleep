@@ -1,5 +1,4 @@
 import { useLocation } from 'react-router-dom';
-import { c, rv, FONT_DISPLAY, T, LH, SP, W } from '../theme';
 
 const SECTIONS = {
   '/privacy': {
@@ -39,15 +38,15 @@ export default function Legal() {
   const page = SECTIONS[pathname] || SECTIONS['/terms'];
 
   return (
-    <div className="r-pad" style={{ maxWidth: W.text + 80, margin: '0 auto', ...rv('pad', ...SP.section) }}>
-      <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, color: c.navy, marginBottom: 12 }}>{page.title}</h1>
-      <p style={{ fontSize: T.xs[0], color: c.grayD, marginBottom: 32 }}>Last updated: July 2026 · flip'nsleep is part of Obtained VOF</p>
-      {page.blocks.map(([h, t], i) => (
-        <div key={i} style={{ marginBottom: 24 }}>
-          <h2 className="r-fs" style={{ ...rv('fs', ...T.lg), lineHeight: LH.head, fontWeight: 700, color: c.navy, marginBottom: 8 }}>{h}</h2>
-          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, color: c.grayD }}>{t}</p>
+    <div className="sk-sec"><div className="sk-wrap"><div className="sk-prose">
+      <h1 className="sk-h1" style={{ fontSize: 'clamp(30px, 4vw, 46px)', marginBottom: 12 }}>{page.title}</h1>
+      <p style={{ fontSize: 14, color: 'var(--ink-3)', marginBottom: 32 }}>Last updated: July 2026. flip'nsleep is part of Obtained VOF.</p>
+      {page.blocks.map(([h, t]) => (
+        <div key={h}>
+          <h3>{h}</h3>
+          <p>{t}</p>
         </div>
       ))}
-    </div>
+    </div></div></div>
   );
 }

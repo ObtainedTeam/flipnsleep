@@ -4,6 +4,7 @@ import { c, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH } from '../the
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { cartCheckoutUrl, CART_CROSSSELL_ANCHOR, CART_CROSSSELL_CONTEXTUAL } from '../shopify';
 import { bundleById, productById, dim, rs } from '../data';
+import { Ico } from './Sky';
 
 // Module-level cart store met pub/sub. Items zijn óf een kussenbundel
 // { bundleId, qty } óf een variantproduct { productId, size, color, qty }.
@@ -121,7 +122,7 @@ export default function Cart({ isOpen, onClose }) {
         </header>
 
         <div style={{ background: c.sky, borderBottom: '1px solid rgba(32,27,93,.10)', padding: '10px 20px', fontSize: T.xs[0], fontWeight: 600, color: c.navy }}>
-          🚚 Free shipping on every order, always included
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}><Ico name="truck" size={18} />Free shipping on every order, always included</span>
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: 16 }}>
@@ -134,16 +135,16 @@ export default function Cart({ isOpen, onClose }) {
             <div key={l.key} style={{ display: 'flex', gap: 12, background: c.white, borderRadius: R.sm, padding: 16, marginBottom: 12, boxShadow: SH.card }}>
               <img src={l.image} {...dim(l.image)} {...rs(l.image, '74px')} loading="lazy" decoding="async" alt="" style={{ width: 74, height: 74, objectFit: l.imgFit, borderRadius: R.sm, background: c.sky }} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], marginBottom: 2 }}>{l.name}</div>
+                <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], fontWeight: 600, marginBottom: 2 }}>{l.name}</div>
                 <div style={{ fontSize: T.xs[0], color: c.grayD, marginBottom: 6 }}>{l.sub}</div>
                 <div style={{ fontSize: T.sm[0], fontWeight: 700 }}>{formatPrice(l.unit, symbol)} {l.compare && <s style={{ fontWeight: 400, color: c.gray, fontSize: T.xs[0] }}>{formatPrice(l.compare, symbol)}</s>}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 6 }}>
-                  <button onClick={l.dec} style={{ width: 26, height: 26, background: 'none', border: `1px solid ${c.navy}22`, borderRadius: R.sm, cursor: 'pointer' }}>−</button>
+                  <button onClick={l.dec} aria-label="Decrease quantity" style={{ width: 32, height: 32, color: c.navy, background: 'none', border: `1px solid ${c.navy}22`, borderRadius: R.sm, cursor: 'pointer' }}>−</button>
                   <span style={{ minWidth: 22, textAlign: 'center', fontSize: T.sm[0] }}>{l.qty}</span>
-                  <button onClick={l.inc} style={{ width: 26, height: 26, background: 'none', border: `1px solid ${c.navy}22`, borderRadius: R.sm, cursor: 'pointer' }}>+</button>
+                  <button onClick={l.inc} aria-label="Increase quantity" style={{ width: 32, height: 32, color: c.navy, background: 'none', border: `1px solid ${c.navy}22`, borderRadius: R.sm, cursor: 'pointer' }}>+</button>
                 </div>
               </div>
-              <button onClick={l.del} aria-label="Remove" style={{ background: 'none', border: 'none', cursor: 'pointer', color: c.gray, fontSize: T.sm[0], alignSelf: 'flex-start' }}>🗑</button>
+              <button onClick={l.del} aria-label="Remove" style={{ background: 'none', border: 'none', cursor: 'pointer', color: c.gray, alignSelf: 'flex-start', display: 'flex', padding: 4 }}><Ico name="x" size={18} /></button>
             </div>
           ))}
 
@@ -159,17 +160,17 @@ export default function Cart({ isOpen, onClose }) {
           {/* Cross-sell: bijbehorende deken / lakens */}
           {lines.length > 0 && recs.length > 0 && (
             <div style={{ marginTop: 8 }}>
-              <div style={{ fontSize: T.xs[0], fontWeight: 700, color: c.grayD, letterSpacing: .4, textTransform: 'uppercase', margin: '16px 2px 8px', fontFamily: FONT_SUB }}>Complete your bed</div>
+              <div style={{ fontSize: T.sm[0], fontWeight: 600, color: c.navy, margin: '16px 2px 8px', fontFamily: FONT_SUB }}>Complete your bed</div>
               {recs.map(r => {
                 const rp = getPrice(r, isCA);
                 return (
                   <Link key={r.id} to={`/product/${r.id}`} onClick={onClose} className="card-hover" style={{ display: 'flex', gap: 12, alignItems: 'center', background: c.white, borderRadius: R.sm, padding: '12px 16px', marginBottom: 8, textDecoration: 'none', boxShadow: SH.card }}>
                     <img src={r.images[0]} {...dim(r.images[0])} {...rs(r.images[0], '48px')} loading="lazy" decoding="async" alt="" style={{ width: 48, height: 48, objectFit: 'contain', borderRadius: R.sm, background: c.sky, flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], color: c.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
+                      <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], fontWeight: 600, color: c.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.name}</div>
                       <div style={{ fontSize: T.xs[0], color: c.grayD }}>From {formatPrice(rp, symbol)}</div>
                     </div>
-                    <span style={{ fontSize: T.xs[0], fontWeight: 700, color: c.purple, flexShrink: 0 }}>View →</span>
+                    <span style={{ fontSize: T.xs[0], fontWeight: 600, color: c.navy, flexShrink: 0, textDecoration: 'underline', textUnderlineOffset: 4 }}>View</span>
                   </Link>
                 );
               })}
@@ -196,7 +197,7 @@ export default function Cart({ isOpen, onClose }) {
               <span style={{ fontSize: T.lg[0], fontWeight: 700 }}>{formatPrice(total, symbol)}</span>
             </div>
             <p style={{ fontSize: T.xs[0], color: c.gray, marginBottom: 16 }}>Free shipping included. Taxes calculated at checkout.</p>
-            <button onClick={handleCheckout} style={{ ...BTN, width: '100%' }}>Checkout</button>
+            <button onClick={handleCheckout} style={{ ...BTN, width: '100%', height: 58, fontSize: 17 }}>Checkout</button>
           </footer>
         )}
       </aside>

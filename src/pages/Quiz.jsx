@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH, W } from '../theme';
+import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, R, T, LH, W } from '../theme';
 import { IMG, dim } from '../data';
 import { subscribe } from '../brevo';
+import { Cloud } from '../components/Sky';
 
 // Sleep quiz funnel: één vraag per pagina, effen beige achtergrond, logo
 // bovenaan en een voortgangsbalk. Antwoorden gaan als attributen mee naar
@@ -103,16 +104,18 @@ export default function Quiz() {
   const current = QUESTIONS[step];
 
   return (
-    <div style={{ minHeight: '100vh', background: c.cream, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 20px 64px' }}>
+    <div style={{ minHeight: '100vh', background: c.sky, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 20px 64px', position: 'relative', overflow: 'hidden' }}>
+      <Cloud className="sk-drift" style={{ position: 'absolute', left: '-3%', top: '18%', width: 'clamp(90px, 16vw, 240px)' }} />
+      <Cloud className="sk-drift" style={{ position: 'absolute', right: '-4%', bottom: '14%', width: 'clamp(110px, 20vw, 300px)', animationDuration: '16s' }} />
       {/* Logo */}
-      <Link to="/" aria-label="flip'nsleep home" style={{ marginBottom: 24 }}>
+      <Link to="/" aria-label="flip'nsleep home" style={{ marginBottom: 24, position: 'relative' }}>
         <img src={IMG.logoDark} {...dim(IMG.logoDark)} decoding="async" alt="flip'nsleep" className="r-h" style={{ ...rv('h', 42, 34), width: 'auto' }} />
       </Link>
 
       {/* Voortgangsbalk */}
-      <div className="r-mb" style={{ width: '100%', maxWidth: W.narrow, ...rv('mb', 48, 32) }}>
-        <div style={{ height: 8, background: 'rgba(32,27,93,.10)', borderRadius: R.pill, overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${progress}%`, background: `linear-gradient(90deg, ${c.purple}, ${c.navy})`, borderRadius: R.pill, transition: 'width .4s ease' }} />
+      <div className="r-mb" style={{ width: '100%', maxWidth: W.narrow, ...rv('mb', 48, 32), position: 'relative' }}>
+        <div role="progressbar" aria-label="Quiz progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)} style={{ height: 8, background: c.white, borderRadius: R.pill, overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${progress}%`, background: c.navy, borderRadius: R.pill, transition: 'width .4s ease' }} />
         </div>
         <div style={{ fontSize: T.xs[0], color: c.grayD, marginTop: 8, textAlign: 'right', fontFamily: FONT_SUB }}>
           {emailStep ? 'Last step' : `Question ${step + 1} of ${QUESTIONS.length}`}
@@ -120,49 +123,46 @@ export default function Quiz() {
       </div>
 
       {!emailStep ? (
-        <div style={{ width: '100%', maxWidth: W.narrow, textAlign: 'center' }}>
-          <h1 className="r-fs r-mb" style={{ ...rv('fs', ...T.h2), color: c.navy, fontFamily: FONT_SUB, fontWeight: 400, ...rv('mb', 32, 24), lineHeight: LH.head }}>
-            {current.q[0]}<span style={{ fontFamily: FONT_DISPLAY }}>{current.q[1]}</span>{current.q[2]}
+        <div style={{ width: '100%', maxWidth: W.narrow, textAlign: 'center', position: 'relative' }}>
+          <h1 className="r-fs r-mb" style={{ ...rv('fs', ...T.h2), color: c.navy, fontFamily: FONT_DISPLAY, fontWeight: 400, ...rv('mb', 32, 24), lineHeight: LH.head }}>
+            {current.q.join('')}
           </h1>
           <div style={{ display: 'grid', gap: 12 }}>
-            {current.options.map(([emoji, label]) => (
-              <button key={label} onClick={() => pick(current.id, label)}
-                className="r-pad r-fs card-hover" style={{ display: 'flex', alignItems: 'center', gap: 16, background: c.sky, border: '2px solid transparent', borderRadius: R.sm, ...rv('pad', '20px 24px', '16px 20px'), cursor: 'pointer', fontFamily: FONT_SUB, ...rv('fs', ...T.md), color: c.navy, textAlign: 'left', transition: 'transform .1s, border .1s' }}
-                onMouseDown={e => e.currentTarget.style.transform = 'scale(.98)'}
-                onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}>
-                <span style={{ fontSize: T.h3[0] }}>{emoji}</span>
-                <span><b style={{ fontFamily: FONT_DISPLAY, fontWeight: 400 }}>{label.split(' ')[0]}</b> {label.split(' ').slice(1).join(' ')}</span>
+            {current.options.map(([, label]) => (
+              <button key={label} type="button" onClick={() => pick(current.id, label)}
+                className="r-fs card-hover" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 60, background: c.white, border: 'none', borderRadius: R.pill, padding: '14px 24px', cursor: 'pointer', fontFamily: FONT_SUB, fontWeight: 500, ...rv('fs', ...T.md), color: c.navy, textAlign: 'center' }}>
+                {label}
               </button>
             ))}
           </div>
           {step > 0 && (
-            <button onClick={() => setStep(s => s - 1)} style={{ background: 'none', border: 'none', color: c.grayD, fontSize: T.sm[0], marginTop: 24, cursor: 'pointer', fontFamily: FONT_SUB }}>← Back</button>
+            <button onClick={() => setStep(s => s - 1)} type="button" className="sk-tlink" style={{ background: 'none', border: 'none', color: c.navy, fontSize: T.sm[0], marginTop: 24, cursor: 'pointer' }}>Back</button>
           )}
         </div>
       ) : (
-        <div style={{ width: '100%', maxWidth: W.narrow, textAlign: 'center' }}>
+        <div style={{ width: '100%', maxWidth: W.narrow, textAlign: 'center', position: 'relative' }}>
           {state === 'done' ? (
             <>
-              <div style={{ fontSize: T.h1[0], marginBottom: 12 }}>🌙</div>
-              <h1 className="r-fs" style={{ ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, fontFamily: FONT_DISPLAY, fontWeight: 400, marginBottom: 12 }}>Check your inbox!</h1>
+              <img className="sk-bob" src={IMG.iconCloud} {...dim(IMG.iconCloud)} decoding="async" alt="" style={{ width: 120, height: 'auto', margin: '0 auto 20px', display: 'block', filter: 'drop-shadow(0 10px 10px rgba(20,16,64,.14))' }} />
+              <h1 className="r-fs" style={{ ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, fontFamily: FONT_DISPLAY, fontWeight: 400, marginBottom: 12 }}>Check your inbox</h1>
               <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.grayD }}>Your 15% discount code is on its way. We're taking you to your perfect pillow…</p>
             </>
           ) : (
             <>
-              <h1 className="r-fs" style={{ ...rv('fs', ...T.h2), color: c.navy, fontFamily: FONT_SUB, fontWeight: 400, marginBottom: 12, lineHeight: LH.head }}>
-                Your perfect pillow is <span style={{ fontFamily: FONT_DISPLAY }}>ready</span>
+              <h1 className="r-fs" style={{ ...rv('fs', ...T.h2), color: c.navy, fontFamily: FONT_DISPLAY, fontWeight: 400, marginBottom: 12, lineHeight: LH.head }}>
+                Your perfect pillow is ready
               </h1>
               <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.grayD, marginBottom: 24 }}>
                 Enter your email and we'll send your personal <b style={{ color: c.navy }}>15% discount code</b> right away.
               </p>
-              <form onSubmit={submit} style={{ display: 'flex', alignItems: 'center', background: c.white, borderRadius: R.pill, padding: 5, boxShadow: SH.card }}>
-                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Your email address" aria-label="Email address" className="r-fs"
+              <form onSubmit={submit} style={{ display: 'flex', alignItems: 'center', background: c.white, borderRadius: R.pill, padding: 5 }}>
+                <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" aria-label="Email address" autoComplete="email" spellCheck={false} className="r-fs"
                   style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: 'inherit', ...rv('fs', ...T.md), padding: '11px 16px', color: c.navy, minWidth: 0, outline: 'none' }} />
                 <button type="submit" disabled={state === 'busy'} style={{ ...BTN, flexShrink: 0 }}>{state === 'busy' ? '…' : 'Get 15% off'}</button>
               </form>
               {state === 'error' && <p style={{ fontSize: T.xs[0], color: c.danger, marginTop: 12 }}>Something went wrong, please try again.</p>}
               <p style={{ fontSize: T.xs[0], color: c.grayD, marginTop: 12 }}>No spam. Unsubscribe anytime.</p>
-              <button onClick={() => setStep(s => s - 1)} style={{ background: 'none', border: 'none', color: c.grayD, fontSize: T.sm[0], marginTop: 24, cursor: 'pointer', fontFamily: FONT_SUB }}>← Back</button>
+              <button onClick={() => setStep(s => s - 1)} type="button" className="sk-tlink" style={{ background: 'none', border: 'none', color: c.navy, fontSize: T.sm[0], marginTop: 24, cursor: 'pointer' }}>Back</button>
             </>
           )}
         </div>

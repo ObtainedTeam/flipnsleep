@@ -29,10 +29,10 @@ export default function StickyBuyBar({ targetRef, name, price, onAdd, disabled =
       }}>
       <div style={{ minWidth: 0, flex: 1 }}>
         <div style={{ fontFamily: FONT_SUB, fontWeight: 600, fontSize: T.sm[1], lineHeight: LH.head, color: c.navy, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</div>
-        <div style={{ fontSize: T.sm[1], fontWeight: 700, color: c.purple }}>{price}</div>
+        <div style={{ fontSize: T.sm[1], fontWeight: 500, color: c.grayD }}>{price}</div>
       </div>
       <button type="button" onClick={onAdd} disabled={disabled} tabIndex={show ? 0 : -1}
-        style={{ ...BTN, height: 46, padding: '0 22px', flexShrink: 0, opacity: disabled ? .5 : 1, cursor: disabled ? 'not-allowed' : 'pointer' }}>{label}</button>
+        style={{ ...BTN, height: 48, padding: '0 22px', fontSize: 15, flexShrink: 0, opacity: disabled ? .5 : 1, cursor: disabled ? 'not-allowed' : 'pointer' }}>{label}</button>
     </div>
   );
 }

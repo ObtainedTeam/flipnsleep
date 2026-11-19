@@ -20,7 +20,7 @@ const SITE = (process.env.SITE_URL || 'https://www.flipnsleep.com').replace(/\/$
 const META = {
   '/': {
     title: "flip'nsleep — The Adjustable Cooling Pillow for Hot Sleepers",
-    desc: 'Adjustable shredded memory foam pillow with a cool-touch side and a warm bamboo side. Buy 1 get 1 free, 100-night sleep trial, free shipping. Ships to the US and Canada.',
+    desc: 'Adjustable shredded memory foam pillow with a cool-touch side and a cozy bamboo side. Buy 1 get 1 free, 100-night sleep trial, free shipping. Ships to the US and Canada.',
   },
   '/shop': {
     title: "Shop Bundles | flip'nsleep",
@@ -44,7 +44,7 @@ const META = {
   },
   '/how-it-works': {
     title: "How It Works | flip'nsleep",
-    desc: 'A cool-touch fabric (Q-max 0.26), adjustable shredded memory foam and a warm bamboo side. One flip to a cooler night — no gadgets, no plugs.',
+    desc: 'A cool-touch fabric (Q-max 0.26), adjustable shredded memory foam and a cozy bamboo side. One flip to a cooler night — no gadgets, no plugs.',
   },
   '/why-flipnsleep': {
     title: "Why flip'nsleep? The Honest Comparison",

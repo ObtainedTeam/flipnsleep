@@ -1,88 +1,76 @@
 import { Link } from 'react-router-dom';
-import { c, R, SH, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, T, LH, SP, W, CARD, CHIP } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { BUNDLES, PRODUCT, products, dim, IMG } from '../data';
-import { ProductImageBlock } from '../components/Blocks';
+import { BUNDLES, PRODUCT, products, IMG, dim, rs } from '../data';
 import Reveal from '../components/Reveal';
+import { Cloud, Ico, PageHead, NightBand } from '../components/Sky';
+import { TrustRow } from '../components/Sections';
 
-
+// Shop: de twee kussenbundels groot bovenaan, daaronder de rest van het assortiment.
 export default function Shop() {
   const { symbol, isCA } = useCurrency();
 
   return (
     <div>
-      {/* Fotobanner bovenaan (Mellow-stijl): sfeerfoto, donker verloop, h1 + CTA naar de bundels */}
-      <section className="r-h r-pad" style={{ position: 'relative', overflow: 'hidden', background: c.night, ...rv('h', 420, 300), borderRadius: `0 0 ${R.lg}px ${R.lg}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', ...rv('pad', `0 ${SP.gutter[0]}px`, `0 ${SP.gutter[1]}px`) }}>
-        <img src={IMG.heroPoster} {...dim(IMG.heroPoster)} fetchPriority="high" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 55%' }} />
-        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(20,16,64,.55) 0%, rgba(20,16,64,.45) 45%, rgba(20,16,64,.8) 100%)' }} />
-        <div style={{ position: 'relative', maxWidth: W.text, color: c.white }}>
-          <div style={{ ...EYEBROW, color: c.amber }}>Shop</div>
-          <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), lineHeight: LH.tight, margin: '8px 0 14px', textShadow: SH.textHero }}>Shop the <span style={{ fontFamily: FONT_SUB }}>flip'nsleep</span> range</h1>
-          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.lilac, margin: '0 auto 24px', maxWidth: W.narrow }}>Buy 1, Get 1 Free on the Signature Cold Pillow. Free shipping to the US &amp; Canada.</p>
-          <a href="#bundles" style={BTN}>Shop the pillow deal</a>
+      <PageHead title="Shop the flip'nsleep range" intro="Buy one, get one free on the Signature Cold Pillow. Free shipping across the US and Canada." />
+
+      <section id="bundles" className="sk-sec" style={{ scrollMarginTop: 96, paddingTop: 32 }}><div className="sk-wrap">
+        <div className="sk-head">
+          <h2 className="sk-h2">Pick your bundle</h2>
+          <p className="sk-lead">Every order is a set: that's our buy-one-get-one-free promise. Choose two pillows or four, always with free shipping and a 100-night trial.</p>
         </div>
-      </section>
-
-      <section id="bundles" className="r-pad" style={{ textAlign: 'center', scrollMarginTop: 96, ...rv('pad', ...SP.sectionTop) }}>
-        <div style={EYEBROW}>Pillow bundles</div>
-        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, margin: '8px 0 16px' }}>Pick your bundle</h2>
-        <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, maxWidth: W.narrow, margin: '0 auto' }}>
-          Every order is a set, that's our buy-one-get-one-free promise. Choose two pillows or four, always with free shipping and a 100-night trial.
-        </p>
-      </section>
-
-      <section className="grid-2m1 r-gap r-mw r-mar r-pad" style={{ ...rv('gap', ...SP.gap), ...rv('mw', W.page, W.narrow), ...rv('mar', '40px auto 0', '32px auto 0'), ...rv('pad', `0 ${SP.gutter[0]}px`, `0 ${SP.gutter[1]}px`) }}>
-        {BUNDLES.map(b => {
-          const p = getPrice(b, isCA);
-          const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
-          return (
-            <Reveal key={b.id} delay={BUNDLES.indexOf(b) * 130}><Link to="/product/signature-cold-pillow" className="card-hover" style={{ textDecoration: 'none', ...CARD, overflow: 'hidden', display: 'block', height: '100%' }}>
-              <div style={{ position: 'relative' }}>
-                <ProductImageBlock src={b.image} alt={b.label} height={[280, 210]} radius={0} priority={b.id === BUNDLES[0].id} />
-                <span style={{ ...CHIP, position: 'absolute', top: 16, left: 16, background: c.amber, color: c.navy }}>{b.short}</span>
-              </div>
-              <div className="r-pad" style={rv('pad', ...SP.card)}>
-                <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 6 }}>{PRODUCT.name}: {b.short}</h2>
-                <div style={{ fontFamily: FONT_SUB, fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD, marginBottom: 10 }}>{b.label}. {b.blurb}</div>
-                <div className="r-fs" style={{ ...rv('fs', ...T.lg), fontWeight: 700, color: c.navy }}>{formatPrice(p, symbol)} <s style={{ fontWeight: 400, color: c.gray, fontSize: T.sm[0] }}>{formatPrice(cm, symbol)}</s></div>
-                <div style={{ fontSize: T.xs[0], color: c.purple, fontWeight: 600, marginTop: 4 }}>{formatPrice(p / b.pillows, symbol)} per pillow · free shipping</div>
-                <span style={{ ...BTN, marginTop: 20 }}>View deal</span>
-              </div>
-            </Link></Reveal>
-          );
-        })}
-      </section>
-
-      {/* De volledige flip'nsleep-range: deken, lakens, comforter */}
-      <section className="r-pad" style={rv('pad', ...SP.section)}>
-        <Reveal><div style={{ textAlign: 'center' }}>
-          <div style={EYEBROW}>More for your bed</div>
-          <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, margin: '8px 0 12px' }}>The full <span style={{ fontFamily: FONT_SUB }}>flip'nsleep</span> range</h2>
-          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.grayD, maxWidth: W.narrow, margin: '0 auto' }}>Cooling bedding built on the same idea as the pillow: stay comfortable without trapping heat.</p>
-        </div></Reveal>
-
-        <div className="grid-3m1 r-gap r-mar" style={{ ...rv('gap', ...SP.gap), maxWidth: W.page, ...rv('mar', '40px auto 0', '28px auto 0') }}>
-          {products.map((prod, idx) => {
-            const p = getPrice(prod, isCA);
-            const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
+        <div className="sk-grid is-2">
+          {BUNDLES.map((b, i) => {
+            const p = getPrice(b, isCA);
+            const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
+            const img = { src: IMG.coverDuo, ...dim(IMG.coverDuo), ...rs(IMG.coverDuo, '(max-width: 699px) 60vw, 340px'), decoding: 'async' };
             return (
-              <Reveal key={prod.id} delay={idx * 120}><Link to={`/product/${prod.id}`} className="card-hover" style={{ textDecoration: 'none', ...CARD, overflow: 'hidden', display: 'block', height: '100%' }}>
-                <div className="r-h" style={{ position: 'relative', ...rv('h', 240, 220), background: c.cream, overflow: 'hidden' }}>
-                  <img src={prod.images[0]} {...dim(prod.images[0])} loading="lazy" decoding="async" alt={prod.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                  {prod.badge && <span style={{ ...CHIP, position: 'absolute', top: 16, left: 16, background: c.amber, color: c.navy }}>{prod.badge}</span>}
+              <Reveal key={b.id} once delay={i * 100}><Link to={`/product/${PRODUCT.id}`} className="sk-pc is-wide">
+                <div className="sk-pc-img">
+                  <span className="sk-tag">{b.pillows === 2 ? 'Buy 1, get 1 free' : 'Buy 2, get 2 free'}</span>
+                  <Cloud className="is-a" /><Cloud className="is-b" />
+                  <img className={`is-cut${b.pillows === 4 ? ' is-two' : ''}`} {...img} fetchPriority={i === 0 ? 'high' : undefined} alt={`${b.pillows} Signature Cold Pillows`} />
+                  {b.pillows === 4 && <img className="is-cut is-two" {...img} alt="" />}
                 </div>
-                <div className="r-pad" style={rv('pad', ...SP.card)}>
-                  <h3 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 6 }}>{prod.name}</h3>
-                  <div style={{ fontSize: T.sm[0], color: c.grayD, marginBottom: 10, lineHeight: LH.body }}>{prod.tagline}</div>
-                  <div className="r-fs" style={{ ...rv('fs', ...T.md), fontWeight: 700, color: c.navy }}>From {formatPrice(p, symbol)} {cm && <s style={{ fontWeight: 400, color: c.gray, fontSize: T.xs[0] }}>{formatPrice(cm, symbol)}</s>}</div>
-                  <div style={{ fontSize: T.xs[0], color: c.purple, fontWeight: 600, marginTop: 4 }}>Free shipping · 100-night trial</div>
-                  <span style={{ ...BTN_SM, marginTop: 16 }}>View product</span>
+                <b>{b.pillows} pillows</b>
+                <span className="is-desc">{b.blurb}</span>
+                <div className="sk-pc-foot">
+                  <span className="sk-price">{formatPrice(p, symbol)}<s>{formatPrice(cm, symbol)}</s><span style={{ fontWeight: 400, fontSize: 15, color: 'var(--ink-2)', marginLeft: 10 }}>{formatPrice(p / b.pillows, symbol)} a pillow</span></span>
+                  <span className="sk-go" aria-hidden="true"><Ico name="right" /></span>
                 </div>
               </Link></Reveal>
             );
           })}
         </div>
-      </section>
+        <TrustRow />
+      </div></section>
+
+      <section className="sk-sec" style={{ paddingTop: 0 }}><div className="sk-wrap">
+        <div className="sk-head">
+          <h2 className="sk-h2">More for your bed</h2>
+          <p className="sk-lead">Cooling bedding built on the same idea as the pillow: stay comfortable without trapping heat.</p>
+        </div>
+        <div className="sk-grid is-3">
+          {products.map((prod, i) => {
+            const p = getPrice(prod, isCA);
+            const cm = prod.compareAt ? (isCA ? prod.compareAt.cad : prod.compareAt.usd) : null;
+            return (
+              <Reveal key={prod.id} once delay={i * 80}><Link to={`/product/${prod.id}`} className="sk-pc">
+                <div className="sk-pc-img"><img className="is-ph" src={prod.images[0]} {...dim(prod.images[0])} loading="lazy" decoding="async" alt={prod.name} /></div>
+                <b>{prod.name}</b>
+                <span className="is-desc">{prod.tagline}</span>
+                <div className="sk-pc-foot">
+                  <span className="sk-price">From {formatPrice(p, symbol)}{cm && <s>{formatPrice(cm, symbol)}</s>}</span>
+                  <span className="sk-go" aria-hidden="true"><Ico name="right" /></span>
+                </div>
+              </Link></Reveal>
+            );
+          })}
+        </div>
+      </div></section>
+
+      <NightBand title="Your coolest night" accent="starts tonight"
+        text="Try it for 100 nights, risk-free. Not sleeping cooler? Ship it back for free and get a full refund."
+        cta={{ label: 'Shop the pillow', to: `/product/${PRODUCT.id}` }} />
     </div>
   );
 }

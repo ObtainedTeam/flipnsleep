@@ -44,17 +44,17 @@ export default function NewsletterPopup() {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       <div onClick={close} style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,.6)' }} />
-      <div style={{ position: 'relative', background: c.sky, borderRadius: R.lg, padding: '40px 24px', maxWidth: 420, width: '100%', textAlign: 'center', boxShadow: SH.float }}>
+      <div style={{ position: 'relative', background: c.sky, borderRadius: 28, padding: '44px 24px 36px', maxWidth: 420, width: '100%', textAlign: 'center', boxShadow: SH.float }}>
         <button onClick={close} aria-label="Close" style={{ position: 'absolute', top: 12, right: 16, background: 'none', border: 'none', fontSize: T.h3[0], cursor: 'pointer', color: c.navy }}>×</button>
-        <img src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" style={{ height: 34, marginBottom: 10 }} />
-        <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: T.h3[0], lineHeight: LH.head, marginBottom: 12, color: c.navy }}>Sleep better, pay less</h3>
+        <img className="sk-bob" src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" style={{ width: 96, height: 'auto', margin: '0 auto 14px', display: 'block', filter: 'drop-shadow(0 8px 8px rgba(20,16,64,.14))' }} />
+        <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: T.h3[0], lineHeight: LH.head, fontWeight: 400, marginBottom: 12, color: c.navy }}>Sleep better, pay less</h3>
         {state === 'done' ? (
-          <p style={{ fontSize: T.sm[0], lineHeight: LH.body }}>Check your inbox, your 10% code is on its way. Sweet dreams!</p>
+          <p style={{ fontSize: T.sm[0], lineHeight: LH.body }}>Check your inbox, your 10% code is on its way. Sweet dreams.</p>
         ) : (
           <>
             <p style={{ fontSize: T.sm[0], lineHeight: LH.body, marginBottom: 20 }}>Get 10% off your first order and our best tips for cooler nights.</p>
-            <form onSubmit={submit} style={{ display: 'flex', alignItems: 'center', background: c.white, borderRadius: R.pill, padding: 5, boxShadow: SH.card }}>
-              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Your email address" aria-label="Email address"
+            <form onSubmit={submit} style={{ display: 'flex', alignItems: 'center', background: c.white, borderRadius: R.pill, padding: 5 }}>
+              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" aria-label="Email address" autoComplete="email" spellCheck={false}
                 style={{ flex: 1, border: 'none', background: 'transparent', fontFamily: 'inherit', fontSize: T.md[1], padding: '10px 14px', color: c.navy, minWidth: 0, outline: 'none' }} />
               <button type="submit" disabled={state === 'busy'} style={{ ...BTN_SM, flexShrink: 0 }}>{state === 'busy' ? '…' : 'Get 10% off'}</button>
             </form>

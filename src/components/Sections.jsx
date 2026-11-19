@@ -166,7 +166,7 @@ export function Layers() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (reduced() || typeof IntersectionObserver === 'undefined') { setOpen(true); return; }
+    if (reduced() || typeof IntersectionObserver === 'undefined') return; // dan houdt CSS de stapel open
     const io = new IntersectionObserver(([e]) => setOpen(e.isIntersecting), { threshold: 0.55 });
     io.observe(el);
     return () => io.disconnect();

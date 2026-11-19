@@ -1,62 +1,46 @@
-import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, R, SH, T, LH, SP, W, CARD } from '../theme';
-import { IMG, dim } from '../data';
 import { Link } from 'react-router-dom';
-import { ProductImageBlock } from '../components/Blocks';
-import CloudEdge from '../components/about/CloudEdge';
+import { IMG, dim, rs } from '../data';
 import Bento from '../components/about/Bento';
 import Reveal from '../components/Reveal';
+import { Cloud, PageHead, NightBand } from '../components/Sky';
 
+const VALUES = [
+  ['Honest', 'Real specs, real certifications and no made-up reviews. If we say it, you can check it.'],
+  ['Comfortable', 'Adjustable fill and soft fabrics, so the pillow fits you instead of the other way around.'],
+  ['Cool', 'Breathable materials and a cool-touch side that help you stay comfortable on warm nights.'],
+];
 
 export default function About() {
   return (
     <div>
-      <section className="r-pad" style={{ background: `linear-gradient(180deg, ${c.navy}, ${c.purple})`, color: c.white, textAlign: 'center', ...rv('pad', ...SP.sectionTop), position: 'relative', overflow: 'hidden' }}>
-        <img src={IMG.night} {...dim(IMG.night)} decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: .25 }} />
-        <div style={{ position: 'relative', maxWidth: W.text, margin: '0 auto' }}>
-          <div style={{ ...EYEBROW, color: c.amber }}>Our story</div>
-          <h1 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h1), margin: '8px 0 16px', lineHeight: LH.tight, textShadow: SH.text }}>Built for the 3 AM club</h1>
-          <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, color: c.lilac, maxWidth: W.narrow, margin: '0 auto 32px' }}>
-            flip'nsleep started with a simple observation: hot sleepers everywhere lie awake at night, too warm to settle, flipping their pillow to find the cold side. Whether it's a warm bedroom, a partner who runs hot or the way sleep shifts over the years, the fix should be simple. So we built a pillow where the cold side is always there.
-          </p>
-        </div>
-        {/* Boven de donkere foto-overlay leggen, anders kleurt de wolkenrand grijs */}
-        {/* Negatieve marge = sectie-gutter, zodat de wolkenrand tot aan beide paginaranden loopt */}
-        <div className="r-mar" style={{ position: 'relative', zIndex: 1, ...rv('mar', `0 -${SP.gutter[0]}px`, `0 -${SP.gutter[1]}px`) }}><CloudEdge fill={c.cream} /></div>
-      </section>
+      <PageHead title="Built for the 3 AM club"
+        intro="flip'nsleep started with a simple observation: hot sleepers everywhere lie awake at night, too warm to settle, flipping their pillow to find the cold side. So we built a pillow where the cold side is always there." />
 
-      <Reveal><section className="r-pad" style={{ maxWidth: W.page + 80, margin: '0 auto', ...rv('pad', '48px 40px 0', '32px 20px 0') }}>
-        <ProductImageBlock src={IMG.coverDuo} alt="Two Signature Cold Pillows, cool side and bamboo side" height={[460, 260]} style={{ boxShadow: SH.strong }} imgStyle={{ maxHeight: '78%', maxWidth: '70%', filter: 'drop-shadow(0 24px 30px rgba(32,27,93,.28))' }} />
-        <div className="grid-3m1 r-gap" style={{ ...rv('gap', ...SP.gap), marginTop: 40 }}>
-          {[
-            ['Honest', 'Real specs, real certifications and no made-up reviews. If we say it, you can check it.'],
-            ['Comfortable', 'Adjustable fill and soft fabrics, so the pillow fits you instead of the other way around.'],
-            ['Cool', 'Breathable materials and a cool-touch side that help you stay comfortable on warm nights.'],
-          ].map(([t, d], i) => (
-            <div key={i} className="r-pad" style={{ ...CARD, ...rv('pad', ...SP.card) }}>
-              <h3 className="r-fs" style={{ fontFamily: FONT_SUB, fontWeight: 600, ...rv('fs', ...T.h4), lineHeight: LH.head, color: c.navy, marginBottom: 8 }}>{t}</h3>
-              <p style={{ fontSize: T.sm[0], lineHeight: LH.body, color: c.grayD }}>{d}</p>
-            </div>
+      <section className="sk-sec" style={{ paddingTop: 32 }}><div className="sk-wrap">
+        <Reveal once><div className="sk-tile" style={{ aspectRatio: 'auto', minHeight: 'clamp(240px, 36vw, 460px)' }}>
+          <Cloud className="is-a sk-drift" style={{ width: '22%' }} /><Cloud className="is-b sk-drift" style={{ width: '26%' }} />
+          <img className="sk-bob" src={IMG.coverDuo} {...dim(IMG.coverDuo)} {...rs(IMG.coverDuo, '(max-width: 767px) 70vw, 520px')} decoding="async" alt="Two Signature Cold Pillows, cool side and bamboo side" style={{ width: 'min(70%, 520px)' }} />
+        </div></Reveal>
+        <div className="sk-grid is-3" style={{ marginTop: 24 }}>
+          {VALUES.map(([t, d]) => (
+            <div key={t} className="sk-card"><h3 className="sk-h3">{t}</h3><p style={{ fontSize: 16, lineHeight: 1.6, color: 'var(--ink-2)', marginTop: 8 }}>{d}</p></div>
           ))}
         </div>
-      </section></Reveal>
+      </div></section>
 
       <Bento />
 
-      <Reveal><section className="r-pad" style={{ maxWidth: W.text + 80, margin: '0 auto', ...rv('pad', ...SP.section) }}>
-        <h2 className="r-fs" style={{ fontFamily: FONT_DISPLAY, ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, marginBottom: 16 }}>What we believe</h2>
-        <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, color: c.grayD, marginBottom: 20 }}>
-          Sleep is not a luxury, and cooling down shouldn't require gadgets. We believe in simple, honest product design: two fabrics that do their job, a filling you can adjust yourself, and certifications you can verify: OEKO-TEX Standard 100 for the fabrics, CertiPUR-US for the foam.
-        </p>
-        <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, color: c.grayD, marginBottom: 20 }}>
-          We also believe you shouldn't have to gamble on sleep. That's why every order is a buy-one-get-one-free set, ships free, and comes with a 100-night trial. If it doesn't make your nights better, it goes back on us.
-        </p>
-        <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.loose, color: c.grayD }}>
-          flip'nsleep is part of Obtained VOF and ships across the United States and Canada.
-        </p>
-        <div style={{ textAlign: 'center', marginTop: 32 }}>
-          <Link to="/product/signature-cold-pillow" style={BTN}>Shop the deal</Link>
-        </div>
-      </section></Reveal>
+      <section className="sk-sec"><div className="sk-wrap"><Reveal once><div className="sk-prose">
+        <h2 style={{ marginTop: 0 }}>What we believe</h2>
+        <p>Sleep is not a luxury, and cooling down shouldn't require gadgets. We believe in simple, honest product design: two fabrics that do their job, a filling you can adjust yourself, and certifications you can verify: OEKO-TEX Standard 100 for the fabrics, CertiPUR-US for the foam.</p>
+        <p>We also believe you shouldn't have to gamble on sleep. That's why every order is a buy-one-get-one-free set, ships free, and comes with a 100-night trial. If it doesn't make your nights better, it goes back on us.</p>
+        <p>flip'nsleep is part of Obtained VOF and ships across the United States and Canada.</p>
+        <div style={{ marginTop: 32 }}><Link to="/product/signature-cold-pillow" className="sk-btn">Shop the deal</Link></div>
+      </div></Reveal></div></section>
+
+      <NightBand title="We don't sleep" accent="until you do"
+        text="Good enough isn't good enough. Not in our products, not in our service, and not in your sleep."
+        cta={{ label: 'How it works', to: '/how-it-works' }} />
     </div>
   );
 }

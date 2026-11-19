@@ -36,7 +36,7 @@ export const PRODUCT_BENTO = [
 export const PILLOW_ACCORDION = [
   ['What makes it cool', 'Two things work together. The filling is shredded memory foam, so air moves between the pieces and heat escapes instead of building up like it does in a solid block. The cool side is a cool-touch fabric with a tested Q-max of 0.26, which means it feels cold the moment your skin touches it. Like every cool-touch fabric it does not stay ice-cold all night, so flip it for a fresh cool side.'],
   ['How the adjustable fill works', 'Your pillow arrives generously filled. Unzip it and take out a few handfuls until the height fits your sleeping position: side sleepers usually keep the most, back sleepers a little less, stomach sleepers the least. Keep the spare filling in a bag so you can add it back any time.'],
-  ['Cool side vs warm side', 'One face is the cool-touch fabric for warm nights. The other is a soft bamboo fiber fabric that feels cozy when the bedroom gets colder. Same pillow, same fit, just flip it over.'],
+  ['Cool side vs cozy side', 'One face is the cool-touch fabric for warm nights. The other is a soft bamboo fiber fabric that feels cozy when the bedroom gets colder. Same pillow, same fit, just flip it over.'],
   ['Care and washing', 'The outer cover zips off and goes in the washing machine at 40°C / 104°F. Do not wash the foam filling itself. Fluff the pillow now and then to keep the filling evenly spread.'],
   ['Size and fit', 'It measures 50 × 76 cm (20 × 30 in), the US standard size, so it fits standard pillowcases, including the ones in our Breeze Bamboo Sheet Set. The foam is CertiPUR-US certified and the fabrics are OEKO-TEX Standard 100.'],
 ];
