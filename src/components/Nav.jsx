@@ -14,12 +14,7 @@ import { Cloud } from './Sky';
 const pillowCard = (isCA) => ({
   to: `/product/${PRODUCT.id}`, name: PRODUCT.name, img: IMG.coverFront,
   price: getPrice(BUNDLES[0], isCA), compare: isCA ? BUNDLES[0].compareAt.cad : BUNDLES[0].compareAt.usd,
-  badge: 'Buy 1, get 1 free', from: true,
-});
-const bundleCard = (b, isCA) => ({
-  to: `/product/${PRODUCT.id}`, name: b.short, sub: `${b.pillows} Signature Cold Pillows`, img: b.id === '2p2' ? IMG.coverDuo : b.image,
-  price: getPrice(b, isCA), compare: isCA ? b.compareAt.cad : b.compareAt.usd,
-  badge: b.short.replace('Get', 'get').replace('Free', 'free'),
+  badge: 'Buy 1, Get 1 Free', sticker: true, from: true,
 });
 const prodCard = (id, isCA) => {
   const p = productById(id);
@@ -31,7 +26,7 @@ const prodCard = (id, isCA) => {
 
 // [key, label, intro, cards(isCA) | null (soon), soonImage]
 const CATS = [
-  { key: 'pillows', label: 'Pillows', intro: 'Adjustable, dual-sided and cool to the touch. Every order is buy one, get one free.', cards: (ca) => [pillowCard(ca), ...BUNDLES.map(b => bundleCard(b, ca))] },
+  { key: 'pillows', label: 'Pillows', intro: 'Adjustable, dual-sided and cool to the touch. Every order is buy one, get one free.', cards: (ca) => [pillowCard(ca)] },
   { key: 'comforters', label: 'Comforters', intro: 'Lightweight, double-sided cooling comforters for people who sleep hot.', cards: (ca) => [prodCard('cooling-comforter', ca)] },
   { key: 'blankets', label: 'Blankets', intro: 'Grounding weight in a breathable bamboo cover that does not trap heat.', cards: (ca) => [prodCard('cooling-weighted-blanket', ca)] },
   { key: 'sheets', label: 'Sheets', intro: 'Silky 400-thread-count bamboo that wicks moisture and sleeps cool.', cards: (ca) => [prodCard('bamboo-sheet-set', ca)] },
@@ -87,7 +82,9 @@ function PanelCard({ card, symbol, onPick }) {
     <Link to={card.to} onClick={onPick} className="card-hover" style={{ textDecoration: 'none', display: 'block' }}>
       <div style={{ position: 'relative', background: c.sky, height: 150, borderRadius: R.sm, overflow: 'hidden' }}>
         <img src={card.img} {...dim(card.img)} {...rs(card.img, '180px')} loading="lazy" decoding="async" alt="" style={{ width: '100%', height: '100%', objectFit: card.cover ? 'cover' : 'contain', display: 'block', padding: card.cover ? 0 : 10 }} />
-        <span style={{ ...CHIP, position: 'absolute', top: 10, left: 10, fontSize: T.xs[0], padding: '5px 10px', background: c.navy, color: c.white }}>{card.badge}</span>
+        {card.sticker
+          ? <span style={{ position: 'absolute', right: 10, bottom: 10, transform: 'rotate(-5deg)', background: c.navy, color: c.amber, borderRadius: R.pill, padding: '7px 12px', fontFamily: FONT_DISPLAY, fontSize: 11, lineHeight: 1, whiteSpace: 'nowrap' }}>{card.badge}</span>
+          : <span style={{ ...CHIP, position: 'absolute', top: 10, left: 10, fontSize: T.xs[0], padding: '5px 10px', background: c.navy, color: c.white }}>{card.badge}</span>}
       </div>
       <div style={{ padding: '12px 2px 4px' }}>
         <div style={{ fontFamily: FONT_SUB, fontWeight: 600, fontSize: T.sm[0], lineHeight: LH.head, color: c.navy, marginBottom: 4 }}>{card.name}</div>

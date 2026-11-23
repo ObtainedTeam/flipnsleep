@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { IMG, dim } from '../data';
 import Reveal from '../components/Reveal';
 import { JUDGEME_REVIEW_FORM_URL } from '../judgeme';
-import { PageHead } from '../components/Sky';
+import { PageHead, Mascot } from '../components/Sky';
 import { TrustRow } from '../components/Sections';
 
 export default function Reviews() {
@@ -43,7 +42,7 @@ export default function Reviews() {
             </>
           ) : (
             <div className="sk-card is-sky" style={{ textAlign: 'center', padding: 'clamp(28px, 5vw, 56px)' }}>
-              <img className="sk-bob" src={IMG.iconCloud} {...dim(IMG.iconCloud)} decoding="async" alt="" aria-hidden="true" style={{ width: 120, height: 'auto', margin: '0 auto 20px', display: 'block', filter: 'drop-shadow(0 10px 10px rgba(20,16,64,.14))' }} />
+              <Mascot className="sk-bob" style={{ width: 120, margin: '0 auto 20px', filter: 'drop-shadow(0 10px 10px rgba(20,16,64,.14))' }} />
               <h2 className="sk-h2" style={{ fontSize: 'clamp(22px, 2.4vw, 28px)' }}>The first reviews are on their way</h2>
               <p className="sk-lead" style={{ margin: '16px auto 0', maxWidth: '60ch' }}>
                 flip'nsleep is a young brand, and our first customers are sleeping on their pillows right now. Every verified buyer automatically gets a review invitation, and as their reviews come in they'll appear on this page, unfiltered. Until then, we'd rather show you no reviews than fake ones.

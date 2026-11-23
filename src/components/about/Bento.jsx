@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { c, R, SH, T, LH, SP, W, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, EYEBROW, CHIP } from '../../theme';
 import { IMG, dim } from '../../data';
+import { Mascot } from '../Sky';
 import Reveal from '../Reveal';
 import './about.css';
 
@@ -54,7 +55,7 @@ export default function Bento() {
         </div>
 
         <div className="r-pad ab-m-full" style={{ ...TILE, background: c.white, boxShadow: SH.card, justifyContent: 'space-between', ...PAD }}>
-          <img src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" aria-hidden="true" className="sk-bob" style={{ width: 72, height: 'auto' }} />
+          <Mascot className="sk-bob" style={{ width: 72 }} />
           <div>
             <p className="r-fs" style={{ fontFamily: FONT_SUB, fontWeight: 600, ...rv('fs', ...T.lg), lineHeight: LH.head, color: c.navy }}>The cold side should always be there when you need it.</p>
             <div style={{ fontSize: T.xs[0], color: c.grayD, marginTop: 8 }}>The flip'nsleep team</div>

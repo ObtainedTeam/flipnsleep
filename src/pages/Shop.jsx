@@ -24,7 +24,7 @@ export default function Shop() {
             const cm = isCA ? b.compareAt.cad : b.compareAt.usd;
             const img = { src: IMG.coverDuo, ...dim(IMG.coverDuo), ...rs(IMG.coverDuo, '(max-width: 699px) 60vw, 340px'), decoding: 'async' };
             return (
-              <Reveal key={b.id} once delay={i * 100}><Link to={`/product/${PRODUCT.id}`} className="sk-pc is-wide">
+              <Reveal key={b.id} once delay={i * 100}><Link to={`/product/${PRODUCT.id}?bundle=${b.id}`} className="sk-pc is-wide">
                 <div className="sk-pc-img">
                   <span className="sk-tag">{b.pillows === 2 ? 'Buy 1, get 1 free' : 'Buy 2, get 2 free'}</span>
                   <Cloud className="is-a" /><Cloud className="is-b" />

@@ -1,4 +1,76 @@
 {
+  "redirects": [
+    {
+      "source": "/product/1p1",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/2p2",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/1p",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/bundle-1p1",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/bundle-2p2",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/buy-1-get-1-free",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/buy-2-get-2-free",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/1-1-signature-bundle",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/product/2-2-signature-bundle",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/1-1-signature-bundle",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/products/2-2-signature-bundle",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/bundles",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/bundles/:path*",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    },
+    {
+      "source": "/bundle/:path*",
+      "destination": "/product/signature-cold-pillow",
+      "statusCode": 301
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",

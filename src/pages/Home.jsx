@@ -1,20 +1,45 @@
+import { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { c, rv, FONT_SUB, T, LH, W } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { BUNDLES, IMG, dim, rs } from '../data';
-import { EXAMPLE_REVIEWS } from '../data/home-content';
+import { BUNDLES, dim } from '../data';
+import { PROMO_VIDEO } from '../data/reviews-media';
 import Reveal from '../components/Reveal';
-import { ReviewsBlock } from '../components/Blocks';
 import HomeHero from '../components/HomeHero';
-import { Cloud, NightBand } from '../components/Sky';
-import { TrustRow, ProductRail, FlipBand, Special, Layers, Steps3, CompareBand, FAQSection } from '../components/Sections';
+import { Mascot, NightBand } from '../components/Sky';
+import { TrustRow, ProductGrid, FlipBand, Special, Layers, Steps3, CompareBand, FAQSection } from '../components/Sections';
+import { ReviewWallHome, ReviewCarouselBand, useHasReviews } from '../components/ReviewWall';
 
-// Homepage volgens het redesign (kleurset 1). Volgorde: hemel-hero, twee
-// promo's en de beloftes, productrij, flip, special, lagen, drie stappen,
-// vergelijking, nachtband, reviews, vragen.
+// Achtergrond van de BOGO-tegel: poster, en zodra PROMO_VIDEO.src is ingevuld
+// een video die muted speelt zolang de tegel in beeld is.
+function PromoMedia() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v || typeof IntersectionObserver === 'undefined') return undefined;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined; // alleen de poster
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { if (!v.getAttribute('src')) v.src = v.dataset.src; const p = v.play(); if (p && p.catch) p.catch(() => {}); } else v.pause();
+    }, { threshold: 0.35 });
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div className="sk-promo-media" aria-hidden="true">
+      {PROMO_VIDEO.src
+        ? <video ref={ref} data-src={PROMO_VIDEO.src} poster={PROMO_VIDEO.poster} muted loop playsInline preload="none" />
+        : <img src={PROMO_VIDEO.poster} {...dim(PROMO_VIDEO.poster)} loading="lazy" decoding="async" alt="" />}
+    </div>
+  );
+}
+
+// Homepage. Volgorde: hemel-hero, twee promo's en de beloftes, productraster,
+// videoreviews, flip, special, lagen, drie stappen, vergelijking, nachtband met
+// de doorlopende reviews, vragen.
 export default function Home() {
   const { symbol, isCA } = useCurrency();
   const deal = formatPrice(getPrice(BUNDLES[0], isCA), symbol);
+  const hasReviews = useHasReviews();
 
   return (
     <div>
@@ -22,31 +47,32 @@ export default function Home() {
 
       <section><div className="sk-wrap">
         <div className="sk-promos">
-          <Link className="sk-promo is-a" to="/product/signature-cold-pillow">
+          <Link className="sk-promo is-a has-media" to="/product/signature-cold-pillow?bundle=1p1">
             <div><h3>Buy one, <span className="sk-amber">get one free</span></h3><p>Two Signature Cold Pillows for {deal}, shipped free.</p><span className="is-go">Shop the deal</span></div>
-            <div className="sk-promo-art"><Cloud className="sk-drift" /><img src={IMG.coverDuo} {...dim(IMG.coverDuo)} {...rs(IMG.coverDuo, '210px')} loading="lazy" decoding="async" alt="" /></div>
+            <PromoMedia />
           </Link>
           <Link className="sk-promo is-b" to="/quiz">
-            <div><h3>How much fill do you need?</h3><p>Answer a few questions and find the height for the way you sleep.</p><span className="is-go">Take the sleep quiz</span></div>
-            <div className="sk-promo-art"><img className="sk-bob" src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" /></div>
+            <div><h3>How much filling do you need?</h3><p>Answer a few questions and find the height for the way you sleep.</p><span className="is-go">Take the sleep quiz</span></div>
+            <div className="sk-promo-art"><Mascot className="sk-bob" /></div>
           </Link>
         </div>
         <TrustRow />
       </div></section>
 
-      <ProductRail />
+      <ProductGrid />
+      <ReviewWallHome />
       <FlipBand />
       <Special />
       <Layers />
       <Steps3 />
       <CompareBand flush />
 
-      <NightBand id="offer" strip title="Your coolest night" accent="starts tonight"
+      <NightBand id="offer" bottom={hasReviews ? 'sky' : 'ink'} title="Your coolest night" accent="starts tonight"
         text="Try it for 100 nights, risk-free. Not sleeping cooler? Ship it back for free and get a full refund."
         cta={{ label: 'Order your Cold Pillow', to: '/product/signature-cold-pillow' }} />
 
-      {/* Reviews: echte Judge.me-reviews, anders gelabelde voorbeelden */}
-      <ReviewsBlock demo={{ reviews: EXAMPLE_REVIEWS }} noTop />
+      {/* Doorlopende carousel met echte Judge.me-reviews; zonder reviews staat hier niets */}
+      <ReviewCarouselBand />
 
       <FAQSection />
 

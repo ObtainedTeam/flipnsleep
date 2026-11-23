@@ -11,7 +11,7 @@ done = []
 for f in sorted(IMGDIR.iterdir()):
     if f.suffix.lower() not in ('.webp', '.jpg', '.jpeg', '.png') or any(f.stem.endswith(f'-{w}') for w in WIDTHS):
         continue
-    if f.stem.startswith('logo') or f.stem == 'hero-poster-720':
+    if f.stem.startswith(('logo', 'hero-pillows')) or f.stem == 'hero-poster-720':
         continue
     im = Image.open(f)
     if im.width < 1100:

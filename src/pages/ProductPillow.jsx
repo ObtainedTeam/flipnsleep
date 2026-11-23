@@ -1,39 +1,50 @@
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { PRODUCT, BUNDLES } from '../data';
+import { PRODUCT, BUNDLES, SINGLE, GIFTS } from '../data';
 import { CartContext } from '../components/Cart';
-import { buyNow } from '../shopify';
+import { buyNow, singlePillowLive, giftsLive } from '../shopify';
 import { trackAddToCart, trackViewContent } from '../track';
 import PillowQuiz from '../components/PillowQuiz';
 import { TrustAccordion, ShippingCountdown } from '../components/Blocks';
 import StickyBuyBar from '../components/StickyBuyBar';
 import LookInside from '../components/product/LookInside.jsx';
-import { CloudList, NightBand } from '../components/Sky';
+import { CloudList, NightBand, Ico } from '../components/Sky';
 import { FlipBand, Special, Steps3, CompareBand, FAQSection } from '../components/Sections';
-import { useReviews, Crumbs, Gallery, GalleryReview, BuyTrust, SpecList, ProductReviews, CompleteYourBed } from '../components/product/ProductSections';
-import { EXAMPLE_REVIEWS } from '../data/product-content.js';
+import { ReviewWallProduct } from '../components/ReviewWall';
+import { useReviews, Crumbs, Gallery, GalleryReview, BuyTrust, SpecList, CompleteYourBed } from '../components/product/ProductSections';
 
-// Kussenpagina volgens het redesign: galerij en koopblok, daarna dezelfde
-// secties als op home (flip, special, lagen, stappen, vergelijking, nachtband,
-// reviews, vragen). Echte Judge.me-reviews tonen sterren; voorbeelden nooit.
+// Kussenpagina. Volgorde: koopblok, reviews (video en tekst), Just flip it,
+// Ready in 3 steps, de doorsnede met What makes it special, daarna de vulling-
+// quiz, de vergelijking, de nachtband, vragen en de rest van het assortiment.
 const GALLERY = PRODUCT.gallery.map(([src, alt]) => ({ src, alt, thumb: src.replace('.webp', '-480.webp') }));
+const DEAL = { 1: 'Single pillow', 2: 'Buy 1, get 1 free', 4: 'Buy 2, get 2 free' };
 
 export default function ProductPillow({ onCartOpen }) {
   const { symbol, isCA } = useCurrency();
-  const [selected, setSelected] = useState('1p1');
+  const [params] = useSearchParams();
+  const [selected, setSelected] = useState('1p1'); // 2 pillows staat standaard aan
+  const [single, setSingle] = useState(false);
+  const [gifts, setGifts] = useState(false);
   const buyRef = useRef(null);
   useEffect(() => { trackViewContent({ content_type: 'product', content_name: 'flipnsleep-pillow' }); }, []);
+  // Opties die van Shopify afhangen pas na het laden bepalen (SSR toont de vaste twee).
+  useEffect(() => { setSingle(singlePillowLive()); setGifts(giftsLive()); }, []);
+  const options = single ? [SINGLE, ...BUNDLES] : BUNDLES;
+  // ?bundle=1p1 of ?bundle=2p2 (vanaf de homepage en het menu) kiest de optie vooraf.
+  const wanted = params.get('bundle');
+  useEffect(() => { if (wanted && options.some(o => o.id === wanted)) setSelected(wanted); }, [wanted, single]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const rvw = useReviews();
   const hasReviews = !!(rvw && rvw.count > 0);
-  const bundle = BUNDLES.find(b => b.id === selected);
+  const bundle = options.find(b => b.id === selected) || BUNDLES[0];
   const price = getPrice(bundle, isCA);
   const compare = isCA ? bundle.compareAt.cad : bundle.compareAt.usd;
-  const perPillow = price / bundle.pillows;
   const dealPrice = getPrice(BUNDLES[0], isCA);
 
   const addToCart = () => {
-    trackAddToCart({ content_type: 'product', content_name: 'flipnsleep-pillow', contents: [{ id: selected, quantity: 1 }] });
-    CartContext.add(selected, 1);
+    trackAddToCart({ content_type: 'product', content_name: 'flipnsleep-pillow', contents: [{ id: bundle.id, quantity: 1 }] });
+    CartContext.add(bundle.id, 1);
     onCartOpen && onCartOpen();
   };
 
@@ -55,60 +66,75 @@ export default function ProductPillow({ onCartOpen }) {
                 {rvw.avg} from {rvw.count} verified review{rvw.count === 1 ? '' : 's'}
               </a>
             )}
-            <p className="sk-lead">{PRODUCT.desc}</p>
+            <CloudList small items={PRODUCT.usps} style={{ marginTop: 20 }} />
 
-            <div className="pd-price"><b>{formatPrice(price, symbol)}</b><s>{formatPrice(compare, symbol)}</s><span>{formatPrice(perPillow, symbol)} a pillow</span></div>
+            <div className="pd-price"><b>{formatPrice(price, symbol)}</b><s>{formatPrice(compare, symbol)}</s>{bundle.pillows > 1 && <span>{formatPrice(price / bundle.pillows, symbol)} a pillow</span>}</div>
 
             <fieldset className="pd-opts">
-              <legend className="sr-only">Choose your bundle</legend>
-              {BUNDLES.map(b => {
+              <legend className="sr-only">Choose how many pillows</legend>
+              {options.map(b => {
                 const p = getPrice(b, isCA);
                 return (
                   <label key={b.id} className="pd-opt">
-                    <input type="radio" name="bundle" value={b.id} checked={selected === b.id} onChange={() => setSelected(b.id)} />
-                    <span><b>{b.pillows} pillows</b><small>{b.pillows === 2 ? 'Buy one, get one free' : 'Buy two, get two free'}. {b.blurb}</small></span>
-                    <span className="is-p">{formatPrice(p, symbol)}<small>{formatPrice(p / b.pillows, symbol)} each</small></span>
+                    <input type="radio" name="bundle" value={b.id} checked={bundle.id === b.id} onChange={() => setSelected(b.id)} />
+                    <span><b>{b.pillows} pillow{b.pillows === 1 ? '' : 's'}</b><small>{b.pillows === 1 ? b.blurb : `${DEAL[b.pillows]}. ${b.blurb}`}</small></span>
+                    <span className="is-p">{formatPrice(p, symbol)}<small>{b.pillows === 1 ? <s>{formatPrice(isCA ? b.compareAt.cad : b.compareAt.usd, symbol)}</s> : `${formatPrice(p / b.pillows, symbol)} each`}</small></span>
                   </label>
                 );
               })}
             </fieldset>
 
+            {gifts && (
+              <div className="pd-gifts">
+                <h3>Free gifts included</h3>
+                <ul>
+                  {GIFTS.map(g => (
+                    <li key={g.id}>
+                      <span className="is-ico"><Ico name={g.icon} /></span>
+                      <span><b>{g.name}</b><small>{g.note}</small></span>
+                      <span className="is-val"><s>value {formatPrice(isCA ? g.value.cad : g.value.usd, symbol)}</s><b>Free</b></span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <div ref={buyRef} className="pd-cta">
               <button type="button" className="sk-btn" onClick={addToCart}>Add to cart</button>
-              <button type="button" className="sk-btn is-line" onClick={() => buyNow(selected)}>Buy now</button>
+              <button type="button" className="sk-btn is-line" onClick={() => buyNow(bundle.id)}>Buy now</button>
             </div>
             <ShippingCountdown />
             <BuyTrust />
-            <CloudList small items={PRODUCT.usps} />
+            <p className="pd-claim">Fewer than 0.5% of orders ever claim our money-back guarantee.</p>
+            <p className="pd-desc">{PRODUCT.desc}</p>
             <TrustAccordion specs={<SpecList specs={PRODUCT.specs} />} />
           </div>
         </section>
       </div>
 
+      <ReviewWallProduct productName={PRODUCT.name} />
+
       <FlipBand />
-      <Special cta={{ label: 'Add to cart', onClick: addToCart }} />
+      <Steps3 />
 
       {/* Look inside: de scroll-gestuurde doorsnede, laag voor laag */}
       <LookInside />
-
-      <Steps3 />
+      <Special cta={{ label: 'Add to cart', onClick: addToCart }} />
 
       {/* Filling finder: vier vragen, een advies in handjes schuim */}
       <PillowQuiz />
 
       <CompareBand />
 
-      <NightBand id="offer" strip title="Sleep cooler tonight," accent="or your money back"
+      <NightBand id="offer" bottom="ink" title="Sleep cooler tonight," accent="or your money back"
         text={`Two pillows for ${formatPrice(dealPrice, symbol)}, with free shipping. Sleep on it for 100 nights. Not sleeping cooler? We refund you in full, with free return shipping.`}
         cta={{ label: 'Add to cart', onClick: addToCart }} />
-
-      <ProductReviews noTop rvw={rvw} productName={PRODUCT.name} examples={EXAMPLE_REVIEWS} />
 
       <FAQSection limit={8} />
 
       <CompleteYourBed current={PRODUCT.id} />
 
-      <StickyBuyBar targetRef={buyRef} name="Signature Cold Pillow" price={`${formatPrice(price, symbol)} for ${bundle.pillows} pillows`} onAdd={addToCart} />
+      <StickyBuyBar targetRef={buyRef} name="Signature Cold Pillow" price={`${formatPrice(price, symbol)} for ${bundle.pillows} pillow${bundle.pillows === 1 ? '' : 's'}`} onAdd={addToCart} />
     </div>
   );
 }

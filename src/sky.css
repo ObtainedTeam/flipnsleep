@@ -42,26 +42,21 @@
 .sk-ico { width: 20px; height: 20px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- Wolken ---------- */
-/* Wolkvorm in elke kleur (masker van het eigen wolk-icoon) */
-.sk-cl { display: block; aspect-ratio: 199 / 98; background: var(--c, #fff);
-  -webkit-mask: url(/images/icon-cloud-white.png) center / contain no-repeat; mask: url(/images/icon-cloud-white.png) center / contain no-repeat; }
+/* Eén wolkvorm in code (SVG in een CSS-variabele), als masker in elke kleur te gebruiken. */
+:root { --cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60'%3E%3Crect x='4' y='30' width='112' height='30' rx='15'/%3E%3Ccircle cx='29' cy='35' r='17'/%3E%3Ccircle cx='52' cy='24' r='20'/%3E%3Ccircle cx='79' cy='28' r='18'/%3E%3Ccircle cx='99' cy='39' r='13'/%3E%3C/svg%3E"); }
+.sk-cl { display: block; aspect-ratio: 2 / 1; background: var(--c, #fff); -webkit-mask: var(--cloud) center / contain no-repeat; mask: var(--cloud) center / contain no-repeat; }
+.sk-mascot { display: block; height: auto; }
 .sk-clist { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
 .sk-clist li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: start; font-size: 16px; line-height: 1.5; color: var(--ink); }
-.sk-clist li::before { content: ""; width: 30px; aspect-ratio: 199 / 98; margin-top: 5px; background: var(--bullet, var(--pop));
-  -webkit-mask: url(/images/icon-cloud-white.png) center / contain no-repeat; mask: url(/images/icon-cloud-white.png) center / contain no-repeat; }
+.sk-clist li::before { content: ""; width: 30px; aspect-ratio: 2 / 1; margin-top: 5px; background: var(--bullet, var(--pop)); -webkit-mask: var(--cloud) center / contain no-repeat; mask: var(--cloud) center / contain no-repeat; }
 .sk-clist b { display: block; font-weight: 600; font-size: 18px; line-height: 1.3; }
 .sk-clist span { display: block; font-size: 16px; color: var(--ink-2); margin-top: 2px; }
 .sk-clist.is-sm { gap: 10px; } .sk-clist.is-sm li { grid-template-columns: 26px minmax(0, 1fr); } .sk-clist.is-sm li::before { width: 26px; margin-top: 6px; }
 
-/* Wolkenranden: echte strook (twee tinten, met het lachende wolkje) of een masker in elke kleur */
-.sk-strip { overflow: hidden; line-height: 0; pointer-events: none; margin-bottom: -1px; }
-.sk-strip.is-down { margin: -1px 0 0; }
-.sk-strip img { display: block; width: 100%; min-width: 820px; max-width: none; height: auto; position: relative; left: 50%; transform: translateX(-50%); }
-.sk-edge { height: max(104px, 12.7vw); background: var(--ec, var(--pop)); margin-bottom: -1px; pointer-events: none;
-  -webkit-mask: url(/images/clouds-up-1600.webp) center bottom / max(820px, 100%) auto no-repeat; mask: url(/images/clouds-up-1600.webp) center bottom / max(820px, 100%) auto no-repeat; }
-.sk-edge.is-down { height: max(92px, 11.25vw); margin: -1px 0 0;
-  -webkit-mask-image: url(/images/clouds-down-1600.webp); mask-image: url(/images/clouds-down-1600.webp); -webkit-mask-position: center top; mask-position: center top; }
-.sk-strip.is-flush { margin-bottom: 0; }
+/* Wolkenranden: het SVG-component CloudEdge. De kleur van de voorste laag is currentColor. */
+.sk-edge { display: block; width: 100%; margin-bottom: -1px; pointer-events: none; color: var(--pop); }
+.sk-edge.is-down { transform: scaleY(-1); margin: -1px 0 0; }
+.sk-edge.is-flush { margin-bottom: 0; }
 .sk-sky { background: var(--sky); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
@@ -97,7 +92,7 @@
 .sk-stage .is-c1 { position: absolute; left: 3%; top: 9%; width: 27%; }
 .sk-stage .is-c2 { position: absolute; right: 30%; top: 2%; width: 13%; --c: var(--sky); animation-duration: 15s; }
 .sk-stage .is-pillows { position: absolute; left: 8%; bottom: 20%; width: 84%; height: auto; --r: -2deg; filter: drop-shadow(0 22px 18px rgba(20,16,64,.18)); }
-.sk-sticker { position: absolute; left: 2%; bottom: 27%; width: 31%; aspect-ratio: 199 / 98; display: grid; place-items: center; --r: -7deg; animation-duration: 5s; }
+.sk-sticker { position: absolute; left: 2%; bottom: 27%; width: 31%; aspect-ratio: 2 / 1; display: grid; place-items: center; --r: -7deg; animation-duration: 5s; }
 .sk-sticker .sk-cl { position: absolute; inset: 0; --c: var(--ink); }
 .sk-sticker b { position: relative; font: 400 clamp(13px, 1.7vw, 22px)/1 var(--display); color: var(--amber); padding-top: 12%; white-space: nowrap; }
 .sk-hero-strip { position: absolute; left: 0; right: 0; bottom: -1px; z-index: 4; margin: 0; }
@@ -119,11 +114,11 @@
 .sk-promo.is-a { background: var(--ink); color: var(--white); }
 .sk-promo.is-b { background: var(--sky); color: var(--ink); }
 .sk-promo-art { position: relative; width: 132px; }
-.sk-promo-art img { display: block; width: 100%; height: auto; position: relative; transition: transform .4s var(--ease); }
-.sk-promo:hover .sk-promo-art img { transform: translateY(-6px) rotate(-3deg); }
+.sk-promo-art img, .sk-promo-art .sk-mascot { display: block; width: 100%; height: auto; position: relative; transition: transform .4s var(--ease); }
+.sk-promo:hover .sk-promo-art img, .sk-promo:hover .sk-promo-art .sk-mascot { transform: translateY(-6px) rotate(-3deg); }
 .sk-promo-art .sk-cl { position: absolute; width: 62%; right: -14%; top: -20%; --c: var(--sky); }
 .sk-promo.is-b .sk-promo-art { display: grid; place-items: center; aspect-ratio: 1; border-radius: 50%; background: var(--white); }
-.sk-promo.is-b .sk-promo-art img { width: 74%; }
+.sk-promo.is-b .sk-promo-art img, .sk-promo.is-b .sk-promo-art .sk-mascot { width: 74%; }
 @media (min-width: 900px) { .sk-promos { grid-template-columns: 1fr 1fr; } .sk-promo { padding: 36px 40px; } .sk-promo-art { width: 210px; } .sk-promo.is-b .sk-promo-art { width: 170px; margin-right: 16px; } }
 
 .sk-trust { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 16px; padding: 32px 0 0; margin: 32px 0 0; border-top: 1px solid var(--line); list-style: none; }
@@ -325,3 +320,108 @@ details[open] > summary .sk-plus { transform: rotate(45deg); background: var(--a
 .sk-table tbody tr:last-child .is-us { border-radius: 0 0 20px 20px; }
 .sk-table td:first-child { font-weight: 600; white-space: nowrap; }
 .sk-table td:last-child { color: var(--ink-2); }
+
+/* ---------- Reviewsectie: bento met video- en tekstreviews ---------- */
+.rw-all { flex-shrink: 0; }
+@media (max-width: 599px) { .rw .sk-row-head { flex-direction: column; align-items: flex-start; } }
+.rw-grid { display: grid; gap: 16px; }
+@media (min-width: 768px) { .rw-grid { gap: 24px; } }
+.rw-cell { min-width: 0; display: flex; }
+.rw-cell > * { flex: 1; min-width: 0; }
+.rw-tile { position: relative; margin: 0; border-radius: 24px; overflow: hidden; background: var(--sky); color: var(--ink); isolation: isolate; transition: transform .45s var(--ease); }
+.rw-tile:hover { transform: translateY(-6px) rotate(-.6deg); }
+.rw-tile.is-pop { background: var(--pop); } .rw-tile.is-ink { background: var(--ink); color: var(--white); }
+.rw-tile video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; cursor: pointer; background: var(--sky); }
+.rw-tile figcaption { position: absolute; left: 14px; right: 14px; bottom: 14px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; pointer-events: none; }
+.rw-tile figcaption b, .rw-tile figcaption span { background: var(--white); color: var(--ink); border-radius: 14px; padding: 8px 12px; font: 600 14px/1.3 var(--body); }
+.rw-tile figcaption span { font-weight: 500; font-size: 13px; }
+.rw-chip { position: absolute; left: 14px; top: 14px; z-index: 2; max-width: calc(100% - 28px); background: var(--white); color: var(--ink); border: 0; border-radius: 14px; padding: 8px 12px; font: 600 13px/1.2 var(--body); }
+@media (max-width: 767px) { .rw-chip { left: 10px; top: 10px; max-width: calc(100% - 20px); font-size: 12px; padding: 7px 10px; } }
+.rw-chip.is-btn { left: auto; right: 14px; cursor: pointer; }
+.rw-play { position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 0; background: var(--white); color: var(--ink); display: grid; place-items: center; cursor: pointer; z-index: 2; }
+.rw-play svg { width: 26px; height: 26px; fill: currentColor; margin-left: 3px; }
+.rw-tile.is-empty .rw-c1 { position: absolute; left: -8%; top: 22%; width: 42%; --c: rgba(255,255,255,.9); }
+.rw-tile.is-empty .rw-c2 { position: absolute; right: -10%; bottom: 14%; width: 50%; --c: rgba(255,255,255,.55); animation-duration: 15s; }
+.rw-tile.is-ink .rw-c1 { --c: rgba(213,235,249,.22); } .rw-tile.is-ink .rw-c2 { --c: rgba(213,235,249,.14); }
+.rw-tile.is-empty .rw-face { position: absolute; left: 50%; top: 50%; width: 38%; max-width: 150px; margin: -11% 0 0 -19%; --r: -4deg; }
+.rw-card { margin: 0; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 10px; color: var(--ink); background: var(--white); min-width: 0; transition: transform .45s var(--ease); }
+.rw-card:hover { transform: translateY(-4px); }
+.rw-card.is-line { box-shadow: inset 0 0 0 1px var(--line); } .rw-card.is-sky { background: var(--sky); }
+.rw-card b.is-title { font-weight: 600; font-size: 19px; line-height: 1.3; }
+.rw-card p { margin: 0; flex: 1; font-size: 16px; line-height: 1.6; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+.rw-card footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-3); }
+.rw-verified { background: var(--sky); color: var(--ink); border-radius: 12px; padding: 6px 10px; font-weight: 600; font-size: 12px; line-height: 1; }
+.rw-card.is-sky .rw-verified { background: var(--white); }
+
+/* Homepage: twee rijen van drie, daaronder twee grote staande */
+.rw-grid.is-home { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rw-grid.is-home .rw-tile { aspect-ratio: 4 / 5; }
+.rw-grid.is-home .rw-cell.is-tall { grid-column: 1 / -1; }
+@media (min-width: 768px) {
+  .rw-grid.is-home { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .rw-grid.is-home .rw-cell { grid-column: span 2; }
+  .rw-grid.is-home .rw-cell.is-drop { margin-top: 28px; margin-bottom: -28px; }
+  .rw-grid.is-home .rw-cell.is-tall { grid-column: span 3; margin-top: 28px; }
+  .rw-grid.is-home .rw-cell.is-tall .rw-tile { aspect-ratio: 5 / 6; }
+}
+
+/* Productpagina: video- en tekstreviews door elkaar */
+.rw-grid.is-product { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: dense; }
+.rw-grid.is-product .rw-cell.is-video .rw-tile { aspect-ratio: 4 / 5; }
+@media (max-width: 899px) { .rw-grid.is-product .rw-cell.is-text { grid-column: 1 / -1; } }
+@media (min-width: 900px) {
+  /* Bento 4 x 3: drie video's van twee rijen hoog, vijf tekstkaarten ertussen */
+  .rw-grid.is-product.is-bento { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(230px, auto)); grid-auto-flow: row; }
+  .rw-grid.is-bento .rw-cell.is-video .rw-tile { aspect-ratio: auto; min-height: 100%; }
+  .rw-grid.is-bento .rw-p1 { grid-area: 1 / 1 / 3 / 2; } .rw-grid.is-bento .rw-p2 { grid-area: 1 / 2 / 2 / 3; }
+  .rw-grid.is-bento .rw-p3 { grid-area: 2 / 2 / 3 / 3; } .rw-grid.is-bento .rw-p4 { grid-area: 1 / 3 / 3 / 4; }
+  .rw-grid.is-bento .rw-p5 { grid-area: 1 / 4 / 2 / 5; } .rw-grid.is-bento .rw-p6 { grid-area: 3 / 1 / 4 / 3; }
+  .rw-grid.is-bento .rw-p7 { grid-area: 2 / 4 / 4 / 5; } .rw-grid.is-bento .rw-p8 { grid-area: 3 / 3 / 4 / 4; }
+  /* Minder dan vijf teksten: video's op een rij, teksten eronder */
+  .rw-grid.is-product.is-loose, .rw-grid.is-product.is-videos-only { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .rw-grid.is-loose .rw-cell.is-video, .rw-grid.is-videos-only .rw-cell.is-video { grid-column: span 2; }
+  .rw-grid.is-loose .rw-cell.is-text { grid-column: span 3; }
+}
+
+/* Doorlopende carousel */
+@keyframes rc-move { to { transform: translateX(calc(-50% - 12px)); } }
+.rc { overflow: hidden; padding-block: 8px; }
+.rc-track { display: flex; gap: 24px; width: max-content; animation: rc-move calc(var(--n, 6) * 8s) linear infinite; }
+.rc:hover .rc-track, .rc:focus-within .rc-track, .rc.is-paused .rc-track { animation-play-state: paused; }
+.rc-track .rw-card { width: min(360px, 78vw); flex-shrink: 0; }
+.rc-dup { display: contents; }
+@media (prefers-reduced-motion: reduce) {
+  .rc { overflow-x: auto; } .rc-track { animation: none; padding-inline: 20px; } .rc-dup { display: none; }
+  .rw-tile, .rw-card { transition: none; } .rw-tile:hover, .rw-card:hover { transform: none; }
+}
+
+/* ---------- Homepage: productraster 2 x 2 met beeldvullende foto's ---------- */
+.sk-pgrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px 24px; }
+@media (min-width: 768px) { .sk-pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 24px; } }
+.sk-pc.is-big .sk-pc-img { border-radius: 28px; }
+.sk-pc.is-big b { font-size: 22px; margin-top: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.sk-pc.is-big .sk-tag { position: static; }
+.sk-pc.is-big .is-desc { font-size: 16px; }
+@media (max-width: 599px) { .sk-row-head { flex-wrap: wrap; } }
+
+/* Promotegel met achtergrondvideo (of alleen de poster zolang er geen video is) */
+.sk-promo.has-media { min-height: 240px; grid-template-columns: minmax(0, 1fr); }
+.sk-promo.has-media > div:first-child { position: relative; z-index: 2; max-width: 54%; }
+.sk-promo-media { position: absolute; inset: 0 0 0 50%; z-index: 1; overflow: hidden; }
+.sk-promo-media img, .sk-promo-media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transition: transform .6s var(--ease); }
+.sk-promo:hover .sk-promo-media img, .sk-promo:hover .sk-promo-media video { transform: scale(1.04); }
+.sk-promo-media .sk-edge { position: absolute; left: -1px; top: 0; bottom: 0; z-index: 2; }
+@media (max-width: 520px) { .sk-promo.has-media > div:first-child { max-width: 58%; } .sk-promo-media { inset: 0 0 0 56%; } }
+
+/* Free gifts onder het keuzeblok */
+.pd-gifts { margin: -8px 0 24px; padding: 18px 20px; border-radius: 20px; background: var(--sky); color: var(--ink); }
+.pd-gifts h3 { font: 600 16px/1.3 var(--body); margin: 0 0 10px; }
+.pd-gifts ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.pd-gifts li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.pd-gifts .is-ico { width: 44px; height: 44px; border-radius: 14px; background: var(--white); display: grid; place-items: center; }
+.pd-gifts b { display: block; font-weight: 600; font-size: 16px; line-height: 1.3; }
+.pd-gifts small { display: block; font-size: 14px; line-height: 1.4; color: var(--ink-2); }
+.pd-gifts .is-val { text-align: right; font-size: 14px; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.pd-gifts .is-val s { display: block; color: var(--ink-3); } .pd-gifts .is-val b { font-size: 15px; }
+.pd-claim { margin: 12px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.pd-desc { margin: 24px 0 0; font-size: 17px; line-height: 1.6; color: var(--ink-2); }

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ReviewsBlock, CompareCards } from '../components/Blocks';
+import { CompareCards } from '../components/Blocks';
+import { ReviewCarouselBand } from '../components/ReviewWall';
 import Reveal from '../components/Reveal';
 import { PageHead, NightBand } from '../components/Sky';
 
@@ -34,7 +35,7 @@ export default function WhyChooseUs() {
         <div style={{ textAlign: 'center', marginTop: 40 }}><Link to="/product/signature-cold-pillow" className="sk-btn">Shop the deal</Link></div>
       </div></section>
 
-      <ReviewsBlock />
+      <ReviewCarouselBand />
 
       <NightBand title="Your coolest night" accent="starts tonight"
         text="Try it for 100 nights, risk-free. Not sleeping cooler? Ship it back for free and get a full refund."

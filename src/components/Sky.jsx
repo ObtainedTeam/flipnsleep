@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { Link } from 'react-router-dom';
 import { IMG, dim } from '../data';
 
@@ -5,25 +6,75 @@ import { IMG, dim } from '../data';
 // wolkjes-opsomming, het accordeon met plusje, de paginakop en de nachtband.
 // Stijlen staan in src/sky.css (klassen met sk-).
 
-// Wolkje in elke kleur (masker van het eigen wolk-icoon). Puur decoratie.
+// ---------------------------------------------------------------------------
+// Wolken, volledig in code (geen PNG's meer): scherp op elke schermdichtheid
+// en in elke kleur. Stijl: kleine rondingen, veel wolkenruggen per breedte.
+//   Cloud      los wolkje (CSS-masker, zie --cloud in sky.css)
+//   Mascot     het lachende wolkje
+//   CloudEdge  wolkenrand boven of onder een band, één of twee tinten,
+//              optioneel met het gezichtje
+// ---------------------------------------------------------------------------
 export const Cloud = ({ className = '', color, style }) => (
   <i aria-hidden="true" className={`sk-cl${className ? ` ${className}` : ''}`} style={color ? { '--c': color, ...style } : style} />
 );
 
-// Wolkenrand als masker in één kleur: bovenkant (standaard) of onderkant van een band.
-export const CloudEdge = ({ color, down = false }) => (
-  <div aria-hidden="true" className={`sk-edge${down ? ' is-down' : ''}`} style={color ? { '--ec': color } : undefined} />
+// Het gezichtje in een vak van 100 x 50: twee boogjes als ogen, een lach en blosjes.
+const Face = () => (
+  <g fill="none" stroke="#000" strokeWidth="6" strokeLinecap="round">
+    <path d="M22 22q7-13 14 0" /><path d="M64 22q7-13 14 0" /><path d="M36 28q14 20 28 0" />
+    <ellipse cx="11" cy="31" rx="7" ry="4.5" fill="#ffbdb7" stroke="none" />
+    <ellipse cx="89" cy="31" rx="7" ry="4.5" fill="#ffbdb7" stroke="none" />
+  </g>
 );
 
-// De echte wolkenstrook (twee tinten blauw; de bovenrand heeft het lachende wolkje).
-export const CloudStrip = ({ down = false, className = '', eager = false }) => {
-  const src = down ? IMG.cloudsDownEdge : IMG.cloudsUpEdge;
+export const Mascot = ({ className = '', style, color = '#d5ebf9' }) => (
+  <svg className={`sk-mascot${className ? ` ${className}` : ''}`} viewBox="0 0 200 112" aria-hidden="true" style={style}>
+    <g fill={color}>
+      <rect x="4" y="54" width="192" height="58" rx="29" />
+      <circle cx="50" cy="66" r="32" /><circle cx="90" cy="44" r="40" /><circle cx="134" cy="50" r="34" /><circle cx="166" cy="72" r="26" />
+    </g>
+    <g transform="translate(50 50)"><Face /></g>
+  </svg>
+);
+
+// Eén tegel van 480px die zich herhaalt: [x, straal, hoogte boven de basislijn].
+// Hoogte kleiner dan de straal geeft vlakke, rustige ruggen.
+const TILE = 480;
+const HUMPS = [[26, 40, 30], [84, 34, 42], [138, 38, 33], [194, 30, 46], [246, 42, 37], [304, 32, 27], [352, 36, 44], [408, 34, 35], [456, 30, 25]];
+const BACK = HUMPS.map(([x, r, t]) => [TILE - x, r + 4, t + 16]);
+function Humps({ list, h }) {
+  const all = [];
+  list.forEach(([x, r, t]) => {
+    all.push([x, r, t]);
+    if (x - r < 0) all.push([x + TILE, r, t]);
+    if (x + r > TILE) all.push([x - TILE, r, t]);
+  });
+  return <g fill="currentColor">{all.map(([x, r, t], i) => <circle key={i} cx={x} cy={h - t + r} r={r} />)}<rect y={h - 12} width={TILE} height="12" /></g>;
+}
+
+export function CloudEdge({ color, back, down = false, face = false, className = '', style }) {
+  const id = useId().replace(/[^a-zA-Z0-9]/g, '');
+  const h = face ? 104 : back ? 66 : 50;
   return (
-    <div aria-hidden="true" className={`sk-strip${down ? ' is-down' : ''}${className ? ` ${className}` : ''}`}>
-      <img src={src} {...dim(src)} loading={eager ? undefined : 'lazy'} decoding="async" alt="" />
-    </div>
+    <svg aria-hidden="true" focusable="false" className={`sk-edge${down ? ' is-down' : ''}${className ? ` ${className}` : ''}`}
+      width="100%" height={h} style={color ? { color, ...style } : style}>
+      <defs>
+        <pattern id={`f${id}`} width={TILE} height={h} patternUnits="userSpaceOnUse"><Humps list={HUMPS} h={h} /></pattern>
+        {back && <pattern id={`b${id}`} width={TILE} height={h} patternUnits="userSpaceOnUse" patternTransform="translate(-34 0)" style={{ color: back }}><Humps list={BACK} h={h} /></pattern>}
+      </defs>
+      {back && <rect width="100%" height={h} fill={`url(#b${id})`} />}
+      <rect width="100%" height={h} fill={`url(#f${id})`} />
+      {face && (
+        <svg x="7%" y="0" width="210" height={h} overflow="visible">
+          <g fill="currentColor">
+            <circle cx="46" cy={h - 8} r="40" /><circle cx="104" cy={h - 40} r="60" /><circle cx="168" cy={h - 4} r="44" />
+          </g>
+          <g transform={`translate(66 ${h - 72}) scale(.76) rotate(-6 50 25)`}><Face /></g>
+        </svg>
+      )}
+    </svg>
   );
-};
+}
 
 const PATHS = {
   check: <path d="M20 6 9 17l-5-5" />,
@@ -96,16 +147,20 @@ export function PageHead({ title, intro, children, moon = true }) {
           {children}
         </div>
       </div>
-      <CloudEdge down />
+      <CloudEdge down back="var(--sky)" />
     </header>
   );
 }
 
-// Nachtband met de maan: de afsluitende oproep. `strip` laat de wolken onderaan
-// opkomen (als er een lichtblauwe band op volgt).
-export function NightBand({ title, accent, text, cta, facts = ['100-night trial', 'Free shipping both ways', '2-year warranty'], strip = false, id }) {
+// Nachtband met de maan: de afsluitende oproep, met wolkenranden.
+// top: donkere wolkenrand erboven. bottom: 'sky' = lichtblauwe wolken met het
+// gezichtje komen onderaan op (er volgt een lichtblauwe band), 'ink' = donkere
+// wolken hangen eronder (er volgt wit), null = recht (er volgt de voet).
+export function NightBand({ title, accent, text, cta, facts = ['100-night trial', 'Free shipping both ways', '2-year warranty'], top = true, bottom = null, id }) {
   return (
-    <section id={id} className={`sk-band sk-on-dark${strip ? '' : ' is-flat'}`}>
+    <>
+    {top && <CloudEdge color="var(--ink)" />}
+    <section id={id} className={`sk-band sk-on-dark${bottom === 'sky' ? '' : ' is-flat'}`}>
       <div className="sk-wrap sk-band-in">
         <div>
           <h2 className="sk-h2">{title}{accent && <> <span className="sk-amber">{accent}</span></>}</h2>
@@ -122,7 +177,9 @@ export function NightBand({ title, accent, text, cta, facts = ['100-night trial'
           <img className="is-moon sk-rock" src={IMG.logoMark} {...dim(IMG.logoMark)} loading="lazy" decoding="async" alt="" />
         </div>
       </div>
-      {strip && <CloudStrip className="is-flush" />}
+      {bottom === 'sky' && <CloudEdge className="is-flush" color="var(--sky)" back="#c0e5ff" face />}
     </section>
+    {bottom === 'ink' && <CloudEdge down color="var(--ink)" />}
+    </>
   );
 }

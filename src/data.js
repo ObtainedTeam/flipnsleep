@@ -22,15 +22,10 @@ export const IMG = {
   heroBg: "/images/hero-bg.jpg",
   heroPoster: "/images/hero-poster.webp",
   sliderBg: "/images/slider-bg.jpg",
-  cloudsUp: "/images/clouds-up.png",
-  cloudsDown: "/images/clouds-down.png",
-  cloudWhite: "/images/icon-cloud-white.png",
   randomPillow: "/images/random-pillow.png",
   logoFull: "/images/logo-contra-full.png",
   logoDark: "/images/logo-dark-full.png",
   logoMark: "/images/logo-mark.png",
-  iconCloud: "/images/icon-cloud.png",
-  icon1p1: "/images/icon-1plus1.png",
   iconStar: "/images/icon-star.png",
   weightedHero: "/images/weighted-hero.webp",
   comforterHero: "/images/comforter-hero.webp",
@@ -50,8 +45,6 @@ export const IMG = {
   step1: "/images/step-1.webp",
   step2: "/images/step-2.webp",
   step3: "/images/step-3.webp",
-  cloudsUpEdge: "/images/clouds-up-1600.webp",
-  cloudsDownEdge: "/images/clouds-down-1600.webp",
 };
 
 // Intrinsieke afmetingen van elke afbeelding (voor width/height-attributen,
@@ -63,8 +56,6 @@ export const IMG_DIM = {
   "/images/bamboo-sheets-4.webp": [800, 800],
   "/images/bamboo-sheets-5.webp": [800, 800],
   "/images/bamboo-sheets-6.webp": [800, 800],
-  "/images/clouds-down.png": [2200, 247],
-  "/images/clouds-up.png": [2133, 270],
   "/images/comforter-1.webp": [800, 800],
   "/images/comforter-2.webp": [800, 800],
   "/images/comforter-3.webp": [800, 800],
@@ -76,9 +67,6 @@ export const IMG_DIM = {
   "/images/hero-bg.jpg": [391, 453],
   "/images/hero-poster.webp": [1080, 1080],
   "/images/hero-poster-720.webp": [720, 720],
-  "/images/icon-1plus1.png": [170, 126],
-  "/images/icon-cloud-white.png": [199, 98],
-  "/images/icon-cloud.png": [228, 136],
   "/images/icon-star.png": [13, 12],
   "/images/logo-contra-full.png": [888, 220],
   "/images/logo-dark-full.png": [888, 220],
@@ -120,8 +108,6 @@ export const IMG_DIM = {
   "/images/step-1.webp": [600, 860],
   "/images/step-2.webp": [600, 860],
   "/images/step-3.webp": [600, 862],
-  "/images/clouds-up-1600.webp": [1600, 203],
-  "/images/clouds-down-1600.webp": [1600, 180],
 };
 // Gebruik: <img src={src} {...dim(src)} />
 export const dim = (src) => {
@@ -168,8 +154,7 @@ export const PRODUCT = {
     ["Cool side", "Cool-touch fabric, tested Q-max cooling value 0.26"],
     ["Cozy side", "Soft bamboo fiber fabric"],
     ["Cover", "Removable and machine-washable at 40°C / 104°F (do not wash the foam)"],
-    ["Certifications", "OEKO-TEX Standard 100 · CertiPUR-US certified foam"],
-    ["Country of origin", "China"],
+    ["Certifications", "OEKO-TEX Standard 100 and CertiPUR-US certified foam"],
   ],
 };
 
@@ -196,7 +181,27 @@ export const BUNDLES = [
   },
 ];
 
-export const bundleById = (id) => BUNDLES.find(b => b.id === id);
+// Losse optie: 1 kussen. Staat apart van BUNDLES omdat hij pas zichtbaar wordt
+// als de Shopify-variant bestaat (zie singlePillowLive in shopify.js).
+// CAD volgens de vaste regel: USD x 1,365, omhoog afgerond op hele dollars.
+export const SINGLE = {
+  id: "1p",
+  label: "1 pillow",
+  short: "1 pillow",
+  pillows: 1,
+  prices: { usd: 79.99, cad: 110 },
+  compareAt: { usd: 109.99, cad: 151 },
+  blurb: "Just the one, for your side of the bed.",
+  image: IMG.coverFront,
+};
+
+// Gratis cadeaus bij elke kussenbestelling (zie GIFT_VARIANT_IDS in shopify.js).
+export const GIFTS = [
+  { id: "filling", name: "500 g extra filling", note: "Top up the height whenever you like", value: { usd: 14.99, cad: 21 }, icon: "feather" },
+  { id: "mask", name: "Sleep mask", note: "Soft, light-blocking, one size", value: { usd: 34.99, cad: 48 }, icon: "moon" },
+];
+
+export const bundleById = (id) => [SINGLE, ...BUNDLES].find(b => b.id === id);
 
 /* ============================================================
    VARIANTPRODUCTEN, maat + kleur (zelfde vorm als bugaway).

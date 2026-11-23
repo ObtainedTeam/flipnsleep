@@ -3,18 +3,14 @@ import { Link } from 'react-router-dom';
 import { dim, rs } from '../../data';
 import Reveal from '../Reveal';
 import { Acc, Ico } from '../Sky';
-import { ReviewBand, ProductRail } from '../Sections';
+import { ProductRail } from '../Sections';
 import './product.css';
 
 // Bouwstenen voor de productpagina's (redesign nov 2026).
 // Niets hangt af van de vensterbreedte tijdens renderen: CSS kiest per viewport.
 
-// Judge.me via /api/reviews: { reviews, count, avg }. Eén fetch per pagina.
-export function useReviews() {
-  const [data, setData] = useState(null);
-  useEffect(() => { fetch('/api/reviews').then(r => r.json()).then(setData).catch(() => setData(null)); }, []);
-  return data;
-}
+// Judge.me via /api/reviews: één gedeelde fetch, zie ReviewWall.jsx.
+export { useReviews } from '../ReviewWall';
 const realReviews = (rvw) => ((rvw && rvw.reviews) || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 const starStr = (n) => '★'.repeat(n) + '☆'.repeat(5 - n);
 
@@ -174,21 +170,6 @@ export function HotSleeperStats({ stats, title = 'Made for hot sleepers', text }
       </ul>
     </div></section>
   );
-}
-
-// ---------------------------------------------------------------------------
-// Reviews op de productpagina: echte Judge.me-reviews (met sterren), anders
-// drie voorbeelden met het label "Example review" en zonder sterren.
-// ---------------------------------------------------------------------------
-export function ProductReviews({ rvw, productName, examples, noTop = false }) {
-  const real = realReviews(rvw);
-  const has = real.length > 0;
-  const list = has
-    ? real.slice(0, 6).map(r => ({ title: r.title, body: r.body, name: (r.name || '').split(' ')[0], rating: r.rating, verified: r.verified }))
-    : examples.slice(0, 3).map(e => ({ ...e, example: true }));
-  return <ReviewBand id="reviews" noTop={noTop} more={has} title={`What sleepers say about the ${productName}`}
-    summary={has ? `${rvw.avg} out of 5, from ${rvw.count} review${rvw.count === 1 ? '' : 's'}` : 'Reviews from verified buyers appear here automatically.'}
-    reviews={list} />;
 }
 
 // Complete your bed: dezelfde productrij, zonder het product van deze pagina

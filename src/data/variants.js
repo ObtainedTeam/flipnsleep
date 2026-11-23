@@ -1,7 +1,5 @@
 // Gegenereerd door scripts/gen-variants.py: afbeeldingen met -480/-960 webp-varianten.
 export const VARIANTS = new Set([
-  "/images/clouds-down.png",
-  "/images/clouds-up.png",
   "/images/flip-cool.webp",
   "/images/flip-warm.webp",
   "/images/gallery-compare.webp",

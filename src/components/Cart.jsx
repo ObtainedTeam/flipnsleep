@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { c, BTN, BTN_SM, rv, FONT_DISPLAY, FONT_SUB, R, SH, T, LH } from '../theme';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { cartCheckoutUrl, CART_CROSSSELL_ANCHOR, CART_CROSSSELL_CONTEXTUAL } from '../shopify';
-import { bundleById, productById, dim, rs } from '../data';
+import { cartCheckoutUrl, giftsLive, CART_CROSSSELL_ANCHOR, CART_CROSSSELL_CONTEXTUAL } from '../shopify';
+import { bundleById, productById, GIFTS, dim, rs } from '../data';
 import { Ico } from './Sky';
 
 // Module-level cart store met pub/sub. Items zijn óf een kussenbundel
@@ -98,6 +98,8 @@ export default function Cart({ isOpen, onClose }) {
   const pillowCount = lines.reduce((s, l) => s + l.pillows, 0);
   const onlyPillows = lines.length > 0 && lines.every(l => l.type === 'bundle');
   const onlyOnePlusOne = lines.length > 0 && lines.every(l => l.item.bundleId === '1p1');
+  // Gratis cadeaus: één set per bestelling met een kussen, alleen als de varianten bestaan.
+  const gifts = pillowCount > 0 && giftsLive() ? GIFTS : [];
 
   // Cross-sell: comforter-anker + contextuele deken/lakens die nog niet in de mand zitten.
   const inCartIds = new Set(items.map(i => i.productId).filter(Boolean));
@@ -147,6 +149,21 @@ export default function Cart({ isOpen, onClose }) {
               <button onClick={l.del} aria-label="Remove" style={{ background: 'none', border: 'none', cursor: 'pointer', color: c.gray, alignSelf: 'flex-start', display: 'flex', padding: 4 }}><Ico name="x" size={18} /></button>
             </div>
           ))}
+
+          {/* Gratis cadeaus: $0-regels, één set per bestelling met een kussen */}
+          {gifts.length > 0 && (
+            <div style={{ background: c.sky, borderRadius: R.sm, padding: '14px 16px', marginBottom: 12 }}>
+              <div style={{ fontSize: T.sm[0], fontWeight: 600, marginBottom: 6, fontFamily: FONT_SUB }}>Free gifts included</div>
+              {gifts.map(g => (
+                <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: T.sm[0] }}>
+                  <span style={{ width: 36, height: 36, borderRadius: 10, background: c.white, display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ico name={g.icon} size={18} /></span>
+                  <span style={{ flex: 1, minWidth: 0 }}>{g.name}</span>
+                  <s style={{ color: c.gray, fontSize: T.xs[0] }}>{formatPrice(isCA ? g.value.cad : g.value.usd, symbol)}</s>
+                  <b style={{ fontWeight: 600 }}>Free</b>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Upsell 1+1 -> 2+2 (alleen bij louter 1+1-bundels) */}
           {onlyOnePlusOne && (

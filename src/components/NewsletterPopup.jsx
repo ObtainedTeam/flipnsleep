@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { c, BTN_SM, FONT_DISPLAY, R, SH, T, LH } from '../theme';
 import { subscribe } from '../brevo';
-import { IMG, dim } from '../data';
+import { Mascot } from './Sky';
 
 // Welkomstpopup: 10% op de eerste bestelling, gekoppeld aan Brevo.
 export default function NewsletterPopup() {
@@ -46,7 +46,7 @@ export default function NewsletterPopup() {
       <div onClick={close} style={{ position: 'absolute', inset: 0, background: 'rgba(20,16,64,.6)' }} />
       <div style={{ position: 'relative', background: c.sky, borderRadius: 28, padding: '44px 24px 36px', maxWidth: 420, width: '100%', textAlign: 'center', boxShadow: SH.float }}>
         <button onClick={close} aria-label="Close" style={{ position: 'absolute', top: 12, right: 16, background: 'none', border: 'none', fontSize: T.h3[0], cursor: 'pointer', color: c.navy }}>×</button>
-        <img className="sk-bob" src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" style={{ width: 96, height: 'auto', margin: '0 auto 14px', display: 'block', filter: 'drop-shadow(0 8px 8px rgba(20,16,64,.14))' }} />
+        <Mascot className="sk-bob" style={{ width: 96, margin: '0 auto 14px', filter: 'drop-shadow(0 8px 8px rgba(20,16,64,.14))' }} />
         <h3 style={{ fontFamily: FONT_DISPLAY, fontSize: T.h3[0], lineHeight: LH.head, fontWeight: 400, marginBottom: 12, color: c.navy }}>Sleep better, pay less</h3>
         {state === 'done' ? (
           <p style={{ fontSize: T.sm[0], lineHeight: LH.body }}>Check your inbox, your 10% code is on its way. Sweet dreams.</p>

@@ -1,67 +1,11 @@
 import { useState, useEffect } from 'react';
 import { c, rv, FONT_DISPLAY, FONT_SUB, R, T, LH, CARD, CHIP, BTN, BTN_SM } from '../theme';
-import { FAQ_ITEMS, IMG, dim, rs } from '../data';
+import { FAQ_ITEMS } from '../data';
 import { subscribe } from '../brevo';
 import { Acc, Ico } from './Sky';
-import { ProductRail, ReviewBand } from './Sections';
+import { ProductRail } from './Sections';
 
-// Gedeelde bouwblokken: wolkenrand, sterren, reviews, FAQ-accordion, e-mailsectie.
-
-export function CloudDivider({ fill = c.cream, flip = false }) {
-  return (
-    <svg viewBox="0 0 520 46" preserveAspectRatio="none" aria-hidden="true"
-      style={{ display: 'block', width: '100%', height: 46, transform: flip ? 'scaleY(-1)' : 'none', marginBottom: -1 }}>
-      <path d="M0 46 Q30 14 75 28 Q110 4 160 22 Q205 0 255 18 Q300 2 350 22 Q400 6 445 26 Q490 12 520 34 L520 46 Z" fill={fill} />
-    </svg>
-  );
-}
-
-// Standaard productfoto-blok: achtergrond #D5EBFA met twee witte wolkjes
-// schuin onder elkaar, productfoto eroverheen. Overal hergebruiken waar een
-// productfoto staat.
-// `height` mag een getal zijn of [desktop, mobiel]; `priority` zet fetchpriority
-// op de hoofdfoto (LCP) in plaats van lazy loading.
-export function ProductImageBlock({ src, alt = '', height = 240, radius = R.lg, bg = c.sky, style = {}, imgStyle = {}, priority = false }) {
-  const [hd, hm] = Array.isArray(height) ? height : [height, height];
-  const load = priority ? { fetchPriority: 'high' } : { loading: 'lazy' };
-  return (
-    <div className="r-h" style={{ position: 'relative', background: bg, borderRadius: radius, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', ...rv('h', hd, hm), ...style }}>
-      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', left: '-4%', top: '11%', width: '44%', opacity: 1 }} />
-      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '7%', width: '50%', opacity: 1 }} />
-      <img src={src} {...dim(src)} {...rs(src, '(max-width: 759px) 80vw, 480px')} {...load} decoding="async" alt={alt} style={{ position: 'relative', maxHeight: '80%', maxWidth: '80%', objectFit: 'contain', ...imgStyle }} />
-    </div>
-  );
-}
-
-// Kussenstapel voor de bundelkaarten: 2 kussens (1+1) of 4 kussens (2+2),
-// half over elkaar met schaduw, op de wolkenachtergrond zodat de wolkjes er
-// goed achter uit komen.
-// `height` mag een getal zijn of [desktop, mobiel]; `priority` voor de LCP-stapel.
-export function PillowDeck({ count = 2, height = 220, radius = 0, bg = c.sky, priority = false }) {
-  const [hd, hm] = Array.isArray(height) ? height : [height, height];
-  const load = priority ? { fetchPriority: 'high' } : { loading: 'lazy' };
-  const P = (extra, key) => (
-    <img key={key} src={IMG.coverFront} {...dim(IMG.coverFront)} {...load} decoding="async" alt="" aria-hidden="true"
-      style={{ position: 'absolute', objectFit: 'contain', filter: 'drop-shadow(0 10px 8px rgba(20,16,64,.16))', ...extra }} />
-  );
-  const two = [
-    P({ width: '54%', left: '13%', top: '30%', transform: 'rotate(-6deg)', zIndex: 1 }, 'a'),
-    P({ width: '54%', left: '33%', top: '40%', transform: 'rotate(6deg)', zIndex: 2 }, 'b'),
-  ];
-  const four = [
-    P({ width: '46%', left: '8%', top: '12%', transform: 'rotate(-7deg)', zIndex: 1 }, 'a'),
-    P({ width: '46%', left: '25%', top: '21%', transform: 'rotate(4deg)', zIndex: 2 }, 'b'),
-    P({ width: '46%', left: '33%', top: '43%', transform: 'rotate(-5deg)', zIndex: 3 }, 'c'),
-    P({ width: '46%', left: '50%', top: '52%', transform: 'rotate(6deg)', zIndex: 4 }, 'd'),
-  ];
-  return (
-    <div className="r-h" style={{ position: 'relative', width: '100%', background: bg, borderRadius: radius, overflow: 'hidden', ...rv('h', hd, hm) }}>
-      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', left: '-5%', top: '9%', width: '40%', opacity: 1 }} />
-      <img src={IMG.cloudWhite} {...dim(IMG.cloudWhite)} loading="lazy" decoding="async" alt="" aria-hidden="true" style={{ position: 'absolute', right: '-5%', bottom: '6%', width: '46%', opacity: 1 }} />
-      {count >= 4 ? four : two}
-    </div>
-  );
-}
+// Gedeelde bouwblokken: besteldeadline, sterren, FAQ-accordion, vergelijkkaarten, e-mailsectie.
 
 // Live besteldeadline: telt af naar 23:00 uur Eastern Time (de "ordered
 // before 11PM, shipped today"-belofte). Waarheidsgetrouwe urgentie.
@@ -148,25 +92,6 @@ export function CompareCards({ rows, ours, theirs }) {
       ))}
     </div>
   );
-}
-
-// ---------------------------------------------------------------------------
-// Reviews (Judge.me via /api/reviews) op de lichtblauwe wolkenband.
-// `demo` (homepage): zonder echte reviews de voorbeelden tonen, duidelijk
-// gelabeld en zonder sterren. Elders: zonder reviews geen sectie.
-// ---------------------------------------------------------------------------
-export function ReviewsBlock({ demo = null, noTop = false }) {
-  const [data, setData] = useState(null); // { reviews, count, avg }
-  useEffect(() => {
-    fetch('/api/reviews').then((r) => r.json()).then(setData).catch(() => setData(null));
-  }, []);
-  const reviews = (data && data.reviews) || [];
-  if (reviews.length === 0) {
-    if (!demo) return null;
-    return <ReviewBand noTop={noTop} summary="Reviews from verified buyers appear here automatically." reviews={demo.reviews.map(r => ({ ...r, example: true }))} />;
-  }
-  return <ReviewBand noTop={noTop} summary={`${data.avg} out of 5, from ${data.count} review${data.count === 1 ? '' : 's'}`}
-    reviews={reviews.slice(0, 6).map(r => ({ title: r.title, body: r.body, name: (r.name || '').split(' ')[0], rating: r.rating, verified: r.verified }))} />;
 }
 
 // ---------------------------------------------------------------------------

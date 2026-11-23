@@ -10,8 +10,9 @@ import StickyBuyBar from '../components/StickyBuyBar';
 import { TrustAccordion, ShippingCountdown } from '../components/Blocks';
 import { NightBand } from '../components/Sky';
 import { FAQSection } from '../components/Sections';
-import { useReviews, Crumbs, Gallery, GalleryReview, BuyTrust, SpecList, ExplainAccordion, SplitImages, HotSleeperStats, ProductReviews, CompleteYourBed } from '../components/product/ProductSections';
-import { VARIANT_SPLIT, VARIANT_STATS, VARIANT_EXAMPLE_REVIEWS, variantAccordion } from '../data/product-content.js';
+import { useReviews, Crumbs, Gallery, GalleryReview, BuyTrust, SpecList, ExplainAccordion, SplitImages, HotSleeperStats, CompleteYourBed } from '../components/product/ProductSections';
+import { ReviewCarouselBand, useHasReviews } from '../components/ReviewWall';
+import { VARIANT_SPLIT, VARIANT_STATS, variantAccordion } from '../data/product-content.js';
 
 // Productpagina voor de variantproducten (maat + kleur). Zelfde bouwstenen en
 // wolk-achtergronden als de kussenpagina, gevoed uit products[] in data.js.
@@ -24,6 +25,7 @@ export default function ProductVariable({ onCartOpen }) {
   const [color, setColor] = useState(product ? product.colors[0] : null);
   const buyRef = useRef(null);
   const rvw = useReviews();
+  const hasTextReviews = useHasReviews();
 
   useEffect(() => {
     if (product) trackViewContent({ content_type: 'product', content_name: product.id });
@@ -42,7 +44,6 @@ export default function ProductVariable({ onCartOpen }) {
   const compare = product.compareAt ? (isCA ? product.compareAt.cad : product.compareAt.usd) : null;
   const purchasable = isProductPurchasable(product.id, size, color);
   const hasColors = product.colors.length > 1;
-  const examples = VARIANT_EXAMPLE_REVIEWS[product.id] || [];
   const split = VARIANT_SPLIT[product.id] || product.images.slice(1, 3).map((image) => ({ image, caption: product.tagline, fit: 'cover' }));
 
   const addToCart = () => {
@@ -111,11 +112,12 @@ export default function ProductVariable({ onCartOpen }) {
       <HotSleeperStats stats={VARIANT_STATS}
         text="Built for people who sleep warm, in breathable materials that don't trap heat. Try it at home with free shipping and plenty of time to decide." />
 
-      <NightBand strip={examples.length > 0} title="Try it for 100 nights," accent="risk-free"
+      <NightBand bottom={hasTextReviews ? 'sky' : 'ink'} title="Try it for 100 nights," accent="risk-free"
         text="Free shipping across the US and Canada. Not for you? Send it back for free and get a full refund."
         cta={purchasable ? { label: 'Add to cart', onClick: addToCart } : null} />
 
-      {examples.length > 0 && <ProductReviews noTop rvw={rvw} productName={product.name} examples={examples} />}
+      {/* Alleen echte Judge.me-reviews; zonder reviews staat hier niets */}
+      <ReviewCarouselBand title={`What sleepers say about the ${product.name}`} />
 
       <FAQSection items={product.faq || undefined} limit={0} more={false} />
 

@@ -4,7 +4,7 @@ import { IMG, BUNDLES, products, FAQ_ITEMS, dim, rs } from '../data';
 import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
 import { TRUST, FLIP, SPECIAL, LAYERS, STEPS, COMPARE } from '../data/home-content';
 import Reveal from './Reveal';
-import { Cloud, CloudEdge, CloudStrip, CloudList, Ico, Acc } from './Sky';
+import { Cloud, CloudEdge, CloudList, Mascot, Ico, Acc } from './Sky';
 
 // Secties van het redesign die op meerdere pagina's terugkomen (home en
 // productpagina's). Tekst staat in data/home-content.js, stijl in sky.css.
@@ -33,8 +33,8 @@ export function ProductRail({ title = 'Our most loved sleep products', intro = '
   const slide = (d) => { const el = rail.current; if (el) el.scrollBy({ left: d * el.clientWidth * 0.8, behavior: reduced() ? 'auto' : 'smooth' }); };
   const items = [
     ...BUNDLES.map(b => ({
-      key: b.id, to: '/product/signature-cold-pillow', pillows: b.pillows,
-      name: `Cold Pillow ${b.pillows === 2 ? '1+1' : '2+2'}`,
+      key: b.id, to: `/product/signature-cold-pillow?bundle=${b.id}`, pillows: b.pillows,
+      name: 'Signature Cold Pillow',
       desc: b.pillows === 2 ? 'Two adjustable cooling pillows, one price.' : 'Four pillows for both sides of the bed.',
       tag: b.pillows === 2 ? 'Buy 1, get 1 free' : 'Buy 2, get 2 free',
       price: getPrice(b, isCA), compare: isCA ? b.compareAt.cad : b.compareAt.usd, from: false,
@@ -88,6 +88,52 @@ export function ProductRail({ title = 'Our most loved sleep products', intro = '
 }
 
 // ---------------------------------------------------------------------------
+// Homepage: raster van 2 kolommen met grote, beeldvullende foto's. De twee
+// kussenkaarten heten allebei Signature Cold Pillow, met de deal als badge, en
+// openen de productpagina met die optie al gekozen.
+// ---------------------------------------------------------------------------
+const GRID_PHOTOS = { '1p1': '/images/gallery-hero.webp', '2p2': '/images/gallery-flip.webp', 'cooling-weighted-blanket': '/images/weighted-1.webp', 'bamboo-sheet-set': '/images/bamboo-sheets-1.webp' };
+export function ProductGrid({ title = 'Our most loved sleep products', intro = 'Cooling comfort from head to toe.' }) {
+  const { symbol, isCA } = useCurrency();
+  const items = [
+    ...BUNDLES.map(b => ({
+      key: b.id, to: `/product/signature-cold-pillow?bundle=${b.id}`, img: GRID_PHOTOS[b.id], name: 'Signature Cold Pillow',
+      alt: b.pillows === 2 ? 'Signature Cold Pillow, cool-touch side and soft bamboo side' : 'A woman holding the Signature Cold Pillow',
+      desc: b.pillows === 2 ? 'Two adjustable cooling pillows, one price.' : 'Four pillows for both sides of the bed.',
+      tag: b.pillows === 2 ? 'Buy 1, get 1 free' : 'Buy 2, get 2 free',
+      price: getPrice(b, isCA), compare: isCA ? b.compareAt.cad : b.compareAt.usd, from: false,
+    })),
+    ...products.filter(p => GRID_PHOTOS[p.id]).map(p => ({
+      key: p.id, to: `/product/${p.id}`, img: GRID_PHOTOS[p.id], name: p.name, alt: p.name, desc: p.tagline,
+      price: getPrice(p, isCA), compare: p.compareAt ? (isCA ? p.compareAt.cad : p.compareAt.usd) : null, from: true,
+    })),
+  ];
+  return (
+    <section className="sk-sec"><div className="sk-wrap">
+      <div className="sk-row-head">
+        <div><h2 className="sk-h2">{title}</h2>{intro && <p className="sk-lead" style={{ marginTop: 12 }}>{intro}</p>}</div>
+        <Link to="/shop" className="sk-btn is-line" style={{ flexShrink: 0 }}>Shop all</Link>
+      </div>
+      <div className="sk-pgrid">
+        {items.map((it, i) => (
+          <Reveal key={it.key} once delay={(i % 2) * 100}><Link to={it.to} className="sk-pc is-big">
+            <div className="sk-pc-img">
+              <img className="is-ph" src={it.img} {...dim(it.img)} {...rs(it.img, '(max-width: 767px) 100vw, 590px')} loading="lazy" decoding="async" alt={it.alt} />
+            </div>
+            <b>{it.name}{it.tag && <span className="sk-tag">{it.tag}</span>}</b>
+            <span className="is-desc">{it.desc}</span>
+            <div className="sk-pc-foot">
+              <span className="sk-price">{it.from ? 'From ' : ''}{formatPrice(it.price, symbol)}{it.compare && <s>{formatPrice(it.compare, symbol)}</s>}</span>
+              <span className="sk-go" aria-hidden="true"><Ico name="right" /></span>
+            </div>
+          </Link></Reveal>
+        ))}
+      </div>
+    </div></section>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Just flip it: het kussen draait in 3D tussen de koele en de cozy kant.
 // SSR rendert de koele kant; in beeld flipt het vanzelf tot de bezoeker klikt.
 // ---------------------------------------------------------------------------
@@ -111,7 +157,7 @@ export function FlipBand() {
   const pick = (s) => { setTouched(true); setSide(s); };
   return (
     <section ref={ref}>
-      <CloudEdge />
+      <CloudEdge back="var(--sky)" />
       <div className="sk-flipsec"><div className="sk-wrap sk-flip-in">
         <Reveal once>
           <h2 className="sk-h2">{FLIP.title}</h2>
@@ -131,7 +177,7 @@ export function FlipBand() {
           <span className="sk-flip-hint">Tap the pillow to flip it</span>
         </div>
       </div></div>
-      <CloudEdge down />
+      <CloudEdge down back="var(--sky)" />
     </section>
   );
 }
@@ -144,7 +190,7 @@ export function Special({ cta = { label: 'Shop the pillow', to: '/product/signat
     <section className="sk-sec"><div className="sk-wrap sk-special">
       <Reveal once className="sk-special-ph">
         <img className="is-ph" src={IMG.specialModel} {...dim(IMG.specialModel)} loading="lazy" decoding="async" alt="A woman holding three Signature Cold Pillows" />
-        <img className="is-mascot sk-bob" src={IMG.iconCloud} {...dim(IMG.iconCloud)} loading="lazy" decoding="async" alt="" aria-hidden="true" />
+        <Mascot className="is-mascot sk-bob" />
       </Reveal>
       <Reveal once delay={100}>
         <h2 className="sk-h2">{SPECIAL.title}</h2>
@@ -173,7 +219,7 @@ export function Layers() {
   }, []);
   return (
     <section>
-      <CloudEdge color="var(--sky)" />
+      <CloudEdge color="var(--sky)" back="#c0e5ff" />
       <div className="sk-sky"><div className="sk-wrap sk-inside">
         <div ref={ref} className={`sk-stack${open ? ' is-open' : ''}`}>
           {LAYERS.map(([name, , file, w, h]) => (
@@ -188,7 +234,7 @@ export function Layers() {
           </ol>
         </Reveal>
       </div></div>
-      <CloudStrip down />
+      <CloudEdge down color="var(--sky)" back="#c0e5ff" />
     </section>
   );
 }
@@ -243,37 +289,6 @@ export function CompareBand({ more = true, flush = false }) {
       </div></Reveal>
       {more && <div style={{ textAlign: 'center', marginTop: 32 }}><Link to="/why-flipnsleep" className="sk-btn is-line">See the full comparison</Link></div>}
     </div></section>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Reviews op een lichtblauwe band. reviews: [{ title, body, name, rating?, example?, verified? }]
-// Voorbeelden krijgen het label "Example review" en geen sterren.
-// ---------------------------------------------------------------------------
-export function ReviewBand({ title = 'What happy sleepers are saying', summary, reviews, more = true, id, noTop = false }) {
-  const stars = (n) => '★'.repeat(n) + '☆'.repeat(5 - n);
-  return (
-    <section id={id}>
-      {!noTop && <CloudStrip />}
-      <div className="sk-sky"><div className="sk-wrap" style={{ paddingBlock: '48px 40px' }}>
-        <Reveal once><div className="sk-head is-mid">
-          <h2 className="sk-h2">{title}</h2>
-          {summary && <p className="sk-lead">{summary}</p>}
-        </div></Reveal>
-        <div className="sk-revs">
-          {reviews.map((r, i) => (
-            <figure key={i} className="sk-rev">
-              {!r.example && r.rating ? <span className="sk-stars" aria-label={`${r.rating} out of 5 stars`}>{stars(r.rating)}</span> : null}
-              {r.title && <b className="is-title">{r.title}</b>}
-              <p className="clamp-5">{r.body}</p>
-              <footer><span>{r.name}</span><span>{r.example ? 'Example review' : r.verified ? 'Verified buyer' : ''}</span></footer>
-            </figure>
-          ))}
-        </div>
-        {more && <div style={{ textAlign: 'center', marginTop: 32 }}><Link to="/reviews" className="sk-btn is-line">Read all reviews</Link></div>}
-      </div></div>
-      <CloudStrip down />
-    </section>
   );
 }
 

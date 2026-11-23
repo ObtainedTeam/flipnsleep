@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { c, BTN, rv, FONT_DISPLAY, FONT_SUB, R, T, LH, W } from '../theme';
 import { IMG, dim } from '../data';
 import { subscribe } from '../brevo';
-import { Cloud } from '../components/Sky';
+import { Cloud, Mascot } from '../components/Sky';
 
 // Sleep quiz funnel: één vraag per pagina, effen beige achtergrond, logo
 // bovenaan en een voortgangsbalk. Antwoorden gaan als attributen mee naar
@@ -143,7 +143,7 @@ export default function Quiz() {
         <div style={{ width: '100%', maxWidth: W.narrow, textAlign: 'center', position: 'relative' }}>
           {state === 'done' ? (
             <>
-              <img className="sk-bob" src={IMG.iconCloud} {...dim(IMG.iconCloud)} decoding="async" alt="" style={{ width: 120, height: 'auto', margin: '0 auto 20px', display: 'block', filter: 'drop-shadow(0 10px 10px rgba(20,16,64,.14))' }} />
+              <Mascot className="sk-bob" style={{ width: 120, margin: '0 auto 20px', filter: 'drop-shadow(0 10px 10px rgba(20,16,64,.14))' }} />
               <h1 className="r-fs" style={{ ...rv('fs', ...T.h2), lineHeight: LH.head, color: c.navy, fontFamily: FONT_DISPLAY, fontWeight: 400, marginBottom: 12 }}>Check your inbox</h1>
               <p className="r-fs" style={{ ...rv('fs', ...T.md), lineHeight: LH.body, color: c.grayD }}>Your 15% discount code is on its way. We're taking you to your perfect pillow…</p>
             </>
