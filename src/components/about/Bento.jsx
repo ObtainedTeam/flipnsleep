@@ -27,7 +27,7 @@ function StatTile({ bg, fg, sub, big, text }) {
     <div className="r-pad" style={{ ...TILE, background: bg, justifyContent: 'space-between', ...PAD }}>
       <div style={{ ...EYEBROW, color: sub }}>{text[0]}</div>
       <div>
-        <div className="r-fs" style={{ ...BIG, ...rv('fs', ...T.display), color: fg }}>{big}</div>
+        <div className="r-fs ab-stat" style={{ ...BIG, ...rv('fs', ...T.display), color: fg }}>{big}</div>
         <div style={{ ...SMALL, color: sub, marginTop: 6 }}>{text[1]}</div>
       </div>
     </div>

@@ -159,7 +159,7 @@ export default function Nav({ onCartOpen }) {
         style={{ position: 'sticky', top: 0, zIndex: 90, background: c.white, borderBottom: LINE }}>
         <div className="nav-bar" style={{ maxWidth: W.page + 80, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 16 }}>
           <button className="nav-sm" aria-label="Open menu" aria-expanded={drawer} aria-controls="nav-drawer" onClick={() => setDrawer(true)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', flexDirection: 'column', gap: 5, padding: 8, marginLeft: -8 }}>
+            style={{ background: 'none', border: 'none', cursor: 'pointer', flexDirection: 'column', justifyContent: 'center', gap: 5, width: 44, height: 44, padding: '0 11px', marginLeft: -11 }}>
             {[0, 1, 2].map(i => <i key={i} style={{ width: 22, height: 2, background: c.navy, borderRadius: R.pill, display: 'block' }} />)}
           </button>
 

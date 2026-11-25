@@ -4,7 +4,8 @@ import { IMG, dim, PRODUCT, products } from '../data';
 import { NewsletterSignup } from './Blocks';
 
 const HEAD = { fontFamily: FONT_SUB, fontSize: 16, fontWeight: 600, lineHeight: LH.head, marginBottom: 14, color: c.white };
-const LINK = { display: 'block', color: c.lilac, fontSize: T.sm[0], lineHeight: LH.head, marginBottom: 10 };
+// Verticale ruimte als padding in plaats van marge: zo is het tikvlak 28px hoog.
+const LINK = { display: 'block', color: c.lilac, fontSize: T.sm[0], lineHeight: LH.head, padding: '5px 0' };
 const LINE = '1px solid rgba(255,255,255,.14)';
 const PILL = { ...CHIP, fontSize: T.xs[0], padding: '6px 12px', fontWeight: 500, background: 'transparent', color: c.white, border: '1px solid rgba(255,255,255,.3)' };
 
