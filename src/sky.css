@@ -353,6 +353,10 @@ details[open] > summary .sk-plus { transform: rotate(45deg); background: var(--a
 .rw-verified { background: var(--sky); color: var(--ink); border-radius: 12px; padding: 6px 10px; font-weight: 600; font-size: 12px; line-height: 1; }
 .rw-card.is-sky .rw-verified { background: var(--white); }
 
+/* Homepage: rij met tekstreviews boven de video's */
+.rw-grid.is-quotes { grid-template-columns: minmax(0, 1fr); margin-bottom: 16px; }
+@media (min-width: 768px) { .rw-grid.is-quotes { margin-bottom: 24px; } }
+@media (min-width: 900px) { .rw-grid.is-quotes { grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); } }
 /* Homepage: twee rijen van drie, daaronder twee grote staande */
 .rw-grid.is-home { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .rw-grid.is-home .rw-tile { aspect-ratio: 4 / 5; }

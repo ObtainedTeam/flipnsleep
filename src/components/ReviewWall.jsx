@@ -112,13 +112,23 @@ function Head({ title, data, fallback }) {
 }
 
 // ---------------------------------------------------------------------------
-// Homepage: twee rijen van drie video's, daaronder twee grote staande video's.
+// Homepage: een rij met de drie nieuwste tekstreviews uit Judge.me (zodra die
+// er zijn), daaronder twee rijen van drie video's en twee grote staande.
 // ---------------------------------------------------------------------------
+export const HOME_TEXT_COUNT = 3;
 export function ReviewWallHome() {
   const data = useReviews();
+  const texts = textReviews(data).slice(0, HOME_TEXT_COUNT);
   return (
     <section id="reviews" className="sk-sec rw" style={{ scrollMarginTop: 96 }}><div className="sk-wrap">
-      <Head title="Real sleepers, on camera" data={data} fallback="Video reviews from verified buyers land here as they come in." />
+      <Head title="Reviews, written and on camera" data={data} fallback="Reviews from verified buyers land here as they come in." />
+      {texts.length > 0 && (
+        <div className="rw-grid is-quotes" style={{ '--n': texts.length }}>
+          {texts.map((r, i) => (
+            <Reveal key={i} once delay={i * 90} className="rw-cell"><ReviewCard r={r} tone={i === 1 ? 'sky' : 'line'} /></Reveal>
+          ))}
+        </div>
+      )}
       <div className="rw-grid is-home">
         {REVIEW_VIDEOS.home.map((v, i) => (
           <Reveal key={i} once delay={(i % 3) * 90} className={`rw-cell${i % 3 === 1 ? ' is-drop' : ''}`}><VideoTile video={v} tone={TONES[(i + (i > 2 ? 1 : 0)) % 3]} /></Reveal>
@@ -185,10 +195,13 @@ export function ReviewCarousel({ reviews }) {
 }
 
 // Lichtblauwe band met de carousel en een wolkenrand eronder. `summary` komt van Judge.me.
-export function ReviewCarouselBand({ title = 'What happy sleepers are saying' }) {
+// `skip` slaat de eerste reviews over als die op dezelfde pagina al in een
+// rij staan (homepage); zijn er te weinig over, dan toont de band ze allemaal.
+export function ReviewCarouselBand({ title = 'What happy sleepers are saying', skip = 0 }) {
   const data = useReviews();
-  const list = textReviews(data);
-  if (list.length === 0) return null;
+  const all = textReviews(data);
+  if (all.length === 0) return null;
+  const list = all.length - skip >= 4 ? all.slice(skip) : all;
   return (
     <section>
       <div className="sk-sky" style={{ paddingBlock: '40px 32px' }}>

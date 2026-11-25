@@ -8,7 +8,7 @@ import Reveal from '../components/Reveal';
 import HomeHero from '../components/HomeHero';
 import { Mascot, NightBand } from '../components/Sky';
 import { TrustRow, ProductGrid, FlipBand, Special, Layers, Steps3, CompareBand, FAQSection } from '../components/Sections';
-import { ReviewWallHome, ReviewCarouselBand, useHasReviews } from '../components/ReviewWall';
+import { ReviewWallHome, ReviewCarouselBand, useHasReviews, HOME_TEXT_COUNT } from '../components/ReviewWall';
 
 // Achtergrond van de BOGO-tegel: poster, en zodra PROMO_VIDEO.src is ingevuld
 // een video die muted speelt zolang de tegel in beeld is.
@@ -72,7 +72,7 @@ export default function Home() {
         cta={{ label: 'Order your Cold Pillow', to: '/product/signature-cold-pillow' }} />
 
       {/* Doorlopende carousel met echte Judge.me-reviews; zonder reviews staat hier niets */}
-      <ReviewCarouselBand />
+      <ReviewCarouselBand skip={HOME_TEXT_COUNT} />
 
       <FAQSection />
 
