@@ -61,9 +61,11 @@ export function Gallery({ images, label = 'Product photos' }) {
   );
 }
 
-// Eén echte review onder de galerij. Zonder echte reviews tonen we hier niets.
+// Eén echte review onder de galerij: de nieuwste met vijf sterren en tekst,
+// anders de nieuwste. Zonder echte reviews tonen we hier niets.
 export function GalleryReview({ rvw, productName }) {
-  const real = realReviews(rvw)[0];
+  const all = realReviews(rvw);
+  const real = all.find(r => r.rating === 5 && r.body) || all[0];
   if (!real) return null;
   return (
     <div className="pd-review">
