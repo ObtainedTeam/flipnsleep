@@ -3,13 +3,14 @@
 // (server-side) en staat in Vercel als environment variable:
 //   JUDGEME_PRIVATE_TOKEN  (Settings > Environment Variables, daarna redeploy)
 // Zonder token of bij fouten geeft de functie een lege lijst terug en toont de
-// reviewpagina automatisch de tussenversie. Respons wordt een uur gecachet.
+// reviewpagina automatisch de tussenversie. Respons wordt vijf minuten gecachet,
+// zodat een gepubliceerde of verwijderde review snel op de site doorkomt.
 
 const SHOP_DOMAIN = '0j1ggm-z7.myshopify.com';
 
 export default async function handler(req, res) {
   const token = process.env.JUDGEME_PRIVATE_TOKEN;
-  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
+  res.setHeader('Cache-Control', 's-maxage=300');
   if (!token) return res.status(200).json({ reviews: [], count: 0, avg: 0 });
 
   try {
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
     if (!r.ok) throw new Error('judge.me ' + r.status);
     const data = await r.json();
     const reviews = (data.reviews || [])
-      .filter((x) => !x.hidden)
+      .filter((x) => !x.hidden && x.published !== false && x.curated !== 'spam')
       .map((x) => ({
         rating: x.rating,
         title: x.title || '',
