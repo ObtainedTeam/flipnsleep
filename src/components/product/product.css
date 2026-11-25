@@ -31,14 +31,18 @@
 .pd-price b { font: 400 30px/1 var(--display); }
 .pd-price s { color: var(--ink-3); font-size: 18px; }
 .pd-price span { font-size: 15px; color: var(--ink-2); }
-.pd-opts { display: grid; gap: 12px; margin: 24px 0; border: 0; padding: 0; min-width: 0; }
-.pd-opt { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 18px 20px; border-radius: 20px; box-shadow: inset 0 0 0 1.5px var(--line); cursor: pointer; color: var(--ink); transition: box-shadow .15s ease, background-color .15s ease; }
+.pd-opts { display: grid; gap: 20px; margin: 30px 0 24px; border: 0; padding: 0; min-width: 0; }
+.pd-opt { position: relative; display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 18px 20px; border-radius: 20px; box-shadow: inset 0 0 0 1.5px var(--line); cursor: pointer; color: var(--ink); transition: box-shadow .15s ease, background-color .15s ease; }
 .pd-opt:has(input:checked) { box-shadow: inset 0 0 0 2.5px var(--ink); background: var(--sky); }
 .pd-opt:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 3px; }
 .pd-opt input { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--ink); margin: 0; outline: none; }
 .pd-opt input:checked { box-shadow: inset 0 0 0 7px var(--ink); }
 .pd-opt b { display: block; font-weight: 600; font-size: 17px; line-height: 1.3; }
 .pd-opt small { display: block; font-size: 14px; line-height: 1.4; color: var(--ink-2); margin-top: 2px; font-weight: 400; }
+.pd-deal { position: absolute; top: -13px; right: 16px; display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px 6px 9px; border-radius: 14px; background: var(--amber); color: var(--ink); font: 700 13px/1.1 var(--body); white-space: nowrap; transition: transform .2s var(--ease); }
+.pd-deal .sk-cl { width: 22px; --c: var(--ink); }
+.pd-opt:has(input:checked) .pd-deal { transform: rotate(-2deg) scale(1.04); }
+@media (prefers-reduced-motion: reduce) { .pd-deal { transition: none; } }
 .pd-opt .is-p { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
 .pd-label { font: 600 15px/1.3 var(--body); color: var(--ink); margin-bottom: 10px; }
 .pd-label span { font-weight: 400; color: var(--ink-2); }
@@ -60,7 +64,16 @@
 .pd-specs { display: grid; gap: 10px; margin: 0; font-size: 15px; }
 .pd-specs > div { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 12px; }
 .pd-specs dt { color: var(--ink-3); } .pd-specs dd { margin: 0; color: var(--ink); }
-.pd-review { margin-top: 16px; padding: 18px 20px; border-radius: 20px; background: var(--sky); color: var(--ink); }
+.pd-review { position: relative; isolation: isolate; overflow: hidden; margin: 16px 0 0; padding: 22px 24px; border-radius: 24px; background: var(--sky); color: var(--ink);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 20px; }
+.pd-review .sk-cl { position: absolute; z-index: -1; }
+.pd-review .sk-cl.is-a { width: 44%; left: -10%; bottom: -26%; --c: rgba(255,255,255,.6); }
+.pd-review .sk-cl.is-b { width: 24%; left: 46%; top: -22%; --c: rgba(255,255,255,.75); animation-duration: 15s; }
+.pd-review .sk-mascot { width: clamp(76px, 9vw, 108px); --r: 5deg; }
+.pd-review .sk-stars { font-size: 20px; }
+.pd-review blockquote { margin: 12px 0 0; font-size: 16px; line-height: 1.55; font-weight: 500; }
+.pd-review figcaption { margin-top: 10px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+.clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* 2. Split-beeldpaar: twee foto's naast elkaar met een wit labeltje */
 .pd-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }

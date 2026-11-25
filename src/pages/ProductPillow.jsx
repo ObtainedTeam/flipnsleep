@@ -9,7 +9,7 @@ import PillowQuiz from '../components/PillowQuiz';
 import { TrustAccordion, ShippingCountdown } from '../components/Blocks';
 import StickyBuyBar from '../components/StickyBuyBar';
 import LookInside from '../components/product/LookInside.jsx';
-import { CloudList, NightBand, Ico } from '../components/Sky';
+import { CloudList, NightBand, Ico, Cloud } from '../components/Sky';
 import { FlipBand, Special, Steps3, CompareBand, FAQSection } from '../components/Sections';
 import { ReviewWallProduct } from '../components/ReviewWall';
 import { useReviews, Crumbs, Gallery, GalleryReview, BuyTrust, SpecList, CompleteYourBed } from '../components/product/ProductSections';
@@ -18,7 +18,8 @@ import { useReviews, Crumbs, Gallery, GalleryReview, BuyTrust, SpecList, Complet
 // Ready in 3 steps, de doorsnede met What makes it special, daarna de vulling-
 // quiz, de vergelijking, de nachtband, vragen en de rest van het assortiment.
 const GALLERY = PRODUCT.gallery.map(([src, alt]) => ({ src, alt, thumb: src.replace('.webp', '-480.webp') }));
-const DEAL = { 1: 'Single pillow', 2: 'Buy 1, get 1 free', 4: 'Buy 2, get 2 free' };
+// Deal-label in de hoek van de keuzes met meer dan één kussen.
+const DEAL = { 2: 'Buy 1, get 1 free', 4: 'Buy 2, get 2 free' };
 
 export default function ProductPillow({ onCartOpen }) {
   const { symbol, isCA } = useCurrency();
@@ -76,8 +77,9 @@ export default function ProductPillow({ onCartOpen }) {
                 const p = getPrice(b, isCA);
                 return (
                   <label key={b.id} className="pd-opt">
+                    {DEAL[b.pillows] && <span className="pd-deal"><Cloud />{DEAL[b.pillows]}</span>}
                     <input type="radio" name="bundle" value={b.id} checked={bundle.id === b.id} onChange={() => setSelected(b.id)} />
-                    <span><b>{b.pillows} pillow{b.pillows === 1 ? '' : 's'}</b><small>{b.pillows === 1 ? b.blurb : `${DEAL[b.pillows]}. ${b.blurb}`}</small></span>
+                    <span><b>{b.pillows} pillow{b.pillows === 1 ? '' : 's'}</b><small>{b.blurb}</small></span>
                     <span className="is-p">{formatPrice(p, symbol)}<small>{b.pillows === 1 ? <s>{formatPrice(isCA ? b.compareAt.cad : b.compareAt.usd, symbol)}</s> : `${formatPrice(p / b.pillows, symbol)} each`}</small></span>
                   </label>
                 );

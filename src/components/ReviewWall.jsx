@@ -102,30 +102,93 @@ export function ReviewCard({ r, tone = 'line', className = '' }) {
   );
 }
 
-function Head({ title, data, fallback }) {
+function Head({ title, data, fallback, rot }) {
   return (
     <Reveal once><div className="sk-row-head">
       <div><h2 className="sk-h2">{title}</h2><p className="sk-lead" style={{ marginTop: 12 }}>{summaryOf(data) || fallback}</p></div>
-      <Link to="/reviews" className="sk-btn is-line rw-all">All reviews</Link>
+      <div className="rw-actions">
+        {rot && rot.active && (
+          <button type="button" className="rw-pause" onClick={rot.toggle} aria-pressed={rot.paused} aria-label={rot.paused ? 'Play rotating reviews' : 'Pause rotating reviews'}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">{rot.paused ? <path d="M8 5.5v13l11-6.5z" /> : <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" />}</svg>
+          </button>
+        )}
+        <Link to="/reviews" className="sk-btn is-line rw-all">All reviews</Link>
+      </div>
     </div></Reveal>
   );
 }
 
+// Wisselende tekstkaarten: `n` vaste plekken tonen om de beurt een volgende
+// review uit `pool`. Eerst een paar seconden nadat het raster in beeld komt,
+// daarna draait er telkens één kaart om. Het wisselen stopt bij hover, focus
+// of aanraken, met de pauzeknop, als het tabblad niet zichtbaar is en volledig
+// bij prefers-reduced-motion. Met niet meer reviews dan plekken wisselt er niets.
+const FLIP_MS = 300;
+function useRotation(pool, n, { first = 3500, every = 2600 } = {}) {
+  const [el, setEl] = useState(null); // het raster (callback-ref)
+  const [slots, setSlots] = useState(() => Array.from({ length: n }, (_, i) => ({ i, gen: 0 })));
+  const [out, setOut] = useState(null);
+  const [paused, setPaused] = useState(false);
+  const [held, setHeld] = useState(false);
+  const [turn, setTurn] = useState(0); // aantal wissels tot nu toe
+  const len = pool.length;
+  const active = len > n && !reduced();
+
+  // Elke doorloop van dit effect plant precies één wissel: plek `turn % n`
+  // krijgt de volgende review uit de pool.
+  useEffect(() => {
+    if (!active || paused || held || !el || typeof IntersectionObserver === 'undefined') return undefined;
+    const k = turn % n; const i = (n + turn) % len; const wait = turn === 0 ? first : every;
+    let timer = null; let dead = false; let seen = false; let since = 0;
+    const tick = () => {
+      if (dead) return;
+      if (!seen || document.hidden || Date.now() - since < wait) { timer = setTimeout(tick, 300); return; }
+      setOut(k);
+      // Een begonnen wissel maakt altijd af, ook als er intussen gepauzeerd is.
+      setTimeout(() => {
+        setSlots(prev => prev.map((x, j) => (j === k ? { i, gen: x.gen + 1 } : x)));
+        setOut(null);
+        setTurn(t => (t === turn ? t + 1 : t));
+      }, FLIP_MS);
+    };
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !seen) since = Date.now();
+      seen = e.isIntersecting;
+    }, { threshold: 0.3 });
+    io.observe(el);
+    timer = setTimeout(tick, 300);
+    return () => { dead = true; io.disconnect(); clearTimeout(timer); };
+  }, [el, active, paused, held, turn, len, n, first, every]);
+
+  // Hover, focus en aanraken zetten het wisselen stil; daarna begint het
+  // wachten opnieuw, zodat er niets omdraait terwijl iemand leest.
+  const bind = {
+    onPointerEnter: (e) => { if (e.pointerType === 'mouse') setHeld(true); },
+    onPointerLeave: (e) => { if (e.pointerType === 'mouse') setHeld(false); },
+    onFocus: () => setHeld(true), onBlur: () => setHeld(false),
+    onTouchStart: () => setHeld(true), onTouchEnd: () => setHeld(false), onTouchCancel: () => setHeld(false),
+  };
+  const toggle = () => setPaused(p => !p);
+  const shown = slots.slice(0, Math.min(n, len)).filter(x => x.i < len).map((x, slot) => ({ r: pool[x.i], slot, gen: x.gen, cls: `is-fixed${out === slot ? ' is-out' : x.gen > 0 ? ' is-in' : ''}` }));
+  return [setEl, bind, shown, { active, paused, toggle }];
+}
+
 // ---------------------------------------------------------------------------
-// Homepage: een rij met de drie nieuwste tekstreviews uit Judge.me (zodra die
-// er zijn), daaronder twee rijen van drie video's en twee grote staande.
+// Homepage: een rij van drie tekstreviews uit Judge.me (zodra die er zijn) die
+// wisselt binnen de negen nieuwste, daaronder twee rijen van drie video's en
+// twee grote staande. De carousel onderaan de pagina slaat die negen over.
 // ---------------------------------------------------------------------------
-export const HOME_TEXT_COUNT = 3;
+export const HOME_TEXT_POOL = 9;
 export function ReviewWallHome() {
   const data = useReviews();
-  const texts = textReviews(data).slice(0, HOME_TEXT_COUNT);
+  const [grid, bind, shown, rot] = useRotation(textReviews(data).slice(0, HOME_TEXT_POOL), 3);
   return (
     <section id="reviews" className="sk-sec rw" style={{ scrollMarginTop: 96 }}><div className="sk-wrap">
-      <Head title="Reviews, written and on camera" data={data} fallback="Reviews from verified buyers land here as they come in." />
-      {texts.length > 0 && (
-        <div className="rw-grid is-quotes" style={{ '--n': texts.length }}>
-          {texts.map((r, i) => (
-            <Reveal key={i} once delay={i * 90} className="rw-cell"><ReviewCard r={r} tone={i === 1 ? 'sky' : 'line'} /></Reveal>
+      <Head title="Reviews, written and on camera" data={data} fallback="Reviews from verified buyers land here as they come in." rot={rot} />
+      {shown.length > 0 && (
+        <div className="rw-grid is-quotes" style={{ '--n': shown.length }} ref={grid} {...bind}>
+          {shown.map(c => (
+            <Reveal key={c.slot} once delay={c.slot * 90} className="rw-cell is-rot"><ReviewCard key={c.gen} r={c.r} tone={c.slot === 1 ? 'sky' : 'line'} className={c.cls} /></Reveal>
           ))}
         </div>
       )}
@@ -146,27 +209,28 @@ export function ReviewWallHome() {
 // ---------------------------------------------------------------------------
 export function ReviewWallProduct({ productName }) {
   const data = useReviews();
-  const texts = textReviews(data).slice(0, 5);
+  const [grid, bind, texts, rot] = useRotation(textReviews(data), 5);
   const vids = REVIEW_VIDEOS.product;
   // Volgorde in de DOM: video, tekst, tekst, video, tekst, tekst, video, tekst.
   // Met vijf tekstreviews vult dat op desktop precies een bento van 4 x 3
   // (posities p1..p8 in sky.css); met minder staan de video's op een rij en de
-  // teksten eronder; zonder teksten alleen de drie video's.
+  // teksten eronder; zonder teksten alleen de drie video's. Zijn er meer dan
+  // vijf reviews, dan wisselen de vijf tekstplekken om de beurt (useRotation).
   const cells = [];
   let t = 0;
   vids.forEach((v, i) => {
     cells.push({ kind: 'video', v, i });
-    for (let k = 0; k < (i === 2 ? 1 : 2) && t < texts.length; k += 1, t += 1) cells.push({ kind: 'text', r: texts[t], i: t });
+    for (let k = 0; k < (i === 2 ? 1 : 2) && t < texts.length; k += 1, t += 1) cells.push({ kind: 'text', c: texts[t], i: t });
   });
-  for (; t < texts.length; t += 1) cells.push({ kind: 'text', r: texts[t], i: t });
+  for (; t < texts.length; t += 1) cells.push({ kind: 'text', c: texts[t], i: t });
   const mode = texts.length >= 5 ? 'is-bento' : texts.length ? 'is-loose' : 'is-videos-only';
   return (
     <section id="reviews" className="sk-sec rw" style={{ scrollMarginTop: 96 }}><div className="sk-wrap">
-      <Head title={`Sleepers on the ${productName}`} data={data} fallback="Reviews from verified buyers land here as they come in." />
-      <div className={`rw-grid is-product ${mode}`}>
+      <Head title={`Sleepers on the ${productName}`} data={data} fallback="Reviews from verified buyers land here as they come in." rot={rot} />
+      <div className={`rw-grid is-product ${mode}`} ref={grid} {...bind}>
         {cells.map((c, n) => c.kind === 'video'
           ? <Reveal key={`v${c.i}`} once delay={(n % 4) * 80} className={`rw-cell is-video rw-p${n + 1}`}><VideoTile video={c.v} tone={TONES[c.i % 3]} /></Reveal>
-          : <Reveal key={`t${c.i}`} once delay={(n % 4) * 80} className={`rw-cell is-text rw-p${n + 1}`}><ReviewCard r={c.r} tone={c.i % 3 === 1 ? 'sky' : 'line'} /></Reveal>)}
+          : <Reveal key={`t${c.i}`} once delay={(n % 4) * 80} className={`rw-cell is-text is-rot rw-p${n + 1}`}><ReviewCard key={c.c.gen} r={c.c.r} tone={c.i % 3 === 1 ? 'sky' : 'line'} className={c.c.cls} /></Reveal>)}
       </div>
     </div></section>
   );

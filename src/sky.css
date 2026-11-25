@@ -348,11 +348,25 @@ details[open] > summary .sk-plus { transform: rotate(45deg); background: var(--a
 .rw-card:hover { transform: translateY(-4px); }
 .rw-card.is-line { box-shadow: inset 0 0 0 1px var(--line); } .rw-card.is-sky { background: var(--sky); }
 .rw-card b.is-title { font-weight: 600; font-size: 19px; line-height: 1.3; }
-.rw-card p { margin: 0; flex: 1; font-size: 16px; line-height: 1.6; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
-.rw-card footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-3); }
+.rw-card p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden; }
+.rw-card footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-3); }
 .rw-verified { background: var(--sky); color: var(--ink); border-radius: 12px; padding: 6px 10px; font-weight: 600; font-size: 12px; line-height: 1; }
 .rw-card.is-sky .rw-verified { background: var(--white); }
 
+/* Wisselende tekstkaarten: vaste hoogte, zodat de pagina niet verspringt als
+   een kaart omdraait naar een volgende review. */
+.rw-card.is-fixed { min-height: 290px; }
+.rw-card.is-fixed b.is-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rw-card.is-fixed p { -webkit-line-clamp: 5; }
+.rw-cell.is-rot { perspective: 1000px; }
+.rw-card.is-out { transform: rotateX(86deg); opacity: 0; transition: transform .28s ease-in, opacity .28s ease-in; }
+.rw-card.is-in { animation: rw-flip-in .55s var(--ease) backwards; }
+@keyframes rw-flip-in { from { transform: rotateX(-86deg); opacity: 0; } }
+.rw-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.rw-pause { width: 48px; height: 48px; border-radius: 50%; border: 0; padding: 0; background: var(--sky); color: var(--ink); display: grid; place-items: center; cursor: pointer; transition: background-color .15s ease, transform .15s var(--ease); }
+.rw-pause:hover { background: var(--amber); } .rw-pause:active { transform: scale(.94); }
+.rw-pause:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.rw-pause svg { width: 20px; height: 20px; fill: currentColor; }
 /* Homepage: rij met tekstreviews boven de video's */
 .rw-grid.is-quotes { grid-template-columns: minmax(0, 1fr); margin-bottom: 16px; }
 @media (min-width: 768px) { .rw-grid.is-quotes { margin-bottom: 24px; } }
@@ -397,6 +411,7 @@ details[open] > summary .sk-plus { transform: rotate(45deg); background: var(--a
 @media (prefers-reduced-motion: reduce) {
   .rc { overflow-x: auto; } .rc-track { animation: none; padding-inline: 20px; } .rc-dup { display: none; }
   .rw-tile, .rw-card { transition: none; } .rw-tile:hover, .rw-card:hover { transform: none; }
+  .rw-card.is-in { animation: none; }
 }
 
 /* ---------- Homepage: productraster 2 x 2 met beeldvullende foto's ---------- */

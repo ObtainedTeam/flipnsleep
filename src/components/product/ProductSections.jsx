@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { dim, rs } from '../../data';
 import Reveal from '../Reveal';
-import { Acc, Ico } from '../Sky';
+import { Acc, Ico, Cloud, Mascot } from '../Sky';
 import { ProductRail } from '../Sections';
 import './product.css';
 
@@ -68,11 +68,15 @@ export function GalleryReview({ rvw, productName }) {
   const real = all.find(r => r.rating === 5 && r.body) || all[0];
   if (!real) return null;
   return (
-    <div className="pd-review">
-      <span className="sk-stars" aria-label={`${real.rating} out of 5 stars`}>{starStr(real.rating)}</span>
-      <p className="clamp-2" style={{ fontSize: 15, lineHeight: 1.6, margin: '8px 0 0' }}>“{real.body || real.title}”</p>
-      <div style={{ fontSize: 13, color: 'var(--ink-3)', marginTop: 8 }}>{(real.name || '').split(' ')[0]}, {productName}</div>
-    </div>
+    <figure className="pd-review">
+      <Cloud className="is-a sk-drift" /><Cloud className="is-b sk-drift" />
+      <div className="pd-review-txt">
+        <span className="sk-stars" aria-label={`${real.rating} out of 5 stars`}>{starStr(real.rating)}</span>
+        <blockquote className="clamp-3">“{real.body || real.title}”</blockquote>
+        <figcaption>{(real.name || '').split(' ')[0]}, {productName}</figcaption>
+      </div>
+      <Mascot className="sk-bob" color="#ffffff" />
+    </figure>
   );
 }
 
