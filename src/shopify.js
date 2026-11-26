@@ -17,8 +17,8 @@ export const VARIANT_IDS = {
    Zolang hier null staat, toont de site de cadeaus niet en gaat er niets extra
    mee naar de checkout: die blijft dan gewoon werken zoals voorheen. */
 export const GIFT_VARIANT_IDS = {
-  filling: null, // 500 g extra filling, één per kussen (waarde $14.99)
-  mask: null,    // Sleep mask, één per bestelling (waarde $29.99)
+  filling: '51205720440897', // 500 g Extra Filling (Free Gift), één per kussen (waarde $14.99)
+  mask: '51205721784385',    // Sleep Mask (Free Gift), één per bestelling (waarde $29.99)
 };
 
 // In development tonen we wat nog op Shopify wacht, zodat de opmaak te zien is.

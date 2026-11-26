@@ -128,6 +128,32 @@ export default function Cart({ isOpen, onClose }) {
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: 16 }}>
+          {/* Gratis cadeaus bovenaan, als toegevoegde waarde (geen upsell):
+              vulling per kussen, één oogmasker per bestelling. */}
+          {gifts.length > 0 && (() => {
+            const rows = gifts.map(g => { const n = g.perPillow ? pillowCount : 1; return { ...g, n, worth: (isCA ? g.value.cad : g.value.usd) * n }; });
+            const worth = rows.reduce((sum, g) => sum + g.worth, 0);
+            return (
+              <section aria-label="Free gifts included" style={{ background: c.navy, color: c.white, borderRadius: R.lg, padding: '18px 18px 14px', marginBottom: 16, position: 'relative', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+                  <span style={{ fontFamily: FONT_DISPLAY, fontSize: T.lg[0], lineHeight: 1.1 }}>Free gifts included</span>
+                  <span style={{ background: c.amber, color: c.navy, borderRadius: 14, padding: '5px 10px', fontSize: T.xs[0], fontWeight: 700, whiteSpace: 'nowrap' }}>Worth {formatPrice(worth, symbol)}</span>
+                </div>
+                <div style={{ fontSize: T.xs[0], color: c.lilac, marginTop: 4, marginBottom: 10 }}>Added to your order at checkout, at no cost.</div>
+                {rows.map(g => (
+                  <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 0', borderTop: '1px solid rgba(255,255,255,.12)', fontSize: T.sm[0] }}>
+                    <span style={{ width: 40, height: 40, borderRadius: 12, background: c.sky, color: c.navy, display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ico name={g.icon} size={20} /></span>
+                    <span style={{ flex: 1, minWidth: 0, fontWeight: 600 }}>{g.n > 1 ? `${g.n} × ${g.name}` : g.name}</span>
+                    <span style={{ textAlign: 'right', lineHeight: 1.25 }}>
+                      <s style={{ display: 'block', color: c.lilac, fontSize: T.xs[0] }}>{formatPrice(g.worth, symbol)}</s>
+                      <b style={{ color: c.amber, fontWeight: 700 }}>Free</b>
+                    </span>
+                  </div>
+                ))}
+              </section>
+            );
+          })()}
+
           {lines.length === 0 ? (
             <div style={{ textAlign: 'center', marginTop: 60 }}>
               <p style={{ fontSize: T.sm[0], color: c.grayD, marginBottom: 20 }}>Your cart is empty.</p>
@@ -149,24 +175,6 @@ export default function Cart({ isOpen, onClose }) {
               <button onClick={l.del} aria-label="Remove" style={{ background: 'none', border: 'none', cursor: 'pointer', color: c.gray, alignSelf: 'flex-start', display: 'flex', padding: 4 }}><Ico name="x" size={18} /></button>
             </div>
           ))}
-
-          {/* Gratis cadeaus: $0-regels, één set per bestelling met een kussen */}
-          {gifts.length > 0 && (
-            <div style={{ background: c.sky, borderRadius: R.sm, padding: '14px 16px', marginBottom: 12 }}>
-              <div style={{ fontSize: T.sm[0], fontWeight: 600, marginBottom: 6, fontFamily: FONT_SUB }}>Free gifts included</div>
-              {gifts.map(g => {
-                const n = g.perPillow ? pillowCount : 1;
-                return (
-                  <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: T.sm[0] }}>
-                    <span style={{ width: 36, height: 36, borderRadius: 10, background: c.white, display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ico name={g.icon} size={18} /></span>
-                    <span style={{ flex: 1, minWidth: 0 }}>{n > 1 ? `${n} × ${g.name}` : g.name}</span>
-                    <s style={{ color: c.gray, fontSize: T.xs[0] }}>{formatPrice((isCA ? g.value.cad : g.value.usd) * n, symbol)}</s>
-                    <b style={{ fontWeight: 600 }}>Free</b>
-                  </div>
-                );
-              })}
-            </div>
-          )}
 
           {/* Upsell 1+1 -> 2+2 (alleen bij louter 1+1-bundels) */}
           {onlyOnePlusOne && (
