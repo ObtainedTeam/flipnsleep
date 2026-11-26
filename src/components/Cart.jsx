@@ -144,10 +144,8 @@ export default function Cart({ isOpen, onClose }) {
                   <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 0', borderTop: '1px solid rgba(255,255,255,.12)', fontSize: T.sm[0] }}>
                     <span style={{ width: 40, height: 40, borderRadius: 12, background: c.sky, color: c.navy, display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ico name={g.icon} size={20} /></span>
                     <span style={{ flex: 1, minWidth: 0, fontWeight: 600 }}>{g.n > 1 ? `${g.n} × ${g.name}` : g.name}</span>
-                    <span style={{ textAlign: 'right', lineHeight: 1.25 }}>
-                      <s style={{ display: 'block', color: c.lilac, fontSize: T.xs[0] }}>{formatPrice(g.worth, symbol)}</s>
-                      <b style={{ color: c.amber, fontWeight: 700 }}>Free</b>
-                    </span>
+                    <s style={{ color: c.lilac, fontSize: T.xs[0] }}>{formatPrice(g.worth, symbol)}</s>
+                    <b style={{ background: c.amber, color: c.navy, fontFamily: FONT_DISPLAY, fontWeight: 400, fontSize: 20, lineHeight: 1, letterSpacing: '.02em', padding: '8px 12px', borderRadius: 14, transform: 'rotate(-3deg)', boxShadow: '0 4px 10px rgba(0,0,0,.25)' }}>FREE</b>
                   </div>
                 ))}
               </section>

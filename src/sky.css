@@ -441,7 +441,10 @@ details[open] > summary .sk-plus { transform: rotate(45deg); background: var(--a
 .pd-gifts b { display: block; font-weight: 600; font-size: 16px; line-height: 1.3; }
 .pd-gifts small { display: block; font-size: 14px; line-height: 1.4; color: var(--ink-2); }
 .pd-gifts .is-val { text-align: right; font-size: 14px; line-height: 1.3; font-variant-numeric: tabular-nums; }
-.pd-gifts .is-val s { display: block; color: var(--ink-3); } .pd-gifts .is-val b { font-size: 15px; }
+.pd-gifts .is-val { display: flex; align-items: center; gap: 10px; }
+.pd-gifts .is-val s { color: var(--ink-3); white-space: nowrap; }
+.pd-gifts .is-val b { background: var(--amber); color: var(--ink); font: 400 20px/1 var(--display); letter-spacing: .02em; padding: 8px 12px; border-radius: 14px; transform: rotate(-3deg); box-shadow: 0 4px 10px rgba(20,16,64,.18); text-transform: uppercase; }
+@media (max-width: 599px) { .pd-gifts .is-val { flex-direction: column; align-items: flex-end; gap: 6px; } .pd-gifts .is-val s { font-size: 12px; } .pd-gifts .is-val b { font-size: 17px; padding: 7px 10px; } }
 .pd-claim { margin: 12px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
 .pd-desc { margin: 24px 0 0; font-size: 17px; line-height: 1.6; color: var(--ink-2); }
 
