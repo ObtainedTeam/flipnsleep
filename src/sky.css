@@ -473,21 +473,23 @@ details[open] > summary .sk-plus { transform: rotate(45deg); background: var(--a
   .sk-hero.is-bf .sk-sticker { top: auto; bottom: 24%; right: 3%; width: 32%; }
   .sk-bf-photo { margin-bottom: calc(-1 * clamp(28px, 7vw, 60px)); }
 }
-/* Desktop: de foto over de volle breedte, onderaan tegen de wolkenrand. Zo
-   blijft het effen vlak links vrij voor de tekst; de bovenrand van de foto
-   loopt zacht over in de hemelkleur. */
+/* Desktop: de foto vult de hele hero; van links naar rechts loopt er een
+   fade in de hemelkleur van de foto overheen, zodat de tekst leesbaar is. */
 @media (min-width: 900px) {
-  .sk-hero.is-bf { display: block; min-height: 0; }
-  .sk-bf-photo { position: absolute; left: 0; right: 0; bottom: 0; }
-  .sk-bf-photo img { aspect-ratio: 2576 / 818; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 26%); mask-image: linear-gradient(to bottom, transparent 0, #000 26%); }
+  .sk-hero.is-bf { display: block; min-height: clamp(480px, 42vw, 560px); }
+  .sk-bf-photo { position: absolute; inset: 0; }
+  .sk-bf-photo img { width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: 78% 40%; }
+  .sk-bf-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, var(--bf-bg) 0%, var(--bf-bg) 26%, rgba(223,240,250,.82) 38%, rgba(223,240,250,0) 58%); }
   .sk-hero.is-bf .sk-hero-copy { position: relative; max-width: 44%; padding: 48px 0 calc(8vw + 8px) clamp(40px, 5vw, 64px); }
   .sk-bf-title { font-size: clamp(40px, 4.7vw, 64px); }
   .sk-hero.is-bf::after { display: none; }
   .sk-hero.is-bf .sk-sticker { top: 6%; right: 3%; width: 17%; --r: 7deg; }
-  .sk-bf-deco .is-c1 { width: 15%; right: 24%; top: 8%; --c: #fff; }
-  .sk-bf-deco .is-c2 { width: 8%; right: 46%; top: 4%; }
-  .sk-bf-deco .is-moon { right: 39%; top: 14%; width: 8%; }
+  .sk-bf-deco .is-c1 { width: 14%; right: 26%; top: 6%; --c: #fff; }
+  .sk-bf-deco .is-c2 { width: 8%; right: 50%; top: 4%; }
+  .sk-bf-deco .is-moon { right: 44%; top: 12%; width: 7%; }
 }
+/* Schaduw onder wolken, maan en 1+1-wolkje, zodat ze loskomen van de foto. */
+.sk-bf-deco .sk-cl, .sk-bf-deco .is-moon, .sk-hero.is-bf .sk-sticker { filter: drop-shadow(0 6px 10px rgba(20,16,64,.22)); }
 
 /* ---------- Tablet staand (768 tot 899px, o.a. iPad) ----------
    Deze breedte kreeg de gestapelde telefoonindeling. Hier staan de grote
