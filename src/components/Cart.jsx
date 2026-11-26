@@ -98,7 +98,7 @@ export default function Cart({ isOpen, onClose }) {
   const pillowCount = lines.reduce((s, l) => s + l.pillows, 0);
   const onlyPillows = lines.length > 0 && lines.every(l => l.type === 'bundle');
   const onlyOnePlusOne = lines.length > 0 && lines.every(l => l.item.bundleId === '1p1');
-  // Gratis cadeaus: één set per bestelling met een kussen, alleen als de varianten bestaan.
+  // Gratis cadeaus: vulling per kussen, één oogmasker per bestelling, alleen als de varianten bestaan.
   const gifts = pillowCount > 0 && giftsLive() ? GIFTS : [];
 
   // Cross-sell: comforter-anker + contextuele deken/lakens die nog niet in de mand zitten.
@@ -154,14 +154,17 @@ export default function Cart({ isOpen, onClose }) {
           {gifts.length > 0 && (
             <div style={{ background: c.sky, borderRadius: R.sm, padding: '14px 16px', marginBottom: 12 }}>
               <div style={{ fontSize: T.sm[0], fontWeight: 600, marginBottom: 6, fontFamily: FONT_SUB }}>Free gifts included</div>
-              {gifts.map(g => (
-                <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: T.sm[0] }}>
-                  <span style={{ width: 36, height: 36, borderRadius: 10, background: c.white, display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ico name={g.icon} size={18} /></span>
-                  <span style={{ flex: 1, minWidth: 0 }}>{g.name}</span>
-                  <s style={{ color: c.gray, fontSize: T.xs[0] }}>{formatPrice(isCA ? g.value.cad : g.value.usd, symbol)}</s>
-                  <b style={{ fontWeight: 600 }}>Free</b>
-                </div>
-              ))}
+              {gifts.map(g => {
+                const n = g.perPillow ? pillowCount : 1;
+                return (
+                  <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 0', fontSize: T.sm[0] }}>
+                    <span style={{ width: 36, height: 36, borderRadius: 10, background: c.white, display: 'grid', placeItems: 'center', flexShrink: 0 }}><Ico name={g.icon} size={18} /></span>
+                    <span style={{ flex: 1, minWidth: 0 }}>{n > 1 ? `${n} × ${g.name}` : g.name}</span>
+                    <s style={{ color: c.gray, fontSize: T.xs[0] }}>{formatPrice((isCA ? g.value.cad : g.value.usd) * n, symbol)}</s>
+                    <b style={{ fontWeight: 600 }}>Free</b>
+                  </div>
+                );
+              })}
             </div>
           )}
 

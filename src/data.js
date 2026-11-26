@@ -197,8 +197,8 @@ export const SINGLE = {
 
 // Gratis cadeaus bij elke kussenbestelling (zie GIFT_VARIANT_IDS in shopify.js).
 export const GIFTS = [
-  { id: "filling", name: "500 g extra filling", note: "Top up the height whenever you like", value: { usd: 14.99, cad: 21 }, icon: "feather" },
-  { id: "mask", name: "Sleep mask", note: "Soft, light-blocking, one size", value: { usd: 34.99, cad: 48 }, icon: "moon" },
+  { id: "filling", name: "500 g extra filling", note: "One bag per pillow, top up the height whenever you like", value: { usd: 14.99, cad: 21 }, icon: "feather", perPillow: true },
+  { id: "mask", name: "Sleep mask", note: "Soft, light-blocking, one size", value: { usd: 29.99, cad: 41 }, icon: "moon" },
 ];
 
 export const bundleById = (id) => [SINGLE, ...BUNDLES].find(b => b.id === id);

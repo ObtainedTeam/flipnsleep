@@ -7,7 +7,7 @@ export const DOMAIN = 'checkout.flipnsleep.com';
 
 /* ===================== KUSSEN — BUNDELS (ongewijzigd) ===================== */
 export const VARIANT_IDS = {
-  '1p':  null,             // 1 pillow ($79.99, vergelijk $109.99): ID invullen zodra de variant in Shopify staat
+  '1p':  '51193312510017', // Signature Cold Pillow, 1 kussen ($79.99, vergelijk $109.99)
   '1p1': '44265543073857', // 1+1 Signature bundle (2 kussens, $109.99)
   '2p2': '44265557098561', // 2+2 Signature Bundle (4 kussens, $189.99)
 };
@@ -17,8 +17,8 @@ export const VARIANT_IDS = {
    Zolang hier null staat, toont de site de cadeaus niet en gaat er niets extra
    mee naar de checkout: die blijft dan gewoon werken zoals voorheen. */
 export const GIFT_VARIANT_IDS = {
-  filling: null, // 500 g extra filling (waarde $14.99)
-  mask: null,    // Sleep mask (waarde $34.99)
+  filling: null, // 500 g extra filling, één per kussen (waarde $14.99)
+  mask: null,    // Sleep mask, één per bestelling (waarde $29.99)
 };
 
 // In development tonen we wat nog op Shopify wacht, zodat de opmaak te zien is.
@@ -33,16 +33,22 @@ export const singlePillowLive = () => !!VARIANT_IDS['1p'] || SHOW_PENDING;
 // Cadeaus pas tonen (en meesturen) als beide varianten bestaan.
 export const giftsLive = () => (!!GIFT_VARIANT_IDS.filling && !!GIFT_VARIANT_IDS.mask) || SHOW_PENDING;
 
-// De cadeaus als extra regels in een cart-permalink. Ontbrekende ID's vallen weg.
-function giftParts() {
-  return Object.values(GIFT_VARIANT_IDS).filter(Boolean).map(id => `${id}:1`);
+// Aantal kussens in een bundel ('1p' = 1, '1p1' = 2, '2p2' = 4).
+const PILLOWS = { '1p': 1, '1p1': 2, '2p2': 4 };
+
+// De cadeaus als extra regels in een cart-permalink: 500 g vulling per kussen,
+// één oogmasker per bestelling. Ontbrekende ID's vallen weg.
+function giftParts(pillows) {
+  if (!pillows) return [];
+  const { filling, mask } = GIFT_VARIANT_IDS;
+  return [filling && `${filling}:${pillows}`, mask && `${mask}:1`].filter(Boolean);
 }
 
 // Directe checkout voor één kussenoptie.
 export function buyNow(bundleId, qty = 1) {
   const id = getVariantId(bundleId);
   if (!id) return;
-  window.location.href = `https://${DOMAIN}/cart/${[`${id}:${qty}`, ...giftParts()].join(',')}`;
+  window.location.href = `https://${DOMAIN}/cart/${[`${id}:${qty}`, ...giftParts((PILLOWS[bundleId] || 0) * qty)].join(',')}`;
 }
 
 /* ================= VARIANTPRODUCTEN — MAAT + KLEUR =================
@@ -130,8 +136,8 @@ export function cartCheckoutUrl(items, discountCode) {
       return id ? `${id}:${i.qty || 1}` : null;
     })
     .filter(Boolean);
-  // Eén set cadeaus zodra er een kussen in de mand zit dat ook echt meegaat.
-  if (items.some(i => i.bundleId && getVariantId(i.bundleId))) parts.push(...giftParts());
+  const pillows = items.reduce((n, i) => n + (i.bundleId && getVariantId(i.bundleId) ? (PILLOWS[i.bundleId] || 0) * (i.qty || 1) : 0), 0);
+  parts.push(...giftParts(pillows));
   const discount = discountCode ? `?discount=${encodeURIComponent(discountCode)}` : '';
   return `https://${DOMAIN}/cart/${parts.join(',')}${discount}`;
 }
