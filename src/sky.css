@@ -445,6 +445,50 @@ details[open] > summary .sk-plus { transform: rotate(45deg); background: var(--a
 .pd-claim { margin: 12px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
 .pd-desc { margin: 24px 0 0; font-size: 17px; line-height: 1.6; color: var(--ink-2); }
 
+/* ---------- Black Friday-hero: foto als achtergrond ---------- */
+.sk-hero.is-bf { --bf-bg: #dff0fa; background: var(--bf-bg); display: flex; flex-direction: column; }
+.sk-bf-photo { display: block; position: relative; order: 2; z-index: 1; }
+.sk-bf-photo img { display: block; width: 100%; height: auto; aspect-ratio: 1616 / 818; object-fit: cover; }
+.sk-hero.is-bf .sk-hero-copy { order: 1; padding: 36px 24px 8px; }
+.sk-bf-checks { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font: 600 15px/1.3 var(--body); color: var(--ink); }
+.sk-bf-checks li { display: inline-flex; align-items: center; gap: 8px; }
+.sk-bf-checks span { width: 22px; height: 22px; border-radius: 50%; background: var(--amber); color: var(--ink); display: grid; place-items: center; }
+.sk-bf-eyebrow { margin: 0 0 8px; font: 500 clamp(20px, 2.3vw, 32px)/1.2 var(--body); color: #3a2f8f; letter-spacing: .01em; }
+.sk-bf-title { text-transform: uppercase; font-size: clamp(38px, 5.4vw, 76px); line-height: 1; }
+.sk-hero.is-bf .sk-bf-sub { margin-top: 16px; font-size: clamp(16px, 1.5vw, 20px); color: var(--ink); }
+.sk-hero.is-bf .sk-hero-cta { margin-top: 24px; }
+.sk-bf-deco { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.sk-bf-deco .sk-cl { position: absolute; }
+.sk-bf-deco .is-c1 { width: 22%; right: 4%; top: 40%; --c: rgba(255,255,255,.92); }
+.sk-bf-deco .is-c2 { width: 11%; right: 46%; top: 3%; --c: #fff; animation-duration: 15s; }
+.sk-bf-deco .is-moon { position: absolute; right: 22%; top: 2%; width: 12%; height: auto; }
+.sk-hero.is-bf .sk-sticker { left: auto; right: 4%; top: 37%; bottom: auto; width: 30%; }
+.sk-hero.is-bf .sk-hero-strip { z-index: 4; }
+/* De foto loopt door onder de wolkenrand */
+.sk-hero.is-bf::after { content: ""; display: block; order: 3; height: clamp(28px, 7vw, 60px); background: transparent; }
+@media (max-width: 899px) {
+  .sk-bf-deco .is-c1 { display: none; }
+  .sk-bf-deco .is-c2 { width: 16%; right: 6%; top: 2%; }
+  .sk-bf-deco .is-moon { right: 6%; top: 10%; width: 15%; }
+  .sk-hero.is-bf .sk-sticker { top: auto; bottom: 24%; right: 3%; width: 32%; }
+  .sk-bf-photo { margin-bottom: calc(-1 * clamp(28px, 7vw, 60px)); }
+}
+/* Desktop: de foto over de volle breedte, onderaan tegen de wolkenrand. Zo
+   blijft het effen vlak links vrij voor de tekst; de bovenrand van de foto
+   loopt zacht over in de hemelkleur. */
+@media (min-width: 900px) {
+  .sk-hero.is-bf { display: block; min-height: 0; }
+  .sk-bf-photo { position: absolute; left: 0; right: 0; bottom: 0; }
+  .sk-bf-photo img { aspect-ratio: 2576 / 818; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 26%); mask-image: linear-gradient(to bottom, transparent 0, #000 26%); }
+  .sk-hero.is-bf .sk-hero-copy { position: relative; max-width: 44%; padding: 48px 0 calc(8vw + 8px) clamp(40px, 5vw, 64px); }
+  .sk-bf-title { font-size: clamp(40px, 4.7vw, 64px); }
+  .sk-hero.is-bf::after { display: none; }
+  .sk-hero.is-bf .sk-sticker { top: 6%; right: 3%; width: 17%; --r: 7deg; }
+  .sk-bf-deco .is-c1 { width: 15%; right: 24%; top: 8%; --c: #fff; }
+  .sk-bf-deco .is-c2 { width: 8%; right: 46%; top: 4%; }
+  .sk-bf-deco .is-moon { right: 39%; top: 14%; width: 8%; }
+}
+
 /* ---------- Tablet staand (768 tot 899px, o.a. iPad) ----------
    Deze breedte kreeg de gestapelde telefoonindeling. Hier staan de grote
    secties weer in twee kolommen, met kleinere tussenruimtes dan op desktop. */

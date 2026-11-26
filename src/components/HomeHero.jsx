@@ -1,46 +1,46 @@
 import { Link } from 'react-router-dom';
 import { HERO } from '../data/home-content';
-import { IMG, BUNDLES, dim } from '../data';
-import { useCurrency, formatPrice, getPrice } from '../currency.jsx';
-import { Cloud, CloudEdge } from './Sky';
+import { IMG, dim } from '../data';
+import { Cloud, CloudEdge, Ico } from './Sky';
 
-// De kussenfoto: opnieuw geëxporteerd met lichte kleurcorrectie (zie
-// scripts/grade-hero-pillows.py), in AVIF en WebP en vier breedtes.
-const HERO_SET = (ext) => [640, 960, 1280, 1700].map(w => `/images/hero-pillows-${w}.${ext} ${w}w`).join(', ');
-const HERO_SIZES = '(max-width: 899px) 84vw, 520px';
+// Black Friday-hero: de foto van de drie slapers is de achtergrond, de tekst
+// staat er in code overheen. De foto heeft links een effen hemelvlak dat
+// overloopt in het beeld; de hero krijgt dezelfde kleur, zodat de foto
+// naadloos aansluit. Op mobiel een uitsnede rechts van de foto onder de tekst.
+// Zwevende wolken, maan, het 1+1-wolkje en de wolkenrand blijven.
+const SET = (name, widths, ext) => widths.map(w => `/images/${name}-${w}.${ext} ${w}w`).join(', ');
+const MOBILE = '(max-width: 899px)';
 
-// Hero als papieren hemel, zoals op de productfoto's: één hemelkaart met de
-// zwevende kussens, de maan, drijvende wolken en de wolkenrand onderaan.
-// Geen video meer; het kussenbeeld is de LCP en laadt met voorrang.
 export default function HomeHero() {
-  const { symbol, isCA } = useCurrency();
-  const deal = formatPrice(getPrice(BUNDLES[0], isCA), symbol);
   return (
     <section className="sk-hero-sec"><div className="sk-wrap">
-      <div className="sk-hero">
+      <div className="sk-hero is-bf">
+        <picture className="sk-bf-photo" aria-hidden="true">
+          <source media={MOBILE} type="image/avif" srcSet={SET('hero-bf-m', [640, 960, 1280], 'avif')} sizes="100vw" />
+          <source media={MOBILE} type="image/webp" srcSet={SET('hero-bf-m', [640, 960, 1280], 'webp')} sizes="100vw" />
+          <source type="image/avif" srcSet={SET('hero-bf', [960, 1600, 2576], 'avif')} sizes="(max-width: 1280px) 140vw, 1700px" />
+          <source type="image/webp" srcSet={SET('hero-bf', [960, 1600, 2576], 'webp')} sizes="(max-width: 1280px) 140vw, 1700px" />
+          <img src="/images/hero-bf-1600.webp" width="2576" height="818" fetchPriority="high" decoding="async" alt="" />
+        </picture>
+
         <div className="sk-hero-copy">
-          <span className="sk-kicker">{HERO.eyebrow}</span>
-          <h1 className="sk-h1">{HERO.title[0]}<br />{HERO.title[1]}</h1>
-          <p className="sk-lead">{HERO.sub}</p>
+          <ul className="sk-bf-checks">
+            {HERO.checks.map(t => <li key={t}><span><Ico name="check" size={14} /></span>{t}</li>)}
+          </ul>
+          <p className="sk-bf-eyebrow">{HERO.eyebrow}</p>
+          <h1 className="sk-h1 sk-bf-title">{HERO.title[0]}<br />{HERO.title[1]}</h1>
+          <p className="sk-lead sk-bf-sub">{HERO.sub[0]}<br />{HERO.sub[1]}</p>
           <div className="sk-hero-cta">
             <Link className="sk-btn" to={HERO.cta.to}>{HERO.cta.label}</Link>
-            <Link className="sk-tlink" to={HERO.quiz.to}>{HERO.quiz.label}</Link>
           </div>
-          <p className="sk-hero-note">Two pillows for {deal}, {HERO.note}</p>
         </div>
-        <div className="sk-stage" aria-hidden="true">
-          <i className="is-disc" />
+
+        <div className="sk-bf-deco" aria-hidden="true">
           <Cloud className="is-c1 sk-drift" />
           <Cloud className="is-c2 sk-drift" />
           <img className="is-moon sk-rock" src={IMG.logoMark} {...dim(IMG.logoMark)} decoding="async" alt="" />
-          <picture>
-            <source type="image/avif" srcSet={HERO_SET('avif')} sizes={HERO_SIZES} />
-            <source type="image/webp" srcSet={HERO_SET('webp')} sizes={HERO_SIZES} />
-            <img className="is-pillows sk-bob" src="/images/hero-pillows-960.webp" width="1700" height="1364" fetchPriority="high" decoding="async" alt="" />
-          </picture>
           <span className="sk-sticker sk-bob"><Cloud /><b>1+1 free</b></span>
         </div>
-        <div className="sk-hero-pad" />
         <CloudEdge className="sk-hero-strip" color="var(--sky)" back="#c0e5ff" face />
       </div>
     </div></section>

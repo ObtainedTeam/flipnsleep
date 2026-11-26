@@ -11,12 +11,12 @@ export const HOME_IMG = {
 };
 
 export const HERO = {
-  eyebrow: "The flip'nsleep Signature Cold Pillow",
-  title: ['Sleep cool.', 'Wake rested.'],
-  sub: 'One pillow, two sides: cool-touch for warm nights, soft bamboo for cooler ones. Adjustable fill for every sleeper.',
-  cta: { label: 'Shop the pillow', to: '/product/signature-cold-pillow' },
-  quiz: { label: 'Take the sleep quiz', to: '/quiz' },
-  note: 'with a 100-night trial',
+  // Black Friday-hero (november 2026). Tekst komt uit de banner van Thomas.
+  checks: ['100-night trial', '2-year warranty'],
+  eyebrow: 'Black Friday Sale',
+  title: ['Buy 1,', 'get 1 free'],
+  sub: ['Your coolest sleep yet.', 'Two for the price of one.'],
+  cta: { label: 'Shop Black Friday sale', to: '/product/signature-cold-pillow?bundle=1p1' },
   trust: [
     ['moon', '100-night trial'],
     ['truck', 'Free shipping US & Canada'],
