@@ -90,7 +90,7 @@ export default function ProductPillow({ onCartOpen }) {
               <div className="pd-gifts">
                 <h3>Free gifts included</h3>
                 <ul>
-                  {GIFTS.map(g => {
+                  {GIFTS.filter(g => bundle.pillows >= (g.minPillows || 1)).map(g => {
                     const n = g.perPillow ? bundle.pillows : 1;
                     return (
                       <li key={g.id}>

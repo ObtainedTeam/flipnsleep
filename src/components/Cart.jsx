@@ -131,7 +131,7 @@ export default function Cart({ isOpen, onClose }) {
           {/* Gratis cadeaus bovenaan, als toegevoegde waarde (geen upsell):
               vulling per kussen, één oogmasker per bestelling. */}
           {gifts.length > 0 && (() => {
-            const rows = gifts.map(g => { const n = g.perPillow ? pillowCount : 1; return { ...g, n, worth: (isCA ? g.value.cad : g.value.usd) * n }; });
+            const rows = gifts.filter(g => pillowCount >= (g.minPillows || 1)).map(g => { const n = g.perPillow ? pillowCount : 1; return { ...g, n, worth: (isCA ? g.value.cad : g.value.usd) * n }; });
             const worth = rows.reduce((sum, g) => sum + g.worth, 0);
             return (
               <section aria-label="Free gifts included" style={{ background: c.navy, color: c.white, borderRadius: R.lg, padding: '18px 18px 14px', marginBottom: 16, position: 'relative', overflow: 'hidden' }}>

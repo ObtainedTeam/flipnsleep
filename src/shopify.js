@@ -37,11 +37,11 @@ export const giftsLive = () => (!!GIFT_VARIANT_IDS.filling && !!GIFT_VARIANT_IDS
 const PILLOWS = { '1p': 1, '1p1': 2, '2p2': 4 };
 
 // De cadeaus als extra regels in een cart-permalink: 500 g vulling per kussen,
-// één oogmasker per bestelling. Ontbrekende ID's vallen weg.
+// één oogmasker per bestelling vanaf 2 kussens. Ontbrekende ID's vallen weg.
 function giftParts(pillows) {
   if (!pillows) return [];
   const { filling, mask } = GIFT_VARIANT_IDS;
-  return [filling && `${filling}:${pillows}`, mask && `${mask}:1`].filter(Boolean);
+  return [filling && `${filling}:${pillows}`, mask && pillows >= 2 && `${mask}:1`].filter(Boolean);
 }
 
 // Directe checkout voor één kussenoptie.
