@@ -94,7 +94,7 @@ export default function ProductPillow({ onCartOpen }) {
                     const n = g.perPillow ? bundle.pillows : 1;
                     return (
                       <li key={g.id}>
-                        <span className="is-ico"><Ico name={g.icon} /></span>
+                        <span className="is-ico">{g.img ? <img src={g.img} width="48" height="48" alt="" loading="lazy" /> : <Ico name={g.icon} />}</span>
                         <span><b>{n > 1 ? `${n} × ${g.name}` : g.name}</b><small>{g.note}</small></span>
                         <span className="is-val"><s>value {formatPrice((isCA ? g.value.cad : g.value.usd) * n, symbol)}</s><b>Free</b></span>
                       </li>

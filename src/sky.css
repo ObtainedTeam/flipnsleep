@@ -437,7 +437,8 @@ details[open] > summary .sk-plus { transform: rotate(45deg); background: var(--a
 .pd-gifts h3 { font: 600 16px/1.3 var(--body); margin: 0 0 10px; }
 .pd-gifts ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .pd-gifts li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
-.pd-gifts .is-ico { width: 44px; height: 44px; border-radius: 14px; background: var(--white); display: grid; place-items: center; }
+.pd-gifts .is-ico { width: 44px; height: 44px; border-radius: 14px; background: var(--white); display: grid; place-items: center; overflow: hidden; }
+.pd-gifts .is-ico img { width: 100%; height: 100%; object-fit: cover; }
 .pd-gifts b { display: block; font-weight: 600; font-size: 16px; line-height: 1.3; }
 .pd-gifts small { display: block; font-size: 14px; line-height: 1.4; color: var(--ink-2); }
 .pd-gifts .is-val { text-align: right; font-size: 14px; line-height: 1.3; font-variant-numeric: tabular-nums; }
